@@ -1,8 +1,4 @@
 <template>
-<div v-if="pages.current_page != undefined" class="d-flex" style="justify-content: space-between;align-items: center;">
-  <div>
-    Всего: {{pages.total}}
-  </div>
   <paginate
     v-if="pages.last_page > 1"
     v-model="page"
@@ -20,8 +16,6 @@
     @change="change"
   >
   </paginate>
-
-</div>
 </template>
 
 <script>

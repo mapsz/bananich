@@ -1,14 +1,18 @@
 <template>
 <div>
        
-  <!-- Paginator / Button -->
-  <div class="d-flex mb-2" style="align-items: center; justify-content: flex-end;">
+  <!-- Total / Paginator / Settings -->
+  <div class="d-flex mb-2" style="align-items: center;">
+    <div v-if="total > 0">
+      <!-- Всего: {{pages.total}} -->
+      <span>Всего: {{total}}</span>      
+    </div>    
     <!-- Paginator -->
-    <div class="mr-2" style="flex:9;">
+    <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
       <paginator :model="modelMulti"/>
     </div>
     <!-- List settings button -->
-    <div>
+    <div style="margin-left: auto; flex:1;">
       <font-awesome-icon class="list-seetings-button" icon="cog" size="2x" data-toggle="modal" :data-target="'#list-settings-modal-'+model"/>
     </div>
   </div>
@@ -63,10 +67,17 @@
     </tbody>
   </table>  
 
-  <!-- Paginator -->
-  <!-- <div v-if="pages">
-    <paginator :model="model"/>
-  </div> -->
+  <!-- Total / Paginator-->
+  <div class="d-flex mb-2" style="align-items: center;">
+    <div v-if="total > 0">
+      <!-- Всего: {{pages.total}} -->
+      <span>Всего: {{total}}</span>      
+    </div>    
+    <!-- Paginator -->
+    <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
+      <paginator :model="modelMulti"/>
+    </div>
+  </div>
 
   <!-- List settings modal -->
   <list-settings :model="modelMulti" :p-keys="keys"></list-settings>
@@ -97,7 +108,15 @@ export default {
     },
     data () {
       return this.$store.getters['get'+this.modelMulti]
-    }    
+    },
+    total(){
+      return this.$store.getters['get'+this.modelMulti+'Pages'].total != undefined ? (
+        this.$store.getters['get'+this.modelMulti+'Pages'].total
+      ) : (
+        this.data.length
+      );
+      
+    },
   },
   mounted(){
     this.getKeys();
