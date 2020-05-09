@@ -16,6 +16,7 @@
 <script>
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 library.add(faSearch);
+import {mapActions} from 'vuex';
 export default {
   data() {
     return {
@@ -23,8 +24,10 @@ export default {
     }
   },
   methods:{
+    ...mapActions(['setFilter']),
     doSearch(){
-      this.$emit('doSearch',this.search);
+      this.setFilter({search:this.search});
+      // this.$emit('doSearch',this.search);
     }
   }
 }

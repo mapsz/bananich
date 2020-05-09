@@ -35,14 +35,17 @@ export default {
         this.page = this.pages.current_page != undefined ? this.pages.current_page : 0;
       },
       deep: true
+    },
+    page: function(val, oldVal){
+      //Add query string
+      let query = Object.assign({}, this.$route.query);
+      if(query.page != undefined && query.page == val) return;
+      query.page = val;
+      this.$router.push({ query });
     }
   },
   methods:{
     change(page){
-      //Add query string
-      let query = Object.assign({}, this.$route.query);
-      query.page = page;
-      this.$router.push({ query });
       this.$store.dispatch('fetch'+this.model);
     }
   },

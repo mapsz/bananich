@@ -1,8 +1,12 @@
 let order = {
   state: {
+    //Order
     order: {},
     orders:[],
+    //Pages
     ordersPages:false,
+    //Filters
+    orderFilters:{},
   },
   getters: {
     getOrder : (state) => {
@@ -20,9 +24,11 @@ let order = {
       let r = await ax.fetch('/json/orders/',{id});
       commit('mOrder',r);
     },
-    async fetchOrders({commit}){    
+    async fetchOrders({commit, state}){    
+      
+    console.log(state.orderFilters);
       //Fetch  
-      let r = await ax.fetch('/json/orders/');
+      let r = await ax.fetch('/json/orders/',state.orderFilters);
 
       // Get pages
       let pages = false;
@@ -42,6 +48,13 @@ let order = {
       commit('mOrders',data);
       commit('mOrdersPages',pages);
     },
+    async setFilter({commit,state, dispatch},filter){
+      let key = Object.keys(filter)[0];
+      state.orderFilters[key] = filter[key];
+      await commit('mOrdersPages',{current_page:1});
+      dispatch('fetchOrders');
+      
+    }
   },
   mutations:{
     mOrder: (state,order) => {return state.order = order;},

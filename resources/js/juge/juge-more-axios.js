@@ -1,8 +1,6 @@
 class jugeMoreAxios{
 
-  constructor(url) {
-    this.url = url;
-    this.activeLoaders = [];
+  constructor() {
   }
 
   async fetch(url,params = {},method = 'get',loader = true){
@@ -32,7 +30,7 @@ class jugeMoreAxios{
         default:
           return false;
       }
-      
+    
       //Save response
       // this.lastResponse = r.r;
       //Stop loading
@@ -43,6 +41,7 @@ class jugeMoreAxios{
   }
 
   async getFetch(url,params){
+    
     //Get query string
     let queryString = this.getQueryString();
 

@@ -3,10 +3,9 @@
        
   <!-- Total / Paginator / Settings -->
   <div class="d-flex mb-2" style="align-items: center;">
-    <div v-if="total > 0">
-      <!-- Всего: {{pages.total}} -->
-      <span>Всего: {{total}}</span>      
-    </div>    
+    <div v-if="total > 0 && data.length > 0">
+      <span>Всего: {{total}}</span>
+    </div>  
     <!-- Paginator -->
     <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
       <paginator :model="modelMulti"/>
@@ -69,10 +68,9 @@
 
   <!-- Total / Paginator-->
   <div class="d-flex mb-2" style="align-items: center;">
-    <div v-if="total > 0">
-      <!-- Всего: {{pages.total}} -->
+    <div v-if="total > 0 && data.length > 0">
       <span>Всего: {{total}}</span>      
-    </div>    
+    </div>
     <!-- Paginator -->
     <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
       <paginator :model="modelMulti"/>

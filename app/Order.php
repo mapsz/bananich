@@ -41,11 +41,8 @@ class Order extends Model
       }])
     );
 
-
-
     //Pay method
     $query = $query->with('pays.method');
-
     
     //Sort
     $sort = ['col' => 'id','order' => 'DESC'];

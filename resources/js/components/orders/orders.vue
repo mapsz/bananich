@@ -9,12 +9,12 @@
   <!-- Menu -->
   <!-- <div class="row m-3 mb-2 order-menu justify-content-between">
     <date-menu @dateChanged="dateChanged" :p-active="true"></date-menu>
-  </div>
-  <div class="row m-3 mb-2 order-menu justify-content-between">
-    <time-menu @timeChanged="timeChanged"></time-menu>
-    <status-menu @statusChanged="statusChanged"></status-menu>
-    <search-menu @doSearch="doSearch"></search-menu>
   </div> -->
+  <div class="row m-3 mb-2 order-menu justify-content-between">
+    <!-- <time-menu @timeChanged="timeChanged"></time-menu> -->
+    <!-- <status-menu @statusChanged="statusChanged"></status-menu> -->
+    <search-menu ></search-menu>
+  </div>
 
   <!-- List -->
   <div class="container-fluid" ref="orderList">
