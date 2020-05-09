@@ -1,5 +1,5 @@
 <template>
-<div class="d-flex" style="justify-content: space-between;align-items: center;">
+<div v-if="pages.current_page != undefined" class="d-flex" style="justify-content: space-between;align-items: center;">
   <div>
     Всего: {{pages.total}}
   </div>
@@ -26,29 +26,32 @@
 
 <script>
 export default {
-props: ['pages'],
-data(){return{
-  page:this.pages.current_page,
-}},
-watch: {
-  pages: {
-    handler: function (val, oldVal) {
-      this.page = this.pages.current_page;
-    },
-    deep: true
-  }
-},
-methods:{
-  change(page){
-    //Add query string
-    let query = Object.assign({}, this.$route.query);
-    query.page = page;
-    this.$router.push({ query });
-    this.$emit('paged');
-    
-    
-  }
-},
+  props: ['model'],
+  data(){return{
+    page:0,
+  }},
+  computed:{
+    pages () {
+      return this.$store.getters['get'+this.model+'Pages']
+    }
+  },
+  watch: {
+    pages: {
+      handler: function (val, oldVal) {
+        this.page = this.pages.current_page != undefined ? this.pages.current_page : 0;
+      },
+      deep: true
+    }
+  },
+  methods:{
+    change(page){
+      //Add query string
+      let query = Object.assign({}, this.$route.query);
+      query.page = page;
+      this.$router.push({ query });
+      this.$store.dispatch('fetch'+this.model);
+    }
+  },
 }
 </script>
 

@@ -4,8 +4,8 @@
   <!-- Paginator / Button -->
   <div class="d-flex mb-2" style="align-items: center; justify-content: flex-end;">
     <!-- Paginator -->
-    <div v-if="pages" class="mr-2" style="flex:9;">
-      <paginator :pages="pages" @paged="paged()" />
+    <div class="mr-2" style="flex:9;">
+      <paginator :model="modelMulti"/>
     </div>
     <!-- List settings button -->
     <div>
@@ -28,7 +28,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(d,i) in cData" :key="i">
+      <tr v-for="(d,i) in data" :key="i">
         <td v-for="k in activeKeys" :key="k.name">
           <template v-if="dataExists(d,k) || k.type == 'custom'"> 
             <!-- Simple value -->
@@ -64,24 +64,24 @@
   </table>  
 
   <!-- Paginator -->
-  <div v-if="pages">
-    <paginator :pages="pages" @paged="paged()" />
-  </div>
+  <!-- <div v-if="pages">
+    <paginator :model="model"/>
+  </div> -->
 
   <!-- List settings modal -->
-  <list-settings :model="model" :p-keys="keys"></list-settings>
+  <list-settings :model="modelMulti" :p-keys="keys"></list-settings>
 
 </div>
 </template>
 
 <script>
+// import {mapGetters} from 'vuex';
 export default {
-  props: ['data','pages','model'],
+  props: ['model'],
   data(){return{
     keys:[],
-    sort:[],
   }},
-  computed:{
+  computed:{    
     activeKeys: function(){
       let out = [];
       $.each( this.keys, ( k, v ) => {
@@ -92,14 +92,12 @@ export default {
       });
       return out;
     },
-    cData: function(){
-      if(this.data.current_page != undefined){
-        return this.data.data;
-      }else{
-        return this.data;
-      }
-      return [];
+    modelMulti: function(){
+      return this.model[0].toUpperCase() + this.model.substr(1) + 's';
     },
+    data () {
+      return this.$store.getters['get'+this.modelMulti]
+    }    
   },
   mounted(){
     this.getKeys();
@@ -156,14 +154,6 @@ export default {
     success(){
       this.$emit('success');
     },
-    paged(){
-      this.$emit('paged');
-    },
-    doSort(key){
-      console.log(key);
-      
-      //
-    }
   },
 }
 </script>

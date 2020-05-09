@@ -2,7 +2,7 @@
 <div>
   <gruzka-navbar></gruzka-navbar>
 
-  <parse @ordersUpdated="getOrders"></parse>
+  <!-- <parse @ordersUpdated="getOrders"></parse> -->
 
   <!-- <orders-print :orders="data"></orders-print> -->
 
@@ -45,10 +45,10 @@ export default {
     }
   },
   mounted(){
-    // this.fetchData();
+    this.fetchOrders();
   },
   methods:{
-    // ...mapActions(['fetchData']),
+    ...mapActions(['fetchOrders']),
     // async getOrders(){
     //   this.jugeAxPages = 1;
     //   let r = await this.jugeAx('/json/orders',{

@@ -56,23 +56,7 @@ class jugeMoreAxios{
     }
     let r;
     r = await axios.get(url, {params})
-      .then((r) => {
-        //Get pages
-        this.lastResponsePages = false;
-        if(r.data.current_page != undefined){
-          let pages = JSON.parse(JSON.stringify(r.data));
-          pages.data = null;
-          this.lastResponsePages = pages;
-        }
-
-        //Get data
-        let data = r.data;
-        if(r.data.current_page != undefined){
-          data = r.data.data;
-        }
-
-        return {e:0,r:data};
-      })
+      .then((r) => {return {e:0,r:r.data};})
       .catch((error) => {this.catch(error);return {e:1,r:error.response};});
 
     return r;
