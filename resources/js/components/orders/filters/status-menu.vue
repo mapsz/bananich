@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
   data() {
     return {
@@ -41,7 +42,8 @@ export default {
           send = [];
         }
 
-        this.$emit('statusChanged',send);
+        // this.$emit('statusChanged',send);
+        this.setFilter({status:send});
 
       },
       deep: true
@@ -52,15 +54,10 @@ export default {
     this.statuses = [{id:-1,name:'Любой'}].concat(this.statuses);
   },  
   methods:{
+    ...mapActions(['setFilter']),
     async getOrderStatuses(){
-     let l = this.$loading.show({},this.slot);
-     let r = await axios.get('/json/order/statuses')
-                .then((r) => {
-                  this.statuses = r.data;
-
-                })
-
-      l.hide();
+      let r = await ax.fetch('/json/order/statuses');
+      if(r) this.statuses = r;
     },    
   }
 

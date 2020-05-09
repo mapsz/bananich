@@ -7,13 +7,13 @@
   <!-- <orders-print :orders="data"></orders-print> -->
 
   <!-- Menu -->
-  <!-- <div class="row m-3 mb-2 order-menu justify-content-between">
-    <date-menu @dateChanged="dateChanged" :p-active="true"></date-menu>
-  </div> -->
   <div class="row m-3 mb-2 order-menu justify-content-between">
-    <!-- <time-menu @timeChanged="timeChanged"></time-menu> -->
-    <!-- <status-menu @statusChanged="statusChanged"></status-menu> -->
-    <search-menu ></search-menu>
+    <date-menu :p-active="true"></date-menu>
+  </div>
+  <div class="row m-3 mb-2 order-menu justify-content-between">
+    <time-menu></time-menu>
+    <status-menu></status-menu>
+    <search-menu></search-menu>
   </div>
 
   <!-- List -->
@@ -45,7 +45,7 @@ export default {
     }
   },
   mounted(){
-    this.fetchOrders();
+    // this.fetchOrders();
   },
   methods:{
     ...mapActions(['fetchOrders']),

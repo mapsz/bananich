@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
   data() {
     return {
@@ -22,17 +23,21 @@ export default {
   },
   watch: {
     time: function () {
-      let data = {
+      let deliveryTime = {
         from:false,
         to:false,
       }
       if(this.time != 0){
-        data.from = this.time.substring(0,2)+':00:00';
-        data.to = this.time.substring(3)+':00:00';
+        deliveryTime.from = this.time.substring(0,2)+':00:00';
+        deliveryTime.to = this.time.substring(3)+':00:00';
       }
-      this.$emit('timeChanged',data);
+      this.setFilter({deliveryTime});
+      // this.$emit('timeChanged',data);
     },
-  },  
+  }, 
+  methods:{
+    ...mapActions(['setFilter']),
+  }, 
 }
 </script>
 

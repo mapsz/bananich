@@ -3,8 +3,6 @@
   <!-- Activate/Deactivate     -->
   <div class="date-activate-deactivate mr-2">
     <span class="date-activate-deactivate-button">
-      <!-- <font-awesome-icon v-if="active" class="text-danger" icon="times" size="2x"/>
-      <font-awesome-icon v-else class="text-success" icon="check" size="2x"/> -->
       <toggle-button v-model="active" :labels="{checked: 'On', unchecked: 'Off'}"/>
     </span>
   </div>    
@@ -36,7 +34,7 @@
 </template>
 
 <script>
-
+import {mapActions} from 'vuex';
 export default {
   props: ['pActive'],
   data() {
@@ -51,6 +49,19 @@ export default {
       nearDates:this.makeNearDates(),
       emit:true,
       active:this.pActive,
+    }
+  },
+  computed:{
+    dateSql: function(){
+      return {
+        from:this.date.from ? (
+          moment(this.date.from,this.date.format).format('YYYY-MM-DD')
+        ) : false,
+        to:this.date.to ? (
+          moment(this.date.to,this.date.format).format('YYYY-MM-DD')
+        ) : false,
+      }
+      
     }
   },
   watch: {
@@ -75,12 +86,13 @@ export default {
     }
   },
   methods:{
+    ...mapActions(['setFilter']),
     makeNearDates(){
       let dates = [];
       dates.push({date:moment().subtract(2, "days"),caption:moment().subtract(2, "days").format('DD.MM')});
-      dates.push({date:moment().subtract(1, "days"),caption:'Yesterday'});
-      dates.push({date:moment(),caption:'Today'});
-      dates.push({date:moment().add(1, "days"),caption:'Tomorrow'});
+      dates.push({date:moment().subtract(1, "days"),caption:'Вчера'});
+      dates.push({date:moment(),caption:'Сегодня'});
+      dates.push({date:moment().add(1, "days"),caption:'Завтра'});
       dates.push({date:moment().add(2, "days"),caption:moment().add(2, "days").format('DD.MM')});
       return dates;
     },
@@ -105,7 +117,7 @@ export default {
     },
     dateChanged(){      
       if(this.emit){
-        this.$emit('dateChanged',this.date);
+        this.setFilter({deliveryDate:this.dateSql});
       }
     },
     doActivates(){

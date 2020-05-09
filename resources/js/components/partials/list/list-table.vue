@@ -78,7 +78,7 @@
   </div>
 
   <!-- List settings modal -->
-  <list-settings :model="modelMulti" :p-keys="keys"></list-settings>
+  <list-settings :model="model" :p-keys="keys"></list-settings>
 
 </div>
 </template>
