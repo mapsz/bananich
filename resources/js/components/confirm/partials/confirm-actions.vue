@@ -21,6 +21,7 @@
       @click="putStatus(850)"
       class="btn"
       :class="status.id == 850 ? 'btn-secondary' : 'btn-outline-secondary'"
+      :style="status.id == 850 ? 'border: 3px solid limegreen;' : ''"
     >
       Не поднимает трубку
     </button>

@@ -1,242 +1,252 @@
 <template>
-<div>
-  <div>
-    <!-- Navbar -->
-    <gruzka-navbar></gruzka-navbar>
+<div class="container-fluid">
+  <gruzka-navbar></gruzka-navbar>
 
-    <!-- Title -->
-    <h1 class="mx-2">Gruzka</h1>
-    
-    <!-- Assemble -->
-    <div class="row mx-2 mb-3">
-      <span class="align-self-center"><b>Orders:</b> {{Object.keys(orders).length}}</span>
-      <!-- <router-link :to="'/gruzka/order'">
-        <button class="btn btn-primary mx-3">Gruzka</button>
-      </router-link> -->
-    </div>    
-    
-    <!-- Filters -->
-    <div class="row mx-0 my-3 order-menu justify-content-around">  
-      <!-- Доступные -->
-      <div>
-        <button 
-          class="btn px-1" :class="filters.firstLevel == 1 ? 'btn-primary' : 'btn-outline-primary'"
-          @click="filters.firstLevel = 1;filters.secondLevel = 1"
-        >
-          Доступные
-        </button>
-      </div>
-      <!-- Мои -->
-      <div>
-        <button 
-          class="btn px-1" :class="filters.firstLevel == 2 ? 'btn-primary' : 'btn-outline-primary'"
-        >
-          Мои Заказы
-        </button>
-      </div>   
-      <!-- By id -->
-      <form @submit.prevent="goById()" class="input-group" style="width: 120px;">    
-        <input v-model="byId" type="number" class="form-control">
-        <div class="input-group-append">
-          <button @click.prevent="goById()" class="btn btn-outline-primary px-1" type="button">По ID</button>
-        </div>     
-      </form> 
-    </div>    
-    
-    <!-- Second level filters -->
-    <div class="row mx-0 my-2 order-menu justify-content-around">
-
-      <!-- Доступные -->
-      <div v-if="filters.firstLevel == 1" style="display:contents">        
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 1 ? 'btn-primary' : 'btn-outline-primary'"
-            @click="filters.secondLevel = 1"
-          >
-            Готовы к сборке
-          </button>
-        </div>
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 2 ? 'btn-primary' : 'btn-outline-primary'"
-            @click="filters.secondLevel = 2"
-          >
-            Собирается
-          </button>
-        </div>          
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 3 ? 'btn-primary' : 'btn-outline-primary'"
-            @click="filters.secondLevel = 3"
-          >
-            Требуют досборки
-          </button>
-        </div>   
-      </div>
-
-      <!-- Мои --> 
-      <div v-if="filters.firstLevel == 2" style="display:contents">  
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 1 ? 'btn-primary' : 'btn-outline-primary'"
-          >
-            Собирается
-          </button>
-        </div>
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 2 ? 'btn-primary' : 'btn-outline-primary'"
-          >
-            Требует досборки
-          </button>
-        </div> 
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 3 ? 'btn-primary' : 'btn-outline-primary'"
-          >
-            Готов
-          </button>
-        </div> 
-        <div>
-          <button 
-            class="btn btn-sm px-1" :class="filters.secondLevel == 4 ? 'btn-primary' : 'btn-outline-primary'"
-          >
-            Уехал +
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- List -->
-    <table class="table table-sm">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Items</th>
-          <th scope="col">Status</th>
-          <th scope="col">Assemble</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Current Orders -->
-        <tr v-for="order in currentOrders" :key="order.id">
-            <th scope="row">
-              <router-link :to="'/order/'+order.id">{{order.id}}</router-link>         
-          </th>
-          <td>{{order.items.length}}</td>
-          <td>
-            {{order.statuses[0].name}}
-
-          </td>
-          <td>      
-            <router-link  :to="'/gruzka/order/'+order.id">
-              <button class="btn btn-primary m-3">
-                <font-awesome-icon icon="box-open" /> 
-              </button>
-            </router-link>
-          </td>
-        </tr>         
-
-        <!-- Ready orders -->
-        <tr v-for="order in orders" :key="order.id">
-          <th scope="row">
-              <router-link :to="'/order/'+order.id">{{order.id}}</router-link>         
-          </th>
-          <td>{{order.items.length}}</td>
-          <td>
-            {{order.statuses[0].name}}
-
-          </td>
-          <td>      
-            <router-link  :to="'/gruzka/order/'+order.id">
-              <button class="btn btn-primary m-3">
-                <font-awesome-icon icon="box-open" /> 
-              </button>
-            </router-link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Order -->
+  <div class="row my-2 justify-content-center text-primary">
+    <span 
+      class="px-2"
+      @click="currentItem = -1"
+      :style="currentItem >= 0 ? 'border:1px solid;border-radius:5px;' : '' "
+    >
+      <font-awesome-icon v-if="currentItem >= 0" icon="list" /> 
+      <b>Заказ: {{orderId}}</b>      
+    </span>
   </div>
+
+  <!-- Comment -->
+  <div v-if="order.comment_our && currentItem == -1" class="my-3">
+    <b>Комментарий к заказу:</b> {{order.comment_our}}
+  </div>
+
+  <div v-if="currentItem == -1" class="mb-3">
+    <!-- list -->
+    <div class="items-list col-12 p-0">
+      <div 
+        class="item d-flex justify-content-between"
+        v-for="(item,k) in items" 
+        :key="item.id"         
+      >
+        <div style="flex:5">
+          <div class="d-flex justify-content-between">            
+            <b>{{item.name}}</b>
+            <span>Полка: {{item.product.gruzka_priority}}</span>  
+          </div>
+          <div class="d-flex justify-content-between">
+            <span style="color:gray">x{{item.quantity}}</span>
+            <span 
+              v-if="item.statuses[0] != undefined"
+              :style="
+                item.statuses[0].id == 100 ? 'color:red' : '' +
+                item.statuses[0].id == 200 ? 'color:#d56d00' : '' +
+                item.statuses[0].id == 300 ? 'color:green' : ''                
+              "
+            >
+              {{item.statuses[0].name}}
+            </span>
+          </div>
+        </div>
+        <div class="m-2 align-self-center text-primary" @click="currentItem = k">
+          <font-awesome-icon icon="box-open" /> 
+        </div>        
+      </div>
+    </div>
+    
+    <!-- Action buttons -->
+    <div v-if="done && orderId" class="row mt-3 justify-content-center">
+      <button v-if="done == 2" class="btn btn-success" @click="finish(300)">Готово</button>
+      <button v-if="done == 3" class="btn btn-warning" @click="finish(400)">Требует досборки</button>
+    </div>
+  
+  </div>
+
+  <gruzka-item 
+    v-if="currentItem >= 0" 
+    :item="order.items[currentItem]"
+    :container-list="containers"
+    @prev="prevItem()"
+    @next="nextItem()"
+    @confirm="confirm"
+    @no-item="noItem"
+  ></gruzka-item>
+
 </div>
 </template>
 
 <script>
-export default {
+export default {  
   data(){
     return {
       slot:{default: this.$createElement('loader-icon'),},
-      orders:[],
-      currentOrders:[],
-      byId:null,
-      filters:{
-        firstLevel:1,
-        secondLevel:1,
-      },
+      orderId:0,
+      order:{items:[]},
+      currentItem:-1,
+      done:false,
+      containers:[],
     }
-  },
+  },  
   computed:{
-    filter: function(){
-      // Доступные
-      if(this.filters.firstLevel == 1){
-        // Готовы к сборке
-        if(this.filters.secondLevel == 1){
-          return {status:[600]};
-        }
-        // Собирается
-        if(this.filters.secondLevel == 2){
-          return {status:[500]};
-        }          
-        // Требуют досборки
-        if(this.filters.secondLevel == 3){
-          return {status:[400]};
-        }        
+    items: function(){return this.order.items;}
+  },
+  async mounted(){
+    //Get order from route
+    this.orderId = this.$route.params.id;
+
+    //Get auto order
+    if(!this.orderId){
+      await this.getAutoOrder();
+    }
+
+    //Start gruzka
+    await this.startOrder();
+
+    //Get Containers
+    this.getContainers();
+
+    //Get order
+    await this.getOrder();    
+    this.checkDone();
+
+
+  },  
+  methods:{
+    async getContainers(){
+      let r = await this.jugeAx('/json/containers');
+      this.containers = r;
+    },
+    async getOrder(){
+      let r = await this.jugeAx('/json/orders', {id:this.orderId,gruzka_priority:true});
+
+      if(!r) return false;
+        
+      this.order = r;
+      return true;
+    },
+    async getAutoOrder(){
+      let l = this.$loading.show({},this.slot);
+      let r = await axios.get('/gruzka/auto/order')
+        .then((r)=>{
+          this.orderId = r.data;
+        }) 
+        
+      l.hide();
+    },
+    async startOrder(){
+      let l = this.$loading.show({},this.slot);
+      let r = await axios.put('/order/status',{orderId:this.orderId,statusId:500})
+        .then((r) => {
+          return;
+        })
+
+      l.hide();
+    },    
+    prevItem(){
+      let l = this.$loading.show({},this.slot);
+      this.currentItem--;
+      l.hide();
+    },
+    nextItem(){
+      let l = this.$loading.show({},this.slot);
+      if(this.currentItem+1 >= this.order.items.length){
+        this.currentItem = -1;        
+        l.hide();
         return;
       }
-
-      // return {status:[600]};
-      // Мои
-      // if(this.filters.firstLevel == 2){
-      //   // Собирается
-      //   if(this.filters.secondLevel == 1){
-      //     return {status:[500],currentUser:true};
-      //   }        
-      // }
-    }
-  },
-  watch: {
-    filters: {
-      handler: function (val, oldVal) {
-        this.getOrders();
-      },
-      deep: true
-    }
-  },
-  async mounted(){    
-    await this.getOrders();   
-  },
-  methods:{ 
-    async getOrders(){
-      let r = await this.jugeAx('/json/orders',this.filter);
-
-      if(!r) return;
-
-      this.orders = r.data;
-        
+      this.currentItem++;
+      l.hide();
     },
-    goById(){
-      this.$router.push('/gruzka/order/'+this.byId);
+
+    async confirm(item){
+      let i = await this.order.items.findIndex(x => x.id == item.id)
+      this.order.items[i] = item;
+      this.checkDone();
+    },
+
+    async noItem(item){
+      let i = await this.order.items.findIndex(x => x.id == item.id)
+      this.order.items[i] = item;
+      this.checkDone();
+    },
+
+    async checkDone(){
+      //Check no items
+      if(this.order.items.length < 1){
+        this.done = false;
+        return;
+      } 
+
+      //Check not touched items
+      let noTouchItems = false;
+      await $.each(this.order.items, ( key, v ) => {
+        if(v.statuses[0] == undefined || v.statuses[0].id == 100){
+          noTouchItems = true;
+          return true;
+        }
+      });
+      if(noTouchItems){
+        this.done = false;
+        return false;
+      }
+
+      //Get order items
+      let orders = await this.getOrder();
+      if(! orders){
+        this.done = false;
+        return;        
+      }
+
+      //Check item statuses
+      let done = 2;
+      await $.each(this.order.items, (k, v) => {
+        //No status
+        if(v.statuses[0] == undefined){
+          done = false;
+          return;
+        }
+        //Not "Нет на складе" and "Погруже"
+        if(v.statuses[0].id != 300 && v.statuses[0].id != 200){
+          done = false;
+          return;          
+        }
+        if(v.statuses[0].id == 200){
+          done = 3;
+        }
+
+      });
+      this.done = done;
+      
+
+      // false = не готов
+      // 2 = готово
+      // 3 = требует догрузки
+      return;
+    },
+    async finish(status){
+      let r = await this.jugeAx('/gruzka/done', {data:{orderId:this.orderId,statusId:status}},'put');
+
+      if(!r){
+        window.location.reload()
+        return;
+      } 
+
+      if(r == 1){
+        this.orderId = 0;
+        window.location.href = '/gruzkas'
+      }
     }
-  }  
+  }
 }
 </script>
 
 <style scoped>
-
-table td, table th{
-  text-align: center; 
-  vertical-align: middle; 
-}
-
+  .items-list{
+    border-top: 2px dashed black;
+    border-bottom: 2px dashed black;
+  }
+  .items-list .item{
+    border-bottom:1px solid gray;
+  }
+  .items-list .item:last-child{
+    border-bottom:0px solid gray;
+  }
 </style>

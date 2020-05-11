@@ -28,6 +28,7 @@ class Order extends Model
         $q->orderBy('created_at','DESC');
       }]);
       //Items
+      $query = $query->with('items');
       $query = $query->with('items.product');
       //Item containers
       $query = $query->with('items.containers');
@@ -127,9 +128,9 @@ class Order extends Model
         //Containers
         foreach ($order->items as $ik => $item) {
           foreach ($item->containers as $ck => $container) {
-            $orders[$ok]->items[$ik]->containers[$ck]->quantity = $container->pivot->quantity;
-            $orders[$ok]->items[$ik]->containers[$ck]->created_at = $container->pivot->created_at;
-            $orders[$ok]->items[$ik]->containers[$ck]->user_id = $container->pivot->user_id;          
+            $container->quantity = $container->pivot->quantity;
+            $container->created_at = $container->pivot->created_at;
+            $container->user_id = $container->pivot->user_id;          
           }
         }
 
@@ -138,21 +139,6 @@ class Order extends Model
           ($order->appart != "" ? ("кв. " . $order->appart) : "") . ' ' .
           ($order->porch !=  "" ? ("п. " . $order->porch) : "")
         );
-
-        // Gruzka_priority
-        if(isset($request['gruzka_priority'])){
-          foreach ($orders as $k => $order) {
-            
-            $sort = $order->items->toArray();
-            usort($sort, function($a, $b) { //@@@ sort
-              return $a['product']['gruzka_priority'] <=> $b['product']['gruzka_priority'];
-            });
-  
-            $order->unsetRelation('items');
-            $order->items = $sort;
-            
-          }
-        }
 
         //Pay method
         if("paymethod"){
@@ -308,6 +294,21 @@ class Order extends Model
         $order->total_result = round($order->total_result,$round);
 
       }
+
+      // Gruzka_priority
+      if(isset($request['gruzka_priority'])){
+        foreach ($orders as $k => $order) {
+          
+          $sort = $order->items->toArray();
+          usort($sort, function($a, $b) { //@@@ sort
+            return $a['product']['gruzka_priority'] <=> $b['product']['gruzka_priority'];
+          });
+
+          $order->unsetRelation('items');
+          $order->items = $sort;
+          
+        }
+      }    
 
     }
 

@@ -8,7 +8,7 @@
     </div>  
     <!-- Paginator -->
     <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
-      <paginator :model="modelMulti"/>
+      <paginator :model="dataModelName"/>
     </div>
     <!-- List settings button -->
     <div style="margin-left: auto; flex:1;">
@@ -73,7 +73,7 @@
     </div>
     <!-- Paginator -->
     <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
-      <paginator :model="modelMulti"/>
+      <paginator :model="dataModelName"/>
     </div>
   </div>
 
