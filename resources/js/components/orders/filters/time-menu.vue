@@ -1,9 +1,9 @@
 <template>
 <div class="input-group input-group-sm" style="width: auto;">
   <div class="input-group-prepend">
-    <label class="input-group-text" for="time-input">Time</label>
+    <label class="input-group-text" for="order-delivery-time-input">Time</label>
   </div>
-  <select v-model="time" class="custom-select" id="time-input">
+  <select v-model="time" class="custom-select" id="order-delivery-time-input">
     <option value="0" selected>Any</option>    
     <option value="11-23">11-23</option>
     <option value="11-15">11-15</option>

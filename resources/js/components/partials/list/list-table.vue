@@ -26,7 +26,7 @@
           v-for="k in activeKeys" :key="k.name"
         >
           <span>{{k.caption}} </span>
-          <span>⬆️</span>
+          <!-- <span>⬆️</span> -->
         </th>
       </tr>
     </thead>
@@ -86,7 +86,7 @@
 <script>
 // import {mapGetters} from 'vuex';
 export default {
-  props: ['model'],
+  props: ['model','p-data-model-name'],
   data(){return{
     keys:[],
   }},
@@ -104,12 +104,19 @@ export default {
     modelMulti: function(){
       return this.model[0].toUpperCase() + this.model.substr(1) + 's';
     },
+    dataModelName(){
+      if(this.pDataModelName != undefined) {
+        return this.pDataModelName[0].toUpperCase() + this.pDataModelName.substr(1);
+      }else{
+         return this.modelMulti;
+      }
+    },
     data () {
-      return this.$store.getters['get'+this.modelMulti]
+      return this.$store.getters['get'+this.dataModelName]
     },
     total(){
-      return this.$store.getters['get'+this.modelMulti+'Pages'].total != undefined ? (
-        this.$store.getters['get'+this.modelMulti+'Pages'].total
+      return this.$store.getters['get'+this.dataModelName+'Pages'].total != undefined ? (
+        this.$store.getters['get'+this.dataModelName+'Pages'].total
       ) : (
         this.data.length
       );

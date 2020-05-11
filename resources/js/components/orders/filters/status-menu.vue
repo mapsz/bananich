@@ -42,7 +42,6 @@ export default {
           send = [];
         }
 
-        // this.$emit('statusChanged',send);
         this.setFilter({status:send});
 
       },

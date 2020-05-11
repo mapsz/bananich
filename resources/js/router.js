@@ -6,8 +6,8 @@ import orderCall from './components/gruzka/order-call.vue';
 import call from './components/gruzka/call.vue';
 import orderGruzka from './components/gruzka/order-gruzka.vue';
 import gruzka from './components/gruzka/gruzka.vue';
-import confirmList from './components/gruzka/confirm/confirm-list.vue';
-import confirmOrder from './components/gruzka/confirm/confirm-order.vue';
+import confirms from './components/confirm/confirms.vue';
+import confirm from './components/confirm/confirm.vue';
 import container from './components/gruzka/container/container.vue';
 import products from './components/products/products.vue';
 import product from './components/products/product.vue';
@@ -133,12 +133,12 @@ export default {
       component: container,
     }, 
     {
-      path:'/confirm',
-      component: confirmList,
+      path:'/confirms',
+      component: confirms,
     },  
     {
-      path:'/confirm/order/:id',
-      component: confirmOrder,
+      path:'/confirm/:id',
+      component: confirm,
     },  
     {
       path:'/',

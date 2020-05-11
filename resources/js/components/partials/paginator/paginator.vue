@@ -1,6 +1,6 @@
 <template>
   <paginate
-    v-if="pages.last_page > 1"
+    v-if="pages != undefined && pages.last_page > 1"
     v-model="page"
     :page-count="pages.last_page"
     :container-class="'pagination m-0'"

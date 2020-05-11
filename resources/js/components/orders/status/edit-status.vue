@@ -10,12 +10,13 @@
     </option>              
   </select>
   <div class="input-group-append">
-    <button class="btn btn-outline-success"  @click="putStatus()">Сохранить</button>      
+    <button class="btn btn-outline-success"  @click="putStatus(status)">Сохранить</button>      
   </div>
 </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
 props: ['current-status','order-id'],
 data(){return{
@@ -34,11 +35,7 @@ methods:{
     if(!r) return;
     this.statuses = r;
   },
-  async putStatus(orderId){
-    let r = await this.jugeAx('/order/status',{orderId:this.orderId,statusId:this.status},'put');
-    if(!r) return;
-    this.$emit('status-edited');
-  }
+  ...mapActions(['putStatus']),
 },
 }
 </script>

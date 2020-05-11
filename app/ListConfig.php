@@ -18,7 +18,7 @@ class ListConfig extends Model
     ['name'    => 'status', 'caption' => 'статус'],
     ['name'    => 'comment', 'caption' => 'коммент клиент'],
     ['name'    => 'comment_our', 'caption' => 'коммент бананыч'],
-    ['name'    => 'confirm', 'caption' => 'потверждение','type' => 'intToStr', 'intToStr' =>[
+    ['name'    => 'confirm', 'caption' => 'тип потверждение','type' => 'intToStr', 'intToStr' =>[
       1 => 'телефон',
       0 => 'емэил'
     ]],
@@ -163,10 +163,31 @@ class ListConfig extends Model
       'component' => 'add-purchase-price',
     ],
   ];
+  
+  protected function getConfirm(){
+    $arr = $this->order;
+    array_push($arr, [
+      "name" => "doConfirm",
+      "caption" => "Подтверждение",
+      'type' => 'custom',
+      'component' => 'confirm-button',      
+    ]);
+    return $arr;
+  }
 
   public function get($name){
-    return $this->$name;
+
+    //Method or property
+    $functionName = 'get'.ucfirst($name);
+    if(method_exists($this,$functionName)){
+      $config = $this->$functionName();
+    }else{
+      $config = $this->$name;
+    }
+    
+    return $config;
   }
+
 
 
 }

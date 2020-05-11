@@ -17,12 +17,35 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
   public function jsonGet(Request $request){
+    $orders = Order::getWithOptions($request->all());    
+    return response()->json($orders);
+  }
 
+  public function getToConfirmOrders(Request $request){
+    
+    //Query
+    $phone = Order::withStatus();
+    $email = Order::withStatus();
 
-    $orders = Order::getWithOptions($request->all());
+    //Where
+    $phone = $phone->whereIn('order_status_id',[900,850,800,700]);
+    $email = $email->whereIn('order_status_id',[900,850,800,700]);
+    $phone = $phone->where('delivery_date','>=',now());
+    $email = $email->where('delivery_date','>=',now());
+    $phone = $phone->where('confirm','=',1);
+    $email = $email->where('confirm','=',0);
+    if(isset($request->id) && $request->id){
+      $phone = $phone->where('id','<>',$request->id);
+      $email = $email->where('id','<>',$request->id);
+    }
 
     
-    return response()->json($orders);
+
+    //Get
+    $phone = $phone->pluck('id');
+    $email = $email->pluck('id');
+
+    return response()->json(['phone'=>$phone,'email'=>$email]);
   }
 
   public function autoOrder(){

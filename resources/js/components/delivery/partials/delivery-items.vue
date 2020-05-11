@@ -110,18 +110,19 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 export default {
-  props: ['items','edit'],
+  props: ['edit'],
   data(){return{
     returnId:false,
     partialReturnId:false,
     returnQuantity:null,
   }},
+  computed:{
+    ...mapGetters({items:'getOrderItems'}),
+  },
   methods:{
     async itemReturn(item,quantity){
-
-      console.log(quantity);
-      
       quantity = quantity.toString().replace(',','.');        
       //Validate
       //bad number format

@@ -37,6 +37,9 @@ Route::get('/json/items', 'ItemController@jsonGet');
 
 Route::middleware(['auth'])->group(function () {
 
+    //Confirm
+    Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
+
     //Pay
     Route::get('/json/pay/methods', 'PayController@getMethods');
 

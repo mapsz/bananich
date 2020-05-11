@@ -1,10 +1,11 @@
 import order from './modules/order'
 import delivery from './modules/delivery'
+import confirm from './modules/confirm'
 
 
 let store = {  
   modules:{
-    order,delivery
+    order,delivery,confirm
   }
 };
 

@@ -2,16 +2,29 @@ let order = {
   state: {
     //Order
     order: {},
+    //Orders
     orders:[],
-    //Pages
     ordersPages:false,
-    //Filters
     orderFilters:{},
+
   },
   getters: {
     getOrder : (state) => {
       return state.order;
     },
+    getOrderItems : (state) => {
+      return state.order.items;
+    },
+    getOrderStatus : (state) => {
+      if(state.order.statuses != undefined){
+        return state.order.statuses[0];
+      }else{
+        return false;
+      }      
+    },   
+    getOrderConfirmType : (state) => {
+      return state.order.confirm;      
+    },        
     getOrders : (state) => {
       return state.orders;
     },
@@ -20,13 +33,11 @@ let order = {
     },
   },
   actions:{
-    async fetchOrder({commit},id){      
+    async fetchOrder({commit,state},id = state.order.id){
       let r = await ax.fetch('/json/orders/',{id});
       commit('mOrder',r);
     },
-    async fetchOrders({commit, state}){    
-      
-    console.log(state.orderFilters);
+    async fetchOrders({commit,state}){
       //Fetch  
       let r = await ax.fetch('/json/orders/',state.orderFilters);
 
@@ -48,23 +59,26 @@ let order = {
       commit('mOrders',data);
       commit('mOrdersPages',pages);
     },
-    async setFilter({commit,state, dispatch},filter){
+    //Filters
+    async setFilter({commit,state,dispatch},filter){
       let key = Object.keys(filter)[0];
       state.orderFilters[key] = filter[key];
       await commit('mOrdersPages',{current_page:1});
       dispatch('fetchOrders');
       
+    },
+    //Status
+    async putStatus({state,dispatch},id,orderId = state.order.id){
+      let r = await ax.fetch('/order/status',{orderId,statusId:id},'put');
+      if(!r) return false;
+      dispatch('fetchOrder');
     }
   },
   mutations:{
-    mOrder: (state,order) => {return state.order = order;},
+    mOrder: (state,order) => {state.order = order; return true;},
     mOrders: (state,orders) => {return state.orders = orders;},
     mOrdersPages: (state,pages) => {return state.ordersPages = pages;},
   }
 };
-
-
-
-
 
 export default order;

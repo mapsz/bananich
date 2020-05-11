@@ -36,8 +36,11 @@
           <div style="margin: 0px -0.5rem;">
             <delivery-items 
               @returnSuccess="get()" 
-              :items="getOrder.items" 
-              :edit="getOrder.statuses != undefined ? (getOrder.statuses[0].id == 1 ? false : true) : false"
+              :edit="(              
+                getOrder.statuses != undefined ? 
+                (getOrder.statuses[0].id == 1 ? false : true) : 
+                false
+              )"
             ></delivery-items>
           </div>          
         </div>
@@ -58,7 +61,6 @@
 
         <!-- Actions -->
         <div class="my-2 m-md-2 p-2 delivery-border">
-
           <!-- Error -->
           <div class="errors text-danger">
             <ul>
@@ -66,9 +68,7 @@
                 {{error}}
               </li>
             </ul>
-
           </div>
-
           <!-- Deliver Button -->
           <button 
             @click="setDelivered()" 
@@ -82,13 +82,7 @@
             Заказ Доставлен! {{getOrder.statuses[0].pivot.created_at}}
           </span>
         </div>  
-
-
       </div>
-
-
-
-
     </div>    
   </div>
   

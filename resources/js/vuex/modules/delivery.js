@@ -1,6 +1,9 @@
 let delivery = {
   state: {
-    deliveries: []
+    //Deliveries
+    deliveries: [],
+    //Delivery
+    delivery:{},    
   },
   getters: {
     getDeliveries : (state) => {

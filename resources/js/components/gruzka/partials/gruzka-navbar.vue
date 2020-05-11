@@ -40,7 +40,7 @@ export default {
         caption:"Заказы",
       },
       {
-        link:"/confirm",
+        link:"/confirms",
         caption:"Подтверждение",
       },
       {
