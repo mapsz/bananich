@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
 {
-  public function orders(){
-    return $this->belongsToMany('App\Order');
-  }
+
 
   public static function remove($productId,$orderId){
     $discounts = self::where('product_id',$productId)->get();
@@ -19,5 +17,10 @@ class Discount extends Model
 
     return true;
   }
+
+
+  public function orders(){
+    return $this->belongsToMany('App\Order');
+  }  
 
 }

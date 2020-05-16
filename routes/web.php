@@ -37,6 +37,10 @@ Route::get('/json/items', 'ItemController@jsonGet');
 
 Route::middleware(['auth'])->group(function () {
 
+    //Return Item
+    Route::put('/return/item', 'ReturnItemController@put');      
+    Route::delete('/return/item', 'ReturnItemController@delete');      
+
     //Confirm
     Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
 
@@ -46,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     //Delivery    
     Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
     Route::put('/put/delivery', 'DeliveryController@put');      
+    Route::delete('/delivery', 'DeliveryController@delete');      
 
     //Report
     Route::get('/json/report', 'ReportController@jsonGet');

@@ -18,6 +18,12 @@ import containers from './components/containers/containers.vue';
 routes.push(
   {path:'/containers',component: containers},
 );
+//Report
+import reports from './components/report/report/reports.vue';
+routes.push(
+  {path:'/reports',component: reports},
+);
+//--Old
 import products from './components/products/products.vue';
 import product from './components/products/product.vue';
 import productAdd from './components/products/product.vue';
@@ -28,7 +34,6 @@ import itemsParvin from './components/items/items-parvin.vue';
 import strews from './components/strews/strews-list.vue';
 import statistics from './components/statistics/statistics-list.vue';
 //Report
-import report from './components/report/report/report.vue';
 import suppliers from './components/report/suppliers/suppliers.vue';
 import supplier from './components/report/suppliers/supplier.vue';
 import purchases from './components/report/purchase/purchases.vue';
@@ -58,10 +63,6 @@ routes = routes.concat([
     component: delivery,
   }, 
   //Report
-  {
-    path:'/report',
-    component: report,
-  }, 
   //Supplier
   {
     path:'/report/supplier/:id',

@@ -16,7 +16,7 @@
   </div>
 
   <!-- List -->
-  <div class="container-fluid" ref="orderList">
+  <!-- <div class="container-fluid" ref="orderList">
     <table class="table">
       <thead class="thead-dark">
         <tr>
@@ -26,16 +26,26 @@
           <th>
             Сумма
           </th>
+          <th>
+            Заказы
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.name">
           <td>{{item.name}}</td>
           <td>{{item.summ}}</td>
+          <td>{{item.orders}}</td>
         </tr>
       </tbody>
     </table>
+  </div> -->
+  <div class="container-fluid">
+    <!-- <juge-list :data="'item'"></juge-list> -->
+    <juge-list :data="items"></juge-list>
   </div>
+
+  
 
 </div>
 </template>
@@ -62,18 +72,12 @@ export default {
     async getItems(){
 
       let r = await this.jugeAx('/json/items',{
-            deliveryDate:{
-              from:(this.filters.date.from) ? moment(this.filters.date.from,this.filters.date.format).format('YYYY-MM-DD') : false,
-              to:(this.filters.date.to) ? moment(this.filters.date.to,this.filters.date.format).format('YYYY-MM-DD') : false,
-            },
-            deliveryTime:{
-              from:(this.filters.time.from) ? this.filters.time.from : false,
-              to:(this.filters.time.to) ? (this.filters.time.to) : false,
-            },
+            deliveryDate:this.filters.date,
+            deliveryTime:this.filters.time,
             search:this.filters.search,
             status:this.filters.status,
             itemStatus:this.filters.itemStatus,
-      });
+      });      
 
       if(r) this.items = r;
 

@@ -32,7 +32,7 @@ export default {
         deliveryTime.to = this.time.substring(3)+':00:00';
       }
       this.setFilter({deliveryTime});
-      // this.$emit('timeChanged',data);
+      this.$emit('timeChanged',{deliveryTime});
     },
   }, 
   methods:{

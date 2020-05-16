@@ -12,13 +12,12 @@
       </div>     
     </form> 
 
+    <button @click="getData()" class="mt-3 btn btn-primary">Список</button>
     <!-- List -->
-    <!-- <list-table :data="getDeliveries" :model="'order'" @paged="getOrders()"></list-table> -->
-
+    <list-table v-if="showList" :model="'delivery'"></list-table>
 
 
   </div>
-
 
 </div>
 </template>
@@ -27,17 +26,23 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    showList:false,
+    loadData:false,
     byId:null,
   }},
-  computed:{
-    ...mapGetters(['getDeliveries']),
-  },
   mounted(){
-    this.fetchDeliveries();
+    //
   },
   methods:{
-    ...mapActions(['fetchDeliveries']),
-     goById(){
+    ...mapActions(['fetchDeliverys']),
+    getData(){
+      if(!this.loadData){
+        this.fetchDeliverys();
+        this.loadData = true;
+      } 
+      this.showList = !this.showList;
+    },
+    goById(){
       this.$router.push('/delivery/'+this.byId);
     }   
   },

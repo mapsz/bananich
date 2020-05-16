@@ -113,6 +113,9 @@ class ListConfig extends Model
     ['name'    => 'product.unit_sys','caption' => 'Единица (сис.)'],
     ['name'    => 'suppliers','caption' => 'Поставщики','type' => 'list'],
     ['name'    => 'summary','caption' => 'Остаток'],
+    ['name'    => 'ordered','caption' => 'Заказано'],
+    ['name'    => 'ready','caption' => 'Погружено'],
+    ['name'    => 'summary_total','caption' => 'Остаток Итог'],
 
   ];
 
@@ -171,6 +174,17 @@ class ListConfig extends Model
       "caption" => "Подтверждение",
       'type' => 'custom',
       'component' => 'confirm-button',      
+    ]);
+    return $arr;
+  }
+
+  protected function getDelivery(){
+    $arr = $this->order;
+    array_push($arr, [
+      "name" => "deliverier",
+      "caption" => "Водитель",
+      'type' => 'custom',
+      'component' => 'order-deliverier-column',        
     ]);
     return $arr;
   }

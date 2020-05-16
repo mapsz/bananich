@@ -27,7 +27,7 @@ export default {
     ...mapActions(['setFilter']),
     doSearch(){
       this.setFilter({search:this.search});
-      // this.$emit('doSearch',this.search);
+      this.$emit('doSearch',this.search);
     }
   }
 }

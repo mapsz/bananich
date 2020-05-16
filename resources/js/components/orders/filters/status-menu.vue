@@ -43,6 +43,7 @@ export default {
         }
 
         this.setFilter({status:send});
+        this.$emit('statusChanged',send);
 
       },
       deep: true

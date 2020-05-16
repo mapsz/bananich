@@ -3,7 +3,7 @@
        
   <!-- Total / Paginator / Settings -->
   <div class="d-flex mb-2" style="align-items: center;">
-    <div v-if="total > 0 && data.length > 0">
+    <div v-if="total > 0 && getData.length > 0">
       <span>Всего: {{total}}</span>
     </div>  
     <!-- Paginator -->
@@ -31,7 +31,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(d,i) in data" :key="i">
+      <tr v-for="(d,i) in getData" :key="i">
         <td v-for="k in activeKeys" :key="k.name">
           <template v-if="dataExists(d,k) || k.type == 'custom'"> 
             <!-- Simple value -->
@@ -68,7 +68,7 @@
 
   <!-- Total / Paginator-->
   <div class="d-flex mb-2" style="align-items: center;">
-    <div v-if="total > 0 && data.length > 0">
+    <div v-if="total > 0 && getData.length > 0">
       <span>Всего: {{total}}</span>      
     </div>
     <!-- Paginator -->
@@ -86,7 +86,7 @@
 <script>
 // import {mapGetters} from 'vuex';
 export default {
-  props: ['model','p-data-model-name'],
+  props: ['data','model','p-data-model-name'],
   data(){return{
     keys:[],
   }},
@@ -111,16 +111,25 @@ export default {
          return this.modelMulti;
       }
     },
-    data () {
-      return this.$store.getters['get'+this.dataModelName]
+    getData () {
+      if(this.data != undefined) return this.data;     
+
+      if(this.$store.getters[this.model+'/get'] != undefined) return this.$store.getters[this.model+'/get']
+
+      if(this.$store.getters['get'+this.dataModelName] != undefined) return this.$store.getters['get'+this.dataModelName];
+            
+      return false;
     },
     total(){
-      return this.$store.getters['get'+this.dataModelName+'Pages'].total != undefined ? (
-        this.$store.getters['get'+this.dataModelName+'Pages'].total
+      return this.$store.getters['get'+this.dataModelName+'Pages'] != undefined ? (
+        this.$store.getters['get'+this.dataModelName+'Pages'].total != undefined ? (
+          this.$store.getters['get'+this.dataModelName+'Pages'].total
+        ) : (
+          this.getData.length
+        )
       ) : (
-        this.data.length
-      );
-      
+        this.getData.length
+      )    
     },
   },
   mounted(){

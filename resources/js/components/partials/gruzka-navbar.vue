@@ -68,7 +68,7 @@ export default {
         caption:"Статистика",
       },
       {
-        link:"/report",
+        link:"/reports",
         caption:"Учёт",
       },
       {

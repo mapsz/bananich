@@ -64,20 +64,26 @@ let order = {
       let key = Object.keys(filter)[0];
       state.orderFilters[key] = filter[key];
       await commit('mOrdersPages',{current_page:1});
-      dispatch('fetchOrders');
-      
+      dispatch('fetchOrders');      
+    },
+    async refreshOrderFilters({commit}){
+      commit('mRefreshOrderFilters');      
     },
     //Status
     async putStatus({state,dispatch},id,orderId = state.order.id){
       let r = await ax.fetch('/order/status',{orderId,statusId:id},'put');
       if(!r) return false;
       dispatch('fetchOrder');
+    },
+    async setOrderReturned({dispatch},$id){
+      dispatch('putStatus',100,$id);
     }
   },
   mutations:{
     mOrder: (state,order) => {state.order = order; return true;},
     mOrders: (state,orders) => {return state.orders = orders;},
     mOrdersPages: (state,pages) => {return state.ordersPages = pages;},
+    mRefreshOrderFilters: (state) => {return state.orderFilters = {};},
   }
 };
 

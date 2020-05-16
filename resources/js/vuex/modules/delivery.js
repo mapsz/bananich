@@ -1,27 +1,66 @@
 let delivery = {
   state: {
     //Deliveries
-    deliveries: [],
+    deliverys: [],
+    deliverysPages:false,
     //Delivery
     delivery:{},    
   },
   getters: {
-    getDeliveries : (state) => {
-      return state.deliveries;
-    }
-  },  
-  mutations:{
-    mDeliveries: (state,deliveries) => {return state.deliveries = deliveries;},
+    getDeliverys : (state) => {
+      return state.deliverys;
+    },
+    getDeliverysPages : (state) => {
+      return state.deliverysPages;
+    },    
   },
   actions:{
-    async fetchDeliveries({commit}){      
+    async fetchDeliverys({commit}){
+      let r = await ax.fetch('/json/deliveries/',{status:1});
+      
+      console.log(r);
+      
 
-      let r = await ax.fetch('/json/deliveries/',{
-        status:1,
-      });
-      commit('mDeliveries',r);
+      // Get pages
+      let pages = false;
+      // console.log(r);
+      if(r.current_page != undefined){
+        pages = JSON.parse(JSON.stringify(r));
+        pages.data = null;
+      }
+
+      //Get data
+      let data = r;
+      if(r.current_page != undefined){
+        data = r.data;
+      }
+
+      //Mutate
+      commit('mDeliveries',data);
+      commit('mDeliveriesPages',pages);
+
     },
-  },
+    async putReturn({dispatch}, data){    
+      let r = await ax.fetch('/return/item',{itemId:data.item.id,quantity:data.quantity},'put');
+      dispatch('fetchOrder');
+    },
+    async deleteReturn({dispatch}, id){
+      let r = await ax.fetch('/return/item',{id},'delete');
+      dispatch('fetchOrder');
+    },
+    async putDelivery(){
+      //
+    },
+    async deleteDelivery({dispatch},id){
+      let r = await ax.fetch('/delivery/',{id},'delete');
+      dispatch('fetchOrder');
+    },
+    
+  },  
+  mutations:{
+    mDeliveries: (state,data) => {return state.deliverys = data;},
+    mDeliveriesPages: (state,data) => {return state.deliverysPages = data;},
+  },  
 };
 
 export default delivery;

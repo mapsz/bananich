@@ -26,7 +26,8 @@ export default {
   }},
   computed:{
     pages () {
-      return this.$store.getters['get'+this.model+'Pages']
+      let pages = this.$store.getters['get'+this.model+'Pages'];      
+      return pages != undefined ? pages : false;
     }
   },
   watch: {

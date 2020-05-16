@@ -118,6 +118,7 @@ export default {
     dateChanged(){      
       if(this.emit){
         this.setFilter({deliveryDate:this.dateSql});
+        this.$emit('dateChanged',this.dateSql);
       }
     },
     doActivates(){

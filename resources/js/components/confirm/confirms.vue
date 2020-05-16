@@ -23,10 +23,11 @@
 import {mapActions} from 'vuex';
 export default {
   mounted(){
+    this.refreshOrderFilters();
     this.setFilter({status:[900,850,800,700]});
   },
   methods:{
-    ...mapActions(['setFilter']),
+    ...mapActions(['setFilter','refreshOrderFilters']),
   }
 }
 </script>

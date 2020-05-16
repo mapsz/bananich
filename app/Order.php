@@ -101,12 +101,16 @@ class Order extends Model
 
     }
 
-    //Get
+
+    //Paggina
     if(isset($request['limit']) && $request['limit']){
-      $orders = $query->paginate($request['limit']);
+      $limit = $request['limit'];
     }else{
-      $orders = $query->get();
+      $limit = 100;
     }
+
+    //Get
+    $orders = $query->paginate($limit);
 
     //Postedit data
     if("EDIT" == "EDIT"){   

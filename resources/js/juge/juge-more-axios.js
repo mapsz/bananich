@@ -1,7 +1,13 @@
 class jugeMoreAxios{
 
   constructor() {
+    this.lastResponse = {};
   }
+
+  async get(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
+  async post(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
+  async put(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
+  async delete(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
 
   async fetch(url,params = {},method = 'get',loader = true){
       //Start loading
@@ -32,7 +38,7 @@ class jugeMoreAxios{
       }
     
       //Save response
-      // this.lastResponse = r.r;
+      this.lastResponse = r.r;
       //Stop loading
       if(loader) load.stop(l);
       //Return data
@@ -46,13 +52,16 @@ class jugeMoreAxios{
     let queryString = this.getQueryString();
 
     //Add pages
-    if(queryString.page != undefined){
-      this.jugeAxPages = queryString.page;
+    if(params.page == undefined){
+      if(queryString.page != undefined){
+        this.jugeAxPages = queryString.page;
+      }
+      if(this.jugeAxPages){
+        params.page = this.jugeAxPages;
+        params.limit = 100;
+      }
     }
-    if(this.jugeAxPages){
-      params.page = this.jugeAxPages;
-      params.limit = 100;
-    }
+
     let r;
     r = await axios.get(url, {params})
       .then((r) => {return {e:0,r:r.data};})
@@ -61,10 +70,11 @@ class jugeMoreAxios{
     return r;
   }
 
-  catch(){
+  catch(error){
 
-    console.log('error');
-    
+    console.log('_______ERROR________');
+    console.log(error.response);
+    console.log('````````````````````');    
 
     // if(error.response.status == 422) return;      
 
@@ -72,7 +82,7 @@ class jugeMoreAxios{
     //   this.saveError(error.response.data);
     // }
     
-    // terror();
+    terror();
     // console.log(error.response);    
   }
 

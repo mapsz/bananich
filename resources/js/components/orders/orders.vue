@@ -25,8 +25,14 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
-  //
+  mounted(){
+    this.refreshOrderFilters();
+  },
+  methods:{
+    ...mapActions(['refreshOrderFilters']),
+  }
 }
 </script>
 

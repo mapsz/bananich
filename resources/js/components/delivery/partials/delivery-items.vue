@@ -59,7 +59,7 @@
       </div>   
 
       <!-- Actions -->
-      <div v-if="edit" @click="returnId = item.id" style="flex:1;text-align: center;cursor:pointer;">
+      <div v-if="currentStatusId != 1 && currentStatusId != 100" @click="returnId = item.id" style="flex:1;text-align: center;cursor:pointer;">
         <span 
           class="delivery-return"
           style="font-size: 20px;"
@@ -68,7 +68,6 @@
         </span>
       </div>
     </div>
-
 
     <!-- Return -->
     <div v-if="returnId==item.id" class="d-flex justify-content-between align-items-center">
@@ -81,20 +80,33 @@
         >
       </div>
 
-      <!-- Return actions -->
-      <div v-if="partialReturnId===false" class="d-flex justify-content-around" style="flex:6;">
-        <button @click="itemReturn(item,item.quantity_result)" class="btn btn-danger">Полный возврат</button>
-        <button @click="partialReturnId=item.id" class="btn btn-warning">Частичный возврат</button>
-      </div>
+      <!-- Current return -->
+      <template v-if="item.statuses[0].id == 400 || item.statuses[0].id == 401">
+        <!-- Return type buttons -->
+        <div class="" style="display:flex;flex:16;align-items: center;text-align: center;">
+          <b>{{item.statuses[0].name}}</b>
+          <button @click="deleteReturn(item.id)" class="m-2 btn btn-primary">Отменить возврат</button>
+        </div>   
+      </template>
 
-      <div v-if="partialReturnId==item.id" class="d-flex justify-content-around" style="flex:6;align-items: center;">
-        <span>Всего: {{item.quantity_result}}</span>
-        <span>Возврат: <input v-model="returnQuantity" type="text" style="width:70px"></span>
-        <span @click="itemReturn(item,returnQuantity)" style="font-size: 20px;cursor:pointer;">✔️</span>   
-        
-      </div>
-      <!-- Actions -->
-      <div @click="returnId=false;partialReturnId=false;returnQuantity=null" style="flex:1;text-align: center;cursor:pointer;">
+      <!-- Return actions -->
+      <template v-else>
+        <!-- Return type buttons -->
+        <div v-if="partialReturnId===false" class="d-flex justify-content-around" style="flex:6;">
+          <button @click="itemReturn(item,item.quantity_result)" class="m-2 btn btn-danger">Полный возврат</button>
+          <button @click="partialReturnId=item.id" class="m-2 btn btn-warning">Частичный возврат</button>
+        </div>
+
+        <!-- Partials return menu -->
+        <div v-if="partialReturnId==item.id" class="d-flex justify-content-around" style="flex:10;align-items: center;">
+          <span>Всего: {{item.quantity_result}}</span>
+          <span>Возврат: <input v-model="returnQuantity" type="text" style="width:70px"></span>
+          <span @click="itemReturn(item,returnQuantity)" style="font-size: 20px;cursor:pointer;">✔️</span>
+        </div>
+      </template>
+
+      <!-- Close -->
+      <div @click="returnId=false;partialReturnId=false;returnQuantity=null" style="flex:2;text-align: center;cursor:pointer;">
         <span 
           class="delivery-return-cancel"
           style="font-size: 20px;"
@@ -110,18 +122,30 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 export default {
-  props: ['edit'],
   data(){return{
     returnId:false,
     partialReturnId:false,
     returnQuantity:null,
   }},
   computed:{
-    ...mapGetters({items:'getOrderItems'}),
+    ...mapGetters({items:'getOrderItems',order:'getOrder'}),
+    currentStatusId: function(){
+      if(this.order.statuses == undefined){
+        return false;
+      }else{
+        return this.order.statuses[0].id;
+      }
+    }
+  },
+  watch: {
+    items: function(){
+      this.refresh();
+    },
   },
   methods:{
+    ...mapActions(['putReturn','deleteReturn']),
     async itemReturn(item,quantity){
       quantity = quantity.toString().replace(',','.');        
       //Validate
@@ -133,28 +157,18 @@ export default {
       if(quantity){
         if(quantity > item.quantity_result){
           alert('Количество возврата должно быть меньше!');
+          return;
         }
       }
-
-      let $quantity_result = item.quantity_result - quantity;
-
-      //Set quantity
-      let r = await this.jugeAx('/item',{itemId:item.id,quantity_result:$quantity_result},'post');
-      if(!r) return;
-
-      //Set status
-      let status = 400;
-      if(item.quantity_result != quantity) status = 401;
-
-      r = await this.jugeAx('/item/status',{itemId:item.id,statusId:status},'put');
-      if(!r) return;
-
+      
+      //
+      this.putReturn({item,quantity});
+      return;
+    },
+    refresh(){
       this.returnId = false;
       this.partialReturnId = false;
-      this.returnQuantity = null;
-
-      this.$emit('returnSuccess');
-
+      this.returnQuantity = null;      
     }
   },
 }

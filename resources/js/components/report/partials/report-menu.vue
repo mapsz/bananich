@@ -20,7 +20,7 @@ data(){return{
   current:this.$route.path,
   links:[
     {
-      link:"/report",
+      link:"/reports",
       caption:"Учёт",
     },
     {

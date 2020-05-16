@@ -4,27 +4,28 @@
   <gruzka-navbar></gruzka-navbar>
 
   <div class="container-fluid">    
-    <h1>Заказ №{{id}}</h1>
+    <h1> Выдача Заказ №{{id}}</h1>
     <div class="row">
+
       <!-- Shipping info -->
       <div class="col-12 col-md-4 p-0 delivery-wrap delivery-shipping-info">
         <div class="my-2 m-md-2 p-2 delivery-border">
           <h4>Детали Заказа</h4>
           <div>
-            <div>{{getOrder.name}}</div>
-            <div>{{getOrder.phone}}</div>
-            <div>{{getOrder.email}}</div>
+            <div>{{order.name}}</div>
+            <div>{{order.phone}}</div>
+            <div>{{order.email}}</div>
             <div>
-              <span>{{getOrder.address}}</span>  
-              <span v-if="getOrder.appart">кв. {{getOrder.appart}}</span>  
-              <span v-if="getOrder.porch">пд. {{getOrder.porch}}</span>  
+              <span>{{order.address}}</span>  
+              <span v-if="order.appart">кв. {{order.appart}}</span>  
+              <span v-if="order.porch">пд. {{order.porch}}</span>  
             </div>
-            <div>{{getOrder.delivery_date}}</div>
+            <div>{{order.delivery_date}}</div>
             <div>{{delivery_time}}</div>
-            <div>{{getOrder.confirm == 1 ? 'Потверждение по телефону' : 'Потверждение по почте'}}</div>
-            <div v-if="getOrder.comment">Комментарий клиент: {{getOrder.comment}}</div>          
-            <div v-if="getOrder.comment_our">Комментарий бананыч: {{getOrder.comment_our}}</div>
-            <div>{{getOrder.created_at}}</div>
+            <div>{{order.confirm == 1 ? 'Потверждение по телефону' : 'Потверждение по почте'}}</div>
+            <div v-if="order.comment">Комментарий клиент: {{order.comment}}</div>          
+            <div v-if="order.comment_our">Комментарий бананыч: {{order.comment_our}}</div>
+            <div>{{order.created_at}}</div>
           </div>
         </div>
       </div>
@@ -34,25 +35,20 @@
         <div class="my-2 m-md-2 p-2 delivery-border">
           <h4>Список продуктов</h4>
           <div style="margin: 0px -0.5rem;">
-            <delivery-items 
-              @returnSuccess="get()" 
-              :edit="(              
-                getOrder.statuses != undefined ? 
-                (getOrder.statuses[0].id == 1 ? false : true) : 
-                false
-              )"
-            ></delivery-items>
+            <delivery-items />
           </div>          
         </div>
       </div>
 
       <!-- Checkout / Actions -->
       <div class="col-12 col-md-4 p-0 delivery-wrap">
+
         <!-- Checkout -->
         <div class="my-2 m-md-2 p-2 delivery-border">
           <h4>Итоги</h4>
-          <show-checkout :order="getOrder" :show="'result'"></show-checkout>
+          <show-checkout :order="order" :show="'result'"></show-checkout>
         </div>   
+
         <!-- Pay Method -->
         <div class="my-2 m-md-2 p-2 delivery-border">
           <h4>Способ оплаты</h4>
@@ -69,18 +65,41 @@
               </li>
             </ul>
           </div>
-          <!-- Deliver Button -->
-          <button 
-            @click="setDelivered()" 
-            v-if="getOrder.statuses != undefined && getOrder.statuses[0].id != 1" 
-            class="btn btn-success"
-          >
-            Доставлен  
-          </button>   
-          <!-- Deliver Show -->
-          <span v-if="getOrder.statuses != undefined && getOrder.statuses[0].id == 1" class="text-success">
-            Заказ Доставлен! {{getOrder.statuses[0].pivot.created_at}}
-          </span>
+
+          <!-- Deliver Buttons -->
+          <div class="d-flex justify-content-between">
+            <button 
+              @click="setDelivered()" 
+              v-if="order.statuses != undefined && !(order.statuses[0].id == 1 || order.statuses[0].id == 100)"
+              class="btn btn-success"
+            >
+              Доставлен  
+            </button>  
+            <button 
+              @click="setOrderReturned(order.id)" 
+              v-if="order.statuses != undefined && !(order.statuses[0].id == 1 || order.statuses[0].id == 100)"
+              class="btn btn-danger"
+            >
+              Возврат  
+            </button>  
+          </div> 
+
+          <!-- Delivered Cancel -->
+          <div style="display: flex;justify-content: space-between;">
+            <!-- Delivered -->
+            <span v-if="order.statuses != undefined && order.statuses[0].id == 1" class="text-success">
+              Заказ Доставлен! {{order.statuses[0].pivot.created_at}}
+            </span>
+            <!-- Returned -->
+            <span v-if="order.statuses != undefined && order.statuses[0].id == 100" class="text-danger">
+              Заказ Возращен! {{order.statuses[0].pivot.created_at}}
+            </span>
+            <!-- Cancel -->
+            <span v-if="order.statuses != undefined && (order.statuses[0].id == 1 || order.statuses[0].id == 100)">
+              <button @click="deleteDelivery(order.id)" class="btn btn-outline-danger">Отменить</button>
+            </span>
+          </div>
+
         </div>  
       </div>
     </div>    
@@ -98,17 +117,17 @@ data(){return{
   errors:[],
 }},
 computed:{
-  ...mapGetters(['getOrder']),
+  ...mapGetters({order:'getOrder'}),
   delivery_time:function(){
-    if(this.getOrder.delivery_time_from == undefined || this.getOrder.delivery_time_from == undefined) return "";
-    return this.getOrder.delivery_time_from.slice(0,2)+ ' - ' +this.getOrder.delivery_time_to.slice(0,2)
+    if(this.order.delivery_time_from == undefined || this.order.delivery_time_from == undefined) return "";
+    return this.order.delivery_time_from.slice(0,2)+ ' - ' +this.order.delivery_time_to.slice(0,2)
   },
 },
 mounted(){
   this.fetchOrder(this.id);
 },
 methods:{
-  ...mapActions(['fetchOrder']),
+  ...mapActions(['fetchOrder','deleteDelivery','setOrderReturned']),
   async setDelivered(){
     //Validate Pays
     this.errors = [];
@@ -121,19 +140,18 @@ methods:{
       return;      
     }
     if(this.payMethod.sum != undefined){
-      if(this.payMethod.sum != this.getOrder.total_result){
+      if(this.payMethod.sum != this.order.total_result){
         this.errors.push('Суммы не совпадают!');
         return
       }
     }
 
-
     let r = await this.jugeAx('/put/delivery',
       {
         orderId:this.id,
-        items:this.getOrder.items,
+        items:this.order.items,
         payMethod:this.payMethod,
-        sum:this.getOrder.total_result,  
+        sum:this.order.total_result,  
       },
       'put'
     );

@@ -30,6 +30,7 @@ export default {
           to:(this.filters.date.to) ? moment(this.filters.date.to,this.filters.date.format).format('YYYY-MM-DD') : false,
         },
         status:[600,500],
+        strews:1,
       })
       if(!r) return;
       this.items = r;
