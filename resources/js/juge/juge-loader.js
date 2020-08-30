@@ -66,7 +66,7 @@ class jugeLoader{
         'data-id="'+id+'"'+
         'style="'+
           'cursor: wait;'+
-          'position:absolute;'+
+          'position:fixed;'+
           'top:'+(margin.top)+';'+
           'left:'+(margin.left)+';'+
           'width:'+(width)+'px;'+

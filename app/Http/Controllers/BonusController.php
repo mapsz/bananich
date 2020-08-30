@@ -10,14 +10,6 @@ use App\BonusAdd;
 class BonusController extends Controller
 {
   public function add(Request $request){
-
-    // Validator::make($request->all(), [
-    //   'itemId'     => 'required|numeric',
-    // ])->validate();
-
-    // $bonus = Bonus::lates();
-    
-
-
+    //
   }
 }

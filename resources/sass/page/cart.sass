@@ -1,0 +1,310 @@
+.cart
+  &-sitebar
+    margin-bottom: 100px
+    .btn
+      font-size: 18px
+  &-item
+    background: rgba(242, 242, 242, 0.5)
+    border-radius: 20px
+    padding: 35px 28px
+    width: 95%
+    display: flex
+    justify-content: space-between
+    align-items: center
+    position: relative
+    margin-right: 30px
+    margin-bottom: 16px
+  &-name
+    font-size: 20px
+    font-weight: 600
+    line-height: 110%
+    margin-bottom: 4px
+  &-weight
+    font-size: 16px
+    line-height: 110%
+    color: #828282
+  &-price
+    font-weight: 600
+    font-size: 20px
+    line-height: 110%
+    text-align: center
+    .old
+      color: #828282
+      font-weight: 400
+      font-size: 16px
+      text-decoration: line-through
+    .sale
+      display: block
+      color: #FF5C00
+  &-points
+    font-weight: 600
+    font-size: 20px
+    line-height: 27px
+    color: #4F4F4F
+  &-remove
+      width: 14px
+      height: 14px
+      position: absolute
+      right: -28px
+      top: 50%
+      bottom: 0
+      transform: translate(0, -50%)
+      font-size: 24px
+      background: url('../image/remove.svg') no-repeat center / cover
+      cursor: pointer
+  &-counter
+    width: 130px
+    height: 40px
+    display: flex
+    justify-content: space-evenly
+    border: 1px solid #BDBDBD
+    box-sizing: border-box
+    border-radius: 30px
+    .number
+      width: 46px
+      border: none
+      background: transparent
+      text-align: center
+      border-left: 1px solid #BDBDBD
+      border-right: 1px solid #BDBDBD
+      font-size: 20px
+      font-weight: 600
+    .back, .next
+      width: 100%
+      border: none
+      background: transparent
+      font-size: 22px
+      font-weight: 600
+      color: rgba(51, 51, 51, 0.70)
+  &-delivery
+    background: rgba(242, 242, 242, 0.5)
+    border-radius: 20px
+    padding: 28px 22px
+    margin-bottom: 16px
+    &-header
+      font-weight: 600
+      font-size: 20px
+      padding-bottom: 18px
+      position: relative
+      margin-bottom: 18px
+      &:after
+        content: ''
+        width: 85%
+        height: 0.8px
+        background: #E0E0E0
+        position: absolute
+        bottom: 0
+        right: 0
+    &-ico
+      margin-right: 14px
+    &-text
+      font-size: 18px
+      color: #333333
+      line-height: 120%
+      .url
+        margin-top: 10px
+
+  &-bonuse
+    background: rgba(242, 242, 242, 0.5)
+    border-radius: 20px
+    padding: 28px 22px
+    margin-bottom: 16px
+    &-ico
+      margin-right: 14px
+    &-text
+      font-size: 18px
+      color: #333333
+      line-height: 120%
+      padding-top: 14px
+      .url
+        margin-top: 10px
+    hr
+      background: #E0E0E0
+      height: 1px
+      border: none
+      margin: 20px 0
+
+  &-promo
+    position: relative
+    &-input
+      border: 1px solid #E0E0E0
+      box-sizing: border-box
+      border-radius: 30px
+      width: 100%
+      height: 40px
+      font-size: 16px
+      padding: 0 128px 0 15px
+    &-btn
+      position: absolute
+      rop: 0
+      right: 0
+      font-size: 16px
+      background: #E0E0E0
+      border-radius: 30px
+      width: 120px
+      height: 40px
+      border: none
+
+  &-info
+    background: rgba(242, 242, 242, 0.5)
+    border-radius: 20px
+    padding: 28px 22px
+    margin-bottom: 16px
+    &-header
+      font-weight: 600
+      font-size: 20px
+      padding-bottom: 18px
+      position: relative
+      margin-bottom: 18px
+    &-item
+      position: relative
+      margin-bottom: 10px
+    &-name
+      font-size: 18px
+      line-height: 110%
+      color: #333333
+    &-sum
+      font-weight: 600
+      font-size: 18px
+      line-height: 110%
+      position: absolute
+      right: 0
+      top: 0
+    &-dd-list
+      color: #828282
+      font-size: 18px
+      li
+        margin-bottom: 10px
+    &-end
+      display: flex
+      justify-content: space-between
+      font-weight: 600
+      font-size: 20px
+  &-message
+    margin-top: 27px
+    display: flex
+    &-ico
+      margin-right: 14px
+    &-text
+      font-size: 20px
+      font-weight: 600
+    &-date
+      font-size: 18px
+      line-height: 130%
+      color: #4F4F4F
+      font-weight: 400
+      margin-top: 8px
+    &-time
+      font-size: 18px
+      font-weight: 600
+      color: #000000
+  &-box
+    padding: 14px 0
+    border-bottom: 1px solid #E0E0E0
+    .cart-name, .cart-price
+      font-size: 18px
+    .cart-weight
+      font-size: 14px
+      
+@media (max-width: 580px)
+  .cart-page
+    .breadcrumb
+      display: none
+  .cart
+    &-item
+      width: 100%
+      padding: 15px
+      display: block
+    &-remove
+      right: 15px
+      top: 15px
+    &-name
+      font-size: 16px
+    &-weight
+      font-size: 12px
+    &-counter
+      width: 98px
+      height: 30px
+      position: absolute
+      bottom: 15px
+      right: 15px
+      .back, .next
+        font-size: 15px
+        font-weight: 400
+      .number
+        font-size: 14px
+    &-price
+      text-align: left
+      margin-top: 10px
+    &-points
+      background: #E0E0E0
+      border-radius: 30px
+      position: absolute
+      right: 126px
+      bottom: 15px
+      padding: 2px 10px
+      font-size: 14px
+
+    &-delivery
+      background: transparent
+      border-radius: 0
+      padding: 28px 0
+      margin-bottom: 16px
+      border-top: 1px solid #E0E0E0
+      border-bottom: 1px solid #E0E0E0
+      &-header
+        padding-left: 46px
+        font-size: 14px
+        &::after
+          width: 88%
+      &-ico
+        img
+          width: 32px
+      &-text
+        font-size: 14px
+        span
+          font-weight: 600
+          font-size: 15px
+        .url
+          font-size: 14px
+    &-bonuse
+      background: transparent
+      border-radius: 0
+      padding: 10px 0 28px
+      margin-bottom: 16px
+      &-ico
+        img
+          width: 32px
+      &-text
+        font-size: 14px
+        padding-top: 0
+        span
+          font-weight: 600
+          font-size: 15px
+        .url
+          font-size: 14px
+    &-message
+      &-ico
+        img
+          width: 32px
+      &-text
+        font-size: 16px
+      &-date
+        margin-top: 4px
+        font-size: 16px
+    &-info
+      &-header
+        margin-bottom: 0px
+        font-size: 16px
+        padding-bottom: 18px
+      &-name, &-sum
+        font-size: 14px
+      &-dd-list
+        font-size: 14px
+      &-end
+        font-size: 16px
+
+/*  Адаптив cart */ 
+@media (max-width: 580px)
+  .cart-sitebar
+    margin: 30px 0

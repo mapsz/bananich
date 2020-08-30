@@ -9,49 +9,8 @@ use App\Supplier;
 
 class SupplierController extends Controller
 {
-  public function jsonGet(Request $request){
-
-    //Make Query
-    $query = new Supplier;
-
-    //Add withs
-    $query = $query->with('products');
-
-    //Add conditions
-    if(isset($request->id)){
-      $query = $query->where('id',$request->id);
-    }
-
-    //By product
-    if(isset($request->productId)){
-      $productId = $request->productId;
-      $query = $query->whereHas('products', function($q)use($productId){
-        $q->where('products.id', '=', $productId);
-      });
-    }
-
-      
-    //Order
-    $query = $query->orderBy('created_at','desc');
-
-    //Get
-    $suppliers = $query->get();
-
-    //Set supplier_product_id
-    foreach ($suppliers as $key => $supplier) {     
-      foreach ($supplier->products as $product) {
-        $product['supplier_product_id'] = $product->pivot->supplier_product_id;
-      }
-    }
-
-    //Set single
-    if(isset($request->id)){
-      if(count($suppliers) > 0){
-        $suppliers = $suppliers[0];
-      }      
-    }
-
-    return response()->json($suppliers);  
+  public function jsonGet(Request $request){   
+    return response()->json(Supplier::jugeGet($request));  
   }
 
   public function jsonDistinct(){

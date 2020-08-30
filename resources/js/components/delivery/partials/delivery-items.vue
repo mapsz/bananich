@@ -130,7 +130,11 @@ export default {
     returnQuantity:null,
   }},
   computed:{
-    ...mapGetters({items:'getOrderItems',order:'getOrder'}),
+    ...mapGetters({order:'order/getOne'}),
+    items:function(){
+      if(this.order.items == undefined) return false;
+      return this.order.items;
+    },
     currentStatusId: function(){
       if(this.order.statuses == undefined){
         return false;

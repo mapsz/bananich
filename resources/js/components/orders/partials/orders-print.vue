@@ -120,7 +120,7 @@
 import {mapGetters} from 'vuex';
 export default {
   computed:{
-    ...mapGetters(['getOrders']),
+    ...mapGetters({getOrders:'order/get'}),
   },
   methods:{
     printModalOpen(){

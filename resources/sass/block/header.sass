@@ -1,0 +1,265 @@
+/* Меню */
+.header
+  z-index: 2
+  position: relative
+  flex: 0 0 auto
+.header-nav
+  width: 100%
+  height: 52px
+  background: #F2F2F2
+  &-wrap
+    display: flex
+    align-items: center
+    justify-content: space-between
+    height: 100%
+
+.navbar
+  width: 100%
+  padding-right: 60px
+  &-nav
+    display: flex
+    justify-content: space-between
+
+.nav-link
+  color: #4F4F4F
+  text-decoration: none
+  font-size: 16px
+  &.active
+    text-decoration: underline
+    color: #000
+
+.header-phone
+  width: 162px
+  flex: none
+  text-align: right
+  height: 52px
+  line-height: 52px
+  border-left: 1px solid #fff
+  a
+    color: #000000
+/* Конец меню */
+
+/* Блок лого, уровень, поиск... */ 
+.header-bar
+  height: 108px
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15)
+  &-wrap
+    display: flex
+    height: 100%
+    align-items: center
+    justify-content: space-between
+  &.fixed
+    position: fixed
+    width: 100%
+    z-index: 1000
+    background: #fff
+    top: 0
+.search
+  position: relative
+  width: 268px
+  height: 50px
+.search-input
+  background: #F2F2F2
+  border-radius: 50px
+  border: none
+  font-size: 16px
+  line-height: 50px
+  height: 50px
+  width: 100%
+  padding: 0 58px 0 17px
+  box-sizing: border-box
+.search-btn
+  border: none
+  background: transparent
+  position: absolute
+  right: 17px
+  top: 50%
+  transform: translateY(-50%)
+  cursor: pointer
+
+.bonuses
+  position: relative
+.bonuses-btn
+  cursor: pointer
+  width: 50px
+  height: 50px
+  border-radius: 50%
+  border: none
+  font-weight: 600
+  font-size: 26px
+  background: #FBE214
+  color: #000
+.bonuses-num
+  position: absolute
+  background: #000000
+  color: #fbe214
+  border-radius: 14px
+  padding: 4px 8px
+  left: 28px
+  top: -11px
+
+.user-btn
+  cursor: pointer
+  width: 50px
+  height: 50px
+  border-radius: 50%
+  border: none
+  background: #000
+
+.cart
+  display: flex
+  align-items: center
+  position: relative
+.cart-btn
+  cursor: pointer
+  position: relative
+  border: none
+  background: transparent
+.cart-num
+  position: absolute
+  font-size: 16px
+  font-weight: 600
+  background: #fbe214
+  color: #000000
+  border-radius: 14px
+  padding: 4px 8px 3px
+  left: 20px
+  top: -9px
+.cart-sum
+  font-weight: 600
+  margin: 0 14px 0 20px
+  font-size: 18px
+.cart-arr
+  cursor: pointer
+  border: none
+  background: transparent
+  &.active
+    transform: scale(1, -1)
+.cart-list
+  right: 0px
+  top: 90px
+  width: 280px
+  padding: 40px 20px 20px
+.cart-line-sum
+  font-weight: 600
+.cart-line-weight
+  font-size: 14px
+  color: #828282
+.cart-line-name
+  margin-bottom: 4px
+.cart-line-end
+  margin: 20px 0 20px
+  display: flex
+  align-items: center
+  justify-content: space-between
+.group-icon
+    display: flex
+    .bonuses
+      margin-right: 20px
+
+.tap-bar
+    display: none
+    position: fixed
+    bottom: 0
+    z-index: 100
+    width: 100%
+    height: 44px
+    background: #fff
+    color: #8E8E90
+    font-size: 10px
+    text-align: center
+    padding-top: 6px
+    &-nav
+      display: flex
+      flex-direction: column
+      justify-content: center
+      height: 100%
+    &-user
+      display: flex
+      flex-direction: column
+      &-btn
+        border: none
+        background: transparent
+      &-icon
+        width: 19px
+        height: 20px
+        fill: #8E8E90
+    &-cart
+      display: flex
+      flex-direction: column
+      &-btn
+        border: none
+        background: transparent
+      &-icon
+        width: 23px
+        height: 21px
+        fill: #8E8E90
+    &-search
+      display: flex
+      flex-direction: column
+      &-btn
+        border: none
+        background: transparent
+
+.navbar-toggler
+  background: transparent
+  border: none
+  text-align: left
+  width: 22px
+  margin: 0 auto
+  span
+    width: 100%
+    height: 2px
+    border-radius: 11px
+    display: block
+    background: #8E8E90
+    margin-bottom: 4px
+    &:nth-child(2)
+      width: 15px
+
+.phone
+  &-nav
+    &-link
+      font-size: 18px
+      color: #000
+      text-decoration: none
+      padding: 25px 0
+      display: block
+    &-item
+      border-bottom: 0.8px solid #E0E0E0
+      &:last-child
+        border-bottom: 0
+/*  Адаптив Header */
+@media (max-width: 1024px)
+  .nav-link
+    font-size: 12px
+  .cart-sum, .cart-arr
+    display: none
+
+@media (max-width: 768px)
+  .search
+    display: none
+  .user
+    display: none
+  .cart
+    display: none
+  .nav-link
+    font-size: 9px
+  .navbar
+    padding-right: 10px
+    &-phone
+      display: block
+  .tap-bar
+    display: block
+  .group-icon
+    .bonuses
+      margin-right: 0
+  .header-bar
+    height: 62px
+  .logo
+    width: 35px
+@media (max-width: 580px)
+  .header-nav
+    display: none
+
+

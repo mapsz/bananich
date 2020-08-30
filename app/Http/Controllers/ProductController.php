@@ -8,118 +8,81 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Product;
 
+
 class ProductController extends Controller
 {
 
   public function get(Request $request){
-
-    $products = new Product();
-
-    //Id
-    if(isset($request['id'])){
-      $products = $products->where('id', $request['id']);
-    }
-
-    //Search
-    if(isset($request['search']) && strlen($request['search']) > 0){
-      $search = $request['search'];
-      $products = $products->where(function($q)use($search) {
-        $q->where('id', $search)
-          ->orWhere('name', 'LIKE', '%'.$search.'%');
-      });
-    }
-
-    //Archive
-    if(isset($request['archive']) && $request['archive']){
-      $products = $products->with(["archive" => function($q){
-        $q->orderBy('archive_at','DESC');
-      }]);
-    }
-
-    //Order
-    $products = $products->orderBy('gruzka_priority','DESC');
-
-    if(isset($request['id'])){
-      $products = $products->first();
-    }else{
-      $products = $products->get();
-    }
-    
-
-
-    return response()->json($products);
+    return response()->json(Product::getWithOptions($request));
   }
 
   public function put(Request $request){
 
     if(!isset($request['data'])) return false;
 
-    Validator::make($request['data'], [
-      'name'              => 'required|unique:products',
-      'price'             => 'required|numeric',
-      'unit.sys'          => 'numeric',
-    ])->validate();
+    Product::doValidate($request);
 
-    //Store Product
-    try {
+    $id = Product::put($request['data']);
 
-      DB::beginTransaction();
-
-      $product = new Product();
-      foreach ($request['data'] as $k => $v) {
-        if($k == 'images') continue;
-        if($k == 'unit'){
-          if(isset($v['view'])){
-            $product->unit = $v['view'];
-          }
-          if(isset($v['sys'])){
-            $product->unit = $v['sys'];
-          }
-          continue;
-        }
-        $product->$k = $v;
-      }
-
-      $product->save();
-      
-
-      if(isset($request['data']['images'])){
-        if(!Product::saveImages($request['data']['images'], $product->id)){
-          throw new Exception("Error Saving Images", 1);          
-        }
-      }
-
-      
-
-      //Store to DB
-      DB::commit();
-
-    } catch (Exception $e) {
-      
-      // Rollback from DB
-      DB::rollback();
-      // dd($e);
-      return response('Could not save file', 505)->header('Content-Type', 'text/plain');
-    }
-
-    return response()->json($product->id);
+    return response()->json($id);
 
   }
 
   public function post(Request $request){
 
-    $product = Product::find($request->data['id']);
+    Product::doValidatePost($request);
 
-    //Edit product
-    foreach ($request->all()['data'] as $key => $value) {
-      $product->$key = $value;
-    }
-      
-    $product->archiveUpdate();
+    Product::post($request->data['id'], $request['data']);
 
     return response()->json(1);
 
   }
+
+  public function editMainPhoto(Request $request){
+
+      //Set path
+      $path = public_path().'/products/images/main/';
+      $name = $request->productId;
+
+      //Save Image
+      if(!FileUpload::saveFile($request->file, $path.$name, ['w' => 200, 'h' => 200])){
+        return false;
+      }
+
+    
+      return response()->json(1);
+
+  }
+
+  public function setDiscount(Request $request){
+
+    //Validate
+    Validator::make($request->all(), [
+      'product_id'      => 'required|exists:products,id',
+      'discount_price'  => 'required|numeric',
+      'quantity'        => 'numeric',
+      'name'            => 'max:99',
+    ])->validate();
+
+    //Set
+    Product::setDiscount($request->all());
+
+    return response()->json(1);
+  }
+
+  public function removeDiscount(Request $request){
+
+    //Validate
+    Validator::make($request->all(), [
+      'product_id'      => 'required|exists:products,id',
+    ])->validate();
+
+    //Set
+    Product::deleteDiscount($request->product_id);
+
+    return response()->json(1);    
+  }
+
 
   public function getBase64PreloadedImages(Request $request){
 

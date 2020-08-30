@@ -12,10 +12,25 @@
       </div>     
     </form> 
 
-    <button @click="getData()" class="mt-3 btn btn-primary">Список</button>
     <!-- List -->
-    <list-table v-if="showList" :model="'delivery'"></list-table>
+    <button @click="getData()" class="mt-3 btn btn-primary">Список</button>
 
+    <div v-if="showList">
+
+      <!-- Filters -->
+      <div class="row m-3 mb-2 order-menu justify-content-between">
+        <juge-date-filter :model="'order'" :default="false"></juge-date-filter>
+        <id-filter :model="model"></id-filter>
+      </div>      
+      <div class="row m-3 mb-2 order-menu justify-content-between">
+        <order-delivery-time-filter :model="'order'" />
+        <search-filter  :model="'order'" />
+      </div>
+
+      <juge-list  :data="'order'" :keys="'delivery'" />
+      <!-- <juge-list v-if="showList" :data="'order'" :keys="'delivery'" :disable-auto-fetch="true"/> -->
+
+    </div>
 
   </div>
 
@@ -23,7 +38,6 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
     showList:false,
@@ -31,13 +45,14 @@ export default {
     byId:null,
   }},
   mounted(){
-    //
+    //Set filters
+    this.$store.dispatch('order/addFilter',{status:[1]});
   },
   methods:{
-    ...mapActions(['fetchDeliverys']),
     getData(){
       if(!this.loadData){
-        this.fetchDeliverys();
+        //Fetch
+        this.$store.dispatch('order/listFetch');
         this.loadData = true;
       } 
       this.showList = !this.showList;

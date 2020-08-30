@@ -4,30 +4,28 @@
 
   <!-- Menu -->
   <div class="row m-3 mb-2 order-menu justify-content-between">
-    <date-menu :p-active="false"></date-menu>
+    <juge-date-filter :model="'order'" :default="false"></juge-date-filter>
   </div>
   <div class="row m-3 mb-2 order-menu justify-content-between">
-    <time-menu></time-menu>
-    <search-menu></search-menu>
+    <order-delivery-time-filter :model="'order'" />
+    <search-filter  :model="'order'" />
   </div>
 
   <!-- List -->
   <div class="container-fluid" ref="orderList">
-    <list-table :model="'confirm'" :p-data-model-name="'orders'"></list-table>
+    <juge-list :data="'order'" :keys="'confirm'" :disable-auto-fetch="true"/>
   </div>
 
 </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
 export default {
   mounted(){
-    this.refreshOrderFilters();
-    this.setFilter({status:[900,850,800,700]});
-  },
-  methods:{
-    ...mapActions(['setFilter','refreshOrderFilters']),
+    //Set filters
+    this.$store.dispatch('order/addFilter',{status:[900,850,800,700]});
+    //Fetch
+    this.$store.dispatch('order/listFetch');
   }
 }
 </script>

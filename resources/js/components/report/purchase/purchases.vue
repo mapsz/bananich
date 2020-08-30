@@ -13,7 +13,6 @@
     <a href="/report/purchase/prices"><button class="btn btn-warning">Цены</button></a>
     </div>
     
-
     <!-- Actions -->
     <div class="my-3">
       <!-- Add -->
@@ -26,7 +25,7 @@
     </div>  
     
     <!-- List -->
-    <list-table :data="goods" :model="'purchases'"></list-table>
+    <juge-list :data="'purchase'"></juge-list>
 
   </div>
 
@@ -40,15 +39,9 @@ export default {
     goods:[],
   }},
   mounted(){
-    // this.add=true;
-    this.get();
+    //
   },
   methods:{
-    async get(){
-      let r = await this.jugeAx('/json/goods');
-      if(!r) return;
-      this.goods = r;      
-    },
     async addSuccess(){
       this.get();
     }

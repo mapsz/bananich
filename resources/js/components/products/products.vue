@@ -4,13 +4,22 @@
   <div class="container-fluid">
     <!-- Title -->
     <h1>Продукты</h1>
+
+    <div class="d-flex" style="justify-content: space-between;">
     <!-- Add Field -->
-    <router-link class="navbar-brand" to="/product/add">
-      <button class="btn-success btn">Добавить</button>
-    </router-link>
+      <router-link class="navbar-brand" to="/admin/product/add">
+        <button class="btn-success btn">Добавить</button>
+      </router-link>
+
+      <button @click="noImage()" class="btn-secondary btn">Без главного фото</button>
+    </div>
+
+    <!-- Filter -->
+    <search-filter class="my-2" :model="'product'" />
+   
 
     <!-- List -->
-    <list-table :data="products" :model="'products'"></list-table>  
+    <juge-list :data="'product'"></juge-list>
     
   </div>
 </div>
@@ -18,19 +27,11 @@
 
 <script>
 export default {
-data(){return{
-  products:[],
-}},
-mounted(){
-  this.getProducts();
-},
-methods:{
-  async getProducts(){
-    //Get
-    let r = await this.jugeAx('/json/products/');
-    this.products = r;   
-  }
-},
+  methods:{
+    noImage(){
+      this.$store.dispatch('product/addFilter',{no_main_image:1});
+    }
+  },
 }
 </script>
 

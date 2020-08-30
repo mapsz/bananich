@@ -48,21 +48,29 @@
     </span>
   </template>
 
-  <span v-for='(error,z) in errors' :key='z+"d"' class="juge-form-error">
-    {{error}}
+  <span v-for='(errorz,z) in errors' :key='z+"d"' class="juge-form-error">
+    <span v-for='(error,j) in errorz' :key='j'>
+      {{error}}
+    </span>    
   </span>
 
-  <button class="juge-form-save btn btn-success" type="submit">Сохранение</button>
+  <button class="juge-form-save btn btn-success" type="submit">{{buttonCaption}}</button>
 
 </form>  
 </template>
 
 <script>
 export default {
-  props: ['inputs','errors'],
+  props: ['inputs','errors','button'],
   data(){return{
     data:{},
   }},
+  computed:{
+    buttonCaption: function(){
+      if(this.button == undefined) return "Сохранить";
+      else return this.button;
+    }
+  },
   mounted(){
     //
   },

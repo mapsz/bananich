@@ -26,4 +26,15 @@ class FileUploadController extends Controller
                 ->header('Content-Type', 'text/plain');
     }
   }  
+
+  public function fileDelete(Request $request){
+
+
+    $r = FileUpload::deleteFile($request->file);
+
+    if($r)
+      return response()->json($r, 200);
+    else
+      return response()->json($r, 512);
+  }
 }

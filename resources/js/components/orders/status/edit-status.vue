@@ -35,7 +35,7 @@ methods:{
     if(!r) return;
     this.statuses = r;
   },
-  ...mapActions(['putStatus']),
+  ...mapActions({'putStatus':'order/putStatus'}),
 },
 }
 </script>

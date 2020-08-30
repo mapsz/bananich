@@ -42,18 +42,18 @@ let delivery = {
     },
     async putReturn({dispatch}, data){    
       let r = await ax.fetch('/return/item',{itemId:data.item.id,quantity:data.quantity},'put');
-      dispatch('fetchOrder');
+      dispatch('order/fetchOne');
     },
     async deleteReturn({dispatch}, id){
       let r = await ax.fetch('/return/item',{id},'delete');
-      dispatch('fetchOrder');
+      dispatch('order/fetchOne');
+    },    
+    async deleteDelivery({dispatch},id){
+      let r = await ax.fetch('/delivery/',{id},'delete');
+      dispatch('order/fetchOne');
     },
     async putDelivery(){
       //
-    },
-    async deleteDelivery({dispatch},id){
-      let r = await ax.fetch('/delivery/',{id},'delete');
-      dispatch('fetchOrder');
     },
     
   },  

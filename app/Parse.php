@@ -3,26 +3,156 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Exception;
+
 use App\Order;
 use App\Item;
 use App\Coupon;
 use App\Product;
 use App\Discount;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class Parse extends Model
 {
 
+  //PRODUCTS
+  public static function getProducts(){
+    $json = file_get_contents('https://bananich.ru/wp-json/wl/v1/products');
+
+    $parsedProducts = json_decode($json);
+
+    // dd($parsedProducts);
+
+    $products = [];
+    foreach ($parsedProducts as $key => $product) {
+
+      $toProduct = [];
+
+      $toProduct['id'] = $product->ID;
+      $toProduct['description'] = $product->post_content;
+      $toProduct['unit'] = isset($product->metas->gram_field_sys[0]) ? $product->metas->gram_field_sys[0] : false;
+      $toProduct['name'] = $product->post_title;      
+      $toProduct['price'] = $product->price;        
+      $toProduct['metas']['strews'] = $product->metas->sipuchka_field[0];
+      $toProduct['metas']['сountry'] = $product->metas->country_field[0];
+      $toProduct['metas']['unit_view'] = isset($product->metas->gram_field[0]) ? $product->metas->gram_field[0] : false;
+
+      //Categories
+      foreach ($product->categories as $key => $cat) {
+        DB::table('categories')->updateOrInsert(['name' => $cat->name]);
+        $catId = DB::table('categories')->where(['name' => $cat->name])->first()->id;
+        DB::table('products_categories')->updateOrInsert(
+          ['product_id'    => $toProduct['id'], 'categoty_id'   => $catId]
+        );
+      }      
+
+      //Images      
+      $path = public_path().'\products\images\source\\' . $toProduct['id'] . '_0.jpg';
+      file_put_contents($path, file_get_contents($product->image[0]));
+
+      //Product
+      DB::table('products')->updateOrInsert(['id' => $toProduct['id']],
+        [
+          'name' => $toProduct['name'],
+          'price' => $toProduct['price'] = $product->price,
+          'unit' => $toProduct['unit'],
+        ]    
+      );
+
+      //Description
+      if($toProduct['description']){
+        DB::table('product_description')->updateOrInsert(
+          ['product_id' => $toProduct['id']], 
+          ['value' => $toProduct['description']]    
+        );        
+      }
+
+      //Metas
+      foreach ($toProduct['metas'] as $key => $meta) {
+        if(!$meta) continue;
+        DB::table('product_metas')->updateOrInsert(
+          ['product_id'  => $toProduct['id'],'name' => $key], 
+          ['value' => $meta]    
+        );        
+      }
+      
+    }
+
+    dd(11);
+
+  }
+
+  //USERS
+  public static function user($id){
+
+    $json = file_get_contents('https://bananich.ru/wp-json/user/user?id='.$id);
+
+    $user = json_decode($json);
+
+    if(isset($user->email)){
+      Parse::putUser($user);
+      return true;
+    }else{
+      return false;
+    }
+
+    return $user;
+
+  }
+
+  public static function putUser($user){
+
+
+    //Database
+    try {
+      DB::beginTransaction();
+      
+      //Put user
+      DB::table('users')->insert([
+        'id'            => $user->id,
+        'email'         => $user->email,
+        'phone'         => $user->phone,
+        'name'          => $user->name,
+        'surname'       => $user->surname,
+        'password'      => 0,
+        'created_at'    => $user->created_at,
+      ]);
+
+      //Put user comment
+      if($user->user_comment){
+        DB::table('user_comments')->insert([
+          'user_id'  => $user->id,
+          'comment'  => $user->user_comment,
+        ]);
+      }
+      
+      //Put user referal
+      if($user->referal){
+        DB::table('user_referals')->insert([
+          'user_id'  => $user->id,
+          'referal_user_id'  => 0,
+          'phone'    => $user->referal,
+        ]);        
+      }   
+
+      //Store to DB
+      DB::commit();    
+    } catch (Exception $e) {          
+      // Rollback from DB
+      DB::rollback();
+      return response(['code' => 'pu1','text' => 'cant put user error'], 512)->header('Content-Type', 'text/plain');
+    }
+
+    return true;
+  }
+
+  //ORDERS
   public static function getOrders(){
 
 
     $json = file_get_contents('https://bananich.ru/wp-json/wl/v1/posts');
     $orders = json_decode($json);
-
-    // dd($orders[0]);
-
-    // dd($orders[0]);
    
     $orderCount = count($orders);
     $putOrderCount = 0;

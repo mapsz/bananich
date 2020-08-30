@@ -16,6 +16,44 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+
+  public function put(Request $request){
+
+    //Validate
+    $validate = [
+      'contacts.name'      => ['required', 'string', 'max:190'],
+      'contacts.email'     => ['required', 'string', 'email', 'max:190'],
+      'contacts.phone'     => ['required', 'regex:/^8(\d){10}?$/', ],
+      'address.apart'      => ['string', 'max:50' ],
+      'address.number'     => ['string', 'max:50' ],
+      'address.pork'       => ['numeric'],
+      'address.street'     => ['required', 'string', 'max:190' ],
+      'dateTime.date'      => ['required'],
+      'dateTime.time'      => ['required'],
+      'container'      => ['required'],
+      'paymethod'      => ['required'],
+      'confirm'      => ['required'],
+      'comment'      => ['required'],
+    ];    
+    //Toother
+    if(
+      isset($request->all()['toOther']) && 
+      isset($request->all()['toOther']['toOther']) && 
+      $request->all()['toOther']['toOther']
+    ){
+      $validate['toOther.name'] = ['required', 'string', 'max:190'];
+      $validate['toOther.phone'] = ['required', 'regex:/^8(\d){10}?$/'];
+      $validate['toOther.comment'] = ['string', 'max:65000'];
+    }
+
+    Validator::make($request->all(), $validate)->validate();
+
+    Order::put($request->all());
+
+    return response()->json(1);
+
+  }
+
   public function jsonGet(Request $request){
     $orders = Order::getWithOptions($request->all());    
     return response()->json($orders);

@@ -1,0 +1,116 @@
+.scale-list
+  display: flex
+  align-items: center
+
+.scale-line
+  color: #4F4F4F
+  font-weight: 600
+  padding: 0 7px
+  &.active
+    border: 1.3px solid rgba(189, 189, 189, 0.7)
+    margin-right: 6px
+    box-sizing: border-box
+    border-radius: 50px
+    width: 344px
+    height: 50px
+    padding: 0 20px
+    position: relative
+    display: flex
+    align-items: center
+    .scale-size
+      line-height: 50px
+      font-size: 24px
+      font-weight: 700
+      color: #000
+.scale-progress
+  padding-left: 12px
+  span
+    font-size: 14px
+    font-weight: 400
+    margin-bottom: 5px
+    display: block
+.scale-progress-line
+  width: 230px
+  height: 8px
+  background: rgba(114, 114, 114, 0.25)
+  border-radius: 10px
+  position: relative
+.scale-progress-position
+  border-radius: 10px
+  position: absolute
+  left: 0
+  top: 0
+  height: 100%
+.scale-gift
+  position: absolute
+  right: -1px
+  top: -1px
+  width: 50px
+  height: 50px
+  display: flex
+  justify-content: center
+  align-items: center
+  border-radius: 50%
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 0px 1px rgba(0, 0, 0, 0.25)
+
+.size-s
+  .scale-progress-position, .scale-gift, &.achieved
+    background: #FBE214
+.size-m
+  .scale-progress-position, .scale-gift, &.achieved
+    background: #FFB800
+.size-l
+  .scale-progress-position, .scale-gift, &.achieved
+    background: #FF7F0A
+.size-xl
+  .scale-progress-position, .scale-gift, &.achieved
+    background: #FF5C00
+
+.achieved
+  border-radius: 50%
+  line-height: 28px
+  text-align: center
+  width: 28px
+  height: 28px
+  margin-right: 11px
+
+
+/*  Адаптив Scale */
+@media (max-width: 768px)
+  .scale-line
+    &.active
+      width: 160px
+      padding: 0 8px
+      height: 34px
+      .scale-size
+        font-size: 18px
+  .scale-progress-line
+    width: 93px
+  .scale-progress
+    padding-left: 4px
+    span
+      font-size: 10px
+  .scale-gift
+    width: 34px
+    height: 34px
+    img
+      width: 17px
+  .bonuses-btn
+    font-size: 18px
+    width: 34px
+    height: 34px
+  .bonuses-num
+    padding: 2px 6px
+    left: 12px
+    top: -6px
+    font-size: 10px
+  .scale-line 
+    font-size: 10px
+    color: #4F4F4F
+    font-weight: 600
+    padding: 0 2px
+  .achieved
+    line-height: 16px
+    width: 16px
+    height: 16px
+    margin-right: 4px

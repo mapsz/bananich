@@ -20,16 +20,10 @@
 
 <script>
 export default {
-  props: ['model'],
+  props: ['pages'],
   data(){return{
     page:0,
   }},
-  computed:{
-    pages () {
-      let pages = this.$store.getters['get'+this.model+'Pages'];      
-      return pages != undefined ? pages : false;
-    }
-  },
   watch: {
     pages: {
       handler: function (val, oldVal) {
@@ -47,7 +41,7 @@ export default {
   },
   methods:{
     change(page){
-      this.$store.dispatch('fetch'+this.model);
+      this.$emit('change');
     }
   },
 }

@@ -1,0 +1,58 @@
+footer
+  background: #F8F8F8
+  padding: 48px 0 30px
+  flex: 0 0 auto
+  .phone
+    font-size: 24px
+    font-weight: 600
+    margin-bottom: 18px
+    a
+      color: #4F4F4F
+.footer-soc
+  &-link
+    margin-right: 20px
+.footer-nav
+  &-link
+    color: #4F4F4F
+    text-decoration: none
+    font-size: 18px
+  &-list
+    margin-bottom: 20px
+.footer-copy
+  font-size: 14px
+  color: #828282
+  margin-top: 30px
+  line-height: 123.68%
+  &-right
+    text-align: right
+.footer-main
+  margin-bottom: 30px
+
+/*  Адаптив footer */
+@media (max-width: 768px)
+  footer
+    .phone
+      display: inline-block
+      margin-right: 46px
+    .footer-soc
+      display: inline-block
+      margin-bottom: 18px
+  .footer-soc-link
+    margin-right: 10px
+  .footer-copy-left
+    margin-bottom: 20px
+  .footer-copy-right
+    text-align: left
+    margin-bottom: 20px
+
+@media (max-width: 580px)
+  .footer-nav
+    &-link
+      font-size: 16px
+  footer
+    .phone
+      font-size: 20px
+  .footer-copy-left, .footer-copy-right
+    font-size: 12px
+  .footer-main
+    margin-bottom: 0px

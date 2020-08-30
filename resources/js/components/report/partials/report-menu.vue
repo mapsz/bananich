@@ -7,7 +7,8 @@
   <div class="collapse navbar-collapse" id="report-navbar">
     <ul class="navbar-nav">
       <li v-for='(link,i) in links' :key='i' :class="current == link.link ? 'active' : ''" class="nav-item">
-        <router-link class="nav-link" :to="link.link">{{link.caption}}</router-link>
+        <!-- <router-link class="nav-link" :to="link.link">{{link.caption}}</router-link> -->
+        <a class="nav-link"  :href="link.link">{{link.caption}}</a>
       </li>
     </ul>
   </div>

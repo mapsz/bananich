@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Stocktaking;
 use App\Product;
 use App\Goods;
 use Carbon\Carbon;
@@ -14,24 +15,7 @@ class StocktakingController extends Controller
 {
   public function jsonGetProducts(Request $request){
 
-    $products = Product::with(['goods' => function($q){
-       $q->where('goods.quantity', 0)
-        ->where('goods.action', 1)
-        ->orderBy('goods.created_at', 'DESC');
-    }])->get();
-
-
-    //Set data
-    foreach ($products as $p) {
-      //Set no st
-      if($p->goods->count() < 1){
-        $p->lastStocktaking = false;
-      }else{
-        $p->lastStocktaking = $p->goods[0]->created_at->format('d.m.y');
-      }
-    
-
-    }
+    $products = Stocktaking::jugeGet($request);
 
     if(isset($request->test)){
       dd($products->toArray());

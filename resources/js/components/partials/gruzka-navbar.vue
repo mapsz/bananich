@@ -7,7 +7,8 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li v-for='(link,i) in links' :key='i' :class="current == link.link ? 'active' : ''" class="nav-item">
-        <router-link class="nav-link" :to="link.link">{{link.caption}}</router-link>
+        <!-- <router-link class="nav-link" :to="link.link">{{link.caption}}</router-link> -->
+        <a class="nav-link" :href="link.link">{{link.caption}}</a>
       </li>
     </ul>
     <!-- Auth -->
@@ -30,54 +31,73 @@ export default {
   data(){return{
     user:{},
     current:this.$route.path,
-    links:[
+    adminPrefix:'/admin',
+    links:[],
+  }},
+  mounted(){
+    this.links = [
       {
-        link:"/main",
-        caption:"main",
-      },
-      {
-        link:"/order-list",
+        link: this.adminPrefix+"/orders",
         caption:"Заказы",
       },
       {
-        link:"/confirms",
+        link: this.adminPrefix+"/confirms",
         caption:"Подтверждение",
       },
       {
-        link:"/gruzkas",
+        link: this.adminPrefix+"/gruzkas",
         caption:"Gruzka",
       },
       {
-        link:"/containers",
+        link: this.adminPrefix+"/containers",
         caption:"Контейнеры",
       },
       {
-        link:"/products-list",
+        link: this.adminPrefix+"/products",
         caption:"Продукты",
       },
       {
-        link:"/users",
+        link: this.adminPrefix+"/categories",
+        caption:"Категории",
+      },
+      {
+        link: this.adminPrefix+"/users",
         caption:"Пользователи",
       },
       {
-        link:"/strews",
+        link: this.adminPrefix+"/strews",
         caption:"Сыпучка",
       },
       {
-        link:"/statistics",
+        link: this.adminPrefix+"/statistics",
         caption:"Статистика",
       },
       {
-        link:"/reports",
+        link: this.adminPrefix+"/reports",
         caption:"Учёт",
       },
       {
-        link:"/deliveries",
+        link: this.adminPrefix+"/deliveries",
         caption:"Выдача",
       },
-    ]
-  }},
-  mounted(){
+      {
+        link: this.adminPrefix+"/bonuses",
+        caption:"Бонусы",
+      },
+      // {
+      //   link: this.adminPrefix+"/interviews",
+      //   caption:"Опрос",
+      // },
+      {
+        link: this.adminPrefix+"/presents",
+        caption:"Подарки",
+      },
+      {
+        link: this.adminPrefix+"/settings",
+        caption:"Настройки",
+      },
+    ];
+
     this.auth();
   },
   methods:{

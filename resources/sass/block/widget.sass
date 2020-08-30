@@ -1,0 +1,40 @@
+.widget
+  background: #fff
+  height: 100%
+  width: 80%
+  margin: 0 0 0 auto
+  transform: translateX(100%)
+  transition: 0.5s
+  &-header
+    padding: 20px 20px 20px 0
+    margin-left: 20px
+    border-bottom: 1px solid #E0E0E0
+    font-size: 18px
+    font-weight: 600
+    margin-bottom: 10px
+  &-list
+    li
+      border-bottom: 0.8px solid #E0E0E0
+      margin-left: 20px
+      a
+        padding: 20px 20px 20px 0
+        font-size: 18px
+        display: block
+        color: #000000
+        text-decoration: none
+  &-overlay
+    background: transparent
+    display: none
+    &.active
+      display: block
+      position: fixed
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+      z-index: 1000
+      overflow: hidden
+      background: rgba(0, 0, 0, .3)
+      .widget
+        transform: translateX(0%)
+        transition: 0.5s

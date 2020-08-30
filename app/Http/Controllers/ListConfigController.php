@@ -9,40 +9,6 @@ use App\ListConfig;
 
 class ListConfigController extends Controller
 {
-  public function get(Request $request){
-    if(!isset($request['model']) && $request['model'] == ''){
-      return response(['code' => 'lc1','text' => 'no config'], 512)->header('Content-Type', 'text/plain');
-    }
-
-    $model = $request['model'];
-    $userId = Auth::user()->id;
-
-    $listConfig = new ListConfig;
-
-    $modelConfig = $listConfig->get($model);
-    $userConfig = ListConfig::where('model',$model)->where('user_id',$userId)->get()->toArray();
-   
-    //No settings
-    if(count($userConfig) < 1){
-      foreach ($modelConfig as $k => $m) {
-        $modelConfig[$k]['active'] = true;
-      }
-      return response()->json($modelConfig);
-    }
-
-    //Set actives
-    foreach ($modelConfig as $k => $m) {
-      $modelConfig[$k]['active'] = false;
-      foreach ($userConfig as $u) {
-        if($m['name'] == $u['name']){
-          $modelConfig[$k]['active'] = true;
-        }
-      }
-    }
-
-    return response()->json($modelConfig);
-  }
-
   public function post(Request $request){
 
     $listConfig = new ListConfig;
@@ -62,11 +28,13 @@ class ListConfigController extends Controller
 
       //Save active keys
       foreach ($keys as $key) {
-        if(isset($key['active']) && $key['active']){
+        if(isset($key['active'])){
           $add = new ListConfig;
           $add->model = $model;
-          $add->name = $key['name'];
+          $add->name = $key['key'];
+          $add->position = $key['position'];
           $add->user_id = $userId;
+          $add->active = $key['active'];
           $add->save();
         }
       }      

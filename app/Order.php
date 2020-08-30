@@ -4,9 +4,71 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
+
+  protected $keys = [
+    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/order/{id}'],
+    ['key'    => 'address','label' => 'адрес'], 
+    ['key'    => 'appart', 'label' => 'квартира'],    
+    ['key'    => 'porch', 'label' => 'подъезд'],     
+    ['key'    => 'appartPorch','label' => 'кв. п.',"sortable" => false],    
+    ['key'    => 'name', 'label' => 'имя'],  
+    ['key'    => 'phone', 'label' => 'номер'], 
+    ['key'    => 'email', 'label' => 'емэил'],    
+    ['key'    => 'status', 'label' => 'статус'],
+    ['key'    => 'comment', 'label' => 'коммент клиент'],
+    ['key'    => 'comment_our', 'label' => 'коммент бананыч'],
+    ['key'    => 'confirm', 'label' => 'тип потверждение','type' => 'intToStr', 'intToStr' =>[
+      1 => 'телефон',
+      0 => 'емэил'
+    ]],
+    ['key'    => 'date', 'label' => 'дата'],
+    ['key'    => 'delivery_date', 'label' => 'дата доставки'],
+    ['key'    => 'delivery_time_from', 'label' => 'время доставки от'],
+    ['key'    => 'delivery_time_to', 'label' => 'время доставки до'],    
+    ['key'    => 'items', 'label' => 'товары','type' => 'count'],
+    // ['key'    => 'discounts', 'label' => 'скидки'],
+    ['key'    => 'discounts_total', 'label' => 'скидки всего(Предварительно)'],
+    ['key'    => 'discounts_total_result', 'label' => 'скидки всего(Погружено)'],
+    ['key'    => 'items_subtotal', 'label' => 'Подытог без учёта скидок(Предварительно)'],
+    ['key'    => 'items_subtotal_result', 'label' => 'Подытог без учёта скидок(Погружено)'],
+    ['key'    => 'items_total', 'label' => 'Подыто(Предварительно)'],
+    ['key'    => 'items_total_result', 'label' => 'Подыто(Погружено)'],
+    ['key'    => 'shipping', 'label' => 'цена доставки'],
+    ['key'    => 'bonus', 'label' => 'бонусы'],
+    ['key'    => 'total', 'label' => 'Итог(Предварительно)'],
+    ['key'    => 'total_result', 'label' => 'Итог(Погружено)'],
+    ['key'    => 'pay_method', 'label' => 'Метод оплаты',"sortable" => false],
+  ];  
+
+  public static function put($data){
+
+    //@@@todo from admin order
+    $customer_id = Auth::user()->id;
+
+    $order = new Order;
+
+    $order->customer_id = $customer_id;
+    $order->delivery_date = $data['dateTime']['date'];
+    $order->delivery_time_from = $data['dateTime']['time']['from'];
+    $order->delivery_time_to = $data['dateTime']['time']['to'];
+    $order->confirm = $data['confirm'];
+    $order->comment = $data['comment'];
+    $order->name = $data['contacts']['name'];
+    $order->phone = $data['contacts']['phone'];
+    $order->email = $data['contacts']['email'];
+    $order->address = $data['address']['street'] . ' ' .$data['address']['number'];
+    $order->appart = $data['address']['apart'];
+    $order->porch = isset($data['address']['porch']) ? $data['address']['porch'] : '';
+    $order->bonus = 0;
+    $order->shipping = 0;
+
+    $order->save();
+
+  }
 
   public static function getWithOptions($request){
 
@@ -23,10 +85,10 @@ class Order extends Model
       //Coupons
       $query = $query->with('coupons');
       //Discounts
-      $query = $query->with('discounts');
-      $query = $query->with(["items.product.discounts" => function($q){
-        $q->orderBy('created_at','DESC');
-      }]);
+      // $query = $query->with('discounts');
+      // $query = $query->with(["items.product.discounts" => function($q){
+      //   $q->orderBy('created_at','DESC');
+      // }]);
       //Items
       $query = $query->with('items');
       $query = $query->with('items.product');
@@ -56,7 +118,16 @@ class Order extends Model
     if('WHERE' == 'WHERE'){
       //Search
       if(isset($request['search']) && $request['search']){
-        $query = $query->where('id', 'LIKE', '%'.$request['search'].'%');
+
+        $search = $request['search'];
+        $query = $query->where(function($q)use($search) {
+          $q->where('id', 'LIKE', "%{$search}%")
+          ->orWhere('address', 'LIKE', "%{$search}%")
+          ->orWhere('name', 'LIKE', "%{$search}%")
+          ->orWhere('phone', 'LIKE', "%{$search}%")
+          ->orWhere('email', 'LIKE', "%{$search}%")
+          ;
+        });
       }
 
       //Delivery Time
@@ -379,5 +450,8 @@ class Order extends Model
     return $this->hasMany('App\Pay');
   }
 
+  //JugeCRUD  
+  public function jugeGetKeys()     {return $this->keys;}  
+  public function jugeGet($request) {return $this->getWithOptions($request);}
 
 }

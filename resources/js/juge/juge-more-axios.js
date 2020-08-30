@@ -15,20 +15,20 @@ class jugeMoreAxios{
       //Axios
       let r = false;
       switch (method) {
-        case 'get':
+        case 'get' || 'GET':
           r = await this.getFetch(url, params);
           break;
-        case 'put':
+        case 'put' || 'PUT':
           r = await axios.put(url, params)
             .then((r) => {return {e:0,r:r.data};})
             .catch((error) => {this.catch(error);return {e:1,r:error.response};});
           break;
-        case 'post':
+        case 'post' || 'POST':
           r = await axios.post(url, params)
             .then((r) => {return {e:0,r:r.data};})
             .catch((error) => {this.catch(error);return {e:1,r:error.response};});
           break;
-        case 'delete':
+        case 'delete' || 'DELETE':
           r = await axios.delete(url, {data:params})
             .then((r) => {return {e:0,r:r.data};})
             .catch((error) => {this.catch(error);return {e:1,r:error.response};});
@@ -36,11 +36,24 @@ class jugeMoreAxios{
         default:
           return false;
       }
+
+
+      //Stop loading
+      if(loader) load.stop(l);
+
+      //Get bad string error
+      if(typeof(r.r) == 'string'){
+        if(
+          r.r != 1 &&
+          url != '/file/upload'
+        ){
+          this.error(r.r);
+          return false;
+        }
+      }      
     
       //Save response
       this.lastResponse = r.r;
-      //Stop loading
-      if(loader) load.stop(l);
       //Return data
       return r.e ? false : r.r;
 
@@ -71,12 +84,13 @@ class jugeMoreAxios{
   }
 
   catch(error){
+    if(error.response.status == 422) return false;    
 
-    console.log('_______ERROR________');
-    console.log(error.response);
-    console.log('````````````````````');    
-
-    // if(error.response.status == 422) return;      
+    // console.log(error);
+    // return false;   
+    // if(error.response.status == 422) return false;    
+        
+    this.error(error.response);
 
     // if(error.response.config.url != "/error"){
     //   this.saveError(error.response.data);
@@ -84,6 +98,14 @@ class jugeMoreAxios{
     
     terror();
     // console.log(error.response);    
+  }
+
+  error(response){
+    console.log('_______ERROR________');
+    console.log(response);
+    console.log('````````````````````');    
+
+    terror();
   }
 
   getQueryString(){

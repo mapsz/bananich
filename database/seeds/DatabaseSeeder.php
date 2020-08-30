@@ -34,26 +34,6 @@ class DatabaseSeeder extends Seeder
       
     }
 
-    public function permissions(){
-        //Permisions
-        DB::table('permissions')->insert([
-            'id' => '1',
-            'name' => "admin",
-        ]);
-
-        DB::table('permissions')->insert([
-            'id' => '2',
-            'name' => "gruzka",
-        ]);
-
-        //perm - users
-        DB::table('permission_user')->insert([
-            'id' => 1,
-            'user_id' => 1,
-            'permission_id' => 1,
-        ]);
-    }
-
     public function containers(){
         DB::table('containers')->insert([
             'id' => '1',

@@ -10,11 +10,11 @@
   <div v-if="active" class="input-group input-group-sm date-menu" style="width: auto;">
     <!-- From/To -->
     <div class="input-group-prepend">
-      <span class="input-group-text" id="date-from">From:</span>
+      <span class="input-group-text" id="date-from">От:</span>
     </div>
     <flat-pickr v-model="date.from" :config="config"></flat-pickr>    
     <div class="input-group-prepend">
-      <span class="input-group-text" id="date-to">To:</span>
+      <span class="input-group-text" id="date-to">До:</span>
     </div>
     <flat-pickr v-model="date.to" :config="config"></flat-pickr>
     <!-- Near Dates -->

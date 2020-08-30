@@ -114,19 +114,27 @@ import {mapGetters,mapActions} from 'vuex';
 export default {
   computed:{
     ...mapGetters({
-      order:'getOrder',
-      status:'getOrderStatus',
-      confirm:'getOrderConfirmType',
-      toConfirm:'getToConfirm',
+      order:'order/getOne',
+      toConfirm:'order/getToConfirm',
     }),
+    status: function(){
+      if(this.order.statuses == undefined) return false;
+      return this.order.statuses[0];
+    },
+    confirm: function(){
+      return this.order.confirm;
+    }
   },
   watch: {
     order: function(){
-      this.fetchToConfirm(this.order.id);
+      this.fetchToConfirm();
     },
   },
   methods:{
-    ...mapActions(['putStatus','fetchToConfirm']),
+    ...mapActions({
+      'putStatus':'order/putStatus',
+      'fetchToConfirm':'order/fetchToConfirm'
+    }),
     orderDate(){
       return moment(this.status.pivot.created_at).format('DD.MM H:m');
     }    

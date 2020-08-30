@@ -1,0 +1,100 @@
+.checkout
+  &-title
+    font-size: 20px
+    font-weight: 600
+    line-height: 120%
+    margin-bottom: 24px
+  &-form
+    max-width: 513px
+    border-bottom: 1px solid #E0E0E0
+    padding-bottom: 40px
+    margin-bottom: 40px
+  &-address
+    max-width: 513px
+    margin-bottom: 40px
+  &-info
+    &-ico
+      width: 40px
+      height: 40px
+      background: #FF5C00
+      border-radius: 50%
+      display: -webkit-box
+      display: -ms-flexbox
+      display: flex
+      -webkit-box-pack: center
+      -ms-flex-pack: center
+      justify-content: center
+      margin-right: 12px
+      flex-shrink: 0
+    &-text
+      font-size: 16px
+      line-height: 120%
+
+.gift
+  font-size: 20px
+  line-height: 110%
+  color: #333333
+  cursor: pointer
+
+.custom-checkbox
+  position: absolute
+  z-index: -1
+  opacity: 0
+  & + label
+    display: inline-flex
+    align-items: center
+    user-select: none
+    &::before
+      content: ''
+      display: inline-block
+      width: 20px
+      height: 20px
+      background-color: #E0E0E0
+      border-radius: 5px
+      margin-right: 0.5em
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: 50% 50%
+      border: none
+  &:checked + label
+    &:before
+      background: url('../image/check-2.svg') no-repeat center
+      background-color: #FF5C00
+
+.custom-radio
+  position: absolute
+  z-index: -1
+  opacity: 0
+  & + label
+    display: inline-flex
+    align-items: center
+    user-select: none
+    &::before
+      content: ''
+      display: inline-block
+      width: 17px
+      height: 17px
+      border: 1px solid #828282
+      background-color: transparent
+      border-radius: 50%
+      margin-right: 0.5em
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: 50% 50%
+      box-sizing: box-sizing
+  &:checked + label
+    &:before
+      box-sizing: box-sizing
+      background-color: #FF5C00
+      border: 1px solid #FF5C00
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e")
+
+/*  Адаптив checkout */
+@media (max-width: 580px)
+  .checkout
+    &-title
+      font-size: 16px
+    &-form
+      max-width: 100%
+  .gift
+    font-size: 16px

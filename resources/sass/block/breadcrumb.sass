@@ -1,0 +1,21 @@
+.breadcrumb
+  display: flex
+  flex-wrap: wrap
+  padding: 20px 0
+  margin-bottom: 54px
+.breadcrumb-item + .breadcrumb-item::before
+  display: inline-block
+  padding-right: .5rem
+  padding-left: .5rem
+  color: #6c757d
+  content: "-"
+.breadcrumb-item
+  .active
+    color: #BDBDBD
+  a
+    color: #828282
+    text-decoration: none
+
+@media (max-width: 768px)
+  .breadcrumb
+    margin-bottom: 20px

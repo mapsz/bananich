@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Sopamo\LaravelFilepond\Filepond;
 use Illuminate\Support\Facades\File;
+use Image;
 
 class FileUpload extends Model
 {
@@ -28,7 +29,8 @@ class FileUpload extends Model
     //Get file encription
     return $filepond->getServerIdFromPath($filePath);
   }
-  public static function saveFile($enc,$pathName){
+
+  public static function saveFile($enc,$pathName,$resize=false){
     $filepond = new Filepond();       
     //Get cache file path
     $cacheFilePath = $filepond->getPathFromServerId($enc);
@@ -44,12 +46,52 @@ class FileUpload extends Model
     $fullPath = $pathName . '.' . $ext;
     //Move file
     if(\File::move($cacheFilePath, $fullPath)){
+      if($resize){
+        Image::make($fullPath)->resize($resize['w'], $resize['h'])->save($fullPath);
+      }
       return true;
     }else
       return false;
   }
+
   public static function getEncFilePath($enc){
     $filepond = new Filepond();       
     return $filepond->getPathFromServerId($enc);
   }
+
+  public static function deleteFile($file){
+    if(\File::delete(public_path().$file)){
+      return true;
+    }else
+      return false;
+  }
+
+  public static function generateFileName($path, $id){
+
+    //Get folder files
+    $folderFiles = scandir($path);
+
+    //filter files
+    $files = [];
+    $max_file = 0;
+    foreach ($folderFiles as $k => $file) {
+      if(strpos($file,strval($id)) !== false){
+        array_push($files,$file);
+      }
+    }
+
+    if(count($files) > 0){
+      //Sort files
+      rsort($files);
+
+      //Generate new file name
+      $last_file = $files[0];
+      $max_file = substr($last_file, strpos($last_file,'_')+1, strpos($last_file,'_') - strpos($last_file,'.')-2);
+      $max_file++;
+    }
+
+
+    return $id . '_' . $max_file;
+  }
+
 }

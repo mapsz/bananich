@@ -1,12 +1,14 @@
-import order from './modules/order'
-import delivery from './modules/delivery'
-import confirm from './modules/confirm'
-import report from './modules/report'
-import writeoff from './modules/writeoff'
+import jugeVuex from './juge-vuex.js'
+import cart from './modules/site/cart'
+import user from './modules/site/user'
+import category from './modules/site/category'
+import settings from './modules/settings'
+
+let product = new jugeVuex('product');
 
 let store = {  
   modules:{
-    order,delivery,confirm,report,writeoff
+    cart,user,product,settings,category
   }
 };
 

@@ -1,0 +1,66 @@
+.sitebar
+  background: #F2F2F2
+  border-radius: 20px
+  padding: 33px 40px
+  margin-right: 40px
+  &-title
+    font-weight: 600
+    font-size: 26px
+    margin-bottom: 30px
+.sitebar-category,.sitebar-item
+  margin-bottom: 24px
+  &.active
+    a
+      font-weight: 600
+      text-decoration: underline
+.sitebar-link
+  font-size: 18px
+  color: #000000
+  text-decoration: none
+
+
+/*  Адаптив Sitebar */
+@media (max-width: 768px)
+  .sitebar
+    display: none
+  .sitebar-cat
+    display: block
+    margin-bottom: 70px
+    margin-right: 0
+    padding: 0
+    background: transparent
+  .sitebar-title
+    display: none
+  .sitebar-category-all
+    display: none
+  .sitebar-category
+    margin-bottom: 10px
+    width: 50%
+    padding: 0 5px
+    height: 155px
+    border-radius: 15px
+  .sitebar-wrap
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    margin: 0 -10px
+  .sitebar-bg
+    width: 100%
+    height: 100%
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: center
+  .sitebar-link
+    position: relative
+    width: 100%
+    height: 100%
+    display: block
+    border-radius: 15px
+    overflow: hidden
+  .sitebar-text
+    position: absolute
+    font-weight: 600
+    top: 11px
+    left: 11px
+    padding-right: 50px
+    line-height: 110%

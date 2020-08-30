@@ -1,0 +1,301 @@
+.bonuse
+  &-block
+    padding-bottom: 50px
+    border-bottom: 1px solid #E0E0E0
+  &-num
+    font-size: 50px
+    margin-right: 64px
+    &-now
+      color: #333333
+      letter-spacing: -0.3px
+      font-weight: 600
+    &-target
+      color: #8E8E90
+    &-text
+      font-size: 20px
+      text-align: right
+  &-progres
+    width: 180px
+    height: 180px
+    position: relative
+    align-self: flex-start
+    img
+      width: 100%
+    &-text
+      position: absolute
+      top: 0
+      bottom: 0
+      right: 0
+      left: 0
+      font-weight: 600
+      font-size: 50px
+      color: #333333
+      text-align: center
+      display: flex
+      align-items: center
+      justify-content: center
+      flex-direction: column
+      span
+        display: block
+        font-weight: 400
+        font-size: 20px
+        color: #828282
+
+  &-item
+    padding: 15px 0
+    &-btn
+      position: relative
+      &::after
+        content: ''
+        display: block
+        position: absolute
+        top: 10px
+        right: -20px
+        transition: 0.5s
+        width: 10px
+        height: 10px
+        border-top: 1.5px solid #828282
+        border-right: 1.5px solid #828282
+        margin-right: 0
+        border-radius: 0px
+        transform: rotate(45deg)
+    &.active
+      .bonuse-item-btn
+        &::after
+            transform: rotate(135deg)
+    a
+      font-weight: 600
+      font-size: 20px
+      line-height: 110%
+      color: #000000
+
+.story
+  margin-top: 30px
+  &-item
+    background: rgba(242, 242, 242, 0.5)
+    border-radius: 20px
+    padding: 24px 31px
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 16px
+    font-size: 20px
+    font-weight: 600
+  &-date
+    font-size: 16px
+    font-weight: 400
+    margin-right: 70px
+
+.rule
+  margin-top: 30px
+  &-round
+    width: 200px
+    height: 200px
+    background: #ffffff
+    position: relative
+    border-radius: 50%
+    display: flex
+    align-items: center
+    text-align: center
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.25), 0px 2px 2px rgba(0, 0, 0, 0.15)
+    &::after
+      width: 200px
+      height: 200px
+      border-radius: 50%
+      content: ''
+      border: 18px solid #FBE214
+      background: transparent
+      position: absolute
+      top: 0
+      bottom: 0
+    &:before
+      width: 164px
+      height: 164px
+      border-radius: 50%
+      content: ''
+      background: #ffffff
+      box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3)
+      position: absolute
+      top: 18px
+      left: 18px
+  &-text
+    z-index: 1
+    font-size: 20px
+    font-weight: bold
+    padding: 18px 30px
+    line-height: 120%
+    span
+      font-size: 16px
+      display: block
+      font-weight: 400
+  &-left
+    margin-right: 20px
+  &-right
+    width: 400px
+  &-item
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.25), 0px 2px 2px rgba(0, 0, 0, 0.15)
+    border-radius: 100px
+    width: 100%
+    padding: 6px
+    margin-bottom: 26px
+    margin-top: 26px
+    &.color-s
+      background: #FBE214
+    &.color-m
+      background: #FFB800
+    &.color-l
+      background: #FF7F0A
+    &.color-xl
+      background: #FF5C00
+    &-text
+      font-size: 16px
+      line-height: 105%
+      padding-top: 6px
+      margin-left: 8px
+      .box
+        width: 220px
+    &-img
+      width: 63px
+      height: 63px
+      flex-shrink: 0
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.25), 0px 2px 2px rgba(181, 161, 0, 0.5)
+      border-radius: 50%
+      background: #ffffff
+      display: flex
+      justify-content: center
+
+.refer
+  margin-top: 30px
+  position: relative
+  &-img
+    position: absolute
+    left: 0
+    right: 0
+    text-align: center
+  &-left, &-right
+    text-align: center
+    width: 50%
+    ol
+      list-style: decimal
+      text-align: left
+      font-weight: 400
+      font-size: 16px
+      line-height: 120%
+      width: 270px
+      margin: 0 auto
+      li
+        margin-bottom: 14px
+    img
+      margin-bottom: 10px
+  &-name
+    font-size: 20px
+    font-weight: 600
+    margin-bottom: 20px
+  &-text
+    text-align: center
+    font-weight: 600
+    font-size: 18px 
+    max-width: 333px
+    width: 100%
+    margin: 20px auto 0
+    p
+      margin-bottom: 10px
+
+@media (max-width: 580px)
+  .bonuse
+    &-num
+      font-size: 26px
+      margin-right: 16px
+      &-text
+        font-size: 12px
+        color: #828282
+    &-progres
+      width: 100px
+      height: 100px
+      &-text
+        font-size: 26px
+        span
+          font-size: 12px
+    &-block
+      padding-bottom: 36px
+    &-item
+      a
+        font-size: 16px
+      &-btn
+        &::after
+          width: 7px
+          height: 7px
+          top: 9px
+  .story
+    &-date
+      font-size: 12px
+      margin-right: 0
+      color: #828282
+    &-track
+      font-size: 18px
+      margin-top: 4px
+    &-item
+      padding: 16px 20px
+    &-bonuse
+      font-size: 18px
+  
+  .rule
+    &-left
+      margin: 0
+    &-round
+      width: 100%
+      height: auto
+      box-shadow: none
+      &::after, &:before
+        display: none
+    &-text
+      width: 100%
+    &-right
+      width: 100%
+      position: relative
+    &-item
+      width: 88%
+      height: 51px
+      margin: 0 0 0 auto
+      padding: 6px
+      margin-bottom: 10px
+      margin-top: 10px
+      &-img
+        width: 31px
+        height: 31px
+        position: absolute
+        left: 0
+        &.color-s
+          background: #FBE214
+        &.color-m
+          background: #FF7F0A
+        &.color-l
+          background: #FF5C00
+        &.color-xl
+          background: #FF5C00
+        img
+          width: 13px
+      &-text
+        font-size: 13px
+        padding: 0 10px 0 0
+        img
+          width: 22px
+  .refer
+    &-left, &-right
+      img
+        width: 59px
+      ol
+        font-size: 13px
+        width: 140px
+    &-img
+      top: 12px
+      img
+        width: 40px
+    &-name
+      font-size: 16px
+      font-weight: 600
+      margin-bottom: 14px
+    &-text
+      font-size: 14px
+      p
+        line-height: 130%

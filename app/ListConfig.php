@@ -116,7 +116,6 @@ class ListConfig extends Model
     ['name'    => 'ordered','caption' => 'Заказано'],
     ['name'    => 'ready','caption' => 'Погружено'],
     ['name'    => 'summary_total','caption' => 'Остаток Итог'],
-
   ];
 
   protected $products = [

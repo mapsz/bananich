@@ -11,16 +11,19 @@ use App\Delivery;
 use App\Item;
 use App\Order;
 use App\Pay;
+use App\Sms;
+use App\Bonus;
+use App\Interview;
+use App\User;
 use Carbon\Carbon;
+use App\Events\OrderSuccess;
+use App\Events\OrderSuccessCancel;
 
 class DeliveryController extends Controller
 {
   public function jsonGet(Request $request){
-
     $orders = Order::getWithOptions($request->all());
-
     return response()->json($orders);
-
   }
 
   public function put(Request $request){
@@ -30,27 +33,27 @@ class DeliveryController extends Controller
       'comment'     => 'max:250',
     ])->validate();
     
-
     //Data
-    $orderId = $request->all()['orderId'];    
-    $items = $request->all()['items'];
-    $userId = Auth::user()->id;
-    if(isset($request->comment)){
-      $comment = $request->comment;
-    }else{
-      $comment = "";
-    }
+    $orderId  = $request->all()['orderId'];    
+    $items    = $request->all()['items'];
+    $userId   = Auth::user()->id;
+    $comment  = ""; if(isset($request->comment)) $comment = $request->comment;
       
     //Set pays
-    $pays = [];
-    if(is_array($request->payMethod)){
-      foreach ($request->payMethod as $k => $pay) {   
-        if($k == 'sum') continue;     
-        array_push($pays,['id' => $k,'value' => $pay]);
+    do{
+      $pays = [];
+      if(is_array($request->payMethod)){
+        foreach ($request->payMethod as $k => $pay) {   
+          if($k == 'sum') continue;     
+          array_push($pays,['id' => $k,'value' => $pay]);
+        }
+      }else{
+        array_push($pays,['id' => $request->payMethod,'value' => $request->sum]);
       }
-    }else{
-      array_push($pays,['id' => $request->payMethod,'value' => $request->sum]);
-    }
+    }while(0);
+
+    //Get Order
+    $order = Order::getWithOptions(['id' => $orderId]);
 
     //Database
     try {
@@ -83,7 +86,7 @@ class DeliveryController extends Controller
       }
 
       //Set status
-      Order::find($orderId)->Statuses()->attach(1,['user_id' => Auth::user()->id]);
+      $order->Statuses()->attach(1,['user_id' => Auth::user()->id]);
 
       //Set Pays
       foreach ($pays as $pay) {
@@ -96,14 +99,50 @@ class DeliveryController extends Controller
           ]
         );
       }
+
+      
+      if($order->customer_id){
+
+        //Set bonuses
+        $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
+        Bonus::add($order->customer_id,$bonusCount,'buy',$order->id);
+        //Wordpress add bonus
+        do{
+          if($_SERVER['HTTP_ORIGIN'] == "http://bananich.loc") continue;
+          $wpUser = User::find($order->customer_id);
+          $wpBonus = [
+            'user_number' => $wpUser->phone,
+            'type' => 1,          
+            'value' => $bonusCount,
+            'date' => now(),
+            'expire' => Bonus::getDieDate(2),
+            'activate' => now(),
+            'comment' => $order->id,
+            'wtf' => 'mangozz'
+          ];
+          $wpBonus = json_encode($wpBonus);
+          $wpBonusEnc = base64_encode ($wpBonus);
+          file_get_contents('https://bananich.ru/wp-json/bonus/add?data='.$wpBonusEnc);
+        }while(0);
+
+
+
+        //Send Interview
+        Interview::sendInterview($order->customer_id,1);
+
+      }
+
+
       
       //Store to DB
       DB::commit();    
-    } catch (Exception $e) {          
+    } catch (Exception $e) {
       // Rollback from DB
       DB::rollback();
       return response(['code' => 'de1','text' => 'delivery put error'], 512)->header('Content-Type', 'text/plain');
     }    
+
+
 
     //Return
     return response()->json(1);
@@ -111,15 +150,15 @@ class DeliveryController extends Controller
   }
 
   public function delete(Request $request){
-    // dd($request->all());
+    //Data
     $orderId = $request->id;
 
     //Database
     try {
       DB::beginTransaction();
 
-      //Get Pays 
-      $pays = Pay::where('order_id',$orderId);
+      //Delete pays
+      DB::table('pays')->where('order_id',$orderId)->delete();
 
       //Get deliveries goods
       $items = (
@@ -128,9 +167,6 @@ class DeliveryController extends Controller
           ->with('delivery.goods')
           ->get()
       );      
-
-      //Delete pays
-      $pays->delete();
 
       //Delete goods/deliveries
       foreach ($items as $item) {
@@ -143,7 +179,33 @@ class DeliveryController extends Controller
       }
 
       //Set status
-      Order::find($orderId)->Statuses()->attach(200,['user_id' => Auth::user()->id]);
+      $order = Order::getWithOptions(['id' => $orderId]);
+      $order->Statuses()->attach(200,['user_id' => Auth::user()->id]);
+
+      //Event      
+      event(new OrderSuccessCancel($orderId));
+
+      //Wordpress remove bonus
+      if($order->customer_id){        
+        do{
+          if($_SERVER['HTTP_ORIGIN'] == "http://bananich.loc") continue;
+          $wpUser = User::find($order->customer_id);          
+          $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
+          $wpBonus = [
+            'user_number' => $wpUser->phone,
+            'type' => 2,          
+            'value' => $bonusCount - ($bonusCount*2),
+            'date' => now(),
+            'expire' => 0,
+            'activate' => 0,
+            'comment' => "Отмена заказа " . $order->id,
+            'wtf' => 'mangozz'
+          ];
+          $wpBonus = json_encode($wpBonus);
+          $wpBonusEnc = base64_encode ($wpBonus);
+          file_get_contents('https://bananich.ru/wp-json/bonus/add?data='.$wpBonusEnc);
+        }while(0);
+      }
 
       //Store to DB
       DB::commit();    
@@ -153,6 +215,7 @@ class DeliveryController extends Controller
       return response(['code' => 'de2','text' => 'delivery delete error'], 512)->header('Content-Type', 'text/plain');
     }  
 
+    return response()->json(1);
 
   }
 }

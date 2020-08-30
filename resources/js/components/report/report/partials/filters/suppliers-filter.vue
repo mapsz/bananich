@@ -16,6 +16,7 @@
 
 <script>
 export default {
+props: ['model'],
 data(){return{
   selected:[-1],
   suppliers:[],  
@@ -39,6 +40,11 @@ data(){return{
           send = [];
         }
 
+        //Set vuex
+        if(this.model != undefined){
+          this.$store.dispatch(this.model+'/addFilter',{'suppliers':send});
+        }
+        //Emit
         this.$emit('changed',send);
 
       },

@@ -117,7 +117,7 @@ data(){return{
   errors:[],
 }},
 computed:{
-  ...mapGetters({order:'getOrder'}),
+  ...mapGetters({order:'order/getOne'}),
   delivery_time:function(){
     if(this.order.delivery_time_from == undefined || this.order.delivery_time_from == undefined) return "";
     return this.order.delivery_time_from.slice(0,2)+ ' - ' +this.order.delivery_time_to.slice(0,2)
@@ -127,7 +127,7 @@ mounted(){
   this.fetchOrder(this.id);
 },
 methods:{
-  ...mapActions(['fetchOrder','deleteDelivery','setOrderReturned']),
+  ...mapActions({'fetchOrder':'order/fetchOne',deleteDelivery:'deleteDelivery',setOrderReturned:'order/setReturned',}),
   async setDelivered(){
     //Validate Pays
     this.errors = [];

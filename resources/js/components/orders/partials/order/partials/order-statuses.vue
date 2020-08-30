@@ -62,7 +62,7 @@ export default {
     showHistory:true,
   }},
   computed:{
-    ...mapGetters({order:'getOrder'},),
+    ...mapGetters({order:'order/getOne'},),
   },
   mounted(){
     // 

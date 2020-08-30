@@ -1,168 +1,227 @@
 let routes = [];
 
 import testtest from './components/testtest.vue';
-//Orders
-import orderList from './components/orders/orders.vue';
-import order from './components/orders/order.vue';
-//Gruzka
-import gruzka from './components/gruzka/gruzka.vue';
-import gruzkas from './components/gruzka/gruzkas.vue';
 routes.push(
-  {path:'/gruzka/:id',component: gruzka},
-  {path:'/gruzkas',component: gruzkas},
+  {path: '/testtest',    component:testtest},
 );
-import confirms from './components/confirm/confirms.vue';
-import confirm from './components/confirm/confirm.vue';
-//Container
-import containers from './components/containers/containers.vue';
-routes.push(
-  {path:'/containers',component: containers},
-);
-//Report
-import reports from './components/report/report/reports.vue';
-routes.push(
-  {path:'/reports',component: reports},
-);
-//--Old
-import products from './components/products/products.vue';
-import product from './components/products/product.vue';
-import productAdd from './components/products/product.vue';
-import users from './components/users/users.vue';
-import usersAdd from './components/users/partials/user-add.vue';
-import items from './components/items/items-list.vue';
-import itemsParvin from './components/items/items-parvin.vue';
-import strews from './components/strews/strews-list.vue';
-import statistics from './components/statistics/statistics-list.vue';
-//Report
-import suppliers from './components/report/suppliers/suppliers.vue';
-import supplier from './components/report/suppliers/supplier.vue';
-import purchases from './components/report/purchase/purchases.vue';
-import purchasePirces from './components/report/purchase/prices/purchase-prices.vue';
-import writeoff from './components/report/writeoff/writeoff.vue';
-import stocktaking from './components/report/stocktaking/stocktaking.vue';
 
-//Delivery
-import deliveries from './components/delivery/deliveries.vue';
-import delivery from './components/delivery/delivery.vue';
+//SITE
+
+  //Order thanks
+  import siteOrderThanks from './components/site/order-thanks/order-thanks.vue';
+  routes.push(
+    {path: '/order-thanks',    component:siteOrderThanks},
+  );
 
 
-//OLD
-routes = routes.concat([  
-  //testtest
-  {
-    path:'/testtest',
-    component: testtest,
-  }, 
-  //Deliveries
-  {
-    path:'/deliveries',
-    component: deliveries,
-  }, 
-  {
-    path:'/delivery/:id',
-    component: delivery,
-  }, 
-  //Report
-  //Supplier
-  {
-    path:'/report/supplier/:id',
-    component: supplier,
-  },   
-  //Suppliers
-  {
-    path:'/report/suppliers',
-    component: suppliers,
-  },     
-  //Purchase
-  {
-    path:'/report/purchases',
-    component: purchases,
-  },     
-  //Purchase prices
-  {
-    path:'/report/purchase/prices',
-    component: purchasePirces,
-  },  
-  //writeoff
-  {
-    path:'/report/writeoff',
-    component: writeoff,
-  }, 
-  //stocktaking
-  {
-    path:'/report/stocktaking',
-    component: stocktaking,
-  }, 
-  //Statistics   
-  {
-    path:'/statistics',
-    component: statistics,
-  }, 
-  //Strews   
-  {
-    path:'/strews',
-    component: strews,
-  },     
-  //Items
-  {
-    path:'/report/items',
-    component: items,
-  }, 
-  {
-    path:'/zakupka',
-    component: itemsParvin,
-  }, 
-  //Users
-  {
-    path:'/user/add',
-    component: usersAdd,
-  },    
-  {
-    path:'/users',
-    component: users,
-  },    
+  //Confirmation
+  import siteConfirmation from './components/site/confirmation/confirmation.vue';
+  routes.push(
+    {path: '/confirmation',    component:siteConfirmation},
+  );
+
+  //Presents
+  import sitePresents from './components/site/presents/presents.vue';
+  routes.push(
+    {path: '/presents',    component:sitePresents},
+  );
+
+  //Catalogue
+  import siteProducts from './components/site/products/products.vue';
+  routes.push(
+    {path: '/catalogue',    component:siteProducts},
+    {path: '/',    component:siteProducts},
+  );
+
+  //Product
+  import siteProduct from './components/site/products/product.vue';
+  routes.push(
+    {path: '/product/:id',    component:siteProduct},
+  );
+
+  //Cart
+  import siteCart from './components/site/cart/cart.vue';
+  routes.push(
+    {path: '/cart',    component:siteCart},
+  );
+
+  //Checkout
+  import siteCheckout from './components/site/checkout/checkout.vue';
+  routes.push(
+    {path: '/checkout',    component:siteCheckout},
+  );
+
+  //Profile
+  import siteProfile from './components/site/profile/profile.vue';
+  import siteProfileFavorites from './components/site/profile/favorites/favorites.vue';
+  import siteProfileBonus from './components/site/profile/bonus/bonus.vue';
+  import siteProfileOrders from './components/site/profile/orders/orders.vue';
+  routes.push(
+    {path: '/profile',    component:siteProfile},
+    {path: '/profile/favorites',    component:siteProfileFavorites},
+    {path: '/profile/bonus',    component:siteProfileBonus},
+    {path: '/profile/orders',    component:siteProfileOrders},
+  );
+
+
+
+
+//ADMIN
+  let adminPrefix = '/admin';
+
+  ///categories
+  import categories from './components/categories/categories.vue';
+  routes.push(
+    {path: adminPrefix+'/categories',    component:categories},
+  );
+
+  ///settings
+  import settings from './components/settings/settings.vue';
+  routes.push(
+    {path: adminPrefix+'/settings',    component:settings},
+  );
+
+  //Presents
+  import presents from './components/presents/presents.vue';
+  routes.push(
+    {path: adminPrefix+'/presents',    component:presents},
+  );
+
+  //Orders
+  import order from './components/orders/order.vue';
+  import orders from './components/orders/orders.vue';
+  routes.push(
+    {path: adminPrefix+'/order/:id',           component:order},
+    {path: adminPrefix+'/orders',              component:orders},
+    {path: adminPrefix+'/main',                component:orders},
+    {path: adminPrefix+'/',                    component:orders},
+  );
+
+  //Sms
+  import sms from './components/sms/sms.vue';
+  routes.push(
+    {path: adminPrefix+'/sms',    component:sms},
+  );
+
+  //Interview
+  import interview from './components/interview/interviews.vue';
+  routes.push(
+    {path: adminPrefix+'/interviews',    component:interview},
+  );
+
+  //Bonus
+  import bonuses from './components/bonuses/bonuses.vue';
+  routes.push(
+    {path: adminPrefix+'/bonuses',    component:bonuses},
+  );
+
+  //Gruzka
+  import gruzka from './components/gruzka/gruzka.vue';
+  import gruzkas from './components/gruzka/gruzkas.vue';
+  routes.push(
+    {path: adminPrefix+'/gruzka/:id',    component: gruzka},
+    {path: adminPrefix+'/gruzkas',       component: gruzkas},
+  );
+
+  //Confirms
+  import confirms from './components/confirm/confirms.vue';
+  import confirm from './components/confirm/confirm.vue';
+  routes.push(
+    {path: adminPrefix+'/confirms',component: confirms,},  
+    {path: adminPrefix+'/confirm/:id',component: confirm,},
+  )
+  //Container
+  import containers from './components/containers/containers.vue';
+  routes.push(
+    {path: adminPrefix+'/containers',component: containers},
+  );
+
   //Products
-  {
-    path:'/products-list',
-    component: products,
-  }, 
-  {
-    name:"product",
-    path:'/product/:id',
-    component: product,
-  }, 
-  {
-    name:"product-add",
-    path:'/product/add',
-    component: productAdd,
-  }, 
-  {
-    path:'/confirms',
-    component: confirms,
-  },  
-  {
-    path:'/confirm/:id',
-    component: confirm,
-  },  
-  {
-    path:'/',
-    component: orderList,
-    // component: main,
-  },
-  {
-    path:'/main',
-    component: orderList,
-    // component: main,
-  },
-  {
-    path:'/order-list',
-    component: orderList,
-  },
-  {
-    path:'/order/:id',
-    component: order,
-  },
-]);
+  import products from './components/products/products.vue';
+  import product from './components/products/product.vue';
+  routes.push(
+    {path: adminPrefix+'/products',component: products,}, 
+    {path: adminPrefix+'/product/:id',component: product,name:"product"},  
+  );
+
+  //User
+  import users from './components/users/users.vue';
+  routes.push(
+    {path: adminPrefix+'/users',component: users},
+  );
+
+  //Items
+  import items from './components/items/items.vue';
+  import itemsParvin from './components/items/items-parvin.vue';
+  routes.push(
+    {path: adminPrefix+'/report/items',component: items},
+    {path: adminPrefix+'/zakupka',component: itemsParvin},
+  );
+    
+  //Strews
+  import strews from './components/strews/strews.vue';
+  routes.push(
+    {path: adminPrefix+'/strews',component: strews},
+  );
+
+  //Statistics  
+  import statistics from './components/statistics/statistics.vue';
+  routes.push(
+    {path: adminPrefix+'/statistics',component: statistics},
+  );
+
+  //Delivery
+  import deliveries from './components/delivery/deliveries.vue';
+  import delivery from './components/delivery/delivery.vue';
+  routes.push(
+    {path: adminPrefix+'/delivery/:id',component: delivery},
+    {path: adminPrefix+'/deliveries',component: deliveries},
+  );
+
+  //Report
+  import reports from './components/report/report/reports.vue';
+  routes.push(
+    {path: adminPrefix+'/reports',component: reports},
+  );
+
+  //Suppliers
+  import supplier from './components/report/suppliers/supplier.vue';
+  import suppliers from './components/report/suppliers/suppliers.vue';
+  routes.push(
+    {path: adminPrefix+'/report/supplier/:id',component: supplier},
+    {path: adminPrefix+'/report/suppliers',component: suppliers},
+  );  
+
+  //Purchases
+  import purchases from './components/report/purchase/purchases.vue';
+  import purchasePirces from './components/report/purchase/prices/purchase-prices.vue';
+  routes.push(
+    {path: adminPrefix+'/report/purchases',component: purchases},
+    {path: adminPrefix+'/report/purchase/prices',component: purchasePirces},
+  );  
+  
+  //Writeoff
+  import writeoff from './components/report/writeoff/writeoff.vue';
+  routes.push(
+    {path: adminPrefix+'/reports/writeoff',component: writeoff},
+  );
+
+  //Stocktaking
+  import stocktaking from './components/report/stocktaking/stocktaking.vue';
+  routes.push(
+    {path: adminPrefix+'/reports/stocktaking',component: stocktaking},
+  );
+
+
+routes.push(
+  // {path:adminPrefix+'*',    component: orders},
+  // {path:'*',    component: siteProducts},
+);
+
+
+
+
+
 
 export default {
 

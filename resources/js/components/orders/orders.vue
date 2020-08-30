@@ -2,37 +2,41 @@
 <div>
   <gruzka-navbar></gruzka-navbar>
 
-  <parse></parse>
+  <!-- <parse></parse> -->
 
   <orders-print></orders-print>
 
-  <!-- Menu -->
+  <!-- Filter -->
   <div class="row m-3 mb-2 order-menu justify-content-between">
-    <date-menu :p-active="true"></date-menu>
+    <juge-date-filter :model="model"></juge-date-filter>
+    <id-filter :model="model"></id-filter>
   </div>
   <div class="row m-3 mb-2 order-menu justify-content-between">
-    <time-menu></time-menu>
-    <status-menu></status-menu>
-    <search-menu></search-menu>
+    <order-delivery-time-filter :model="model" />
+    <order-status-filter  :model="model" />
+    <search-filter  :model="model" />
   </div>
+
+<!-- 
+  TODO @@@
+  наличие возврвтов/ 
+  метод оплаты/ 
+  водитель/  
+-->
 
   <!-- List -->
   <div class="container-fluid" ref="orderList">
-    <list-table :model="'order'"></list-table>
+    <juge-list :data="model"></juge-list>
   </div>
 
 </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
 export default {
-  mounted(){
-    this.refreshOrderFilters();
-  },
-  methods:{
-    ...mapActions(['refreshOrderFilters']),
-  }
+  data(){return{
+    model:'order',
+  }},
 }
 </script>
 

@@ -1,6 +1,9 @@
 /node_modules
-/public/hot
-/public/storage
+/tests
+/storage/filepond-temp
+/storage/logs
+/public/products
+/public/.htaccess
 /storage/*.key
 /vendor
 .env

@@ -78,8 +78,8 @@ class Item extends Model
     
         //Parvin
         if($parvinBuild){
-          $query = $query->where('delivery_date', Carbon::now()->format('Y-m-d'));
-          $query = $query->whereIn('order_status_id',[900,850,800,800,600,500,400]);
+          $query = $query->where('delivery_date', now()->format('Y-m-d'));
+          $query = $query->whereIn('order_status_id',[600,500,400]);
         }
     
         //Orders Get
@@ -206,8 +206,12 @@ class Item extends Model
 
     }
 
+    //JugeCRUD
+    public function jugeGet($request) {return $this->getWithOptions($request);}
+
+    //Relations
     public function orders(){
-        return $this->belongsTo('App\Order');
+      return $this->belongsTo('App\Order');
     }
     public function product(){
         return $this->belongsTo('App\Product');

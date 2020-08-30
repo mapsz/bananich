@@ -20,9 +20,7 @@
     </div>  
 
     <!-- List -->
-    <div class="">
-      <list-table :data="list" :model="'suppliers'"></list-table>
-    </div>
+    <juge-list :data="'supplier'"></juge-list>
   
   </div>
 
@@ -33,18 +31,11 @@
 export default {
 data(){return{
   add:false,
-  list:[],
 }},
 mounted(){
-  // this.add=true;
-  this.get();
+  //
 },
 methods:{
-  async get(){
-    let r = await this.jugeAx('/json/suppliers');
-    if(!r) return;
-    this.list = r;
-  },
   addSuccess(add){
     console.log(add);
     this.add=false;

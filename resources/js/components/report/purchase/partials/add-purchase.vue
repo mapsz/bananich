@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
   data(){return{
     product:false,
@@ -49,14 +50,14 @@ export default {
         required:true,
       },
       {
-        name:'price',
-        caption:'Цена закупки(за шт/кг)',
-        type:'number',
+        name:'quantity',
+        caption:'Количество',
         required:true,
       },
       {
-        name:'quantity',
-        caption:'Количество',
+        name:'price',
+        caption:'Цена закупки(за шт/кг)',
+        type:'number',
         required:true,
       },
       {
@@ -83,6 +84,7 @@ export default {
     ]
   }},
   methods:{
+    ...mapActions({'fetch':'purchase/fetchData'}),
     async setProduct(product){
       //Get product suppliers
       let r = await this.jugeAx('/json/suppliers',{productId:product.id});
@@ -112,7 +114,8 @@ export default {
         return;   
       };        
 
-      this.$emit('add-success');
+      // this.$emit('add-success');
+      this.fetch();
 
       //Refresh
       this.product = false;

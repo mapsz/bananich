@@ -199,5 +199,4 @@ export default {
   .list-seetings-button:hover{
     color: #a6ff36;
   }
-
 </style>

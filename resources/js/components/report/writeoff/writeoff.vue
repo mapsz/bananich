@@ -19,8 +19,9 @@
       </div>
     </div>  
     
+    
     <!-- List -->
-    <list-table :data="goods" :model="'purchases'"></list-table>
+    <juge-list :data="'writeoff'"></juge-list>
 
   </div>
 
@@ -35,14 +36,14 @@ export default {
   }},
   mounted(){
     // this.add=true;
-    this.get();
+    // this.get();
   },
   methods:{
-    async get(){
-      let r = await this.jugeAx('/json/goods');
-      if(!r) return;
-      this.goods = r;      
-    },
+  //   async get(){
+  //     let r = await this.jugeAx('/json/goods');
+  //     if(!r) return;
+  //     this.goods = r;      
+  //   },
     async writeoffSuccess(){
       this.get();
     }

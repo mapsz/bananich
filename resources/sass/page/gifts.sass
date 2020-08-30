@@ -1,0 +1,74 @@
+.gifts
+  &-item
+    box-sizing: border-box
+    margin-bottom: 30px
+    height: 100%
+    border-radius: 15px
+    &-box
+      position: relative
+    &.hide
+      .gifts
+        &-item
+          &-box
+            &:after
+              content: ''
+              position: absolute
+              width: 100%
+              height: 100%
+              top: 0
+              left: 0
+              background: #000000
+              opacity: 0.3
+              border-radius: 15px 15px 0px 0px
+    &-img
+      width: 100%
+      height: 207px
+      background-size: cover
+      position: relative
+      background-position: center center
+      background-repeat: no-repeat
+      border-radius: 15px
+    &-text
+      position: relative
+      padding: 24px 13px
+      border-left: 1px solid #E0E0E0
+      border-right: 1px solid #E0E0E0
+      margin-top: -14px
+      box-sizing: border-box
+    &-title
+      font-size: 16px
+      line-height: 110%
+    &-button
+      border-radius: 0px 0px 15px 15px
+      width: 100%
+      height: 57px
+      font-size: 18px
+      &:disabled
+        color: #000000
+        cursor:	default
+      &.color-s
+        background: #FBE214
+        border: 1px solid #FBE214
+      &.color-m
+        background: #FFB800
+        border: 1px solid #FFB800
+      &.color-l
+        background: #FF7F0A
+        border: 1px solid #FF7F0A
+      &.color-xl
+        background: #FF5C00
+        border: 1px solid #FF5C00
+      &.active
+        background: #ffffff
+        border: 1px solid #E0E0E0
+        box-sizing: border-box
+@media (max-width: 580px)
+  .gifts
+    &-item
+      &-img
+        height: 130px
+      &-button
+        height: 35px
+        font-size: 12px
+      &-title
+        font-size: 12px

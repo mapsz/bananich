@@ -5,19 +5,13 @@
   
   <div class="row">
     <!-- Client -->
-    <div class="col-4 order-container">
-      <div class="order-inner-container"> 
-        <h5>Клиент</h5>        
-        <span v-if="order.customer_id == 0">(Гость)</span>
-        <span v-else>
-          <a :href="'https://bananich.ru/wp-admin/user-edit.php?user_id='+order.customer_id" target="_blank">
-            {{order.customer_id}}
-          </a>          
-        </span>
+    <div class="col-12 col-md-4 order-container">
+      <div class="order-inner-container">   
+        <show-user :id="order.customer_id"></show-user>
       </div>
     </div>
     <!-- Order details -->
-    <div class="order-details col-4 order-container">
+    <div class="col-12 col-md-4 order-details order-container">
       <div class="order-inner-container">
         <span class="d-flex justify-content-between">
           <h5>Детали Заказа</h5>
@@ -98,7 +92,7 @@
       </div>
     </div>
     <!-- Items List -->
-    <div class="col-4 order-container">
+    <div class="col-12 col-md-4 order-container">
       <div v-if="order.items" class="order-inner-container"> 
         <h5>Список продуктов</h5>
         <div class="row justify-content-between m-0">
@@ -168,16 +162,16 @@
 
   <div class="row">
     <!-- Order Statuses -->
-    <div class="col-4 order-container">
+    <div class="col-12 col-md-4 order-container">
       <div class="order-inner-container"> 
         <order-statuses></order-statuses>
       </div>
     </div>
     <!-- ??? -->
-    <div class="col-4">      
+    <div class="col-12 col-md-4 ">      
     </div>
     <!-- Checkout -->
-    <div class="col-4 order-container">
+    <div class="col-12 col-md-4 order-container">
       <div class="order-inner-container">
         <div class="d-flex justify-content-between">
           <h4>Итоги</h4>
@@ -217,24 +211,25 @@ export default {
     justAdded:false,
   }},
   computed:{
-    ...mapGetters({order:'getOrder'}),
+    ...mapGetters({order:'order/getOne'}),
     delivery_time:function(){
       if(this.order.delivery_time_from == undefined || this.order.delivery_time_from == undefined) return "";
       return this.order.delivery_time_from.slice(0,2)+ ' - ' +this.order.delivery_time_to.slice(0,2)
     },
   },
   async mounted(){
-    await this.fetchOrder(this.id);
+    await this.fetchOne(this.id);
   },  
   methods:{
-    ...mapActions(['fetchOrder']),
+    ...mapActions({fetchOne:'order/fetchOne'}),
     //Order
     async getOrder(){
-      let r = await this.jugeAx('/json/orders',{id:this.id,discounts:true});
-      if(!r) return;
+      this.fetchOne(this.id);
+      // let r = await this.jugeAx('/json/orders',{id:this.id,discounts:true});
+      // if(!r) return;
 
-      this.order = r;
-      this.statuses = r.statuses;
+      // this.order = r;
+      // this.statuses = r.statuses;
       return;
     },
     async postOrder(){
@@ -298,6 +293,10 @@ export default {
       this.editCheckout = false;
     },    
   }
+
+
+
+
 }
 </script>
 

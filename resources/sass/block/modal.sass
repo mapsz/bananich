@@ -1,0 +1,210 @@
+/* enterPopup */
+.overlay
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  background: rgba(0, 0, 0, .3)
+  z-index: 1000
+  overflow: hidden
+.modal-sad
+  position: fixed
+  left: 50%
+  top: 50%
+  transform: translate(-50%,-50%)
+  width: 380px
+  background: #fff
+  border-radius: 30px
+  padding: 53px 37px
+  &-big
+    width: 737px
+  &-nopadding
+    padding-left: 0
+    padding-right: 0
+    .modal-sad-title
+      padding-left: 37px
+      padding-right: 37px
+
+  &-title
+    margin-bottom: 28px
+    font-weight: 600
+    color: #333
+    font-size: 24px
+    &.center
+      text-align: center
+
+  &-text
+    font-size: 20px
+    line-height: 130%
+    margin-bottom: 16px
+    &.center
+      text-align: center
+    &-gray
+      color: #828282
+      font-size: 18px
+
+  &-close
+    position: absolute
+    right: 21px
+    top: 21px
+    font-size: 30px
+    cursor: pointer
+
+  &-tabs
+    display: flex
+    margin-bottom: 64px
+    &-item
+      margin-right: 30px
+      &.active
+        a
+          color: #333
+          font-weight: 600
+          border-bottom: 2px solid #333
+          padding-bottom: 10px
+      a
+        font-size: 24px
+        color: #828282
+        text-decoration: none
+
+  &-tab
+    &-pane 
+      display: none
+      &.active
+        display: block
+
+  &-form
+    &-input
+      border: navajowhite
+      width: 100%
+      font-size: 16px
+      border-bottom: 1px solid #E0E0E0
+      line-height: 110%
+      padding: 11px 0
+    &-group
+      margin-bottom: 28px
+    &-btn
+      display: flex
+      align-items: center
+      .btn-enter
+        width: 153px
+        height: 50px
+        margin-right: 20px
+    &-text
+      color: #BDBDBD
+      font-size: 14px
+      line-height: 130%
+    &-textarea
+      border: 1px solid #E0E0E0
+      box-sizing: border-box
+      border-radius: 10px
+      width: 100%
+      padding: 11px
+      min-height: 112px
+      font-family: 'Open Sans', sans-serif
+      font-size: 18px
+
+  &-list
+    li
+      padding: 12px 37px
+      border-bottom: 0.8px solid #E0E0E0
+      display: flex
+      align-items: center
+      &:last-child
+        border-bottom: 0
+      img
+        margin-right: 20px
+
+  &-wrap
+    display: flex
+    align-items: center
+  &-product
+    box-sizing: border-box
+    border-radius: 15px
+    margin-bottom: 30px
+    height: 100%
+    &-img
+      width: 100%
+      height: 166px
+      background-size: cover
+      background-position: center
+      background-repeat: no-repeat
+      border-radius: 15px
+      position: relative
+    &-cart
+      font-weight: 600
+      font-size: 18px
+      display: flex
+      justify-content: space-between
+      align-items: center
+      .sale
+        color: #FF5C00
+        .old
+          font-size: 18px
+          font-weight: 400
+          color: #828282
+          text-decoration: line-through
+    &-title
+      font-weight: 600
+      font-size: 18px
+      margin: 12px 0
+      line-height: 130%
+      a
+        color: #000000
+        text-decoration: none
+    &-text 
+      padding: 13px
+      border: 1.5px solid #E0E0E0
+      border-top: 0
+      margin-top: -12px
+      border-radius: 0 0 15px 15px
+
+
+/*  Адаптив Header */
+@media (max-width: 580px)
+  .overlay
+    &-phone
+      background: transparent
+      z-index: 1
+  .modal-sad
+    padding-right: 10px 
+    padding-left: 10px 
+    height: 100%
+    &-big 
+      width: 100%
+    &-wrap
+      margin: 0 -5px 
+      .col-4
+        padding-right: 5px
+        padding-left: 5px
+    &-product
+      &-img
+        height: 77px
+      &-title
+        font-size: 12px
+      &-cart
+        font-size: 12px
+    &-phone
+      position: absolute
+      width: 100%
+      border-radius: 0
+      top: 62px
+      padding-top: 30px
+      transform: translate(0%, 0%)
+      left: 0
+      .modal-sad-close
+        font-size: 38px
+    &-tabs
+      margin-bottom: 38px
+    &-tabs-item
+      a
+        font-size: 18px
+    &-list
+      li
+        padding: 13px 10px
+    &-nopadding
+      .modal-sad-title 
+        padding-left: 20px
+        padding-right: 20px
+.search-phone
+  margin-bottom: 26px
