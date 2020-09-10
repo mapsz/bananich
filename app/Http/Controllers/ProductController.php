@@ -7,6 +7,7 @@ use App\FileUpload;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Product;
+use App\ProductMeta;
 
 
 class ProductController extends Controller
@@ -38,6 +39,51 @@ class ProductController extends Controller
 
   }
 
+  public function publish(Request $request){
+
+    //Delete old meta
+    ProductMeta::where('name','publish')->where('product_id',$request->productId)->delete();
+
+    //Make meta if publish
+    if($request->publish){
+     
+      //Save
+      $meta = new ProductMeta;
+      $meta->product_id   = $request->productId;
+      $meta->name         = 'publish';
+      $meta->value        = 1;
+      $meta->save();
+
+    }
+
+    return response()->json(1);    
+
+  }
+
+  public function editDeliveryDays(Request $request){
+
+    //Delete old meta
+    ProductMeta::where('name','deliveryDays')->where('product_id',$request->productId)->delete();
+
+    //Make new if not all
+    if(count($request->days) > 0 && count($request->days) < 7){
+
+      //Formate days
+      $days = json_encode($request->days);
+      
+      //Save
+      $meta = new ProductMeta;
+      $meta->product_id   = $request->productId;
+      $meta->name         = 'deliveryDays';
+      $meta->value        = $days;
+      $meta->save();
+
+    }
+
+    return response()->json(1);
+
+  }
+
   public function editMainPhoto(Request $request){
 
       //Set path
@@ -48,7 +94,6 @@ class ProductController extends Controller
       if(!FileUpload::saveFile($request->file, $path.$name, ['w' => 200, 'h' => 200])){
         return false;
       }
-
     
       return response()->json(1);
 

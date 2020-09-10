@@ -34,6 +34,14 @@ class PresentController extends Controller
 
   }
 
+  public function deleteProduct(Request $request){
+
+    Present::where('product_id', $request->id)->where('type', $request->type)->delete();
+
+    return response()->json(1);
+
+  }
+
   public function getProduct(){
 
     //Get presents

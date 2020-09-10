@@ -1,6 +1,8 @@
 <template>
 <div>  
-  <gruzka-navbar></gruzka-navbar>
+  <gruzka-navbar></gruzka-navbar>  
+  <product-navbar></product-navbar>
+  
   <div class="container-fluid">
     <!-- Title -->
     <h1>Категории</h1>

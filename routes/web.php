@@ -70,10 +70,14 @@ Route::get('/json/settings', 'SettingController@get');
 Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
 
-  //category
+  //Category
   Route::put('/category', 'CategoryController@put');
-  Route::post('/category/detach', 'CategoryController@detach');
-  Route::post('/category/atach', 'CategoryController@atach');
+  Route::post('/category', 'CategoryController@post');
+  Route::post('/categoty/main/photo', 'CategoryController@editMainPhoto');
+  Route::post('/category/product/detach', 'CategoryController@detachProduct');
+  Route::post('/category/product/attach', 'CategoryController@attachProduct');
+  Route::post('/category/category/detach', 'CategoryController@detachCategory');
+  Route::post('/category/category/attach', 'CategoryController@attachCategory');
 
   
   //Settings
@@ -81,6 +85,7 @@ Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
   //Present
   Route::put('/admin/product/present', 'PresentController@putProduct'); 
+  Route::delete('/admin/product/present', 'PresentController@deleteProduct'); 
 
   //File upload
   Route::post('/file/upload', 'FileUploadController@fileUpload');
@@ -121,6 +126,12 @@ Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
     Route::get('/json/products', 'ProductController@get');
     Route::get('/base64/preloaded/images', 'ProductController@getBase64PreloadedImages');
 
+    //Product Published
+    Route::post('/product/publish', 'ProductController@publish');
+
+    //Delivery days
+    Route::post('/product/delivery/days', 'ProductController@editDeliveryDays');
+
     //Main photo
     Route::post('/product/main/photo', 'ProductController@editMainPhoto');
     
@@ -136,6 +147,17 @@ Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
     Route::delete('/discount/remove', 'DiscountController@remove');
     Route::put('/discount/add', 'DiscountController@add');
   });
+
+
+  //Supplier
+  Route::get('/json/suppliers', 'SupplierController@jsonGet');
+  Route::get('/json/suppliers/distinct', 'SupplierController@jsonDistinct');
+  Route::put('/put/supplier', 'SupplierController@put');
+  Route::post('/post/supplier', 'SupplierController@post');
+  Route::delete('/delete/supplier', 'SupplierController@delete');
+  Route::put('/attach/supplier/product', 'SupplierController@addProduct');
+  Route::delete('/remove/supplier/product', 'SupplierController@removeProduct');
+  Route::post('/edit/supplier/product/id', 'SupplierController@editId');
 
 });
 
@@ -211,15 +233,7 @@ do{
   //     Route::get('/json/purchase/prices', 'PurchaseController@getPrices');
   //     Route::put('/put/purchase/prices', 'PurchaseController@putPrice');
 
-  //     //Supplier
-  //     Route::get('/json/suppliers', 'SupplierController@jsonGet');
-  //     Route::get('/json/suppliers/distinct', 'SupplierController@jsonDistinct');
-  //     Route::put('/put/supplier', 'SupplierController@put');
-  //     Route::post('/post/supplier', 'SupplierController@post');
-  //     Route::delete('/delete/supplier', 'SupplierController@delete');
-  //     Route::put('/attach/supplier/product', 'SupplierController@addProduct');
-  //     Route::delete('/remove/supplier/product', 'SupplierController@removeProduct');
-  //     Route::post('/edit/supplier/product/id', 'SupplierController@editId');
+
 
   //     //Goods
   //     Route::get('/json/goods', 'GoodsController@jsonGet');

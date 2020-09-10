@@ -1,6 +1,6 @@
 <template>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">  
-  <a data-v-04a0d7a8="" href="/report" class="navbar-brand">🗃</a>
+  <a data-v-04a0d7a8="" href="/admin/report" class="navbar-brand">🗃</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#report-navbar" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -21,27 +21,27 @@ data(){return{
   current:this.$route.path,
   links:[
     {
-      link:"/reports",
+      link:"/admin/reports",
       caption:"Учёт",
     },
     {
-      link:"/report/items",
+      link:"/admin/report/items",
       caption:"Товары",
     },
     {
-      link:"/report/suppliers",
+      link:"/admin/report/suppliers",
       caption:"Поставщики",
     },
     {
-      link:"/report/purchases",
+      link:"/admin/report/purchases",
       caption:"Закупка",
     },
     {
-      link:"/report/writeoff",
+      link:"/admin/report/writeoff",
       caption:"Списание",
     },
     {
-      link:"/report/stocktaking",
+      link:"/admin/report/stocktaking",
       caption:"Переучет",
     },
   ]

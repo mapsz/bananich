@@ -9,8 +9,8 @@ class Supplier extends Model
   public $guarded = [];
 
   protected $keys = [
-    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/report/supplier/{id}'],
-    ['key'    => 'name','label' => 'Название','type' => 'link', 'link' => '/report/supplier/{id}'],
+    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/report/supplier/{id}'],
+    ['key'    => 'name','label' => 'Название','type' => 'link', 'link' => '/admin/report/supplier/{id}'],
     ['key'    => 'address','label' => 'Адрес'],
     ['key'    => 'comment','label' => 'Комментарий'],
     ['key'    => 'contact_name','label' => 'Имя'],

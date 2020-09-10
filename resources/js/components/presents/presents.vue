@@ -1,7 +1,8 @@
 <template>
   <div>
     
-    <gruzka-navbar></gruzka-navbar>
+    <gruzka-navbar></gruzka-navbar>    
+    <product-navbar></product-navbar>
 
     <!-- Form -->
     <div class="container pt-3">
@@ -33,12 +34,18 @@
             </div>
           </div>
 
+          <!-- Current presents list -->
           <ul>
             <li v-for='(product,i) in products' :key='i'>
               
+              <!-- Delete -->
+              <span @click="removeProduct(product.product_id, product.type)" style="cursor:pointer;">❌</span>
+              <!-- Info -->
               <span>({{product.type}})</span>
               <span>{{product.product_id}}</span>
               <span>{{product.product.name}}</span>
+
+
             </li>
           </ul>
 
@@ -100,6 +107,10 @@ export default {
       let id = this.toAdd.id;
       let r = await ax.fetch('product/present',{id,type},'put');
       this.getProducts();
+    },
+    async removeProduct(id, type){
+      let r = await ax.fetch('product/present',{id,type},'delete');
+      location.reload();
     },
     async getProducts(){
       this.products = await ax.fetch('/product/present');

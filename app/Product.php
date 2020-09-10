@@ -59,7 +59,17 @@ class Product extends Model
       [
         'name' => 'description',
         'caption' => 'Описание',
-        'type' => 'textarea'
+        'type' => 'textEditor'
+      ],
+      [
+        'name' => 'composition',
+        'caption' => 'Состав',
+        'type' => 'textEditor'
+      ],
+      [
+        'name' => 'benefit',
+        'caption' => 'Польза',
+        'type' => 'textEditor'
       ],
       [
         'name' => 'calories',
@@ -89,16 +99,6 @@ class Product extends Model
       [
         'name' => 'сountry',
         'caption' => 'Страна',
-      ],
-      [
-        'name' => 'composition',
-        'caption' => 'Состав',
-        'type' => 'textarea'
-      ],
-      [
-        'name' => 'benefit',
-        'caption' => 'Польза',
-        'type' => 'textarea'
       ],
       [
         'name' => 'no_gluten',
@@ -171,7 +171,6 @@ class Product extends Model
     return $ids;
 
   }
-
 
   public static function getWithOptions($request){
 
@@ -412,7 +411,7 @@ class Product extends Model
 
     $rFiles = [];
     foreach ($files as $file) {
-      if(strpos($file,$id.'_') !== false){
+      if(strpos($file,$id.'_') === 0){
         array_push($rFiles,'/products/images/source/' .$file);
       }      
     }
@@ -429,7 +428,7 @@ class Product extends Model
     
     $image = false;
     foreach ($files as $file) {
-      if(strpos($file,$id.'.') !== false){
+      if(strpos($file,$id.'.') === 0){
         $image = $xpath .'/'. $file;
         break;
       }
@@ -598,6 +597,7 @@ class Product extends Model
         case  "eco": 
         case  "gruzka_priority": 
         case  "strews": 
+        case  "bonus": 
           $insert['meta'][$key] = $value;
           break;
         case "composition": 
@@ -615,8 +615,6 @@ class Product extends Model
           break;
       }
     }
-
-    // dd($insert);
 
     //Insert
     try {

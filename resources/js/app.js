@@ -37,7 +37,7 @@ Vue.use(infiniteScroll)
 
 
 // Components
-const files = require.context('./components/site', true, /\.vue$/i); 
+const files = require.context('./components/__site', true, /\.vue$/i); 
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 const app = new Vue({

@@ -2,26 +2,28 @@
 <div>
   <gruzka-navbar></gruzka-navbar>
 
-  
-  
 
   <div class="container-fluid mb-3">
 
-    <h2 v-if="id" class="text-center mt-2">ID: <a :href="'/product/'+id">{{id}} <span style="font-size:12pt">(просмотр)</span></a></h2>
+    <h2 v-if="id" class="text-center my-3">{{product.name}} <a :href="'/product/'+id">{{id}} <span style="font-size:12pt">(просмотр)</span></a></h2>
     
     <div class="row">
-      <div class="col-7">   
-
+      <div class="col-8">   
         <juge-form :inputs="inputs" :errors="errors" @submit="submit"></juge-form>
-
       </div>
-      <div class="col-5" v-if="id">  
+      <div class="col-4" v-if="id">
+        <!-- Published -->
+        <product-published class="mb-3 border p-2" />
         <!-- Main Photo -->
-        <product-main-photo class="mb-3" />
+        <product-main-photo class="mb-3 border p-2" />
+        <!-- Bonuses -->
+        <product-bonus class="mb-3 border p-2" />
         <!-- Categories -->
-        <product-categories class="mb-3" />
+        <product-categories class="mb-3 border p-2" />
         <!-- Discount -->
-        <product-discount-edit></product-discount-edit>
+        <product-discount-edit class="mb-3 border p-2" />
+        <!-- Delivery Days -->
+        <product-delivery-days class="mb-3 border p-2" />
       </div>
     </div>
   </div>
@@ -35,16 +37,13 @@ export default {
   data(){return{
     id:false,
     edit:false,
+    content:'',
   }},
   computed:{
     ...mapGetters({product:'product/getOne',inputs:'product/getInputs',errors:'product/getErrors'}),    
   },
-  async mounted(){
-
-
+  async mounted(){   
     
-
-
     //Get
     if(this.$route.params.id > 0){
       this.id = this.$route.params.id;

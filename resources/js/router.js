@@ -5,57 +5,57 @@ routes.push(
   {path: '/testtest',    component:testtest},
 );
 
-//SITE
+//__site
 
   //Order thanks
-  import siteOrderThanks from './components/site/order-thanks/order-thanks.vue';
+  import siteOrderThanks from './components/__site/order-thanks/order-thanks.vue';
   routes.push(
     {path: '/order-thanks',    component:siteOrderThanks},
   );
 
 
   //Confirmation
-  import siteConfirmation from './components/site/confirmation/confirmation.vue';
+  import siteConfirmation from './components/__site/confirmation/confirmation.vue';
   routes.push(
     {path: '/confirmation',    component:siteConfirmation},
   );
 
   //Presents
-  import sitePresents from './components/site/presents/presents.vue';
+  import sitePresents from './components/__site/presents/presents.vue';
   routes.push(
     {path: '/presents',    component:sitePresents},
   );
 
   //Catalogue
-  import siteProducts from './components/site/products/products.vue';
+  import siteProducts from './components/__site/products/products.vue';
   routes.push(
     {path: '/catalogue',    component:siteProducts},
     {path: '/',    component:siteProducts},
   );
 
   //Product
-  import siteProduct from './components/site/products/product.vue';
+  import siteProduct from './components/__site/products/product.vue';
   routes.push(
     {path: '/product/:id',    component:siteProduct},
   );
 
   //Cart
-  import siteCart from './components/site/cart/cart.vue';
+  import siteCart from './components/__site/cart/cart.vue';
   routes.push(
     {path: '/cart',    component:siteCart},
   );
 
   //Checkout
-  import siteCheckout from './components/site/checkout/checkout.vue';
+  import siteCheckout from './components/__site/checkout/checkout.vue';
   routes.push(
     {path: '/checkout',    component:siteCheckout},
   );
 
   //Profile
-  import siteProfile from './components/site/profile/profile.vue';
-  import siteProfileFavorites from './components/site/profile/favorites/favorites.vue';
-  import siteProfileBonus from './components/site/profile/bonus/bonus.vue';
-  import siteProfileOrders from './components/site/profile/orders/orders.vue';
+  import siteProfile from './components/__site/profile/profile.vue';
+  import siteProfileFavorites from './components/__site/profile/favorites/favorites.vue';
+  import siteProfileBonus from './components/__site/profile/bonus/bonus.vue';
+  import siteProfileOrders from './components/__site/profile/orders/orders.vue';
   routes.push(
     {path: '/profile',    component:siteProfile},
     {path: '/profile/favorites',    component:siteProfileFavorites},
@@ -71,9 +71,12 @@ routes.push(
 
   ///categories
   import categories from './components/categories/categories.vue';
+  import category   from './components/categories/category.vue';
   routes.push(
     {path: adminPrefix+'/categories',    component:categories},
+    {path: adminPrefix+'/category/:id',    component:category},
   );
+
 
   ///settings
   import settings from './components/settings/settings.vue';
