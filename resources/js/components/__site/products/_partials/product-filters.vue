@@ -93,6 +93,7 @@
           </div>
       </div>
 
+      <!-- no_lactose -->
       <label class="filter-line">
         <div class="filter-line-left">
           Без лактозы
@@ -102,6 +103,7 @@
           <div class="checkbox-box"></div>
         </div>
       </label>
+      <!-- no_egg -->
       <label class="filter-line">
         <div class="filter-line-left">
           Без яиц
@@ -111,6 +113,7 @@
           <div class="checkbox-box"></div>
         </div>
       </label>
+      <!-- no_sugar -->
       <label class="filter-line">
         <div class="filter-line-left">
           Без сахара
@@ -120,6 +123,48 @@
           <div class="checkbox-box"></div>
         </div>
       </label>
+      <!-- no_gluten -->
+      <label class="filter-line">
+        <div class="filter-line-left">
+          Без глютена
+        </div>
+        <div class="filter-line-right">
+          <input v-model="filters.no_gluten" class="checkbox" name="sort" type="checkbox">
+          <div class="checkbox-box"></div>
+        </div>
+      </label>
+      <!-- no_heat -->
+      <label class="filter-line">
+        <div class="filter-line-left">
+          Без термической обработки
+        </div>
+        <div class="filter-line-right">
+          <input v-model="filters.no_heat" class="checkbox" name="sort" type="checkbox">
+          <div class="checkbox-box"></div>
+        </div>
+      </label>
+      <!-- low_glycemic -->
+      <label class="filter-line">
+        <div class="filter-line-left">
+          Низкий гликемический индекс
+        </div>
+        <div class="filter-line-right">
+          <input v-model="filters.low_glycemic" class="checkbox" name="sort" type="checkbox">
+          <div class="checkbox-box"></div>
+        </div>
+      </label>
+      <!-- eco -->
+      <label class="filter-line">
+        <div class="filter-line-left">
+          Эко сертификат
+        </div>
+        <div class="filter-line-right">
+          <input v-model="filters.eco" class="checkbox" name="sort" type="checkbox">
+          <div class="checkbox-box"></div>
+        </div>
+      </label>
+
+
       <button @click.prevent="addFilters()" class="btn-yellow">Смотреть товары</button>
     </form>
 

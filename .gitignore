@@ -3,6 +3,7 @@
 /storage/filepond-temp
 /storage/logs
 /public/products
+/public/categories
 /public/.htaccess
 /storage/*.key
 .env
