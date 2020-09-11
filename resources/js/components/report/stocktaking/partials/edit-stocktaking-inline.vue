@@ -22,7 +22,8 @@
           <!-- info -->
           <div class="col-6">
             <h5>{{product.name}}</h5>
-            <p>Всего на складе: <b>{{currentQuantity}}</b></p>
+            <a :href="'/admin/product/' + product.id" target="_blank">Редактировать продукт </a>
+            <p class="mt-3">Всего на складе: <b>{{currentQuantity}}</b></p>
           </div>
         </div>
         <!-- input -->

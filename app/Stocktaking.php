@@ -8,7 +8,7 @@ use App\Product;
 class Stocktaking extends Model
 {
   protected $keys = [
-    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/product/{id}'],
+    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/product/{id}'],
     ['key'    => 'mainImage','label' => 'Фото','type' => 'image'],
     ['key'    => 'name','label' => 'Название'],    
     ['key'    => 'price','label' => 'Цена'],

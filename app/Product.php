@@ -57,6 +57,11 @@ class Product extends Model
         'type' => 'float'
       ],
       [
+        'name' => 'unit_full',
+        'caption' => 'Единица полный вес',
+        'type' => 'float'
+      ],
+      [
         'name' => 'description',
         'caption' => 'Описание',
         'type' => 'textEditor'
@@ -582,6 +587,7 @@ class Product extends Model
           $insert['product'][$key] = $value;
           break;
         case 'unit_view':
+        case 'unit_full':
         case 'calories':  
         case 'carbohydrates_slow':  
         case 'carbohydrates_fast':  
