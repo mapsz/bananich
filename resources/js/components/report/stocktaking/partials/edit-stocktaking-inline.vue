@@ -14,9 +14,19 @@
         </button>
       </div>
       <div class="modal-body">
-        <h5>{{product.name}}</h5>
-        <p>Всего на складе: <b>{{currentQuantity}}</b></p>
-        <div class="d-flex">
+        <div class="row mb-3">
+          <!-- Image -->
+          <div class="col-6">
+            <img :src="product.mainImage" alt="">
+          </div>
+          <!-- info -->
+          <div class="col-6">
+            <h5>{{product.name}}</h5>
+            <p>Всего на складе: <b>{{currentQuantity}}</b></p>
+          </div>
+        </div>
+        <!-- input -->
+        <div class="d-flex justify-content-center">
           <span>Количество: </span> 
           <input v-model="quantity" type="text">
         </div>

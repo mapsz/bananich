@@ -55,6 +55,10 @@
           </b-button>
         </div>
       </span>     
+      <!-- Image -->
+      <span v-else-if="data.field.type == 'image'">
+        <img :src="data.value" alt="">
+      </span>
       <!-- Custom -->
       <span v-else-if="data.field.type == 'custom'">
         <component :is="data.field.component" :data="data.item" @success="success()"></component>

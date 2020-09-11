@@ -9,6 +9,7 @@ class Stocktaking extends Model
 {
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/product/{id}'],
+    ['key'    => 'mainImage','label' => 'Фото','type' => 'image'],
     ['key'    => 'name','label' => 'Название'],    
     ['key'    => 'price','label' => 'Цена'],
     ['key'    => 'unit','label' => 'Единица'],
@@ -44,8 +45,12 @@ class Stocktaking extends Model
        $p->lastStocktaking = false;
      }else{
        $p->lastStocktaking = $p->goods[0]->created_at->format('d.m.y');
-     }  
+     }
+
+     //Images
+     $p->mainImage = Product::getMainImage($p->id);
    }
+
 
    return $products;
 

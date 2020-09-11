@@ -148,6 +148,33 @@ Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
     Route::put('/discount/add', 'DiscountController@add');
   });
 
+  //Report
+  Route::middleware([])->group(function (){
+
+    //Report
+    Route::get('/json/report', 'ReportController@jsonGet');
+
+    //Stocktaking
+    Route::get('/json/stocktaking/products', 'StocktakingController@jsonGetProducts');
+    Route::put('/stocktaking', 'StocktakingController@put');
+
+    //Writeoff        
+    Route::put('/put/writeoff', 'WriteoffController@put');    
+
+    //Purchases        
+    Route::put('/put/purchase', 'PurchaseController@put');      
+    //Purchase prices       
+    Route::get('/json/purchase/prices', 'PurchaseController@getPrices');
+    Route::put('/put/purchase/prices', 'PurchaseController@putPrice');
+
+    //Goods
+    Route::get('/json/goods', 'GoodsController@jsonGet');
+    Route::put('/put/goods', 'GoodsController@put');
+    Route::post('/post/goods', 'GoodsController@post');
+    Route::delete('/delete/goods', 'GoodsController@delete');
+
+  });
+
 
   //Supplier
   Route::get('/json/suppliers', 'SupplierController@jsonGet');
@@ -158,6 +185,8 @@ Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
   Route::put('/attach/supplier/product', 'SupplierController@addProduct');
   Route::delete('/remove/supplier/product', 'SupplierController@removeProduct');
   Route::post('/edit/supplier/product/id', 'SupplierController@editId');
+
+
 
 });
 
@@ -216,30 +245,6 @@ do{
   //     Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
   //     Route::put('/put/delivery', 'DeliveryController@put');      
   //     Route::delete('/delivery', 'DeliveryController@delete');      
-
-  //     //Report
-  //     Route::get('/json/report', 'ReportController@jsonGet');
-
-  //     //Stocktaking
-  //     Route::get('/json/stocktaking/products', 'StocktakingController@jsonGetProducts');
-  //     Route::put('/stocktaking', 'StocktakingController@put');
-
-  //     //Writeoff        
-  //     Route::put('/put/writeoff', 'WriteoffController@put');    
-
-  //     //Purchases        
-  //     Route::put('/put/purchase', 'PurchaseController@put');
-  //     //Purchase prices       
-  //     Route::get('/json/purchase/prices', 'PurchaseController@getPrices');
-  //     Route::put('/put/purchase/prices', 'PurchaseController@putPrice');
-
-
-
-  //     //Goods
-  //     Route::get('/json/goods', 'GoodsController@jsonGet');
-  //     Route::put('/put/goods', 'GoodsController@put');
-  //     Route::post('/post/goods', 'GoodsController@post');
-  //     Route::delete('/delete/goods', 'GoodsController@delete');
 
   //     //Statistics
   //     Route::get('/json/statistics', 'StatisticController@jsonGet');

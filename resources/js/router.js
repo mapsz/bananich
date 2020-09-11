@@ -206,13 +206,13 @@ routes.push(
   //Writeoff
   import writeoff from './components/report/writeoff/writeoff.vue';
   routes.push(
-    {path: adminPrefix+'/reports/writeoff',component: writeoff},
+    {path: adminPrefix+'/report/writeoff',component: writeoff},
   );
 
   //Stocktaking
   import stocktaking from './components/report/stocktaking/stocktaking.vue';
   routes.push(
-    {path: adminPrefix+'/reports/stocktaking',component: stocktaking},
+    {path: adminPrefix+'/report/stocktaking',component: stocktaking},
   );
 
 
