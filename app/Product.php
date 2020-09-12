@@ -228,6 +228,7 @@ class Product extends Model
       }
 
       //Ids
+      // dd($request['ids']);
       if(isset($request['ids']) && is_array($request['ids'])){
         $products = $products->wherein('id',$request['ids']);
       }
@@ -722,7 +723,7 @@ class Product extends Model
   }  
   public function discount(){
       return $this->hasOne('App\ProductDiscount');
-  } 
+  }
   public function goods(){
       return $this->hasMany('App\Goods');
   }   

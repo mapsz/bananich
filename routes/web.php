@@ -193,6 +193,10 @@ Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 //Site
 Route::group(['middleware' => []], function (){
 
+  //Favorites
+  Route::put('/favorite', 'FavoriteController@put');
+  Route::delete('/favorite', 'FavoriteController@remove');
+
   //Pages
   Route::middleware([])->group(function (){
     //Profile

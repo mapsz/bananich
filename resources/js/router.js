@@ -64,8 +64,6 @@ routes.push(
   );
 
 
-
-
 //ADMIN
   let adminPrefix = '/admin';
 
