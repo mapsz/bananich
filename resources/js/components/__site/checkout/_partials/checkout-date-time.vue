@@ -4,16 +4,16 @@
       <div class="checkout-title">Дата доставки</div>
       <div class="form-group">
         <div class="form-radio">
-          <input v-model="data.date" class="custom-radio" type="radio" id="date" name="date" value="2020.08.22">
-          <label for="date">22.08.20</label>
+          <input v-model="data.date" class="custom-radio" type="radio" id="date" name="date" value="2020-09-14">
+          <label for="date">14.09.20</label>
         </div>
         <div class="form-radio">
-          <input v-model="data.date" class="custom-radio" type="radio" id="date-2" name="date" value="2020.08.23">
-          <label for="date-2">23.08.20</label>
+          <input v-model="data.date" class="custom-radio" type="radio" id="date-2" name="date" value="2020-09-15">
+          <label for="date-2">15.09.20</label>
         </div>
         <div class="form-radio">
-          <input v-model="data.date" class="custom-radio" type="radio" id="date-3" name="date" value="2020.08.24">
-          <label for="date-3">24.08.20</label>
+          <input v-model="data.date" class="custom-radio" type="radio" id="date-3" name="date" value="2020-09-15">
+          <label for="date-3">16.09.20</label>
         </div>
       </div>
     </div>

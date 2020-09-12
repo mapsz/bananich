@@ -5,7 +5,7 @@
       <ul class="sitebar-wrap">
         <!-- All -->
         <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
-          <a class="sitebar-link " v-on:click.prevent="active = false" href="">Все</a>
+          <a class="sitebar-link " href="/">Все</a>
         </li>
         <!-- Categories -->
         <li 
@@ -13,10 +13,15 @@
           :class="active == category.id? 'active' : ''"
           class="sitebar-category"
         >
-          <a class="sitebar-link" v-on:click.prevent="active = category.id; activeCategoty=category" href="">
+          <a
+            class="sitebar-link"
+            @click.prevent="changeCategory(category)"
+            :href="'/category/'+category.id"
+          >
             <div class="sitebar-text">{{category.name}}</div> 
             <div class="sitebar-bg" :style='"background-image: url("+category.photo+"); background-color: #ebeff2;"'></div>
           </a>
+
         </li>
       </ul>
     </div>            
@@ -37,9 +42,17 @@ watch: {
     this.productFetch();
     this.$emit('change',this.activeCategoty);
   },
+  $route: async function(){
+    this.active = this.$route.params.id != undefined ? this.$route.params.id : false;
+    this.activeCategoty = this.categories.find(x => x.id == this.$route.params.id);
+  },
 },
-mounted(){
-  this.fetch();
+async mounted(){
+  await this.fetch();
+  if(this.$route.params.id != undefined){
+    this.active = this.$route.params.id;
+    this.activeCategoty = this.categories.find(x => x.id == this.$route.params.id);    
+  }
 },
 methods:{
   ...mapActions({
@@ -47,6 +60,11 @@ methods:{
     'productFetch':'product/fetchData',
     'fetch':'category/fetch',
   }),
+  changeCategory(category){
+    this.active = category.id;
+    this.activeCategoty = category;
+    this.$router.push('/category/'+category.id);
+  }
 },
 }
 </script>

@@ -1,17 +1,17 @@
 <template>
   <div class="catalog-item">
     <!-- Image -->
-    <div 
-      class="catalog-item-img" 
-      :style='"background-image:url(\""+product.mainImage+"\")"'
-    > 
-
-    <!-- Favorite -->
-    <button  class="like">
-      <favorite-button :product-id="product.id"/>
-    </button>
-
-    </div>                  
+    <a :href="'/product/'+product.id">
+      <div 
+        class="catalog-item-img" 
+        :style='"background-image:url(\""+product.mainImage+"\")"'
+      > 
+        <!-- Favorite -->
+        <button  class="like">
+          <favorite-button :product-id="product.id"/>
+        </button>
+      </div>  
+    </a>                
     <div class="catalog-item-text">
       <!-- Name -->
       <div class="catalog-item-title">

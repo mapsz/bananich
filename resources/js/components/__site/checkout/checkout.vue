@@ -79,8 +79,7 @@ export default {
       //Setup data
       let data  = this.data;
 
-      //Post
-      
+      //Post      
       let r = await ax.fetch('/order/put', data, 'put');
 
       //Catch errors

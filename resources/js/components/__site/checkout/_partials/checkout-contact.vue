@@ -36,7 +36,7 @@
 
     <!-- Edit data -->
     <div v-if="user && edit==false" class="form-button">      
-      <button @click="edit=true" class="form-url" >Это не мои данные</button>
+      <button @click="name='';phone='';email='';edit=true" class="form-url" >Это не мои данные</button>
     </div>
     
   </div>
@@ -68,6 +68,7 @@ watch: {
   },
 },
 async mounted(){
+  //
 },
 methods:{
   ...mapActions({'getUser':'user/fetch'}),
@@ -76,7 +77,12 @@ methods:{
     this.showLogin=true;
   },
   isPreData(){
-    if(this.user.name && this.user.surname && this.user.email) return true;
+    if(this.user.name && this.user.phone && this.user.email){
+      this.name  = this.user.name;
+      this.phone = this.user.phone;
+      this.email = this.user.email;
+      return true;
+    }
     
     return false;
   }

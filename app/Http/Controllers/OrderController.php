@@ -11,6 +11,7 @@ use App\OrderStatus;
 use App\Item;
 use App\Product;
 use App\Discount;
+use App\Cart;
 
 use Illuminate\Support\Facades\DB;
 
@@ -30,10 +31,10 @@ class OrderController extends Controller
       'address.street'     => ['required', 'string', 'max:190' ],
       'dateTime.date'      => ['required'],
       'dateTime.time'      => ['required'],
-      'container'      => ['required'],
-      'paymethod'      => ['required'],
-      'confirm'      => ['required'],
-      'comment'      => ['required'],
+      'container'          => ['required'],
+      'paymethod'          => ['required'],
+      'confirm'            => ['required'],
+      'comment'            => ['max:1000'],
     ];    
     //Toother
     if(
@@ -47,6 +48,9 @@ class OrderController extends Controller
     }
 
     Validator::make($request->all(), $validate)->validate();
+
+    //Get Cart
+
 
     Order::put($request->all());
 

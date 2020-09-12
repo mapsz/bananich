@@ -41,10 +41,6 @@ export default {
         caption:"Заказы",
       },
       {
-        link: this.adminPrefix+"/confirms",
-        caption:"Подтверждение",
-      },
-      {
         link: this.adminPrefix+"/gruzkas",
         caption:"Gruzka",
       },

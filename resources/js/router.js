@@ -29,6 +29,7 @@ routes.push(
   //Catalogue
   import siteProducts from './components/__site/products/products.vue';
   routes.push(
+    {path: '/category/:id',    component:siteProducts},
     {path: '/catalogue',    component:siteProducts},
     {path: '/',    component:siteProducts},
   );
@@ -96,6 +97,12 @@ routes.push(
     {path: adminPrefix+'/orders',              component:orders},
     {path: adminPrefix+'/main',                component:orders},
     {path: adminPrefix+'/',                    component:orders},
+  );
+
+  //Orders Limit
+  import orderLimit from './components/orders-limit/orders-limit.vue';
+  routes.push(
+    {path: adminPrefix+'/orders/limits',           component:orderLimit},
   );
 
   //Sms

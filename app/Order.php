@@ -49,9 +49,12 @@ class Order extends Model
     //@@@todo from admin order
     $customer_id = Auth::user()->id;
 
+
+    //Save Order
     $order = new Order;
 
     $order->customer_id = $customer_id;
+    $order->date = now();
     $order->delivery_date = $data['dateTime']['date'];
     $order->delivery_time_from = $data['dateTime']['time']['from'];
     $order->delivery_time_to = $data['dateTime']['time']['to'];

@@ -11,7 +11,7 @@ let category = {
   },
   actions:{
     async fetch({commit}){
-      let r = await ax.fetch('json/categories');
+      let r = await ax.fetch('/json/categories');
       commit('mcategory',r); 
     }
   },  

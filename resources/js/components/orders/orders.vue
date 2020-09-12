@@ -1,6 +1,7 @@
 <template>
 <div>
   <gruzka-navbar></gruzka-navbar>
+  <order-navbar></order-navbar>
 
   <!-- <parse></parse> -->
 
