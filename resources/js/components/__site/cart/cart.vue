@@ -91,9 +91,9 @@
                   <div class="cart-message-text">
                     <span>За этот заказ вы получите {{Math.round(cart.final_summ / 10)}} бонусов! </span> 
                     <div class="cart-message-date">
-                      Успей потратить до
-                      <div class="cart-message-time"><span>01.12.2020</span> I <span>18:10</span></div>
-                      <span style="color:red; font-size:8pt">!!(дата\время неизвестно?)</span> <!-- todo @@@-->
+                      Успей потратить за 21 день!
+                      <!-- <div class="cart-message-time"><span>01.12.2020</span> I <span>18:10</span></div>
+                      <span style="color:red; font-size:8pt">!!(дата\время неизвестно?)</span> todo @@@ -->
                     </div>
                   </div>
                 </div>

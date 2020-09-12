@@ -114,6 +114,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
             'League\\Flysystem\\' => 17,
             'League\\CommonMark\\' => 18,
             'Lcobucci\\JWT\\' => 13,
+            'LarsJanssen\\UnderConstruction\\' => 30,
             'Laravel\\Ui\\' => 11,
             'Laravel\\Tinker\\' => 15,
         ),
@@ -363,6 +364,10 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         array (
             0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
         ),
+        'LarsJanssen\\UnderConstruction\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src',
+        ),
         'Laravel\\Ui\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/ui/src',
@@ -499,6 +504,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\Events\\OrderSuccess' => __DIR__ . '/../..' . '/app/Events/OrderSuccess.php',
         'App\\Events\\OrderSuccessCancel' => __DIR__ . '/../..' . '/app/Events/OrderSuccessCancel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Favorite' => __DIR__ . '/../..' . '/app/Favorite.php',
         'App\\FileUpload' => __DIR__ . '/../..' . '/app/FileUpload.php',
         'App\\Goods' => __DIR__ . '/../..' . '/app/Goods.php',
         'App\\Gruzka' => __DIR__ . '/../..' . '/app/Gruzka.php',
@@ -518,6 +524,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\Http\\Controllers\\DeliveryController' => __DIR__ . '/../..' . '/app/Http/Controllers/DeliveryController.php',
         'App\\Http\\Controllers\\DiscountController' => __DIR__ . '/../..' . '/app/Http/Controllers/DiscountController.php',
         'App\\Http\\Controllers\\ErrorController' => __DIR__ . '/../..' . '/app/Http/Controllers/ErrorController.php',
+        'App\\Http\\Controllers\\FavoriteController' => __DIR__ . '/../..' . '/app/Http/Controllers/FavoriteController.php',
         'App\\Http\\Controllers\\FileUploadController' => __DIR__ . '/../..' . '/app/Http/Controllers/FileUploadController.php',
         'App\\Http\\Controllers\\GoodsController' => __DIR__ . '/../..' . '/app/Http/Controllers/GoodsController.php',
         'App\\Http\\Controllers\\GruzkaController' => __DIR__ . '/../..' . '/app/Http/Controllers/GruzkaController.php',
@@ -599,6 +606,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\UserComment' => __DIR__ . '/../..' . '/app/UserComment.php',
         'App\\UserReferal' => __DIR__ . '/../..' . '/app/UserReferal.php',
         'App\\Writeoff' => __DIR__ . '/../..' . '/app/Writeoff.php',
+        'App\\ordersLimit' => __DIR__ . '/../..' . '/app/ordersLimit.php',
         'App\\statisticOrder' => __DIR__ . '/../..' . '/app/statisticOrder.php',
         'App\\statisticProduct' => __DIR__ . '/../..' . '/app/statisticProduct.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
@@ -2523,6 +2531,14 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'Laravel\\Ui\\Presets\\Vue' => __DIR__ . '/..' . '/laravel/ui/src/Presets/Vue.php',
         'Laravel\\Ui\\UiCommand' => __DIR__ . '/..' . '/laravel/ui/src/UiCommand.php',
         'Laravel\\Ui\\UiServiceProvider' => __DIR__ . '/..' . '/laravel/ui/src/UiServiceProvider.php',
+        'LarsJanssen\\UnderConstruction\\Commands\\SetCodeCommand' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/Commands/SetCodeCommand.php',
+        'LarsJanssen\\UnderConstruction\\Controllers\\AssetController' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/Controllers/AssetController.php',
+        'LarsJanssen\\UnderConstruction\\Controllers\\CodeController' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/Controllers/CodeController.php',
+        'LarsJanssen\\UnderConstruction\\Facades\\TransFormer' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/Facades/TransFormer.php',
+        'LarsJanssen\\UnderConstruction\\Throttle' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/Throttle.php',
+        'LarsJanssen\\UnderConstruction\\TransFormer' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/TransFormer.php',
+        'LarsJanssen\\UnderConstruction\\UnderConstruction' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/UnderConstruction.php',
+        'LarsJanssen\\UnderConstruction\\UnderConstructionServiceProvider' => __DIR__ . '/..' . '/larsjanssen6/underconstruction/src/UnderConstructionServiceProvider.php',
         'Lcobucci\\JWT\\Builder' => __DIR__ . '/..' . '/lcobucci/jwt/src/Builder.php',
         'Lcobucci\\JWT\\Claim' => __DIR__ . '/..' . '/lcobucci/jwt/src/Claim.php',
         'Lcobucci\\JWT\\Claim\\Basic' => __DIR__ . '/..' . '/lcobucci/jwt/src/Claim/Basic.php',

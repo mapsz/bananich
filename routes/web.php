@@ -11,6 +11,9 @@
 |
 */
 
+
+Route::group(['middleware' => 'under-construction'], function () {
+
 Route::get('/home', function(){
   return redirect('/');
 });
@@ -322,3 +325,6 @@ do{
 
 Auth::routes();
 
+
+
+});

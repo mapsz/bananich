@@ -35,10 +35,14 @@ window.terror= function(){console.log('error xzz')};
 var infiniteScroll = require('vue-infinite-scroll');
 Vue.use(infiniteScroll)
 
+//Under construction
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+require('es6-promise').polyfill();
 
 // Components
 const files = require.context('./components/__site', true, /\.vue$/i); 
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+
 
 const app = new Vue({
     el: '#app',

@@ -131,6 +131,11 @@ class Product extends Model
         'type' => 'checkbox'
       ],
       [
+        'name' => 'no_milk',
+        'caption' => 'Без молока',
+        'type' => 'checkbox'
+      ],
+      [
         'name' => 'low_glycemic',
         'caption' => 'Низкий гликемический индекс',
         'type' => 'checkbox'
@@ -320,6 +325,12 @@ class Product extends Model
             $q->where('name', '=', 'no_lactose')->where('value', '=', '1');
           });
         }  
+        //No sugar
+        if(isset($request['no_sugar']) && $request['no_sugar'] && $request['no_egg'] != 'false'){
+          $products = $products->whereHas('metas', function ($q) {
+            $q->where('name', '=', 'no_sugar')->where('value', '=', '1');
+          });
+        }    
         //No sugar
         if(isset($request['no_sugar']) && $request['no_sugar'] && $request['no_egg'] != 'false'){
           $products = $products->whereHas('metas', function ($q) {
@@ -524,6 +535,7 @@ class Product extends Model
       'no_sugar'              => 'boolean',
       'no_heat'               => 'boolean',
       'no_egg'                => 'boolean',
+      'no_milk'                => 'boolean',
       'low_glycemic'          => 'boolean',
       'eco'                   => 'boolean',
       'gruzka_priority'       => 'numeric',
@@ -600,6 +612,7 @@ class Product extends Model
         case  "no_sugar": 
         case  "no_heat": 
         case  "no_egg": 
+        case  "no_milk": 
         case  "low_glycemic": 
         case  "eco": 
         case  "gruzka_priority": 
