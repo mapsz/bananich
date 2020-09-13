@@ -59,6 +59,7 @@
       </div>
       <!-- Icons -->
       <div class="catalog-item-icon d-flex">
+        <img v-if="product.no_lactose != undefined" src="/image/no-lactose.svg" alt="no lactose">
         <img v-if="product.no_gluten != undefined" src="/image/no-gluten.svg" alt="no gluten">
         <img v-if="product.no_sugar != undefined" src="/image/no-sugar.svg" alt="no sugar">
         <img v-if="product.no_egg != undefined" src="/image/no-eggs.svg" alt="no eggs">

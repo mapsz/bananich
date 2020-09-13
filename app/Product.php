@@ -320,21 +320,45 @@ class Product extends Model
           });
         }  
         //No lactose
-        if(isset($request['no_lactose']) && $request['no_lactose'] && $request['no_egg'] != 'false'){
+        if(isset($request['no_lactose']) && $request['no_lactose'] && $request['no_lactose'] != 'false'){
           $products = $products->whereHas('metas', function ($q) {
             $q->where('name', '=', 'no_lactose')->where('value', '=', '1');
           });
         }  
         //No sugar
-        if(isset($request['no_sugar']) && $request['no_sugar'] && $request['no_egg'] != 'false'){
+        if(isset($request['no_sugar']) && $request['no_sugar'] && $request['no_sugar'] != 'false'){
           $products = $products->whereHas('metas', function ($q) {
             $q->where('name', '=', 'no_sugar')->where('value', '=', '1');
           });
         }    
-        //No sugar
-        if(isset($request['no_sugar']) && $request['no_sugar'] && $request['no_egg'] != 'false'){
+        // No egg
+        if(isset($request['no_egg']) && $request['no_egg'] && $request['no_egg'] != 'false'){
           $products = $products->whereHas('metas', function ($q) {
-            $q->where('name', '=', 'no_sugar')->where('value', '=', '1');
+            $q->where('name', '=', 'no_egg')->where('value', '=', '1');
+          });
+        }  
+        // no_heat
+        if(isset($request['no_heat']) && $request['no_heat'] && $request['no_heat'] != 'false'){
+          $products = $products->whereHas('metas', function ($q) {
+            $q->where('name', '=', 'no_heat')->where('value', '=', '1');
+          });
+        }    
+        // low_glycemic
+        if(isset($request['low_glycemic']) && $request['low_glycemic'] && $request['low_glycemic'] != 'false'){
+          $products = $products->whereHas('metas', function ($q) {
+            $q->where('name', '=', 'low_glycemic')->where('value', '=', '1');
+          });
+        }   
+        // no_milk
+        if(isset($request['no_milk']) && $request['no_milk'] && $request['no_milk'] != 'false'){
+          $products = $products->whereHas('metas', function ($q) {
+            $q->where('name', '=', 'no_milk')->where('value', '=', '1');
+          });
+        }   
+        // eco
+        if(isset($request['eco']) && $request['eco'] && $request['eco'] != 'false'){
+          $products = $products->whereHas('metas', function ($q) {
+            $q->where('name', '=', 'eco')->where('value', '=', '1');
           });
         }      
       }while(0);
@@ -390,12 +414,12 @@ class Product extends Model
         }
       }
 
+      //Description
       if(isset($product->description)){
         $description = $product->description->value;
         unset($product->description);
         $product['description'] = $description;
       }
-
 
       //Final price
       if(!$request['short_query'] || isset($request['with_final_price'])){
@@ -409,6 +433,14 @@ class Product extends Model
           $product->final_price = $product->final_price;
         }
       }
+      
+      //Unit
+      $product->unit             = isset($product->unit) ? $product->unit : 1;
+      $product->unit_view        = isset($product->unit_view) ? $product->unit_view : $product->unit;
+      
+      //view unit split      
+      $product->unit_digit       = preg_replace('/[^0-9]/', '', $product->unit_view);
+      $product->unit_name        = preg_replace('/\ /', '', preg_replace('/\d/', '', $product->unit_view));;
 
     }
 

@@ -36,7 +36,10 @@ class Checkout extends Model
         
         //Add data
         $item->name             = $product->name;
-        $item->unit_view        = isset($product->unit_view) ? $product->unit_view : '';
+        $item->unit             = $product->unit;
+        $item->unit_view        = $product->unit_view;
+        $item->unit_digit       = $product->unit_digit;
+        $item->unit_name        = $product->unit_name;
         $item->price_per_unit   = $product->price;
         $item->price            = $product->price * $item->count;
         $item->discount         = isset($product->discount) ? $product->discount : false;

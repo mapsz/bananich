@@ -27,7 +27,7 @@
                 <div v-for='(item,i) in cart.items' :key='i' class="cart-item">                  
                   <div>
                     <div class="cart-name">{{item.name}}</div>
-                    <span style="color:red">!!</span> <span class="cart-weight">500 гр</span> <span style="color:red">!!</span> <!-- todo @@@-->
+                    <span class="cart-weight">{{item.unit_digit * item.count}} {{item.unit_name}}</span>
                   </div>
                   
                   <div class="cart-counter">
