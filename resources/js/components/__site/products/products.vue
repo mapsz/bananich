@@ -10,7 +10,7 @@
         <div class="row content-page">
 
           <!-- Categories Sidebar -->
-          <categories-sidebar />
+          <categories-sidebar v-model="categoriesActive"/>
 
           <div class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
             
@@ -26,7 +26,7 @@
             </div>
 
             <!-- Product list -->
-            <div class="row">
+            <div v-if="width > 768 || categoriesActive" class="row">
 
               <!-- Карточка товара -->
               <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 ">
@@ -37,7 +37,6 @@
 
               <div 
                 v-infinite-scroll="loadMore" 
-                infinite-scroll-disabled="busy"
                 infinite-scroll-distance="10"
               ></div>
 
@@ -58,6 +57,9 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    busy:false,
+    categoriesActive:false,
+    width:window.screen.width,
   }},
   computed:{
     ...mapGetters({
@@ -100,9 +102,12 @@ export default {
     getItem(id){
       return this.cart.items.find(x => x.product_id == id);
     },
-    loadMore(){
+    async loadMore(){
+      if(this.busy) return;
       if(this.infinite >= this.pages.last_page) return;
-      this.addInfinite();
+      this.busy = true;
+      await this.addInfinite();
+      this.busy = false;
     }
   }
 }

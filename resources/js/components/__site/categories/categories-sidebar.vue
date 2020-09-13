@@ -31,6 +31,7 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+model: {event: 'blur'},
 data(){return{
   active:false,
   activeCategoty:'',
@@ -41,6 +42,7 @@ watch: {
     await this.addFilter({category:this.active})
     this.productFetch();
     this.$emit('change',this.activeCategoty);
+    this.$emit('blur',this.active);
   },
   $route: async function(){
     this.active = this.$route.params.id != undefined ? this.$route.params.id : false;
