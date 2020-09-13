@@ -15,7 +15,7 @@
       <label 
         :for="input.multi == undefined || !input.multi ? input.name + '-input' : ''"          
       >
-        {{input.caption}}:
+        {{input.caption != undefined ? input.caption : input.name}}:
       </label>
     </span>
 

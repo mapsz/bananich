@@ -12,6 +12,7 @@ use App\Item;
 use App\Product;
 use App\Discount;
 use App\Cart;
+use App\Setting;
 
 use Illuminate\Support\Facades\DB;
 
@@ -25,34 +26,90 @@ class OrderController extends Controller
       'contacts.name'      => ['required', 'string', 'max:190'],
       'contacts.email'     => ['required', 'string', 'email', 'max:190'],
       'contacts.phone'     => ['required', 'regex:/^8(\d){10}?$/', ],
-      'address.apart'      => ['string', 'max:50' ],
-      'address.number'     => ['string', 'max:50' ],
-      'address.pork'       => ['numeric'],
-      'address.street'     => ['required', 'string', 'max:190' ],
+      'address.apart'      => ['string', 'max:20' ],
+      'address.number'     => ['string', 'max:20' ],
+      'address.pork'       => ['string', 'max:20' ],
+      'address.street'     => ['required', 'string', 'max:170' ],
       'dateTime.date'      => ['required'],
       'dateTime.time'      => ['required'],
       'container'          => ['required'],
       'paymethod'          => ['required'],
       'confirm'            => ['required'],
       'comment'            => ['max:1000'],
-    ];    
+    ];   
     //Toother
     if(
-      isset($request->all()['toOther']) && 
-      isset($request->all()['toOther']['toOther']) && 
-      $request->all()['toOther']['toOther']
+      isset($request->data['toOther']) && 
+      isset($request->data['toOther']['toOther']) && 
+      $request->data['toOther']['toOther']
     ){
       $validate['toOther.name'] = ['required', 'string', 'max:190'];
       $validate['toOther.phone'] = ['required', 'regex:/^8(\d){10}?$/'];
-      $validate['toOther.comment'] = ['string', 'max:65000'];
-    }
-
-    Validator::make($request->all(), $validate)->validate();
+      $validate['toOther.comment'] = ['string', 'max:1000'];
+    }     
+    $messages = [
+      'toOther.comment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
+      'toOther.phone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
+      'toOther.phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'toOther.name.max'              => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
+      'comment.max'              => 'Количество символов в поле "Комментарий" не должно превышать :max',
+      'confirm.required'              => 'Необходимо выбрать способ подтверждение заказа',
+      'paymethod.required'            => 'Необходимо выбрать способ оплаты',
+      'container.required'            => 'Необходимо выбрать упаковку',
+      'dateTime.time.required'        => 'Необходимо выбрать время доставки',
+      'dateTime.date.required'        => 'Необходимо выбрать дату доставки',
+      'address.street.required'        => 'Необходимо заполнить поле "Адрес"',
+      'address.street.max'        => 'Количество символов в поле "Адрес" не должно превышать :max',
+      'address.pork.max'        => 'Количество символов в поле "Этаж" не должно превышать :max',
+      'address.number.max'        => 'Количество символов в поле "Дом" не должно превышать :max',
+      'address.apart.max'        => 'Количество символов в поле "Квартира" не должно превышать :max',
+      'contacts.phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
+      'contacts.phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'contacts.email.required'   => 'Необходимо заполнить поле "e-mail"',
+      'contacts.email.max'        => 'Количество символов в поле "Имя" не должно превышать :max',
+      'contacts.name.required'    => 'Необходимо заполнить поле "Имя"',
+      'contacts.name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
+    ];
+    Validator::make($request->data, $validate,$messages)->validate();
 
     //Get Cart
+    $cart = Cart::getCart()->toArray();
+    $settings = new Setting(); $settings = $settings->getList(1);
+    
+    //Validate Cart
+    $cartValidate = [
+      'final_summ'      => ['required','numeric','max:200000', 'min:'.$settings['min_order']],
+      'items'           => ['min:1'],
+      // 'items.*.count'   => ['max:100'],
 
+    ];
+    $cartMessages = [
+      'required'               => 'ошибка!',
+      'final_summ.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
+      'final_summ.min'         => 'Минимальная сумма заказа ' . $settings['min_order'] . 'р',
+      'items.min'              => 'Корзина пуста!'
+    ];
+    Validator::make($cart, $cartValidate, $cartMessages)->validate();
 
-    Order::put($request->all());
+    //Put order
+    $orderId = Order::put($request->data);
+    if(!$orderId) return response()->json(0);
+    
+    //Put items
+    foreach($cart['items'] as $item){
+      $putItem = new Item;
+      $putItem->order_id    = $orderId;
+      $putItem->product_id  = $item['product_id'];
+      $putItem->name        = $item['name'];
+      $putItem->quantity    = $item['count'];
+      $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : '';
+      $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
+      $putItem->price       = $item['price'];
+      $putItem->save();
+    }
+
+    //Delete Cart
+    Cart::find($cart['id'])->delete();
 
     return response()->json(1);
 

@@ -18,7 +18,7 @@
           </div>
           <div class="scale-gift">
             <a href="/presents">
-              <img src="image/gift.svg" alt="gift">
+              <img src="/image/gift.svg" alt="gift">
             </a>
           </div>  
         </template>              

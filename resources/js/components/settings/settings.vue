@@ -8,8 +8,8 @@
     <h1>Настройки</h1>
 
     <div>
-      <h4>Доставка</h4>
-      <juge-form :inputs="delivery" :errors="errors" @submit="post"></juge-form>
+      <!-- <h4>Доставка</h4> -->
+      <juge-form :inputs="inputs" :errors="errors" @submit="post"></juge-form>
 
     </div>
     
@@ -24,6 +24,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    inputs:[],
     delivery:[],
     errors:[],
   }},
@@ -36,27 +37,29 @@ export default {
     //Get settings
     await this.get();
 
-    //Setup inputs form
-    do{
-      let i = -1;
-      i = this.settings.findIndex(x => x.name == 'free_shipping');
-      console.log(i);
-      if(i > -1){      
-        this.delivery.push({
-          name      : this.settings[i].name,
-          caption   : this.settings[i].name,
-          value     : this.settings[i].value
-        });
-      }
-      i = this.settings.findIndex(x => x.name == 'shipping_price');
-      if(i > -1){ 
-        this.delivery.push({
-          name      : this.settings[i].name,
-          caption   : this.settings[i].name,
-          value     : this.settings[i].value
-        });
-      }
-    }while(0);
+    this.inputs = this.settings;
+
+    // //Setup inputs form
+    // do{
+    //   let i = -1;
+    //   i = this.settings.findIndex(x => x.name == 'free_shipping');
+    //   console.log(i);
+    //   if(i > -1){      
+    //     this.delivery.push({
+    //       name      : this.settings[i].name,
+    //       caption   : this.settings[i].name,
+    //       value     : this.settings[i].value
+    //     });
+    //   }
+    //   i = this.settings.findIndex(x => x.name == 'shipping_price');
+    //   if(i > -1){ 
+    //     this.delivery.push({
+    //       name      : this.settings[i].name,
+    //       caption   : this.settings[i].name,
+    //       value     : this.settings[i].value
+    //     });
+    //   }
+    // }while(0);
 
     //
 

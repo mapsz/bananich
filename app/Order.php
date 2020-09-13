@@ -49,7 +49,6 @@ class Order extends Model
     //@@@todo from admin order
     $customer_id = Auth::user()->id;
 
-
     //Save Order
     $order = new Order;
 
@@ -70,6 +69,8 @@ class Order extends Model
     $order->shipping = 0;
 
     $order->save();
+
+    return $order->id;
 
   }
 

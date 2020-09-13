@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Setting;
 
 class SettingController extends Controller
 {
@@ -20,7 +21,9 @@ class SettingController extends Controller
   }
 
   public function get(){
+    $settings = new Setting(); 
+    $settings = $settings->getList();
     
-    return response()->json(DB::table('settings')->get());
+    return response()->json($settings);
   }
 }

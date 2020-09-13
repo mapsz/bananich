@@ -65,11 +65,15 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 export default {
   data(){return{
     data:{},
     errors:[],
   }},
+  computed:{
+    ...mapGetters({cart:'cart/getCart'}),
+  },
   methods:{
     async doOrder(){
       //Refresh errors
@@ -79,8 +83,8 @@ export default {
       //Setup data
       let data  = this.data;
 
-      //Post      
-      let r = await ax.fetch('/order/put', data, 'put');
+      //Put      
+      let r = await ax.fetch('/order/put', {data,'cartId':this.cart.id}, 'put');
 
       //Catch errors
       if(!r){      
@@ -90,7 +94,8 @@ export default {
         }
       }
 
-      location.href ='/confirmation';
+      if(r == 1)
+        location.href ='/order-thanks';
 
       // //Check signin
       // await this.getUser();
