@@ -126,14 +126,18 @@ class jugeVuex {
         }
         if(rPages){
           commit('mPages',rPages);
-        }          
+        }   
+        
+        return;
       },
       async setInfinite({commit},infinite){
-        commit('mInfinite',infinite);
+        await commit('mInfinite',infinite);
+        return;
       },
       async addInfinite({commit,state,dispatch}){
-        commit('mInfinite',state.infinite+1);
-        dispatch('fetchData');
+        await commit('mInfinite',state.infinite+1);
+        await dispatch('fetchData');
+        return;
       },
       //Filters
       async addFilter({commit,state,dispatch},filter){

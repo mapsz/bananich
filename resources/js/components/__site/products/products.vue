@@ -106,11 +106,8 @@ export default {
       if(this.busy) return;
       if(this.infinite >= this.pages.last_page) return;
       this.busy = true;
-      console.log('busy');
       await this.addInfinite();
       this.busy = false;
-      
-      console.log('nobusy');
     }
   }
 }
