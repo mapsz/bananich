@@ -2444,20 +2444,20 @@ footer .phone a {
 /* * Страница Профиль - Мои заказы
  * */
 
-.nav-tabs {
+.nav-tabs-sad {
   display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 120px;
 }
 
-.nav-tabs .nav-item {
+.nav-tabs-sad .nav-item {
   margin-right: 12px;
   margin-bottom: 19px;
   position: relative;
 }
 
-.nav-tabs .nav-link {
+.nav-tabs-sad .nav-link {
   height: 56px;
   line-height: 56px;
   display: block;
@@ -2470,7 +2470,7 @@ footer .phone a {
   text-decoration: none;
 }
 
-.nav-tabs .nav-link.active {
+.nav-tabs-sad .nav-link.active {
   background: #FBE214;
   border: 1px solid #FBE214;
   color: #000000;
@@ -2819,11 +2819,11 @@ footer .phone a {
 /*  Адаптив Order Page */
 
 @media (max-width: 768px) {
-  .nav-tabs {
+  .nav-tabs-sad {
     margin-bottom: 40px;
   }
 
-  .nav-tabs .nav-link {
+  .nav-tabs-sad .nav-link {
     height: 47px;
     line-height: 47px;
     font-size: 16px;

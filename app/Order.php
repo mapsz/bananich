@@ -174,6 +174,11 @@ class Order extends Model
 
       }
 
+      //Customer
+      if(isset($request['customerId']) && $request['customerId']){
+        $query = $query->where('customer_id', '=', $request['customerId']);
+      }
+
     }
 
 

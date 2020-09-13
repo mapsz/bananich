@@ -16,18 +16,22 @@
         <div class="row product">
           <!-- Image -->
           <div class="col-md-6">
-            <div 
-              v-if="product.images != undefined && product.images[0] != undefined"
-              class="product-img" 
-              :style="'background-image: url('+product.images[0]+');'"
-            ></div>
+            <img 
+              v-if="product.images != undefined && product.images[0] != undefined"            
+              :src="product.images[0]" 
+              style="    
+                border-radius: 20px;
+                width: 100%;
+                height: auto;
+              "
+            >
           </div>
 
           <div class="col-md-6">
             <div class="product-info">
 
               <!-- Name -->
-              <h1 class="title-page m-0 mb-sm-5">
+              <h1 class="title-page m-0 mb-sm-4">
                 {{
                   product.name + 
                   (product.сountry ? ', '+product.сountry:'') + 
@@ -50,7 +54,7 @@
 
               <div class="row"> 
                 <!-- КБЖУ -->
-                <div class="col-md-12 order-2 order-md-1 mt-4 mt-sm-0">                  
+                <div v-if="product.calories" class="col-md-12 order-2 order-md-1 mt-4 mt-sm-0">                  
                   <div class="calories">
                     <div class="calories-header d-flex justify-content-between mb-4">
                       <span>БЖУ на 100гр продукта</span>
@@ -128,14 +132,15 @@
                     </template>
 
                     <!-- Gramm -->
-                    <div>
+                    <!-- <div>
                       <select class="product-select mr-4">
                         <option value="1000 гр">1000 гр</option>
                         <option value="500 гр">500 гр</option>
                         <option value="50 гр">50 гр</option>
                       </select>                    
-                      <span style="color:orange">todo</span><!-- todo @@@-->
-                    </div>
+                      
+                    </div> -->
+                    <!-- <span style="color:orange">todo</span>todo @@@ -->
       
                     <!-- Favorites -->
                     <button class="to-favorite">
@@ -168,8 +173,9 @@
           </div>
         </div>
 
-        <h2 class="product-title mb-4">С этим товаром покупают:</h2>
-        <span style="color: orange;">todo</span> <!-- @@@ todo -->
+        <!-- <h2 class="product-title mb-4">С этим товаром покупают:</h2>
+        <span style="color: orange;">todo</span> -->
+         <!-- @@@ todo -->
         <!-- <div class="row">
 
           <div class="col-lg col-md-4 col-6">

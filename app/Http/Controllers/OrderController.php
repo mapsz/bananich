@@ -21,6 +21,25 @@ class OrderController extends Controller
 
   public function put(Request $request){
 
+    //Get Cart
+    $cart = Cart::getCart()->toArray();
+    $settings = new Setting(); $settings = $settings->getList(1);
+    
+    //Validate Cart
+    $cartValidate = [
+      'items'           => ['bail','min:1'],
+      'final_summ'      => ['bail','required','numeric','max:200000', 'min:'.$settings['min_order']],
+      // 'items.*.count'   => ['max:100'],
+
+    ];
+    $cartMessages = [
+      'required'               => 'ошибка!',
+      'final_summ.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
+      'final_summ.min'         => 'Минимальная сумма заказа ' . $settings['min_order'] . 'р',
+      'items.min'              => 'Корзина пуста!'
+    ];
+    Validator::make($cart, $cartValidate, $cartMessages)->validate();
+
     //Validate
     $validate = [
       'contacts.name'      => ['required', 'string', 'max:190'],
@@ -71,25 +90,6 @@ class OrderController extends Controller
       'contacts.name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
     ];
     Validator::make($request->data, $validate,$messages)->validate();
-
-    //Get Cart
-    $cart = Cart::getCart()->toArray();
-    $settings = new Setting(); $settings = $settings->getList(1);
-    
-    //Validate Cart
-    $cartValidate = [
-      'final_summ'      => ['required','numeric','max:200000', 'min:'.$settings['min_order']],
-      'items'           => ['min:1'],
-      // 'items.*.count'   => ['max:100'],
-
-    ];
-    $cartMessages = [
-      'required'               => 'ошибка!',
-      'final_summ.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
-      'final_summ.min'         => 'Минимальная сумма заказа ' . $settings['min_order'] . 'р',
-      'items.min'              => 'Корзина пуста!'
-    ];
-    Validator::make($cart, $cartValidate, $cartMessages)->validate();
 
     //Put order
     $orderId = Order::put($request->data);
