@@ -32,13 +32,13 @@
                   <div class="order-wrap">
 
                     <div>
-                      <div class="order-name"><a href="#" class="order-name-btn">Заказ 5 апреля</a> <span style="color:orange; font-size:8pt">дата заказа или доставки?<!--@@todo--></span></div> 
+                      <div class="order-name"><a href="#" class="order-name-btn">{{fDate(order.created_at)}}</a></div> 
                       <div class="order-track">{{order.id}}</div> <!-- Класс active или cancellation у родителя order-item меняет оформление -->
                     </div>
                   
                     <div class="order-right">
                       <div class="order-status">
-                        {{order.status}} <br><span style="color:orange; font-size:8pt">надо решить список статусов<!--@@todo--></span>
+                        {{order.status}}
                       </div><!-- Класс active или cancellation у родителя order-item меняет оформление -->
                       <div class="d-flex">
                         <div class="order-values">
@@ -47,7 +47,7 @@
                         </div>
                         <div class="order-values">
                           <div class="order-value-img"><img src="/image/order/money.svg" alt="Сумма"></div>
-                          <div class="order-value-text">{{order.total}} руб <span style="color:orange; font-size:8pt">предварительная или финальная?<!--@@todo--></span>  </div>
+                          <div class="order-value-text">{{order.total}} руб   </div>
                         </div>
                       </div>
 
@@ -74,6 +74,9 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  data(){return{
+    //
+  }},
   computed:{
     ...mapGetters({orders:'order/get',user:'user/get'}), 
   },
@@ -90,6 +93,9 @@ export default {
   },
   methods:{    
     ...mapActions({'addFilter':'order/addFilter','fetch':'order/fetchData'}),
+    fDate(date){
+      return moment(date).locale("ru").format('MMMM Do');
+    }
   },
 }
 
