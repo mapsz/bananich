@@ -62,7 +62,7 @@
                     <div class="cart-delivery-text">До бесплатной доставки закажите еще на <span>{{freeShipping - cart.final_summ}}</span><br><a href="/catalogue" class="url">Докупить</a></div>
                   </div>
                 </div>
-                <div class="cart-bonuse">
+                <div v-if="user" class="cart-bonuse">
                   <div class="d-flex">
                     <div class="cart-bonuse-ico">
                       <img src="image/icons/bonus.svg" alt="Bonuse">
@@ -84,7 +84,7 @@
                 </div>
                 <buy-info />
                 <a href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
-                <div class="cart-message">
+                <div v-if="user" class="cart-message">
                   <div class="cart-message-ico">
                     <img src="image/icons/bonus.svg" alt="Bonus">
                   </div>
@@ -116,7 +116,7 @@ export default {
     //
   }},
   computed:{
-    ...mapGetters({cart:'cart/getCart',setting:'settings/get'}),
+    ...mapGetters({cart:'cart/getCart',setting:'settings/get',user:'user/get'}),
     freeShipping: function(){
       let f = this.setting.find(x => x.name == 'free_shipping');
       if(f) return f.value;

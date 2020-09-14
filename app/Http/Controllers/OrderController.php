@@ -91,27 +91,31 @@ class OrderController extends Controller
     ];
     Validator::make($request->data, $validate,$messages)->validate();
 
+    //Place order
+    $orderId = Order::placeOrder($request->data, $cart);
+
+
     //Put order
-    $orderId = Order::put($request->data);
-    if(!$orderId) return response()->json(0);
+    // $orderId = Order::put($request->data);
+    // if(!$orderId) return response()->json(0);
     
-    //Put items
-    foreach($cart['items'] as $item){
-      $putItem = new Item;
-      $putItem->order_id    = $orderId;
-      $putItem->product_id  = $item['product_id'];
-      $putItem->name        = $item['name'];
-      $putItem->quantity    = $item['count'];
-      $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : '';
-      $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
-      $putItem->price       = $item['price'];
-      $putItem->save();
-    }
+    // //Put items
+    // foreach($cart['items'] as $item){
+    //   $putItem = new Item;
+    //   $putItem->order_id    = $orderId;
+    //   $putItem->product_id  = $item['product_id'];
+    //   $putItem->name        = $item['name'];
+    //   $putItem->quantity    = $item['count'];
+    //   $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : '';
+    //   $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
+    //   $putItem->price       = $item['price'];
+    //   $putItem->save();
+    // }
 
-    //Delete Cart
-    Cart::find($cart['id'])->delete();
+    // //Delete Cart
+    // Cart::find($cart['id'])->delete();
 
-    return response()->json(1);
+    return response()->json($orderId);
 
   }
 

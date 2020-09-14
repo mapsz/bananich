@@ -435,13 +435,14 @@ class Product extends Model
       }
       
       //Unit
-      $product->unit             = isset($product->unit) ? $product->unit : 1;
-      $product->unit_view        = isset($product->unit_view) ? $product->unit_view : $product->unit;
-      
-      //view unit split      
-      $product->unit_digit       = preg_replace('/[^0-9]/', '', $product->unit_view);
-      $product->unit_name        = preg_replace('/\ /', '', preg_replace('/\d/', '', $product->unit_view));;
-
+      foreach ($products as $product) {        
+        $product->unit             = isset($product->unit) ? $product->unit : 1;
+        // $product->unit_view        = isset($product->unit_view) ? $product->unit_view : $product->unit;
+        
+        //view unit split      
+        $product->unit_digit       = preg_replace('/[^0-9]/', '', isset($product->unit_view) ? $product->unit_view : $product->unit);
+        $product->unit_name        = preg_replace('/\ /', '', preg_replace('/\d/', '', $product->unit_view));;
+      }
     }
 
     //Single

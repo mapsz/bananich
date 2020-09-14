@@ -56,7 +56,7 @@ data(){return{
   showLoginType: 'signup',
 }},
 computed:{
-  ...mapGetters({user:'user/get'}),
+  ...mapGetters({user:'user/get',cart:'cart/getCart'}),
 },
 watch: {
   name: function(){this.$emit('blur', {name:this.name, phone:this.phone, email:this.email});},

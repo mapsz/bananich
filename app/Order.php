@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Item;
 
 class Order extends Model
 {
@@ -44,33 +45,74 @@ class Order extends Model
     ['key'    => 'pay_method', 'label' => 'Метод оплаты',"sortable" => false],
   ];  
 
-  public static function put($data){
+  public static function placeOrder($data, $cart){
+    
+    //Customer
+    if(Auth::user()){
+      $customer_id = Auth::user()->id;
+    }else{
+      $customer_id = 0;
+    }
+   
+    //Order
+    if('Order' == 'Order'){
 
-    //@@@todo from admin order
-    $customer_id = Auth::user()->id;
+      //Bonus
+      $bonus = 0; //@@ todo
+      $shipping = 0; //@@ todo
 
-    //Save Order
-    $order = new Order;
+      //Save order
+      $order = new Order;
+      $order->customer_id = $customer_id;
+      $order->date = now();
+      $order->delivery_date = $data['dateTime']['date'];
+      $order->delivery_time_from = $data['dateTime']['time']['from'];
+      $order->delivery_time_to = $data['dateTime']['time']['to'];
+      $order->confirm = $data['confirm'];
+      $order->comment = $data['comment'];
+      $order->name = $data['contacts']['name'];
+      $order->phone = $data['contacts']['phone'];
+      $order->email = $data['contacts']['email'];
+      $order->address = $data['address']['street'] . ' ' .$data['address']['number'];
+      $order->appart = $data['address']['apart'];
+      $order->porch = isset($data['address']['porch']) ? $data['address']['porch'] : '';
+      $order->bonus = $bonus;
+      $order->shipping = $shipping;
+      if(!$order->save()) return false;    
+      
+      //Save status
+      Order::find($order->id)->statuses()->attach(900);
 
-    $order->customer_id = $customer_id;
-    $order->date = now();
-    $order->delivery_date = $data['dateTime']['date'];
-    $order->delivery_time_from = $data['dateTime']['time']['from'];
-    $order->delivery_time_to = $data['dateTime']['time']['to'];
-    $order->confirm = $data['confirm'];
-    $order->comment = $data['comment'];
-    $order->name = $data['contacts']['name'];
-    $order->phone = $data['contacts']['phone'];
-    $order->email = $data['contacts']['email'];
-    $order->address = $data['address']['street'] . ' ' .$data['address']['number'];
-    $order->appart = $data['address']['apart'];
-    $order->porch = isset($data['address']['porch']) ? $data['address']['porch'] : '';
-    $order->bonus = 0;
-    $order->shipping = 0;
+      $orderId = $order->id;
+    }
 
-    $order->save();
+    //Items
+    if('Items' == 'Items'){
+      //Put items
+      foreach($cart['items'] as $item){
 
-    return $order->id;
+        //Save item
+        $putItem = new Item;
+        $putItem->order_id    = $orderId;
+        $putItem->product_id  = $item['product_id'];
+        $putItem->name        = $item['name'];
+        $putItem->quantity    = $item['count'];        
+        $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
+        $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : $putItem->gram_sys;
+        $putItem->price       = $item['price'];
+        if(!$putItem->save()) return false;
+
+        //Save status
+        Item::find($putItem->id)->statuses()->attach(100);
+
+      }      
+    }
+
+    //Delete Cart
+    Cart::find($cart['id'])->delete();
+
+
+    return $orderId;
 
   }
 

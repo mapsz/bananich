@@ -94,7 +94,7 @@ export default {
         }
       }
 
-      if(r == 1)
+      if(r > 0)
         location.href ='/order-thanks';
 
       // //Check signin
