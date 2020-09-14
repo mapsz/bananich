@@ -97,7 +97,7 @@ export default {
       this.settings = await ax.fetch('/present/settings');
     },
     async postSettings(data){
-      let r = await ax.fetch('settings',data,'post');
+      let r = await ax.fetch('/settings',data,'post');
       this.getSettings();
     },
     async setProduct(product){
@@ -105,11 +105,11 @@ export default {
     },
     async addProduct(type){
       let id = this.toAdd.id;
-      let r = await ax.fetch('product/present',{id,type},'put');
+      let r = await ax.fetch('/admin/product/present',{id,type},'put');
       this.getProducts();
     },
     async removeProduct(id, type){
-      let r = await ax.fetch('product/present',{id,type},'delete');
+      let r = await ax.fetch('/admin/product/present',{id,type},'delete');
       location.reload();
     },
     async getProducts(){

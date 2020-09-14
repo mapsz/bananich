@@ -82,7 +82,6 @@ Route::group(['middleware' => 'under-construction'], function () {
     Route::post('/category/product/attach', 'CategoryController@attachProduct');
     Route::post('/category/category/detach', 'CategoryController@detachCategory');
     Route::post('/category/category/attach', 'CategoryController@attachCategory');
-
     
     //Settings
     Route::post('/settings', 'SettingController@post');  
