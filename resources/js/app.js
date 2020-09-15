@@ -43,6 +43,9 @@ require('es6-promise').polyfill();
 const files = require.context('./components/__site', true, /\.vue$/i); 
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+//Is json
+window.isJson = function(str){try{JSON.parse(str);}catch(e){return false;}return true;}
+
 
 const app = new Vue({
     el: '#app',

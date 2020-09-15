@@ -50,15 +50,16 @@ Route::group(['middleware' => 'under-construction'], function () {
   Route::get('/sms/send/confirm', 'SmsController@sendConfirm');
   Route::get('/sms/add/send', 'SmsController@sendAdd');
 
-  //Auth
-  Auth::routes();
-
   //Errors
   Route::put('/error', 'ErrorController@put');
 
-  //Get auth user
+  //Auth
+  Auth::routes();
+
+  //User
   Route::get('/auth/user', 'UserController@getAuthUser');
-  Route::post('/edit/user', 'UserController@post');
+  Route::post('/user', 'UserController@post');
+  Route::post('/user/address', 'UserController@postAddress');
 
   //Present
   Route::get('/present/settings', 'PresentController@getSettings'); 

@@ -14,8 +14,13 @@ let siteUser = {
       commit('mUser',r); 
       return;
     },
-    async edit({commit}){
-      let r = await ax.fetch('/auth/user');
+    async edit({commit}, data){
+      let r = await ax.fetch('/user', {data}, 'post');
+      commit('mUser',r); 
+      return;
+    },
+    async editAddress({commit}, data){
+      let r = await ax.fetch('/user/address', {data}, 'post');
       commit('mUser',r); 
       return;
     },

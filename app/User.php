@@ -21,7 +21,7 @@ class User extends Authenticatable
       'email_verified_at' => 'datetime',
   ];
 
-  public function jugeGet($request){
+  public static function jugeGet($request){
 
     //Make query
     $query = new User;
@@ -40,6 +40,10 @@ class User extends Authenticatable
       $query = $query->with('comment');
       //Referal
       $query = $query->with('referal');
+      //Addresses
+      $query = $query->with('addresses');
+      //Permissions
+      $query = $query->with('permissions');
     }while(0);    
 
     //Where Single id
@@ -61,6 +65,9 @@ class User extends Authenticatable
 
   public function comment(){
     return $this->hasOne('App\UserComment');
+  }
+  public function addresses(){
+    return $this->hasMany('App\UserAddress');
   }
   public function referal(){
     return $this->hasOne('App\UserReferal');

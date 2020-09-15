@@ -49,14 +49,20 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-      return Validator::make($data, [
-        'name'      => ['required', 'string', 'max:190'],
-        'surname'   => ['required', 'string', 'max:190'],
-        'email'     => ['required', 'string', 'email', 'max:190', 'unique:users'],
-        'password'  => ['required', 'string', 'min:6', 'confirmed'],
-        'phone'     => ['required', 'regex:/^8(\d){10}?$/', 'unique:users'],
-        'referral'  => ['regex:/^8(\d){10}?$/']
-      ]);
+      return Validator::make(
+        $data, 
+        [
+          'name'      => ['required', 'string', 'max:190'],
+          'surname'   => ['required', 'string', 'max:190'],
+          'email'     => ['required', 'string', 'email', 'max:190', 'unique:users'],
+          'password'  => ['required', 'string', 'min:6', 'confirmed'],
+          'phone'     => ['required', 'regex:/^8(\d){10}?$/', 'unique:users'],
+          'referral'  => ['regex:/^8(\d){10}?$/']
+        ],
+        [
+          'regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+        ]    
+      );
     }
 
     /**

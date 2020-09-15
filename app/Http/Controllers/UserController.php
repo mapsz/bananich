@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\UserAddress;
 use App\UserComment;
 
 class UserController extends Controller
@@ -17,7 +18,7 @@ class UserController extends Controller
     if(!$auth)
       return response()->json(false);
 
-    $user = User::where('id',$auth->id)->with('permissions')->first();
+    $user = User::jugeGet(['id' => $auth->id]);
 
     return response()->json($user);
 
@@ -41,6 +42,40 @@ class UserController extends Controller
   }
 
   public function post(Request $request){
+
+    if(!Auth::user()) return false;
+    if(!isset($request->data)) return false;
+
+    $data = $request->data;
+
+    //Remove self phone
+    if(isset($data['phone']) && (Auth::user()->phone == $data['phone'])) unset($data['phone']);
+
+    //Validate Cart
+    $validate = [
+      'name'      => ['required','max:190'],
+      'surname'   => ['max:190'],
+      'phone'     => ['regex:/^8(\d){10}?$/', 'unique:users'],
+    ];
+    $messages = [
+      'regex'            => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'surname.max'      => 'Количество символов в поле фамилия не может превышать :max',
+    ];
+    Validator::make($data, $validate, $messages)->validate();
+
+    //Update
+    $user = User::find(Auth::user()->id);
+    $user->name       = $data['name'];
+    $user->surname    = $data['surname'];
+    $user->phone      = isset($data['phone']) ? $data['phone'] : $user->phone;
+    $user->save();
+
+    return response()->json($user);
+    
+
+  }
+
+  public function postComment(Request $request){
 
     Validator::make($request->all(), [
       'id' => ['required', 'exists:users'],
@@ -69,6 +104,43 @@ class UserController extends Controller
     }
 
     return response()->json(1);
+  }
+
+  public function postAddress (Request $request){
+
+    if(!Auth::user()) return false;
+    if(!isset($request->data)) return false;
+    $data = $request->data;
+
+    //Validate Cart
+    $validate = [
+      'street'    => ['required','max:250'],
+      'number'    => ['max:50'],
+      'apart'     => ['max:50'],
+      'porch'     => ['max:50'],
+    ];
+    $messages = [
+      'street.required'   => 'Поле Улица обязательно для заполнения.',
+      'street.max'        => "Количество символов в поле Улица не может превышать :max",
+      'number.max'        => "Количество символов в поле Дом не может превышать :max",
+      'apart.max'         => "Количество символов в поле Квартира не может превышать :max",
+      'porch.max'         => "Количество символов в поле Подъезд не может превышать :max",
+    ];
+    Validator::make($data, $validate, $messages)->validate();
+
+    //Post Address
+    UserAddress::updateOrCreate(
+      ['user_id' => Auth::user()->id],
+      [
+        'street' => $data['street'],
+        'number' => $data['number'],
+        'appart' => $data['appart'],
+        'porch' => $data['porch'],
+      ]
+    );
+
+    return response()->json(User::jugeGet(['id' => Auth::user()->id]));
+
   }
 
 
