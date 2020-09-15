@@ -381,7 +381,11 @@ class Product extends Model
 
     //Get
     if(isset($_GET['page'])){
-      $products = $products->paginate(15);
+      //Paginate
+      if(isset($_GET['paginate'])) $paginate = $_GET['paginate'];
+      else $paginate = 20;
+
+      $products = $products->paginate($paginate);
     }else{
       $products = $products->get();
     }

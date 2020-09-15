@@ -50,16 +50,20 @@ watch: {
   },
 },
 async mounted(){
+  this.setWaterfall(1);
   await this.fetch();
   if(this.$route.params.id != undefined){
     this.active = this.$route.params.id;
     this.activeCategoty = this.categories.find(x => x.id == this.$route.params.id);    
+  }else{
+    this.productFetch();
   }
 },
 methods:{
   ...mapActions({
     'addFilter':'product/addFilter',
     'productFetch':'product/fetchData',
+    'setWaterfall':'product/setWaterfall',
     'fetch':'category/fetch',
   }),
   changeCategory(category){

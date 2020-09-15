@@ -33,12 +33,12 @@
                 <product-gallery-card :product="product" />
               </div>
 
-              <span v-if="products.length < 1"><b>Ничего не найдено</b></span>
+              <span v-if="products.length < 1 && isFetched"><b>Ничего не найдено</b></span>
 
-              <div 
+              <!-- <div 
                 v-infinite-scroll="loadMore" 
                 infinite-scroll-distance="10"
-              ></div>
+              ></div> -->
 
             </div>
 
@@ -71,6 +71,7 @@ export default {
       categories:'category/get',      
       pages:'product/getPages',
       infinite:'product/getInfinite',
+      isFetched:'product/isFetched',
     }), 
     currentCategory:function(){
         if (this.categories[0] != undefined) {
@@ -84,14 +85,14 @@ export default {
   },
   mounted(){
     this.getCart();
-    this.setInfinite(1);
-    this.fetch();
+    this.setWaterfall(1);
   },
   methods:{
     ...mapActions({
       'fetch':'product/fetchData',
       'addFilter':'product/addFilter',
       'setInfinite':'product/setInfinite',
+      'setWaterfall':'product/setWaterfall',
       'addInfinite':'product/addInfinite',
       'getCart':'cart/fetch',
       'editItem':'cart/editItem',
