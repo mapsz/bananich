@@ -19,7 +19,7 @@
       </div>
       <div class="d-flex align-items-center">
         <div class="checkout-info-ico"><img src="image/order/i.svg" alt="info"></div>
-        <div class="checkout-info-text">Ссылка на оплату вам будет отправлена после получения подарка адресатом.</div>
+        <div class="checkout-info-text">Мы свяжемся с вами для уточнения удобной формы оплаты.</div>
       </div>
     </div>
 
