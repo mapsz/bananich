@@ -131,8 +131,6 @@ class jugeVuex {
           }
         }
 
-
-
         if(rPages){
           await commit('mPages',rPages);
         }   
@@ -144,6 +142,15 @@ class jugeVuex {
           
           //Waterfall
           if(state.waterfall){
+
+            console.log('----');
+            console.log(state.waterfall);
+            console.log(rPages.current_page);
+            console.log(rPages.last_page);
+
+            if(rPages.current_page != state.waterfall){
+              return;
+            }
             
             if (rPages.current_page > rPages.last_page){
               await commit('mWaterfall',1);
