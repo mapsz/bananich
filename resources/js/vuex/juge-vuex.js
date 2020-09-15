@@ -16,7 +16,8 @@ class jugeVuex {
       rows:[],
       pages:false,
       infinite:false,
-      waterwall:false,
+      waterfall:false,
+      waterfalling:false,
       filters:{},
       //Keys      
       keys:null,
@@ -39,6 +40,7 @@ class jugeVuex {
       getFilters: (state) => {return state.filters;},
       isFirstListFetch: (state) => {return state.firstListFetch;},
       isFetched: (state) => {return state.didFetch;},
+      isWaterfalling: (state) => {return state.waterfalling;},
       //Other      
       getErrors: (state) => {return state.errors;},
       getInputs: (state) => {
@@ -77,7 +79,7 @@ class jugeVuex {
       //Fetch
       async listFetch({commit,dispatch}){
         await commit('mFirstListFetch',true);     
-        dispatch('fetchKeys');        
+        dispatch('fetchKeys');
         dispatch('fetchData');
       },
       async fetchKeys({commit,state}){
@@ -105,10 +107,10 @@ class jugeVuex {
           params.paginate = 9;
           params.page = state.waterfall;
           loaded = false;
+          state.waterfalling = true;
         }
 
-        //DATA        
-
+        //DATA 
         let r = await ax.fetch('/juge',params,'get',loaded);     
         
         // By ID
@@ -129,27 +131,50 @@ class jugeVuex {
           }
         }
 
-        //Commit
-        if(state.infinite || state.waterfall){
-          commit('mRowsInfinite',data);
-        }else{
-          commit('mRows',data);
-        }
+
+
         if(rPages){
-          commit('mPages',rPages);
+          await commit('mPages',rPages);
         }   
 
-        commit('mDidFetch',true);
+        //Commit
+        if(state.infinite || state.waterfall){
+          //Infinite
+          if(state.infinite) await commit('mRowsInfinite',data);
+          
+          //Waterfall
+          if(state.waterfall){
+            
+            if (rPages.current_page > rPages.last_page){
+              await commit('mWaterfall',1);
+              state.waterfalling = false;
+              return;
+            }
 
-        //Waterfall
-        if(state.waterfall){
-          if (rPages.current_page >= rPages.last_page){
-            state.waterfall = 1;
-            return;
-          } 
-          state.waterfall++;
-          dispatch('fetchData');
-        }        
+            if(state.waterfall == 1){
+              await commit('mRows',data);
+              await commit('mWaterfall',rPages.current_page+1);
+              await dispatch('fetchData');              
+              return;
+            }
+
+            if (state.waterfall > 1 && rPages.current_page < rPages.last_page){
+              await commit('mWaterfall',rPages.current_page+1);
+              await commit('mRowsInfinite',data);
+              await dispatch('fetchData');      
+              return;
+            }
+
+            if (rPages.current_page == rPages.last_page){
+              await commit('mWaterfall',1);
+              state.waterfalling = false;
+              return;
+            }
+          }
+        }
+
+        await commit('mDidFetch',true);
+      
         
         return;
       },
@@ -197,8 +222,9 @@ class jugeVuex {
         }
 
         //Fetch
-        if(state.firstListFetch)
+        if(state.firstListFetch){
           dispatch('fetchData');
+        }
         
       },  
       //Keys

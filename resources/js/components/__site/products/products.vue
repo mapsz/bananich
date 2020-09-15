@@ -33,7 +33,7 @@
                 <product-gallery-card :product="product" />
               </div>
 
-              <span v-if="products.length < 1 && isFetched"><b>Ничего не найдено</b></span>
+              <span v-if="products.length < 1 && isFetched && !isWaterfalling"><b>Ничего не найдено</b></span>
 
               <!-- <div 
                 v-infinite-scroll="loadMore" 
@@ -72,6 +72,7 @@ export default {
       pages:'product/getPages',
       infinite:'product/getInfinite',
       isFetched:'product/isFetched',
+      isWaterfalling:'product/isWaterfalling',
     }), 
     currentCategory:function(){
         if (this.categories[0] != undefined) {

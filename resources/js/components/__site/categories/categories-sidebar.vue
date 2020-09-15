@@ -38,9 +38,10 @@ data(){return{
 }},
 computed:{...mapGetters({categories:'category/get',}),}, 
 watch: {
-  active: async function(){
-    await this.addFilter({category:this.active})
-    this.productFetch();
+  active: async function(val, oldVal){
+    if(val == oldVal) return;
+    await this.addFilter({category:this.active});
+    await this.productFetch();
     this.$emit('change',this.activeCategoty);
     this.$emit('blur',this.active);
   },
