@@ -61,7 +61,7 @@
           </button>
 
           <!-- Выпадающий список Корзина -->
-          <div class="dropdown cart-list" :style="cartDrop ? '' : 'display: none;' " style="position: absolute;">
+          <div class="dropdown-sad cart-list" :style="cartDrop ? '' : 'display: none;' " style="position: absolute;">
             <div class="dropdown-arr"></div>
 
             <cart-list></cart-list>
@@ -207,5 +207,18 @@ export default {
     border-radius: 14px;
     padding: 2px 4px 1px;
     left: 50px;
+}
+
+.dropdown-sad {
+  display: block;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: #FFFFFF;
+    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.15), 0px 0px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.15), 0px 0px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    padding: 40px 40px 20px;
+    z-index: 100;
 }
 </style>

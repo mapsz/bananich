@@ -25,13 +25,8 @@
 
           </div>  
         </div>
-
-
       </div>
-    </div>
-
-    
-
+    </div>  
   </main>
 
   <site-footer></site-footer>
@@ -58,6 +53,7 @@ export default {
       $.each(this.favorites , ( k, v ) => {
         ids.push(v.product_id);
       });
+      if(ids.length < 1) return;
       this.products = await ax.fetch('http://bananich.loc/juge?&model=product',{ids:ids});
     }
   },

@@ -143,11 +143,6 @@ class jugeVuex {
           //Waterfall
           if(state.waterfall){
 
-            console.log('----');
-            console.log(state.waterfall);
-            console.log(rPages.current_page);
-            console.log(rPages.last_page);
-
             if(rPages.current_page != state.waterfall){
               return;
             }
@@ -180,6 +175,7 @@ class jugeVuex {
           }
         }
 
+        await commit('mRows',data);
         await commit('mDidFetch',true);
       
         
