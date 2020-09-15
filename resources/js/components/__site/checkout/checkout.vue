@@ -17,45 +17,32 @@
             <h1 class="title-page">Оформление заказа</h1>
           </div>
 
-        <div class="row content-page">
+        <div class="row content-page checkout-data">
 
-          <div class="col-lg-8">
+          <div class="col-lg-7">
             <div class="content">
-              <checkout-contact v-model="data.contacts" />
+              <checkout-contact class="checkout-div " v-model="data.contacts" />
 
-              <checkout-toother v-model="data.toOther" />
+              <checkout-login class="checkout-div" />
 
-              <checkout-address v-model="data.address"/>
+              <checkout-toother class="checkout-div" v-model="data.toOther" />
 
-              <checkout-date-time v-model="data.dateTime"/>
+              <checkout-address class="checkout-div" v-model="data.address"/>
 
-              <div class="row">
+              <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
+
+              <div class="row checkout-div">
                 <checkout-container v-model="data.container"/>
                 <checkout-paymethod v-model="data.paymethod"/>
               </div>
               
-              <checkout-confirm v-model="data.confirm"/>
+              <checkout-confirm class="checkout-div" v-model="data.confirm"/>
 
-              <checkout-comment v-model="data.comment"/>
+              <checkout-comment class="checkout-div" v-model="data.comment"/>
 
             </div>
           </div>
-          <div class="col-lg-4">
-            <!-- Sitebar -->
-              <div class="cart-sitebar">
-                <buy-info />
-                <!-- Errors -->
-                <ul>
-                  <template v-for='error in errors'>
-                    <li v-for='err in error' :key="err" style="color:tomato">
-                      {{err}}
-                    </li>
-                  </template>
-                </ul>            
-                <button @click="doOrder()" class="btn-yellow btn-thick">Оформить заказ</button>
-              </div>
-            <!-- Sitebar -->
-          </div>
+          <checkout-checkout :errors="errors" @do-order="doOrder()"/>
         </div>
       </div>
     </main>
@@ -72,7 +59,7 @@ export default {
     errors:[],
   }},
   computed:{
-    ...mapGetters({cart:'cart/getCart'}),
+    ...mapGetters({cart:'cart/getCart',checkout:'checkout/get'}),
   },
   methods:{
     async doOrder(){
@@ -80,11 +67,8 @@ export default {
       if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
       this.errors = [];
 
-      //Setup data
-      let data  = this.data;
-
       //Put      
-      let r = await ax.fetch('/order/put', {data,'cartId':this.cart.id}, 'put');
+      let r = await ax.fetch('/order/put', {data:this.checkout,'cartId':this.cart.id}, 'put');
 
       //Catch errors
       if(!r){      
@@ -106,6 +90,15 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .checkout-div{
+    border-bottom: 1px solid #fbe214;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+  }
+  .checkout-div:last-child{
+    border-bottom: 0px solid #fbe214;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
 </style>

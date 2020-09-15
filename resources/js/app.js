@@ -46,6 +46,17 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 //Is json
 window.isJson = function(str){try{JSON.parse(str);}catch(e){return false;}return true;}
 
+//Scroll hanler
+Vue.directive('scroll', {
+    inserted: function (el, binding) {
+      let f = function (evt) {
+        if (binding.value(evt, el)) {
+          window.removeEventListener('scroll', f)
+        }
+      }
+      window.addEventListener('scroll', f)
+    }
+  })
 
 const app = new Vue({
     el: '#app',

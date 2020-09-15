@@ -21,6 +21,10 @@ class OrderController extends Controller
 
   public function put(Request $request){
 
+    
+    //Get data
+    $data = $request->all();
+
     //Get Cart
     $cart = Cart::getCart()->toArray();
     $settings = new Setting(); $settings = $settings->getList(1);
@@ -42,52 +46,48 @@ class OrderController extends Controller
 
     //Validate
     $validate = [
-      'contacts.name'      => ['required', 'string', 'max:190'],
-      'contacts.email'     => ['required', 'string', 'email', 'max:190'],
-      'contacts.phone'     => ['required', 'regex:/^8(\d){10}?$/', ],
-      'address.apart'      => ['string', 'max:20' ],
-      'address.number'     => ['string', 'max:20' ],
-      'address.pork'       => ['string', 'max:20' ],
-      'address.street'     => ['required', 'string', 'max:170' ],
-      'dateTime.date'      => ['required'],
-      'dateTime.time'      => ['required'],
+      'name'      => ['required', 'string', 'max:190'],
+      'email'     => ['required', 'string', 'email', 'max:190'],
+      'phone'     => ['required', 'regex:/^8(\d){10}?$/', ],
+      'addressApart'      => ['string', 'max:20' ],
+      'addressNumber'     => ['string', 'max:20' ],
+      'addressPorch'       => ['string', 'max:20' ],
+      'addressStreet'     => ['required', 'string', 'max:170' ],
+      'deliveryDate'      => ['required'],
+      'deliveryTime'      => ['required'],
       'container'          => ['required'],
-      'paymethod'          => ['required'],
+      'payMethod'          => ['required'],
       'confirm'            => ['required'],
       'comment'            => ['max:1000'],
     ];   
     //Toother
-    if(
-      isset($request->data['toOther']) && 
-      isset($request->data['toOther']['toOther']) && 
-      $request->data['toOther']['toOther']
-    ){
-      $validate['toOther.name'] = ['required', 'string', 'max:190'];
-      $validate['toOther.phone'] = ['required', 'regex:/^8(\d){10}?$/'];
-      $validate['toOther.comment'] = ['string', 'max:1000'];
+    if(isset($data['toOther']) && $data['toOther']){
+      $validate['toOtherName'] = ['required', 'string', 'max:190'];
+      $validate['toOtherPhone'] = ['required', 'regex:/^8(\d){10}?$/'];
+      $validate['toOtherComment'] = ['string', 'max:1000'];
     }     
     $messages = [
-      'toOther.comment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
-      'toOther.phone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
-      'toOther.phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
-      'toOther.name.max'              => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
+      'toOtherComment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
+      'toOtherPhone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
+      'toOtherPhone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'toOtherName.max'              => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
       'comment.max'              => 'Количество символов в поле "Комментарий" не должно превышать :max',
       'confirm.required'              => 'Необходимо выбрать способ подтверждение заказа',
-      'paymethod.required'            => 'Необходимо выбрать способ оплаты',
+      'payMethod.required'            => 'Необходимо выбрать способ оплаты',
       'container.required'            => 'Необходимо выбрать упаковку',
-      'dateTime.time.required'        => 'Необходимо выбрать время доставки',
-      'dateTime.date.required'        => 'Необходимо выбрать дату доставки',
-      'address.street.required'        => 'Необходимо заполнить поле "Адрес"',
-      'address.street.max'        => 'Количество символов в поле "Адрес" не должно превышать :max',
-      'address.pork.max'        => 'Количество символов в поле "Этаж" не должно превышать :max',
-      'address.number.max'        => 'Количество символов в поле "Дом" не должно превышать :max',
-      'address.apart.max'        => 'Количество символов в поле "Квартира" не должно превышать :max',
-      'contacts.phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
-      'contacts.phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
-      'contacts.email.required'   => 'Необходимо заполнить поле "e-mail"',
-      'contacts.email.max'        => 'Количество символов в поле "Имя" не должно превышать :max',
-      'contacts.name.required'    => 'Необходимо заполнить поле "Имя"',
-      'contacts.name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
+      'deliveryTime.required'        => 'Необходимо выбрать время доставки',
+      'deliveryDate.required'        => 'Необходимо выбрать дату доставки',
+      'addressStreet.required'        => 'Необходимо заполнить поле "Адрес"',
+      'addressStreet.max'        => 'Количество символов в поле "Адрес" не должно превышать :max',
+      'addressPorch.max'        => 'Количество символов в поле "Этаж" не должно превышать :max',
+      'addressNumber.max'        => 'Количество символов в поле "Дом" не должно превышать :max',
+      'addressApart.max'        => 'Количество символов в поле "Квартира" не должно превышать :max',
+      'phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
+      'phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'email.required'   => 'Необходимо заполнить поле "e-mail"',
+      'email.max'        => 'Количество символов в поле "Имя" не должно превышать :max',
+      'name.required'    => 'Необходимо заполнить поле "Имя"',
+      'name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
     ];
     Validator::make($request->data, $validate,$messages)->validate();
 

@@ -1,44 +1,33 @@
 <template>
-<div>
-  <div class="checkout-title">Ваши данные</div>
-  <div class="checkout-form" action="">
+<div class="row checkout-address">
+  <div class="col-12">
+    <div class="checkout-title">Ваши данные</div>
+    <div>
 
-    <!-- Pre data -->
-    <template>
-      <div class="form-group"> 
-        <div class="form-content bold" :class="!edit ? 'active' : ''">{{user.name}}</div>
-        <input v-model="name" id="name" class="form-input form-input-show" :class="edit ? 'active' : ''" placeholder="Ваше имя" type="text">
-      </div>
-
-      <div class="form-group">
-        <div class="form-content"  :class="!edit ? 'active' : ''">{{user.phone}}</div>
-        <input v-model="phone" id="phone" class="form-input form-input-show" :class="edit ? 'active' : ''" placeholder="Ваш телефон" type="text">
-      </div>
-
-      <div class="form-group">
-        <div class="form-content" :class="!edit ? 'active' : ''">{{user.email}}</div>
-        <input v-model="email" id="email" class="form-input form-input-show" :class="edit ? 'active' : ''" placeholder="Ваш e-mail" type="text">
-      </div>
-    </template>
-
-    <!-- Login -->
-    <login-modal v-if="!user" :p-show="showLogin" :p-show-type="showLoginType" @close="showLogin=false"></login-modal>
-    <div v-if="!user" class="form-button">
-      <div>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <button @click="showLoginModal('signup')" class="btn-signup">Зарегистрироваться</button>
-          <span>или</span>
-          <button @click="showLoginModal('signin')" class="btn-signup">Войти</button>
+      <!-- Pre data -->
+      <template>
+        <div class="form-group"> 
+          <div class="pl-3 form-content bold" :class="!edit ? 'active' : ''">{{user.name}}</div>          
+          <checkout-input v-if="edit" v-model="name" :name="'name'" :placeholder="'Ваше имя'" />
         </div>
-        <div class="text-center">чтобы получить <b>10% кешбэк</b> с этой покупки</div>
-      </div>
-    </div>
 
-    <!-- Edit data -->
-    <div v-if="user && edit==false" class="form-button">      
-      <button @click="name='';phone='';email='';edit=true" class="form-url" >Это не мои данные</button>
+        <div class="form-group">
+          <div class="pl-3 form-content"  :class="!edit ? 'active' : ''">{{user.phone}}</div>
+          <checkout-input v-if="edit" v-model="phone" :name="'phone'" :placeholder="'Ваш телефон'" />
+        </div>
+
+        <div class="form-group">
+          <div class="pl-3 form-content" :class="!edit ? 'active' : ''">{{user.email}}</div>
+          <checkout-input v-if="edit" v-model="email" :name="'email'" :placeholder="'Ваш e-mail'" />
+        </div>
+      </template>
+
+      <!-- Edit data -->
+      <div v-if="user && edit==false" class="form-button" style="margin-top:0px">      
+        <button @click="edit=true" class="form-url" style="margin-top:0px">Это не мои данные</button>
+      </div>
+
     </div>
-    
   </div>
 </div>
 </template>
@@ -48,43 +37,57 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
 model: {event: 'blur'},
 data(){return{
-  name:'',
-  phone:'',
-  email:'',
-  edit: false,
-  showLogin: false,
-  showLoginType: 'signup',
+  name:false,
+  phone:false,
+  email:false,
+  edit: true,
+  
+  loadUser:false,
 }},
 computed:{
   ...mapGetters({user:'user/get',cart:'cart/getCart'}),
 },
 watch: {
-  name: function(){this.$emit('blur', {name:this.name, phone:this.phone, email:this.email});},
-  phone: function(){this.$emit('blur', {name:this.name, phone:this.phone, email:this.email});},
-  email: function(){this.$emit('blur', {name:this.name, phone:this.phone, email:this.email});},
   user: function(){
-    if(this.isPreData()) this.edit = false;
-    else this.edit = true;
+    this.loadUserData();      
   },
 },
 async mounted(){
-  //
+  // this.getUser();
 },
 methods:{
-  ...mapActions({'getUser':'user/fetch'}),
-  showLoginModal(type){
-    this.showLoginType=type;    
-    this.showLogin=true;
-  },
+  ...mapActions({'set':'checkout/setValue'}),
   isPreData(){
     if(this.user.name && this.user.phone && this.user.email){
-      this.name  = this.user.name;
-      this.phone = this.user.phone;
-      this.email = this.user.email;
       return true;
-    }
-    
+    }    
     return false;
+  },
+  loadUserData(){
+    if(this.loadUser) return;
+    if(!this.user) return;
+    if(this.user == undefined ) return;
+
+    this.loadUser = true;
+
+    if(this.name === null && this.phone === null && this.email === null){
+      if(this.isPreData()) this.edit = false;
+    }
+
+    if(this.user.name !== undefined && this.name === null){  
+      this.set({name:'name', value:this.user.name});
+      this.name = this.user.name;
+    }
+    if(this.user.phone !== undefined && this.phone === null){      
+      this.set({name:'phone', value:this.user.phone});
+      this.phone = this.user.phone;
+    }
+    if(this.user.email !== undefined && this.email === null){      
+      this.set({name:'email', value:this.user.email});
+      this.email = this.user.email;
+    }
+
+    
   }
 },
 }

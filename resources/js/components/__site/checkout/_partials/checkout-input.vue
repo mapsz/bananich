@@ -11,6 +11,9 @@
     </div>
   </div>
 
+  
+  <input v-else-if="fType == 'checkbox'" v-model="value" class="custom-checkbox" type="checkbox" id="gift" :name="inputName" >
+
   <!-- Simple -->
   <input v-else v-model="value" class="form-input" :placeholder="fPlaceholder" :type="fType" :name="inputName">
 
@@ -30,6 +33,7 @@ export default {
   computed:{...mapGetters({checkout:'checkout/get'}),},
   watch: {
     value: function(){
+      this.$emit('blur', this.value);
       this.set({name:this.name, value:this.value});
     },
   },
@@ -40,6 +44,7 @@ export default {
     if(this.type) this.fType = this.type;
     //Value
     if(this.checkout[this.name]) this.value = this.checkout[this.name];
+    else this.value = null;
 
   },
   methods:{    

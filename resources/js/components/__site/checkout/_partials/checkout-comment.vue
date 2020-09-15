@@ -3,7 +3,7 @@
     <div class="col-md-8">
       <div class="checkout-title">Комментарий к заказу</div>
       <div class="form-group">
-        <checkout-input :name="'addressStreet'" :placeholder="'Ваш комментарий'" :type="'textarea'" />
+        <checkout-input :name="'comment'" :placeholder="'Ваш комментарий'" :type="'textarea'" />
       </div>
     </div>
   </div> 

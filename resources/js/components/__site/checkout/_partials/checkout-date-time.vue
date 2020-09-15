@@ -32,6 +32,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.form-group{
+  margin-bottom: 0px !important;
+}
 </style>

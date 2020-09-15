@@ -15,7 +15,7 @@
           autofocus
         >  
       </div>
-      <div class="modal-sad-form-group">
+      <!-- <div class="modal-sad-form-group">
         <input 
           v-model="surname"
           placeholder="Фамилия*" 
@@ -25,7 +25,7 @@
           name="surname"   
           required 
         >  
-      </div>
+      </div> -->
       <div class="modal-sad-form-group">
         <input 
           v-model="phone"
