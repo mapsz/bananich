@@ -14,7 +14,7 @@ class Report extends Model
 {
 
   protected $keys = [
-    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/product/{product_id}'],
+    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/product/{id}'],
     ['key'    => 'name','label' => 'Продукт'],
     ['key'    => 'unit','label' => 'Единица'],
     ['key'    => 'summary','label' => 'Остаток'],
