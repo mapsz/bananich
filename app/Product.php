@@ -82,13 +82,8 @@ class Product extends Model
         'type' => 'number'
       ],
       [
-        'name' => 'carbohydrates_slow',
-        'caption' => 'Углеводы медленные',
-        'type' => 'number'
-      ],
-      [
-        'name' => 'carbohydrates_fast',
-        'caption' => 'Углеводы быстрыее',
+        'name' => 'carbohydrates',
+        'caption' => 'Углеводы',
         'type' => 'number'
       ],
       [

@@ -1,7 +1,4 @@
 <template>
-<div>
-  <site-header></site-header>
-
   <main>
     <div class="container">
       <!-- Breadcrumbs -->
@@ -129,8 +126,6 @@
     
 
   </main>
-  <site-footer></site-footer>
-</div>
 </template>
 
 <script>

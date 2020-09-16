@@ -39,16 +39,7 @@
                 }}
               </h1>
               <!-- Icons -->
-              <div class="catalog-item-icon d-flex">
-                <img v-if="product.no_lactose != undefined" src="/image/no-lactose.svg" alt="no lactose">
-                <img v-if="product.no_gluten != undefined" src="/image/no-gluten.svg" alt="no gluten">
-                <img v-if="product.no_sugar != undefined" src="/image/no-sugar.svg" alt="no sugar">
-                <img v-if="product.no_egg != undefined" src="/image/no-eggs.svg" alt="no eggs">
-                <img v-if="product.no_heat != undefined" src="/image/no-heat.svg" alt="no heat">
-                <img v-if="product.low_glycemic != undefined" src="/image/low-glycemic.svg" alt="low glycemic">
-                <img v-if="product.no_milk != undefined" src="/image/no-milk.svg" alt="no milk">
-                <img v-if="product.eco != undefined" src="/image/eco.svg" alt="eco">
-              </div>              
+              <product-noty-icons :product="product" />            
 
               <!-- Ves -->
               <div class="product-weight">{{product.unit_view}} <span style="color:orange">??</span><!-- todo @@@--></div>

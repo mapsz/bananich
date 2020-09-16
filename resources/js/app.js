@@ -58,6 +58,27 @@ Vue.directive('scroll', {
     }
   })
 
+//Breadcrumbs
+import VueBreadcrumbs from 'vue-2-breadcrumbs';
+let bcTemplate = {
+  template:
+    '<ol v-if="$breadcrumbs.length" class="breadcrumb">\n' +
+    '    <li class="breadcrumb-item active" aria-current="page">\n' +
+    '        <router-link to="/">Главная</router-link>' +
+    '    </li>\n' +
+    '    <li v-for="(crumb, key) in $breadcrumbs" v-if="crumb.meta.breadcrumb" :key="key" class="breadcrumb-item active" aria-current="page">\n' +
+    '        <span v-if="$breadcrumbs.length-1 == key">{{ getBreadcrumb(crumb.meta.breadcrumb) }}</span>' +
+    '        <router-link v-else :to="{ path: getPath(crumb) }">{{ getBreadcrumb(crumb.meta.breadcrumb)}}</router-link>' +
+    '    </li>\n' +
+    '</ol>'
+};
+// Vue.use(VueBreadcrumbs);
+Vue.use(VueBreadcrumbs,bcTemplate);
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 const app = new Vue({
     el: '#app',
     router: new VueRouter(routes),

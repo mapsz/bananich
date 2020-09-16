@@ -1,11 +1,52 @@
 let routes = [];
 
-import testtest from './components/testtest.vue';
-routes.push(
-  {path: '/testtest',    component:testtest},
-);
+// import testtest from './components/testtest.vue';
+// routes.push(
+//   {path: '/testtest',    component:testtest},
+// );
 
 //__site
+
+  //Catalogue 
+  import siteProducts from './components/__site/products/products.vue';
+  routes.push(
+    {path: '/category/:id',    component:siteProducts},
+    {path: '/catalogue',    component:siteProducts},
+    {path: '/',    component:siteProducts,},
+  );
+
+  //Profile
+  import siteProfile from './components/__site/profile/profile.vue';
+  import siteProfilePersonalData from './components/__site/profile/personal-data/personal-data.vue';
+  import siteProfileFavorites from './components/__site/profile/favorites/favorites.vue';
+  import siteProfileBonus from './components/__site/profile/bonus/bonus.vue';
+  import siteProfileOrders from './components/__site/profile/orders/orders.vue';
+  routes.push(
+    {      
+      path: '/profile',component:siteProfile,
+      name: 'Профиль',meta: { breadcrumb: 'Профиль'},
+      children: [
+        {
+          path: '', component:siteProfilePersonalData,
+          name: 'Личные данные',meta: {breadcrumb: 'Личные данные'}
+        },
+        {
+          path: 'favorites', component:siteProfileFavorites,
+          name: 'Избранное',meta: {breadcrumb: 'Избранное'}
+        },
+        {
+          path: '/profile/bonus',    component:siteProfileBonus,
+          name: 'Бонусы', meta: {breadcrumb: 'Бонусы'}
+        },
+        {
+          path: '/profile/orders',    component:siteProfileOrders,
+          name: 'Мои заказы', meta: {breadcrumb: 'Мои заказы'}
+        },
+      ]
+    }
+  );
+
+
 
   //Order thanks
   import siteOrderThanks from './components/__site/order-thanks/order-thanks.vue';
@@ -26,14 +67,6 @@ routes.push(
     {path: '/presents',    component:sitePresents},
   );
 
-  //Catalogue
-  import siteProducts from './components/__site/products/products.vue';
-  routes.push(
-    {path: '/category/:id',    component:siteProducts},
-    {path: '/catalogue',    component:siteProducts},
-    {path: '/',    component:siteProducts},
-  );
-
   //Product
   import siteProduct from './components/__site/products/product.vue';
   routes.push(
@@ -50,18 +83,6 @@ routes.push(
   import siteCheckout from './components/__site/checkout/checkout.vue';
   routes.push(
     {path: '/checkout',    component:siteCheckout},
-  );
-
-  //Profile
-  import siteProfile from './components/__site/profile/profile.vue';
-  import siteProfileFavorites from './components/__site/profile/favorites/favorites.vue';
-  import siteProfileBonus from './components/__site/profile/bonus/bonus.vue';
-  import siteProfileOrders from './components/__site/profile/orders/orders.vue';
-  routes.push(
-    {path: '/profile',    component:siteProfile},
-    {path: '/profile/favorites',    component:siteProfileFavorites},
-    {path: '/profile/bonus',    component:siteProfileBonus},
-    {path: '/profile/orders',    component:siteProfileOrders},
   );
 
 
@@ -221,19 +242,7 @@ routes.push(
   );
 
 
-routes.push(
-  // {path:adminPrefix+'*',    component: orders},
-  // {path:'*',    component: siteProducts},
-);
-
-
-
-
-
-
 export default {
-
-  mode:'history',
-  routes:routes,
-
+    'mode':'history',
+    'routes':routes
 }

@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="container-fluid p-0">
-    <router-view />
-  </div>
+  <router-view></router-view>
 @endsection
