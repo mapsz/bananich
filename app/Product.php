@@ -179,6 +179,19 @@ class Product extends Model
 
   public static function getWithOptions($request){
 
+
+    // $p = Product::whereHas('goods')
+    //   ->with('goods')
+    //   ->get();
+
+    //   ->with(['goods' => function($query)
+    //   {
+    //      $query->where('orders.user_id', $customerID);
+    //      $query->orderBy('orders.created_at', 'DESC');
+    //   }])
+
+    // dd($p);
+
     DB::enableQueryLog();
     
     //No main image
@@ -197,6 +210,12 @@ class Product extends Model
 
     //Withs
     if("WITH" == "WITH"){
+
+      //Metas
+      // if(!$request['short_query'] || isset($request['with_metas'])){
+        // $products = $products->with('goods');
+        // $products = $products->with('longMetas');
+      // }   
 
       //Metas
       if(!$request['short_query'] || isset($request['with_metas'])){
@@ -233,6 +252,11 @@ class Product extends Model
       if(isset($request['ids']) && is_array($request['ids'])){
         $products = $products->wherein('id',$request['ids']);
       }
+
+      // $products = $products->whereHas('metas', function ($q) {
+      //   $q->where('name', '=', 'publish')->where('value', '=', '1');
+      // });      
+   
 
       //Search
       if(isset($request['search']) && strlen($request['search']) > 0){

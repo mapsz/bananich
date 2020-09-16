@@ -116,6 +116,10 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 window.currency = 'в‚Ѕ';
 
+import vSelect from "vue-select"; 
+import "vue-select/dist/vue-select.css";
+Vue.component("v-select", vSelect);
+
 const app = new Vue({
     el: '#app',
     router: new VueRouter(routes),

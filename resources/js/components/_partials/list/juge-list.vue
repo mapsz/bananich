@@ -47,6 +47,7 @@
         <div v-if="data.value.length == 1">
           {{data.value[0][data.field.show]}}
         </div>
+        <div v-else-if="data.value.length == 0"></div>
         <!-- list -->
         <div v-else>
           {{data.value.length}}
