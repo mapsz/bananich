@@ -12,7 +12,6 @@ let cart = {
   actions:{
     async fetch({commit}){
       let r = await ax.fetch('/json/cart');
-      console.log(r);
       commit('mCart',r); 
     },
     async editItem({dispatch},data){

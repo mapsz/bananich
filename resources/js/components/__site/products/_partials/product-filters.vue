@@ -1,10 +1,13 @@
 <template>
 
   <div class="filt">
-    <button @click="dropFilter = !dropFilter" class="filter-btn">
-      <img src="image/filter.svg" alt="Фильтр">
-      <span>Фильтры</span>
-    </button>
+    <div>
+      <button @click="dropFilter = !dropFilter" class="filter-btn">
+        <img src="/image/filter.svg" alt="Фильтр">
+        <span>Фильтры</span>      
+      </button>
+      <div v-if="currentFiltersCount > 0" class="cart-num">{{currentFiltersCount}}</div>
+    </div>
 
     <form class="dropdown-sad filter-list" style="position: absolute;" :style="dropFilter ? '' : 'display: none;'">
 
@@ -17,7 +20,7 @@
         </div>
       </div>
 
-      <div class="mobile-only dropdown-sad-item filter-dd" :class="dropCategory ? 'active' : ''">
+      <div class="dropdown-sad-item filter-dd" :class="dropCategory ? 'active' : ''">
         <a @click="dropCategory=!dropCategory" class="dropdown-sad-btn">Раздел</a>
         <ul class="dropdown-sad-list">
           <li>
@@ -185,7 +188,21 @@ data(){return{
   dropBZU:false,
   filters:{},
 }},
-computed:{...mapGetters({categories:'category/get',}),}, 
+computed:{  
+  ...mapGetters({categories:'category/get','getCurrentFilters':'product/getFilters',}),
+  currentFiltersCount: function(){
+
+    let count = 0;
+
+    for (const [key, value] of Object.entries(this.getCurrentFilters)) {
+      if(value) count++;
+    }
+
+
+    return count;
+  }
+
+}, 
 methods:{
   ...mapActions({
     'addFilter':'product/addFilter',
@@ -195,13 +212,11 @@ methods:{
     
     // Add filters
     await $.each( this.filters, async ( k, v ) => {
-      console.log(1);
       var obj = {};
       obj[k] = v;
       await this.addFilter(obj);
     });    
 
-    console.log(2);
 
     //Get data
     this.dropFilter = false;
@@ -229,5 +244,10 @@ methods:{
     .mobile-only {
       display:none !important;
     }
+  }
+
+  .cart-num { 
+    right: -25px !important;
+    left: inherit !important;
   }
 </style>

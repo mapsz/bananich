@@ -179,6 +179,7 @@ class Product extends Model
 
   public static function getWithOptions($request){
 
+    DB::enableQueryLog();
     
     //No main image
     if(isset($request['no_main_image']) && $request['no_main_image']){
@@ -254,7 +255,7 @@ class Product extends Model
       if((isset($request['price_from']) && $request['price_from'] > 0) || (isset($request['price_to']) && $request['price_to'] > 0)){
         $d['from'] = isset($request['price_from']) ? $request['price_from'] : 0;
         $d['to'] = isset($request['price_to']) ? $request['price_to'] : 99999;
-        $products = $products->where('price', '>=', $d['from'])->where('price', '<=', $d['to']);
+        $products = $products->where('price', '>=', intval($d['from']))->where('price', '<=', intval($d['to']));
       }
 
       //КБЖУ
@@ -265,8 +266,8 @@ class Product extends Model
           $d['to'] = isset($request['cal_to']) ? $request['cal_to'] : 99999;
           $products = $products->whereHas('metas', function ($q)use($d) {
             $q->where('name', '=', 'calories')
-              ->where('value', '>=', $d['from'])
-              ->where('value', '<=', $d['to']);
+              ->where('value', '>=', intval($d['from']))
+              ->where('value', '<=', intval($d['to']));
           });
         }  
 
@@ -276,8 +277,8 @@ class Product extends Model
           $d['to'] = isset($request['prot_to']) ? $request['prot_to'] : 99999;
           $products = $products->whereHas('metas', function ($q)use($d) {
             $q->where('name', '=', 'proteins')
-              ->where('value', '>=', $d['from'])
-              ->where('value', '<=', $d['to']);
+              ->where('value', '>=', intval($d['from']))
+              ->where('value', '<=', intval($d['to']));
           });
         }  
 
@@ -287,8 +288,8 @@ class Product extends Model
           $d['to'] = isset($request['fat_to']) ? $request['fat_to'] : 99999;
           $products = $products->whereHas('metas', function ($q)use($d) {
             $q->where('name', '=', 'fats')
-              ->where('value', '>=', $d['from'])
-              ->where('value', '<=', $d['to']);
+              ->where('value', '>=', intval($d['from']))
+              ->where('value', '<=', intval($d['to']));
           });
         }  
 
@@ -297,14 +298,21 @@ class Product extends Model
           $d['from'] = isset($request['carb_from']) ? $request['carb_from'] : 0;
           $d['to'] = isset($request['carb_to']) ? $request['carb_to'] : 99999;
           $products = $products->whereHas('metas', function ($q)use($d) {
-            $q->where('name', '=', 'carbohydrates_fast')
-              ->where('value', '>=', $d['from'])
-              ->where('value', '<=', $d['to']);
+            $q->where('name', '=', 'carbohydrates')
+              ->where('value', '>=', intval($d['from']))
+              ->where('value', '<=', intval($d['to']));
           });
         }  
 
 
       }while(0);
+
+      //Bonus
+      if(isset($request['bonus']) && $request['bonus'] && $request['bonus'] != 'false'){
+        $products = $products->whereHas('metas', function ($q) {
+          $q->where('name', '=', 'bonus')->where('value', '=', '1');
+        });
+      }  
 
       //Noties
       do{
@@ -448,6 +456,10 @@ class Product extends Model
     if(isset($request['id'])){
       $products = $products[0];
     }
+
+    // dd(DB::getQueryLog());
+    // dd($products);
+
 
 
     return $products;

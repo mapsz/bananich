@@ -118,8 +118,5 @@ export default {
 
 <style scoped>
 
-  .catalog-item-icon img{
-    margin-right:10px;
-  }
 
 </style>

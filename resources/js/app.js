@@ -75,9 +75,6 @@ let bcTemplate = {
 // Vue.use(VueBreadcrumbs);
 Vue.use(VueBreadcrumbs,bcTemplate);
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
 
 const app = new Vue({
     el: '#app',

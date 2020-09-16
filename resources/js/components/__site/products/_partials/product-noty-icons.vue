@@ -13,7 +13,11 @@
 <script>
 export default {
   props: ['product'],
-
+  mounted(){
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  },
 }
 </script>
 

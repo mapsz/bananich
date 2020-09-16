@@ -24,7 +24,7 @@ let routes = [];
   routes.push(
     {      
       path: '/profile',component:siteProfile,
-      name: 'Профиль',meta: { breadcrumb: 'Профиль'},
+      meta: { breadcrumb: 'Профиль'},
       children: [
         {
           path: '', component:siteProfilePersonalData,

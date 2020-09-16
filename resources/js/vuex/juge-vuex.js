@@ -1,5 +1,3 @@
-import { each } from "jquery";
-
 class jugeVuex {
   constructor(modelName) {
     //Params
@@ -44,12 +42,12 @@ class jugeVuex {
       //Other      
       getErrors: (state) => {return state.errors;},
       getInputs: (state) => {
-        //Set values
-        $.each(state.inputs, (k, v) => {                    
+        if(state.inputs == null) return null;
+        state.inputs.forEach(function (v, k) {
           if(undefined != state.row[v.name]){      
             state.inputs[k].value = state.row[v.name];
           }   
-        });        
+        });
         
         return state.inputs;
       
