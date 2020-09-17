@@ -247,10 +247,10 @@ class Product extends Model
 
       //Discounts
       if(!$request['short_query'] || isset($request['with_final_price'])){
-        $products = $products->with('discount');
+        $products = $products->with('discounts');
       }
       
-      //Discounts
+      //Categories
       if(!$request['short_query'] || isset($request['categories'])){
         $products = $products->with('categories');
       }
@@ -822,8 +822,8 @@ class Product extends Model
   public function archive(){
       return $this->hasMany('App\ArchiveProduct');
   }  
-  public function discount(){
-      return $this->hasOne('App\ProductDiscount');
+  public function discounts(){
+      return $this->hasMany('App\ProductDiscount');
   }
   public function goods(){
       return $this->hasMany('App\Goods');

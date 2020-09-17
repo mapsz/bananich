@@ -59,7 +59,7 @@ class Report extends Model
 
     //Id
     if(isset($request['id'])){
-      $query = $query->where('product.id',$request['id']);
+      $query = $query->where('id',$request['id']);
     }
 
     //Suppliers filter

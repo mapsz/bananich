@@ -21,7 +21,7 @@
         <!-- Categories -->
         <product-categories class="mb-3 border p-2" />
         <!-- Discount -->
-        <product-discount-edit class="mb-3 border p-2" />
+        <!-- <product-discount-edit class="mb-3 border p-2" /> -->
         <!-- Delivery Days -->
         <product-delivery-days class="mb-3 border p-2" />
       </div>
