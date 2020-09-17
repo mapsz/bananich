@@ -19,7 +19,7 @@
           <div class="content">
       
             <!-- Табы навигация -->
-            <order-status-filter />
+            <!-- <order-status-filter /> TODO @@@-->
 
             <div class="tab-content">
               <div class="tab-pane fade show active" id="all">

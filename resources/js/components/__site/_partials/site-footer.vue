@@ -5,8 +5,8 @@
           <div class="col-lg-4">
             <div class="phone"><a href="tel:+79681828252">+7 (968) 182-82-52</a></div>
             <div class="footer-soc">
-              <a href="#!" class="footer-soc-link"><img src="image/insta.svg" alt="Мы в instagram"></a>
-              <a href="#!" class="footer-soc-link"><img src="image/vk.svg" alt="Мы в контакте"></a>
+              <a href="https://instagram.com/bananich.ru" target="_blank" class="footer-soc-link"><img src="/image/insta.svg" alt="Мы в instagram"></a>
+              <a href="https://vk.com/bananichru" target="_blank" class="footer-soc-link"><img src="/image/vk.svg" alt="Мы в контакте"></a>
             </div>
           </div>
           <div class="col-lg-4">

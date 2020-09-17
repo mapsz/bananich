@@ -20,25 +20,31 @@ class Cart extends Model
     //Cart
     $cart = Cart::with('items');
     $cart = $cart->with('presents');
+
     //User Loged in
     if($user){
-      //Get Cart
-      $cart = $cart->where('user_id',$user->id)->first();
-      //Cart exist
-      if($cart){
-        //Session not equal
-        if($cart->session_id != $session){
-          //Update session
+      $cartz = $cart->where('session_id',$session)->first();
+      if(!$cartz){
+        //Get Cart
+        $cart = $cart->where('user_id',$user->id)->first();
+        //Cart exist
+        if($cart){
+          //Session not equal
+          if($cart->session_id != $session){
+            //Update session
+            $cart->session_id = $session;
+            $cart->save();
+          }
+        }
+        //Create cart
+        else{
+          $cart = new Cart();
+          $cart->user_id = $user->id;
           $cart->session_id = $session;
           $cart->save();
         }
-      }
-      //Create cart
-      else{
-        $cart = new Cart();
-        $cart->user_id = $user->id;
-        $cart->session_id = $session;
-        $cart->save();
+      }else{
+        $cart = $cartz;
       }
     }
     //User NOT Loged in

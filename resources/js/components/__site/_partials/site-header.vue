@@ -24,11 +24,10 @@
         
         <!-- Presents -->
         <present-bar :cart="cart" :settings="presentSettings"/>
+        
+        <!-- Product input -->
+        <product-input-search />
 
-        <form class="search">
-          <input class="search-input" type="text" placeholder="Поиск">
-          <button class="search-btn"><img src="/image/search.svg" alt="search"></button>
-        </form>
         <div class="group-icon">
           <bonus-header-button />
           <div class="user">

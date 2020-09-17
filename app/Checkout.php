@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Product;
 use App\ProductDiscount;
+use App\Setting;
 
 class Checkout extends Model
 {
@@ -44,10 +45,19 @@ class Checkout extends Model
         $item->price            = $product->price * $item->count;
         $item->discount         = isset($product->discount) ? $product->discount : false;
 
-        //Final price
+        //pre price
         $item->final_price = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
-        $cart->final_summ += $item->final_price;
+        $cart->pre_price += $item->final_price;
       }
+
+      //Shipping
+      if($cart->pre_price < Setting::where('name','free_shipping')->first()->value)
+        $cart->shipping = Setting::where('name','shipping_price')->first()->value;
+      else
+      $cart->shipping = 0;
+      
+      $cart->final_summ = $cart->pre_price;
+      $cart->final_summ += $cart->shipping;
     }
 
     return $cart;
