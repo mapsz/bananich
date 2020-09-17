@@ -403,7 +403,7 @@ class Product extends Model
       }while(0);
 
 
-      if(!isset($request['get_all'])){
+      if(!isset($request['get_all']) && !isset($request['id'])){
         $products = $products->whereHas('metas', function ($q) {
           $q->where('name', '=', 'publish')->where('value', '=', '1');
         });      
