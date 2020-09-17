@@ -270,13 +270,6 @@ class Product extends Model
         $products = $products->wherein('id',$request['ids']);
       }
 
-      if(!isset($request['get_all'])){
-        $products = $products->whereHas('metas', function ($q) {
-          $q->where('name', '=', 'publish')->where('value', '=', '1');
-        });      
-        $products = $products->where('summary','>', 0);
-      }
-
       //Search
       if(isset($request['search']) && strlen($request['search']) > 0){
         $search = $request['search'];
@@ -408,6 +401,14 @@ class Product extends Model
           });
         }      
       }while(0);
+
+
+      if(!isset($request['get_all'])){
+        $products = $products->whereHas('metas', function ($q) {
+          $q->where('name', '=', 'publish')->where('value', '=', '1');
+        });      
+        $products = $products->where('summary','>', 0);
+      }
 
     }
 
