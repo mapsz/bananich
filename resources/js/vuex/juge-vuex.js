@@ -109,7 +109,9 @@ class jugeVuex {
         }
 
         //DATA 
-        let r = await ax.fetch('/juge',params,'get',loaded);     
+        let r = await ax.fetch('/juge',params,'get',loaded);  
+        
+        await commit('mDidFetch',true);   
         
         // By ID
         let data = [];
