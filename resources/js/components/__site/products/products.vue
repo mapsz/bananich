@@ -35,6 +35,9 @@
               </div>
 
               <span v-if="products.length < 1 && isFetched && !isWaterfalling"><b>Ничего не найдено</b></span>
+              <div v-if="isWaterfalling || !isFetched" class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
 
               <!-- <div 
                 v-infinite-scroll="loadMore" 
