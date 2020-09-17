@@ -29,9 +29,12 @@
 
 <script>
 export default {
+  mounted(){
+    this.$store.dispatch('product/addFilter',{get_all:1});
+  },
   methods:{
     noImage(){
-      this.$store.dispatch('product/addFilter',{no_main_image:1});
+      this.$store.dispatch('product/addFilter',{no_main_image:1});      
     }
   },
 }

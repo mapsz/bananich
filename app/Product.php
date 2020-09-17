@@ -9,6 +9,7 @@ use App\ProductMeta;
 use App\ProductLongMeta;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Goods;
 
 class Product extends Model
 {
@@ -211,11 +212,27 @@ class Product extends Model
     //Withs
     if("WITH" == "WITH"){
 
-      //Metas
-      // if(!$request['short_query'] || isset($request['with_metas'])){
-        // $products = $products->with('goods');
-        // $products = $products->with('longMetas');
-      // }   
+      
+      //Summary
+      $goods = (
+        Goods::
+          selectRaw('goods.product_id, SUM(quantity) as summary')
+          ->join(
+            DB::raw('
+              (
+                SELECT product_id,MAX(created_at) AS lastStocktaking FROM goods
+                WHERE quantity = 0
+                AND action = 1
+                GROUP BY product_id
+              ) md
+            '),
+            'md.product_id', '=', 'goods.product_id'
+          ) 
+          ->whereRaw('goods.created_at >= md.lastStocktaking')
+          ->GroupBy('product_id')
+      );    
+      $products = $products->leftJoin(DB::raw('('.$goods->toSql().') goods'),'products.id', '=', 'goods.product_id');
+
 
       //Metas
       if(!$request['short_query'] || isset($request['with_metas'])){
@@ -253,10 +270,12 @@ class Product extends Model
         $products = $products->wherein('id',$request['ids']);
       }
 
-      // $products = $products->whereHas('metas', function ($q) {
-      //   $q->where('name', '=', 'publish')->where('value', '=', '1');
-      // });      
-   
+      if(!isset($request['get_all'])){
+        $products = $products->whereHas('metas', function ($q) {
+          $q->where('name', '=', 'publish')->where('value', '=', '1');
+        });      
+        $products = $products->where('summary','>', 0);
+      }
 
       //Search
       if(isset($request['search']) && strlen($request['search']) > 0){

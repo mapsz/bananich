@@ -2,7 +2,7 @@
   <div class="sort">
 
     <button @click="dropSorts = !dropSorts" class="filter-btn">
-      <img src="image/sort.svg" alt="Сортировка">
+      <img src="/image/sort.svg" alt="Сортировка">
       <span>По популярности</span>
     </button>
 
