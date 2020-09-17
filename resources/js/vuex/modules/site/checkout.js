@@ -1,3 +1,5 @@
+import { cleanData } from "jquery";
+
 let checkout = {
   namespaced: true,
 
@@ -30,6 +32,11 @@ let checkout = {
 
       //Mutate
       commit('mCheckout',checkout); 
+    },
+    async clean({commit}){
+      localStorage.checkout = {}
+      //Mutate
+      commit('mCheckout',{}); 
     }
   },  
   mutations:{

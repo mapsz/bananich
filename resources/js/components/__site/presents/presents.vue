@@ -66,30 +66,22 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  data(){return{
-    products:[],
-    presentSettings:{},
-  }},
   computed:{
     ...mapGetters({
-      cart:'cart/getCart'
-    }),    
+      cart:'cart/getCart',
+      presentSettings:'presents/getSettings',
+      products:'presents/getProducts',
+    }),
   },  
   mounted(){
-    this.getProducts();
-    this.getSettings();
-    
+    this.fetchCart();
+    this.fetchPresents();    
   },
   methods:{
     ...mapActions({
-      'getCart':'cart/fetch',
+      'fetchCart':'cart/fetch',
+      'fetchPresents':'presents/fetch',
     }),
-    async getProducts(){
-      this.products = await ax.fetch('/product/present');
-    },
-    async getSettings(){
-      this.presentSettings = await ax.fetch('/present/settings');
-    },
     async addPresentToCart(id){
       let r = await ax.fetch('/present/cart',{id},'put');
 

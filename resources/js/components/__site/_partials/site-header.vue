@@ -30,12 +30,7 @@
           <button class="search-btn"><img src="/image/search.svg" alt="search"></button>
         </form>
         <div class="group-icon">
-          <div class="bonuses">
-            <a href="/profile/bonus">
-              <div class="bonuses-num">{{11}}</div>
-              <button class="bonuses-btn">Б</button>
-            </a>
-          </div>
+          <bonus-header-button />
           <div class="user">
             <a href="/profile">
               <button class="user-btn"><img src="/image/lk.svg" alt="user" style="margin: auto;"></button>

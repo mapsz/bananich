@@ -70,10 +70,15 @@ Route::group(['middleware' => 'under-construction'], function () {
   Route::get('/json/settings', 'SettingController@get'); 
 
 
+  //Order Limits
+  Route::get('/order/available/days', 'OrderController@getAvailableDays');
 
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
+    //Order Limits
+    Route::get('/orders/calendar', 'OrderController@getCalendarOrders');
+    Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
 
     //Category
     Route::put('/category', 'CategoryController@put');

@@ -26,7 +26,7 @@
 
                 <div v-for='(item,i) in cart.items' :key='i' class="cart-item">                  
                   <div>
-                    <div class="cart-name">{{item.name}}</div>
+                    <div class="cart-name"><a :href="'/product/'+item.product_id" style="color:black">{{item.name}}</a></div>
                     <span class="cart-weight">{{item.unit_digit * item.count}} {{item.unit_name}}</span>
                   </div>
                   
@@ -48,34 +48,15 @@
           <div class="col-lg-4">
             <!-- Sitebar -->
               <div class="cart-sitebar">
-                <div class="cart-delivery">
-                  
-                  <div class="cart-delivery-header d-flex justify-content-between">
-                    <span>Доставка</span>
-                    <template>
-                      <span v-if="(freeShipping - cart.final_summ) > 0">200р</span>
-                      <span v-else>Бесплатно</span>
-                    </template>
-                  </div>                  
-                  <div v-if="(freeShipping - cart.final_summ) > 0" class="d-flex">
-                    <div class="cart-delivery-ico"><img src="image/icons/free.svg" alt="Free"></div>
-                    <div class="cart-delivery-text">До бесплатной доставки закажите еще на <span>{{freeShipping - cart.final_summ}}</span><br><a href="/catalogue" class="url">Докупить</a></div>
-                  </div>
-                </div>
-                <div v-if="user" class="cart-bonuse">
-                  <div class="d-flex">
-                    <div class="cart-bonuse-ico">
-                      <img src="image/icons/bonus.svg" alt="Bonuse">
-                    </div>
-                    <div class="cart-bonuse-text">
-                      У вас 500 активных бонусов!
-                      <span style="color:orange">todo</span><!--  @@@todo -->
-                    </div>
-                  </div>
+
+                <delivery-block />
+
+                <div class="cart-bonuse">                  
+                  <present-block />
                   <hr>
                   <!-- Bonus -->
-                  <div class="mb-4">
-                    <bonus-button></bonus-button>
+                  <div v-if="user" class="mb-4">
+                    <bonus-cart-block></bonus-cart-block>
                   </div>
                   <form class="cart-promo">
                     <input type="text" placeholder="Ввести промокод" class="cart-promo-input">

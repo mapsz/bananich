@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters,mapActions} from 'vuex';
 export default {
   data(){return{
     data:{},
@@ -61,7 +61,8 @@ export default {
   computed:{
     ...mapGetters({cart:'cart/getCart',checkout:'checkout/get'}),
   },
-  methods:{
+  methods:{    
+    ...mapActions({'clean':'checkout/clean'}),
     async doOrder(){
       //Refresh errors
       if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
@@ -78,8 +79,11 @@ export default {
         }
       }
 
-      if(r > 0)
+      if(r > 0){
+        this.clean();
         location.href ='/order-thanks';
+      }
+        
 
       // //Check signin
       // await this.getUser();

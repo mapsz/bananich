@@ -5,6 +5,7 @@ import order from './modules/order'
 import user from './modules/user'
 import product from './modules/product'
 import settings from './modules/settings'
+import orderLimits from './modules/orderLimits'
 // import statistic from './modules/statistic'
 
 
@@ -27,7 +28,7 @@ let category = new jugeVuex('category');
 let store = {  
   modules:{
     order,delivery,confirm,report,product,item,supplier,stocktaking,
-    purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,settings,category
+    purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,settings,category,orderLimits
   }
 };
 

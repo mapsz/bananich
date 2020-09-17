@@ -19,6 +19,25 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
 
+  public function getCalendarOrders(){
+    return response()->json(Order::getCalendarOrders());
+  }
+
+  public function getAvailableDays(){
+
+    $days = Order::getAvailableDays();
+
+    return response()->json($days);
+
+  }
+
+  public function getLimitSettings(){
+    
+    $settings = Order::getLimitSettings();
+
+    return response()->json($settings);
+  }
+
   public function put(Request $request){
 
     

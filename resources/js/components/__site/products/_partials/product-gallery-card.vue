@@ -6,6 +6,19 @@
         class="catalog-item-img" 
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
+        <!-- Bonus -->
+        <span v-if="product.bonus" style="
+          background-color: #fbe214;
+          color: black;
+          padding: 10px;
+          border-radius: 20px;
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          font-weight: 600;
+          font-size: 12pt;
+          line-height: 0.5;"
+        >Б</span>
         <!-- Favorite -->
         <button  class="like">
           <favorite-button :product-id="product.id"/>

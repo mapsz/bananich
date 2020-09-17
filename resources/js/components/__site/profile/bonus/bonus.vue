@@ -15,9 +15,8 @@
           </div>
           <div class="content">
             <div class="bonuse-block d-flex align-items-center justify-content-lg-start justify-content-center">
-              <span style="color:orange">todo</span><!--  @@@todo -->
               <div class="bonuse-num">
-                <span class="bonuse-num-now">200</span> /  <span class="bonuse-num-target">500</span>
+                <span class="bonuse-num-now">{{lastBonus.quantity}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
                 <div class="bonuse-num-text">сгорят через</div>
               </div>
               <div class="bonuse-progres">
@@ -26,31 +25,28 @@
               </div>
             </div>
             <ul class="bonuse-list">
-              <li class="bonuse-item active">                 
-                <span style="color:orange">todo</span><!--  @@@todo -->
-                <a class="bonuse-item-btn" href="#!">История</a> <!-- При клике на ссылку, классу bonuse-item присваивается active, а у story убирается display: none -->
-                <div class="story">
-                  <div class="story-item">
-                    <div class="d-md-flex justify-content-center">
-                      <div class="story-date">5.04.2020</div>
-                      <div class="story-track">TRK09845098</div>
-                    </div>
-                    <div class="story-bonuse">+250 Б</div>
-                  </div>
+              <li class="bonuse-item"  :class="showHistory ? 'active' : ''">
+                <a @click.prevent="showHistory = !showHistory" class="bonuse-item-btn" href="#!">История</a>
+                <div v-if="showHistory" class="story">
 
-                  <div class="story-item">
+                  <div v-for='(bonus,i) in bonuses' :key='i' class="story-item">
                     <div class="d-md-flex justify-content-center">
-                      <div class="story-date">5.04.2020</div>
-                      <div class="story-track">TRK09845098</div>
+                      <div class="story-date">{{moment(bonus.created_at).lang('ru').format('lll')}}</div>
+                      <div class="story-track">
+                        {{bonus.bonus_type_id == 1 ? 'Админ' : ''}}
+                        <!-- TRK09845098 -->
+                      </div>
                     </div>
-                    <div class="story-bonuse">+3 Б</div>
+                    <div class="story-bonuse">{{bonus.quantity}} Б</div>
                   </div>
 
                 </div>
               </li>
-              <li class="bonuse-item active">
-                <a class="bonuse-item-btn" href="#!">Правила бонусной сиcтемы</a>
-                <div class="rule d-md-flex align-items-center">
+              
+              <!-- Rules -->
+              <li  class="bonuse-item"  :class="showRules ? 'active' : ''">
+                <a @click.prevent="showRules = !showRules" class="bonuse-item-btn" href="#!">Правила бонусной сиcтемы</a>        
+                <div v-if="showRules" class="rule d-md-flex align-items-center">
                   <div class="rule-left">
                     <div class="rule-round">
                     <div class="rule-text">Получайте 10% кешбэк <span>с каждой покупки в бонусах</span></div>
@@ -88,13 +84,15 @@
                   </div>
                 </div>
               </li>
-              <li class="bonuse-item">
-                <a class="bonuse-item-btn" href="#!">Правила реферальной сиcтемы</a>
-                <div class="refer">
-                  <div class="refer-img"><img src="/image/bonuse/reload.svg" alt="reload"></div>
+
+              <!-- Referals -->
+              <li class="bonuse-item" :class="showReferal ? 'active' : ''">
+                <a @click.prevent="showReferal = !showReferal" class="bonuse-item-btn" href="#!">Правила реферальной сиcтемы</a>
+                <div v-if="showReferal" class="refer">
+                  <div class="refer-img"><img src="/image/bonuse/reload.svg" alt="reload" style="margin: auto;"></div>
                   <div class="d-flex">
                   <div class="refer-left">
-                    <img src="/image/bonuse/user.svg" alt="user">
+                    <img src="/image/bonuse/user.svg" alt="user" style="margin: auto;">
                     <div class="refer-name">Маша</div>
                     <ol>
                       <li><b>Зарегистрирована</b> на нашем сайте и совершает покупки</li>
@@ -103,7 +101,7 @@
                     </ol>
                   </div>
                   <div class="refer-right">
-                    <img src="/image/bonuse/user.svg" alt="user">
+                    <img src="/image/bonuse/user.svg" alt="user" style="margin: auto;">
                     <div class="refer-name">Миша</div>
                     <ol>
                       <li><b>При регистрации</b> указывает номер телефона Маши</li>
@@ -129,8 +127,23 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
-
+  data(){return{
+    showHistory:false,
+    showRules:false,
+    showReferal:false,
+    moment:moment,
+  }},
+  computed:{
+    ...mapGetters({bonuses: 'bonus/get',}),
+    currentBonus: function(){
+      return (this.bonuses != undefined && this.bonuses[0] != undefined) ? this.bonuses[0].left : 0;
+    },
+    lastBonus: function(){
+      return this.bonuses[this.bonuses.length-1];
+    }
+  },
 }
 </script>
 

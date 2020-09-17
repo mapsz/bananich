@@ -33,6 +33,16 @@ class Bonus extends Model
     //Add users
     $query = $query->with('user');
     $query = $query->with('action_user');
+    $query = $query->with('addBonus');
+
+    if('where'=='where'){
+      $user = Auth::user();
+      $userId = $user->id;
+
+      $query = $query->whereHas('user', function($q)use($userId){
+        $q->where('id', '=', $userId);
+      });
+    }
 
     //Sort
     $query = $query->orderBy('created_at', 'DESC');
@@ -93,6 +103,8 @@ class Bonus extends Model
       DB::rollback();
       return response(['code' => 'bo1','text' => 'Bonus add put error'], 512)->header('Content-Type', 'text/plain');
     }
+
+    return true;
     
   }
 
@@ -113,18 +125,21 @@ class Bonus extends Model
   }
 
   public static function getDieDate($type,$dieDays = false){
+
+    $default = DB::table('bonus_types')->where('id',2)->first()->die;
     //Get die date
     switch ($type) {
       case 1:
-        if(!$dieDays) return false;
         $dieDays = $dieDays; //@@@ add current admin
         break;
 
       default:
-        $dieDays = DB::table('bonus_types')->where('id',2)->first()->die;
+        $dieDays = $default;
         break;
     }
 
+
+    if(!$dieDays) $dieDays = $default;
     $dieDate = now()->addDays($dieDays);
 
     return $dieDate;
@@ -182,5 +197,8 @@ class Bonus extends Model
   }
   public function action_user(){
     return $this->belongsTo('App\User','action_user_id');
+  }
+  public function addBonus(){
+    return $this->hasOne('App\BonusAdd');
   }
 }

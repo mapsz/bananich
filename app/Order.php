@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Item;
+use Carbon\Carbon;
 
 class Order extends Model
 {
@@ -44,6 +45,101 @@ class Order extends Model
     ['key'    => 'total_result', 'label' => 'Итог(Погружено)'],
     ['key'    => 'pay_method', 'label' => 'Метод оплаты',"sortable" => false],
   ];  
+
+  public static function getAvailableDays(){
+
+    //Get settings
+    $settings = Order::getLimitSettings();
+    $endTime = 24 - $settings['order_limit_day_end_time'];
+
+    $from = now()->add($endTime,'hour');
+    $to   = now()->add($endTime,'hour')->add($settings['order_limit_days_count'],'days');
+
+    //Get orders$endTime
+    $orders = Order::withStatus()
+      ->where('delivery_date', '>=', $from)
+      ->where('delivery_date', '<=', $to)
+      ->get()->toArray();
+
+
+    $days = [];
+    $day =false;
+    while ($day != $to->isoFormat('YYYY-MM-DD')) {
+      $day = $from->add(1,'day')->isoFormat('YYYY-MM-DD');
+
+      $dayOrders = array_filter($orders, function($k)use($day) {
+        return $k['delivery_date'] == $day;
+      });
+
+      $dayOrders_11_15 = array_filter($dayOrders, function($k) {
+        return $k['delivery_time_from'] == '11:00:00' && $k['delivery_time_to'] == '15:00:00';
+      });
+      $dayOrders_11_23 = array_filter($dayOrders, function($k) {
+        return $k['delivery_time_from'] == '11:00:00' && $k['delivery_time_to'] == '23:00:00';
+      });
+      $dayOrders_15_19 = array_filter($dayOrders, function($k) {
+        return $k['delivery_time_from'] == '15:00:00' && $k['delivery_time_to'] == '19:00:00';
+      });
+      $dayOrders_19_23 = array_filter($dayOrders, function($k) {
+        return $k['delivery_time_from'] == '19:00:00' && $k['delivery_time_to'] == '23:00:00';
+      });
+        
+      array_push($days,[
+        'date' => $day,
+        'slots' => $settings['order_limit_total_orders'] - count($dayOrders),
+        'times' => [          
+          ['time' => ['from' => '11', 'to' => '23'] , 'slots' => $settings['order_limit_interval_11_23'] - count($dayOrders_11_23)],
+          ['time' => ['from' => '11', 'to' => '15'] , 'slots' => $settings['order_limit_interval_11_15'] - count($dayOrders_11_15)],
+          ['time' => ['from' => '15', 'to' => '19'] , 'slots' => $settings['order_limit_interval_15_19'] - count($dayOrders_15_19)],
+          ['time' => ['from' => '19', 'to' => '23'] , 'slots' => $settings['order_limit_interval_19_23'] - count($dayOrders_19_23)]
+        ]
+      ]);
+
+    } 
+
+    return $days;
+
+  }
+
+  public static function getLimitSettings(){
+
+    $settings = Setting::whereIn('name',[
+      'order_limit_interval_11_23',
+      'order_limit_interval_11_15',
+      'order_limit_interval_15_19',
+      'order_limit_interval_19_23',
+      'order_limit_total_orders',
+      'order_limit_days_count',
+      'order_limit_day_end_time',
+    ])->get();
+
+    $out = [];
+    foreach ($settings as $key => $value) {
+      $out[$value->name] = $value->value;
+    }
+
+    return $out;
+  }
+
+  public static function getCalendarOrders(){
+
+    $pastDays = 3;
+    $futurDays = 8;
+
+    $minDate = now()->sub($pastDays,'days');
+    $maxDate = now()->add($futurDays,'days');
+    
+    $filters = [
+      // 'status' => [200,300,350,400,500,600,700,800,850,900],
+      'deliveryDate' => json_encode(['from' => $minDate, 'to' => $maxDate]),
+      'limit' => 9999,
+    ];
+
+    $orders = Order::withStatus()->where('delivery_date', '>=', $minDate)->where('delivery_date', '<=', $maxDate)->get();
+
+    return $orders;
+
+  }
 
   public static function placeOrder($data, $cart){
     
@@ -197,6 +293,7 @@ class Order extends Model
           $query = $query->where('delivery_date', '<=', $deliveryDate->to);
         }      
       }
+
       
       //Id
       if(isset($request['id']) && $request['id']){

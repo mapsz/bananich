@@ -4,8 +4,8 @@
   <checkout-input :name="'container'" :type="'radio'" 
     :list="[
       {value:'0',caption:'Стандарт (ящик)'},
-      {value:'2',caption:'Крафт коробка (+100р)'},
-      {value:'3',caption:'Крафт пакет (+100р)'}
+      {value:'2',caption:'Крафт коробка (+100р за шт.)'},
+      {value:'3',caption:'Крафт пакет (+100р за шт.)'}
     ]" 
   />
   <!-- TODO @@@ (+100р) gray -->
