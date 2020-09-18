@@ -410,29 +410,24 @@ class Product extends Model
         }      
       }while(0);
 
+
       //Published
       if(!isset($request['get_all']) && !isset($request['id'])){
-        // $products = $products->whereDoesntHave('metas', function ($q) {
-        //   $q->where('name', '=', 'always_publish')->where('value', '=', '1');
-        // });
 
-        $products = $products->where(function($q) {
-          $q->whereHas('metas', function ($q2) {
-            $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
-          });
-        })
-        ->orWhere(function($q) {
-          $q->where('summary','>', 0)
-          ->whereHas('metas', function ($q2) {
-            $q2->where('name', '=', 'publish')->where('value', '=', '1');
+        $products = 
+        $products->where(function($q9) {
+            $q9->where(function($q) {
+            $q->whereHas('metas', function ($q2) {
+              $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
+            });
+          })
+          ->orWhere(function($q) {
+            $q->where('summary','>', 0)
+            ->whereHas('metas', function ($q2) {
+              $q2->where('name', '=', 'publish')->where('value', '=', '1');
+            });
           });
         });
-
-
-        // $products = $products->whereHas('metas', function ($q) {
-        //   $q->where('name', '=', 'publish')->where('value', '=', '1');
-        // });      
-        // $products = $products->where('summary','>', 0);
       }
 
     }
@@ -526,8 +521,8 @@ class Product extends Model
       $products = $products[0];
     }
 
-    // dd(DB::getQueryLog());
-    // dd($products);
+    dump(DB::getQueryLog());
+    dd($products);
 
 
 
