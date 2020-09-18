@@ -230,6 +230,9 @@ class jugeVuex {
         }
         
       },  
+      async clearFilters({commit}){
+        commit('mFilters',{});
+      },
       //Keys
       async setKeysModel({commit},model){
         commit('mKeysModel',model);  
@@ -239,7 +242,7 @@ class jugeVuex {
       mId: (state,d) => {return state.id = d;},
       mRow: (state,d) => {return state.row = d;},
       mFirstListFetch: (state,d) => {return state.firstListFetch = d;},
-      mFilters: (state,d) => {return state.firstListFetch = d;},
+      mFilters: (state,d) => {return state.filters = d;},
       mKeys: (state,d) => {return state.keys = d;},
       mInputs: (state,d) => {return state.inputs = d;},
       mKeysModel: (state,d) => {return state.keysModel = d;},

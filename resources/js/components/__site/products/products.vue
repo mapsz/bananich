@@ -3,16 +3,29 @@
 
     <site-header />
 
-
+    
+    <a name="catalogue"></a>
     <main class="home">
       <div class="container">
         <h1 class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
 
+        <a v-if="showUp" href="#catalogue" style="
+          position: fixed;
+          z-index: 9999;
+          right: 20px;
+          bottom: 50px;
+          border: 1px solid black;
+          padding: 5px;
+          border-radius: 10px;
+          background-color: #fbe21485;
+          color: black;
+        ">Наверх ⇑</a>
         <div class="row content-page">
+          
 
           <!-- Categories Sidebar -->
           <div class="col-lg-4">
-            <categories-menu />
+            <categories-menu v-scroll="handleScroll" />
           </div>
 
           <div v-if="active || !isMobile" class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
@@ -65,6 +78,7 @@ export default {
   data(){return{
     busy:false,
     categoriesActive:false,
+    showUp:false,
   }},
   computed:{
     ...mapGetters({
@@ -120,7 +134,15 @@ export default {
       this.busy = true;
       await this.addInfinite();
       this.busy = false;
-    }
+    },
+    handleScroll: function (evt, el) {
+      let position = window.scrollY;  
+
+      if(position > 900)
+        this.showUp = true;
+      else
+        this.showUp = false;
+    }    
   }
 }
 </script>

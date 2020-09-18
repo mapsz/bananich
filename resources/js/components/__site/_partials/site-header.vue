@@ -18,7 +18,7 @@
       </div>
     </div> -->
 
-    <div class="header-bar">
+    <div class="header-bar" style="position:fixed; width:100%; background-color:white; top:0;">
       <div class="container header-bar-wrap">
         <a href="/"><img class="logo" src="/image/logo.svg" alt="logo"></a>
         
@@ -73,6 +73,8 @@
       </div>
     </div>
   </header>  
+
+  <div style="margin-top:150px;"></div>
 
   <!-- Mobile upper header -->
   <div class="tap-bar">

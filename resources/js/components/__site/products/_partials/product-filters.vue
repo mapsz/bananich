@@ -21,6 +21,17 @@
           <span @click="dropFilter = false">❌</span>
         </div>
       </div>
+
+      <!-- Crear -->
+      <div v-if="currentFiltersCount" class="my-3" style='
+        cursor: pointer;
+        color: red;
+        border-bottom: 1px solid gray;
+        padding-bottom: 10px;'
+        @click="dropFilters()"
+      >
+        Очистить фильтры 🗑️
+      </div>
       
       <!-- Categories -->
       <div class="dropdown-sad-item filter-dd" :class="dropCategory ? 'active' : ''">
@@ -192,7 +203,9 @@ computed:{
   currentFiltersCount: function(){
     let count = 0;
     for (const [key, value] of Object.entries(this.getCurrentFilters)) {
-      if(value) count++;
+      if(!(value[0] != undefined && value[0] == 0)){
+        if(value) count++;
+      }
     }
     return count;
   },
@@ -202,9 +215,11 @@ computed:{
 methods:{
   ...mapActions({
     'addFilter':'product/addFilter',
+    'clearFilters':'product/clearFilters',
     'productsFetch':'product/fetchData',
   }),
   async addFilters(){
+    this.clearFilters();
     // Add filters
     await $.each( this.filters, async ( k, v ) => {
       var obj = {};
@@ -237,6 +252,18 @@ methods:{
 
     //Trigger
     this.filters = JSON.parse(JSON.stringify(this.filters));
+  },
+  async dropFilters(){
+    this.filters = {};
+    this.filters = JSON.parse(JSON.stringify(this.filters));
+    this.dropFilter = false;
+    await this.clearFilters()
+    if(this.$route.fullPath != '/'){
+      this.$router.push('/');
+    } else{
+      this.productsFetch();
+    }
+    
   }
 },
 }

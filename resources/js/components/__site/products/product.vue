@@ -10,6 +10,7 @@
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Главная</a></li>
             <li class="breadcrumb-item"><a href="/catalogue">Каталог</a></li>
+            <li v-if="currentCategory" class="breadcrumb-item"><a :href="'/category/'+currentCategory.id">{{currentCategory.name}}</a></li>
             <li class="breadcrumb-item active">{{product.name}}</li>
           </ol>
         </nav>
@@ -43,7 +44,7 @@
               <product-noty-icons :product="product" />            
 
               <!-- Ves -->
-              <div class="product-weight">{{product.unit_view}} <span style="color:orange">??</span><!-- todo @@@--></div>
+              <div class="product-weight">{{product.unit_view}}</div>
 
               <!-- Charts -->
               <div class="row"> 
@@ -75,17 +76,6 @@
                       </div>
                       <button v-else @click="toCart(product.id)" class="btn-yellow btn-thick btn-product mr-4">В корзину</button>
                     </template>
-
-                    <!-- Gramm -->
-                    <!-- <div>
-                      <select class="product-select mr-4">
-                        <option value="1000 гр">1000 гр</option>
-                        <option value="500 гр">500 гр</option>
-                        <option value="50 гр">50 гр</option>
-                      </select>                    
-                      
-                    </div> -->
-                    <!-- <span style="color:orange">todo</span>todo @@@ -->
       
                     <!-- Favorites -->
                     <button class="to-favorite">
@@ -221,19 +211,21 @@ export default {
   computed:{
     ...mapGetters(
       {
+        categories:'category/get',
         product:'product/getOne',
         cart:'cart/getCart'      
       }
-    ),    
+    ), 
+    currentCategory:function(){
+      if (this.$route.params.catId == undefined) return false;
+      if (this.categories[0] == undefined) return false;
+      return this.categories.find(x => x.id == this.$route.params.catId);
+    }   
   }, 
   async mounted(){
-
-
     await this.fetchProduct(this.id);    
     await this.getCart();
-
-
-
+    await this.fetchCategories();
 
   },
   methods:{
@@ -241,6 +233,7 @@ export default {
       'fetchProduct':'product/fetchOne',
       'getCart':'cart/fetch',
       'editItem':'cart/editItem',
+      'fetchCategories':'category/fetch',
     }),    
     toCart(id,count = 1){
       this.editItem({id,count});

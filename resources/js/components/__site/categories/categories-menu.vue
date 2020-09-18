@@ -37,7 +37,7 @@ export default {
       //Set route
       if('route' == 'route'){
         if (this.active.id == undefined) {
-          if(this.$route.fullPath != '/') this.$router.push('/');          
+          if(this.$route.fullPath != '/') this.$router.push('/');
         }else{
           if(this.$route.params.id == undefined ||this.$route.params.id != this.active.id)
             this.$router.push('/category/'+this.active.id)
