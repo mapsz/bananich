@@ -75,6 +75,13 @@ let bcTemplate = {
 // Vue.use(VueBreadcrumbs);
 Vue.use(VueBreadcrumbs,bcTemplate);
 
+//Charts
+
+// import store from './vuex/store.js';
+// Vue.use(Vuex)
+
+// var Chart = require('chart.js');
+// var myChart = new Chart(ctx, {...});
 
 const app = new Vue({
     el: '#app',

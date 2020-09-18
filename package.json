@@ -30,6 +30,7 @@
         "babel-loader": "^8.0.6",
         "bootstrap-touchspin": "^4.2.5",
         "bootstrap-vue": "^2.14.0",
+        "chart.js": "^2.9.3",
         "cropperjs": "^1.5.7",
         "es6-promise": "^4.2.8",
         "filepond": "^4.12.0",

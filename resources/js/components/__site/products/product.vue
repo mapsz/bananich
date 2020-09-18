@@ -2,6 +2,7 @@
 <div>
     <site-header />
 
+
     <main>
       <div class="container">
         <!-- Breadcrumbs -->
@@ -44,62 +45,14 @@
               <!-- Ves -->
               <div class="product-weight">{{product.unit_view}} <span style="color:orange">??</span><!-- todo @@@--></div>
 
+              <!-- Charts -->
               <div class="row"> 
-                <!-- КБЖУ -->
-                <div v-if="product.calories" class="col-md-12 order-2 order-md-1 mt-4 mt-sm-0">                  
-                  <div class="calories">
-                    <div class="calories-header d-flex justify-content-between mb-4">
-                      <span>БЖУ на 100гр продукта</span>
-                      <span>Дневная норма<span style="color:orange">??</span><!-- todo @@@--></span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <!-- Ссal -->
-                      <div class="calories-range">
-                        <img src="/image/demo.png" alt="Демо кругового графика">
-                        <div class="calories-range-text">{{product.calories}} <span>ккал</span></div>
-                        <span style="color:orange">todo</span><!-- todo @@@-->
-                      </div>
-                      <!-- БЖУ -->
-                      <div class="calories-scale">
-                        <!-- Углеводы -->
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div class="product-line">
-                            <div class="product-line-header d-flex justify-content-between mb-1">
-                              <span>Углеводы</span>
-                              <span class="bold">{{product.carbohydrates_fast}}г</span>
-                            </div>
-                            <div class="calories-scale-line"><div class="calories-scale-position yellow" :style="'width: '+product.carbohydrates_fast+'%;'"></div></div>
-                          </div>
-                          <div class="product-percent">40%<span style="color:orange">??</span><!-- todo @@@--></div>
-                        </div>
-                        <!-- Жиры -->
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div class="product-line">
-                            <div class="product-line-header d-flex justify-content-between mb-1">
-                              <span>Жиры</span>
-                              <span class="bold">{{product.fats}}г</span>
-                            </div>
-                            <div class="calories-scale-line"><div class="calories-scale-position green" :style="'width: '+product.fats+'%;'"></div></div>
-                          </div>
-                          <div class="product-percent">70%<span style="color:orange">??</span><!-- todo @@@--></div>
-                        </div>
-                        <!-- Белки -->
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div class="product-line">
-                            <div class="product-line-header d-flex justify-content-between mb-1">
-                              <span>Белки</span>
-                              <span class="bold">{{product.proteins}}г</span>
-                            </div>
-                            <div class="calories-scale-line"><div class="calories-scale-position blue" :style="'width: '+product.proteins+'%;'"></div></div>
-                          </div>
-                          <div class="product-percent">40%<span style="color:orange">??</span><!-- todo @@@--></div>
-                        </div>
-                      </div>                  
-                    </div>
-                  </div>
-                </div>
+                <product-charts :product="product" />
+              </div>
 
-                <!-- Price Cart Favorites -->
+              <!-- Price Cart Favorites -->
+              <div class="row"> 
+                
                 <div class="col-md-12 order-1 order-md-2">
                   <!-- Price -->
                   <div class="d-flex align-items-center mb-4">                    
@@ -142,6 +95,7 @@
                 </div>
               </div> 
 
+              <!-- More info -->
               <div class="product-text mt-5">
                 <!-- Description -->
                 <template v-if="product.description">
@@ -254,6 +208,11 @@
 </template>
 
 <script>
+
+
+    
+// window.myChart = new Chart(ctx);
+
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
@@ -267,9 +226,15 @@ export default {
       }
     ),    
   }, 
-  mounted(){
-    this.fetchProduct(this.id);    
-    this.getCart();
+  async mounted(){
+
+
+    await this.fetchProduct(this.id);    
+    await this.getCart();
+
+
+
+
   },
   methods:{
     ...mapActions({

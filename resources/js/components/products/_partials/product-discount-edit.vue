@@ -2,21 +2,8 @@
   <div>
     <h3>Скидка</h3>
     
-    <div v-for='(inputs,i) in inputsList' :key='i' class="mb-2">
-      <div class="mb-2">
-        <form data-v-25ffc046="" class="juge-form">
-          <template v-for='(input) in inputs'>
-            <span class="juge-form-label-required" v-bind:key="input.name+i">
-              <label :for="input.name+'-input'">
-                {{input.caption}}
-              </label>
-            </span> 
-            <span v-bind:key="input.name+i">
-              <input  :id="input.name+'-input'" :name="input.name" type="number" class="juge-form-input">
-            </span>  
-          </template>     
-        </form>
-      </div>
+    <div v-for='(inputs,i) in inputsList' :key='i' >
+      <juge-form :inputs="inputs" :errors="errors" @submit="postSettings" @click="edit=i"></juge-form>
     </div>
 
   </div>
@@ -26,7 +13,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
-  inputsSave:[],
+  edit:0,
   input:[
     {
       name:'discount_price',
@@ -51,22 +38,21 @@ data(){return{
 computed:{
   ...mapGetters({product:'product/getOne'}),
   inputsList:function(){
-    if(this.product.discounts == undefined) return [];    
+    if(this.product.discounts == undefined) return [this.input];
+    
     let inputs = [];
     $.each(this.product.discounts , ( k, v ) => {
-      console.log(v);
       let put = [
         {
           name:'discount_price',
           caption:'Цена с скидкой',
           type:"number",
-          value:parseInt(v.discount_price),
         },
         {
           name:'quantity',
           caption:'Количество',
           type:"number",
-          value:v.quantity,
+          value:v.discount_price,
         },
         {
           name:'type',
@@ -80,12 +66,14 @@ computed:{
       inputs.push(put);
 
     });
+
     
     return inputs;
   }
 },
 methods:{
   postSettings(a){
+    console.log(this.edit);
     console.log(a);
   }
 },
