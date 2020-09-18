@@ -43,7 +43,12 @@ mounted(){
 },
 methods:{
   async doSearch(){
-    let r = await this.jugeAx('/json/products',{search:this.search, archive:true,});
+    let r = await this.jugeAx('/json/products',{
+      'search':this.search, 
+      'archive':true,
+      'get_all':1,
+      'no_summэ':1
+    });
     if(!r) return;
     this.products = r;
     this.showList = true;

@@ -20,7 +20,7 @@
             </div>
           </div>
         </div>
-
+        
         <div class="col-6">
           <search-product @choose="setProduct"/>
           <div v-if="toAdd">

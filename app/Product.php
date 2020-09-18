@@ -214,25 +214,26 @@ class Product extends Model
 
       
       //Summary
-      $goods = (
-        Goods::
-          selectRaw('goods.product_id, SUM(quantity) as summary')
-          ->join(
-            DB::raw('
-              (
-                SELECT product_id,MAX(created_at) AS lastStocktaking FROM goods
-                WHERE quantity = 0
-                AND action = 1
-                GROUP BY product_id
-              ) md
-            '),
-            'md.product_id', '=', 'goods.product_id'
-          ) 
-          ->whereRaw('goods.created_at >= md.lastStocktaking')
-          ->GroupBy('product_id')
-      );    
-      $products = $products->leftJoin(DB::raw('('.$goods->toSql().') goods'),'products.id', '=', 'goods.product_id');
-
+      if(!isset($request['no_summ'])){
+        $goods = (
+          Goods::
+            selectRaw('goods.product_id, SUM(quantity) as summary')
+            ->join(
+              DB::raw('
+                (
+                  SELECT product_id,MAX(created_at) AS lastStocktaking FROM goods
+                  WHERE quantity = 0
+                  AND action = 1
+                  GROUP BY product_id
+                ) md
+              '),
+              'md.product_id', '=', 'goods.product_id'
+            ) 
+            ->whereRaw('goods.created_at >= md.lastStocktaking')
+            ->GroupBy('product_id')
+        );    
+        $products = $products->leftJoin(DB::raw('('.$goods->toSql().') goods'),'products.id', '=', 'goods.product_id');
+      }
 
       //Metas
       if(!$request['short_query'] || isset($request['with_metas'])){

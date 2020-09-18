@@ -54,7 +54,8 @@ class PresentController extends Controller
     }
  
     //Get present products
-    $products = Product::getWithOptions(['ids' => $ids]);
+    $products = Product::getWithOptions(['ids' => $ids,'get_all'=>1,'no_summ'=>1]);
+
 
     //Sort
     $productsSorted = [];
