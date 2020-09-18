@@ -48,7 +48,7 @@ export default {
         ids.push(v.product_id);
       });
       if(ids.length < 1) return;
-      this.products = await ax.fetch('http://bananich.loc/juge?&model=product',{ids:ids});
+      this.products = await ax.fetch('/juge?&model=product',{ids:ids});
     }
   },
 }

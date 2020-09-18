@@ -13,19 +13,29 @@
           <div class="title-wrap title-page">
             <h2 class="title-h2">Бонусы</h2>
           </div>
+
           <div class="content">
-            <div class="bonuse-block d-flex align-items-center justify-content-lg-start justify-content-center">
+
+            <div v-show="currentBonus" class="bonuse-block d-flex align-items-center justify-content-lg-start justify-content-center">
               <div class="bonuse-num">
                 <span class="bonuse-num-now">{{lastBonus.quantity != undefined ? lastBonus.quantity : 0}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
                 <div class="bonuse-num-text">сгорят через</div>
               </div>
               <div class="bonuse-progres">
-                <img src="/image/demo-bonuse.png" alt="Demo">
-                <div class="bonuse-progres-text">15 <span>дней</span></div>
+                <div>
+                  <div class="bonus-chart-block my-3">
+                    <div style="width:100%; position: relative; z-index: 2;">
+                      <canvas id="bonus-chart"></canvas>
+                    </div> 
+                    <div class="bonuse-progres-text" style="z-index:1">{{lastBonus.die_days}}<span>дней</span></div>   
+                  </div>
+                </div>
               </div>
             </div>
+
             <ul class="bonuse-list">
-              <li class="bonuse-item"  :class="showHistory ? 'active' : ''">
+              <!-- History -->
+              <li v-if="bonuses.length > 0" class="bonuse-item"  :class="showHistory ? 'active' : ''">
                 <a @click.prevent="showHistory = !showHistory" class="bonuse-item-btn" href="#!">История</a>
                 <div v-if="showHistory" class="story">
 
@@ -135,6 +145,16 @@ export default {
     showReferal:false,
     moment:moment,
   }},
+  watch: {
+    bonuses: function(){
+      if(!this.bonuses.length > 0){
+        this.showRules = true;        
+      } 
+    },
+    currentBonus:function(){
+      if(this.currentBonus > 0) this.setCharts();
+    }
+  },
   computed:{
     ...mapGetters({bonuses: 'bonus/get',}),
     currentBonus: function(){
@@ -142,17 +162,61 @@ export default {
     },
     lastBonus: function(){
       if(this.bonuses[this.bonuses.length-1] == undefined) return false;
-      return this.bonuses[this.bonuses.length-1];
+
+      let bonus = this.bonuses[this.bonuses.length-1];
+      bonus.die_days = moment(bonus.add_bonus.die).diff(moment(),'d');
+
+      return bonus;
+    }
+  },
+  mounted(){
+    //
+  },
+  methods:{
+    setCharts(){
+      var ctx = document.getElementById('bonus-chart');
+      var myChart = new Chart(ctx, {
+          type: 'doughnut',
+            data: {
+              labels: [
+                'Активные',
+                'Скоро сгорят',
+              ],
+              datasets: [{
+                borderWidth:3,
+                data: [this.currentBonus, this.lastBonus.quantity],
+                label: 'БЖУ',
+                backgroundColor: [
+                  '#fbe214',
+                  '#dcdcdc',
+                ],
+                hoverOffset: 4
+              }]
+            },
+          options: {
+            cutoutPercentage:75,     
+            aspectRatio:1,  
+            legend: {display: false}, //Hide labels
+            tooltips: {enabled: false},hover: {mode: null}, //hide tooltips
+          }
+      });   
     }
   },
 }
 </script>
 
 <style scoped>
-@media (max-width: 580px){
-  .rule-item {
-    height: inherit !important;
-    padding: 10px  !important;
+  @media (max-width: 580px){
+    .rule-item {
+      height: inherit !important;
+      padding: 10px  !important;
+    }
   }
-}
+  .bonus-chart-block{
+    width: 180px;    
+    height: 180px;
+    display: flex;
+    position: relative;
+    margin: auto;
+  }
 </style>

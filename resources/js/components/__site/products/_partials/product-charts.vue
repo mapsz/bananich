@@ -92,9 +92,9 @@ mounted(){
   this.getSettings();
 },
 methods:{
-   ...mapActions({
-      'getSettings':'settings/fetch',
-    }),  
+  ...mapActions({
+    'getSettings':'settings/fetch',
+  }),  
   setChats(){
     var ctx = document.getElementById('pfc-chart');
     var myChart = new Chart(ctx, {
