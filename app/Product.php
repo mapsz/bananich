@@ -279,13 +279,21 @@ class Product extends Model
         });
       }
 
-      //Categories
+      //Category
       if(isset($request['category']) && $request['category'] > 0){
         $categoryId = $request['category'];
         $products = $products->whereHas('categories', function ($q)use($categoryId) {
           $q->where('categoty_id', '=', $categoryId);
         });
-      }      
+      }  
+      
+      //Categories
+      if(isset($request['categories']) && is_array($request['categories']) && isset($request['categories'][0]) && $request['categories'][0] > 0){
+        $categories = $request['categories'];
+        $products = $products->whereHas('categories', function ($q)use($categories) {
+          $q->wherein('categoty_id', $categories);
+        });
+      }          
 
       //Price
       if((isset($request['price_from']) && $request['price_from'] > 0) || (isset($request['price_to']) && $request['price_to'] > 0)){

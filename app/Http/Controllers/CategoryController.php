@@ -14,7 +14,7 @@ class CategoryController extends Controller
 
 
         foreach ($cat as $key => $v) {
-            $v->photo = "image/r-1.png";            
+            $v->photo = Category::getMainImage($v->id);
         }
 
         return response()->json($cat);

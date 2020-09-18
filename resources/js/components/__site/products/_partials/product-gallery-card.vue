@@ -1,11 +1,15 @@
 <template>
   <div class="catalog-item">
     <!-- Image -->
-    <a :href="'/product/'+product.id">
+    <div>
       <div 
         class="catalog-item-img" 
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
+        <router-link 
+          :to="$route.fullPath+'/product/'+product.id" 
+          style="position:absolute; width:100%; height:100%"          
+        ></router-link>
         <!-- Bonus -->
         <span v-if="product.bonus" style="
           background-color: #fbe214;
@@ -18,23 +22,24 @@
           font-weight: 600;
           font-size: 12pt;
           line-height: 0.5;"
+          data-toggle="tooltip" title="Можно купить за бонусы"
         >Б</span>
         <!-- Favorite -->
         <button  class="like">
           <favorite-button :product-id="product.id"/>
         </button>
       </div>  
-    </a>                
+    </div>
     <div class="catalog-item-text">
       <!-- Name -->
       <div class="catalog-item-title">
-        <a :href="'/product/'+product.id">
+        <router-link :to="$route.fullPath+'/product/'+product.id">
           {{
             product.name + 
             (product.сountry ? ', '+product.сountry:'') + 
             (product.unit_view ? ', '+product.unit_view:'')
           }}
-        </a>
+        </router-link>
       </div>
       <!-- БЖУ -->
       <div class="catalog-item-cal">
@@ -103,6 +108,9 @@ export default {
     ...mapGetters({
       cart:'cart/getCart',
     }), 
+  },
+  mounted(){ 
+    //
   },
   methods:{
     ...mapActions({

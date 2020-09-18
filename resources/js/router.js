@@ -72,6 +72,9 @@ let routes = [];
   routes.push(
     {path: '/product/:id',    component:siteProduct},
   );
+  routes.push(
+    {path: '/category/:id/product/:id',    component:siteProduct},
+  );
 
   //Cart
   import siteCart from './components/__site/cart/cart.vue';

@@ -29,7 +29,7 @@
             </div>        
             <!-- lines -->  
             <div style="height: 100%;display: flex;flex-direction: column;justify-content: center;">              
-              <div v-for='(line,i) in lines' :key='i' class="d-flex justify-content-center align-items-center">
+              <div v-for='(line,i) in lines' :key='i' class="d-flex justify-content-around  align-items-center">
                 <div class="product-line" style="margin-right: 20px;">
                   <div class="product-line-header d-flex justify-content-between mb-1">
                     <span>{{line.caption}}</span>

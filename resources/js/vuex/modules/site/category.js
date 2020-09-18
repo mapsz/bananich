@@ -3,20 +3,28 @@ let category = {
 
   state: {  
     category:false,
+    active:false,
   },
   getters: {   
     get : (state) => {
       return state.category;
     },
+    getActive : (state) => {
+      return state.active;
+    },
   },
   actions:{
     async fetch({commit}){
       let r = await ax.fetch('/json/categories');
-      commit('mcategory',r); 
+      commit('mCategory',r); 
+    },
+    async setActive({commit},set){
+      commit('mActive',set); 
     }
   },  
   mutations:{
-    mcategory: (state,data) => {return state.category = data;},
+    mCategory: (state,data) => {return state.category = data;},
+    mActive: (state,data) => {return state.active = data;},
   },
 };
 

@@ -60,9 +60,9 @@ class Category extends Model
       if(strpos($file,strval($id) . '.') === 0){
         return $short_path.'/'.$file;
       }      
-    }
+    }  
 
-    return false;
+    return '/image/r-1.png';
 
   }
 

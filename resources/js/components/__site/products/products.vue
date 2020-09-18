@@ -11,9 +11,11 @@
         <div class="row content-page">
 
           <!-- Categories Sidebar -->
-          <categories-sidebar v-model="categoriesActive"/>
+          <div class="col-lg-4">
+            <categories-menu />
+          </div>
 
-          <div class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
+          <div v-if="active || !isMobile" class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
             
             <div class="title-wrap title-page">
               <h2 class="title-h2">{{currentCategory.name}}</h2>
@@ -27,7 +29,7 @@
             </div>
 
             <!-- Product list -->
-            <div v-if="width > 768 || categoriesActive" class="row">
+            <div v-if="768" class="row">
 
               <!-- Карточка товара -->
               <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 ">
@@ -63,7 +65,6 @@ export default {
   data(){return{
     busy:false,
     categoriesActive:false,
-    width:window.screen.width,
   }},
   computed:{
     ...mapGetters({
@@ -77,7 +78,9 @@ export default {
       infinite:'product/getInfinite',
       isFetched:'product/isFetched',
       isWaterfalling:'product/isWaterfalling',
+      active:'category/getActive',
     }), 
+    isMobile:function(){return window.screen.width <= 768;},
     currentCategory:function(){
         if (this.categories[0] != undefined) {
           let cat =  this.categories.find(x => x.id == this.filters.category);
@@ -88,9 +91,11 @@ export default {
        return {id:0,name:''};
     }
   },
-  mounted(){
-    this.getCart();
-    this.setWaterfall(1);
+  async mounted(){
+    // this.getCart();
+    this.fetchFavorites();
+    await this.setWaterfall(1);
+    if(!this.isMobile) this.fetch();
   },
   methods:{
     ...mapActions({
@@ -101,6 +106,7 @@ export default {
       'addInfinite':'product/addInfinite',
       'getCart':'cart/fetch',
       'editItem':'cart/editItem',
+      'fetchFavorites':'favorite/fetchData',
     }),
     toCart(id,count = 1){
       this.editItem({id,count});

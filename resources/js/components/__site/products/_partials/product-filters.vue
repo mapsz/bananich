@@ -1,6 +1,7 @@
 <template>
 
   <div class="filt">
+    <!-- Button -->
     <div>
       <button @click="dropFilter = !dropFilter" class="filter-btn">
         <img src="/image/filter.svg" alt="Фильтр">
@@ -13,34 +14,32 @@
 
       <div class="dropdown-sad-arr"></div>
 
+      <!-- Mobile title / Close button -->
       <div class="mobile-only mb-2" style="border-bottom: 1px solid gray;padding: 10px;">
         <div style="display: flex;justify-content: space-between;">
           <h4 >Фильтр</h4>
           <span @click="dropFilter = false">❌</span>
         </div>
       </div>
-
+      
+      <!-- Categories -->
       <div class="dropdown-sad-item filter-dd" :class="dropCategory ? 'active' : ''">
         <a @click="dropCategory=!dropCategory" class="dropdown-sad-btn">Раздел</a>
         <ul class="dropdown-sad-list">
-          <li>
-            <a 
+          <li><a 
               href="#" 
-              v-on:click.prevent="filters.category = 0"
-              :class="filters.category === 0 ? 'font-weight-bold' : ''"
+              v-on:click.prevent="filters.categories = [0]"
+              :class="(filters.categories != undefined && filters.categories[0] == 0) ? 'font-weight-bold' : ''"
             >
               Все
-            </a>
-          </li>
-          <li v-for='(category,i) in categories' :key='i'>
-            <a 
+          </a></li>
+          <li v-for='(category,i) in categories' :key='i'><a 
               href="#" 
-              v-on:click.prevent="filters.category = category.id"
-              :class="filters.category == category.id ? 'font-weight-bold' : ''"
+              v-on:click.prevent="addCategory(category.id)"
+              :class="(filters.categories != undefined && (filters.categories.findIndex(x => x == category.id) > -1)) ? 'font-weight-bold' : ''"
             >
               {{category.name}}
-            </a>
-          </li>
+          </a></li>
         </ul>
       </div>
 
@@ -191,16 +190,13 @@ data(){return{
 computed:{  
   ...mapGetters({categories:'category/get','getCurrentFilters':'product/getFilters',}),
   currentFiltersCount: function(){
-
     let count = 0;
-
     for (const [key, value] of Object.entries(this.getCurrentFilters)) {
       if(value) count++;
     }
-
-
     return count;
-  }
+  },
+  isMobile:function(){return window.screen.width <= 768;},
 
 }, 
 methods:{
@@ -209,7 +205,6 @@ methods:{
     'productsFetch':'product/fetchData',
   }),
   async addFilters(){
-    
     // Add filters
     await $.each( this.filters, async ( k, v ) => {
       var obj = {};
@@ -217,10 +212,31 @@ methods:{
       await this.addFilter(obj);
     });    
 
-
     //Get data
     this.dropFilter = false;
     this.productsFetch();
+  },
+  async addCategory(id){
+    if(this.filters.categories == undefined) this.filters.categories = [0];
+
+    //Remove category
+    let categoryIndex = this.filters.categories.findIndex(x => x == id);
+    if(categoryIndex > -1){
+      this.filters.categories.splice(categoryIndex,1);
+      //Trigger
+      this.filters = JSON.parse(JSON.stringify(this.filters));
+      return;
+    } 
+
+    //Remove zero
+    let zeroIndex = this.filters.categories.findIndex(x => x == 0);
+    if(id > 0 && zeroIndex > -1) this.filters.categories.splice(zeroIndex,1);
+
+    //Add category
+    this.filters.categories.push(id);
+
+    //Trigger
+    this.filters = JSON.parse(JSON.stringify(this.filters));
   }
 },
 }
