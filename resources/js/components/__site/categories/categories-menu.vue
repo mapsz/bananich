@@ -37,7 +37,7 @@ export default {
       //Set route
       if('route' == 'route'){
         if (this.active.id == undefined) {
-          this.$router.push('/')
+          if(this.$route.fullPath != '/') this.$router.push('/');          
         }else{
           if(this.$route.params.id == undefined ||this.$route.params.id != this.active.id)
             this.$router.push('/category/'+this.active.id)
@@ -45,8 +45,15 @@ export default {
       } 
     
       //Set filter
-      this.addFilter({'categories':[this.active.id]});
-      this.fetchProducts();
+      let active = JSON.parse(JSON.stringify(this.active));
+      if(active == false) 
+        this.addFilter({'categories':[0]});
+      else 
+        this.addFilter({'categories':[active.id]});
+      
+      //Skip if mobile return to category list
+      if(!(active == false && this.isMobile)) 
+        this.fetchProducts();
     },
     $route: async function(){
       this.setActive(this.$route.params.id != undefined ? this.categories.find(x => x.id == this.$route.params.id) : false);
