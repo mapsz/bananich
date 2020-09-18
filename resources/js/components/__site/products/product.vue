@@ -47,7 +47,7 @@
 
               <!-- Charts -->
               <div class="row"> 
-                <product-charts :product="product" />
+                <product-charts />
               </div>
 
               <!-- Price Cart Favorites -->

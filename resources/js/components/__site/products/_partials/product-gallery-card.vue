@@ -66,7 +66,7 @@
         <template v-if="product.carbohydrates != undefined">
           <div class="catalog-item-cal-box">
             <span class="title">углев.</span>
-            <span>{{product.carbohydrates}}</span>
+            <span>{{product.carbohydrates}}г</span>
           </div>
         </template>
       </div>

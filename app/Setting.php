@@ -11,6 +11,9 @@ class Setting extends Model
     'min_order'                 => 1200,
     'shipping_price'            => 200,
     'phone_number'              => '+79219444137',
+    'day_norm_fats'             => '60',
+    'day_norm_proteins'         => '150',
+    'day_norm_carbs'            => '230',
   ];
 
 

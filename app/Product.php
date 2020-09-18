@@ -611,8 +611,7 @@ class Product extends Model
       'unit'                  => 'max:50',
       'unit_sys'              => 'numeric',
       'calories'              => 'numeric',
-      'carbohydrates_slow'    => 'numeric',
-      'carbohydrates_fast'    => 'numeric',
+      'carbohydrates'          => 'numeric',
       'proteins'              => 'numeric',
       'fats'                  => 'numeric',
       'сountry'               => 'max:50',
@@ -640,8 +639,7 @@ class Product extends Model
       'unit'                  => 'max:50',
       'unit_sys'              => 'numeric',
       'calories'              => 'numeric',
-      'carbohydrates_slow'    => 'numeric',
-      'carbohydrates_fast'    => 'numeric',
+      'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
       'fats'                  => 'numeric',
       'сountry'               => 'max:50',
@@ -690,8 +688,7 @@ class Product extends Model
         case 'unit_view':
         case 'unit_full':
         case 'calories':  
-        case 'carbohydrates_slow':  
-        case 'carbohydrates_fast':  
+        case 'carbohydrates':  
         case 'proteins':  
         case 'fats':  
         case  "сountry": 
