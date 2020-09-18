@@ -45,7 +45,7 @@
               <div class="cart-num">{{cart.items != undefined ? cart.items.length : 0}}</div>
             </a>
           </button>
-          <div class="cart-sum"><span>{{cart.final_summ}}</span>р</div>
+          <div class="cart-sum"><span>{{cart.pre_price}}</span>р</div>
           <button 
             class="cart-arr"
             :class="cartDrop ? 'active' : ''"

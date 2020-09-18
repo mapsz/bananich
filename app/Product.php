@@ -410,12 +410,28 @@ class Product extends Model
         }      
       }while(0);
 
-
+      //Published
       if(!isset($request['get_all']) && !isset($request['id'])){
-        $products = $products->whereHas('metas', function ($q) {
-          $q->where('name', '=', 'publish')->where('value', '=', '1');
-        });      
-        $products = $products->where('summary','>', 0);
+        // $products = $products->whereDoesntHave('metas', function ($q) {
+        //   $q->where('name', '=', 'always_publish')->where('value', '=', '1');
+        // });
+
+        $products = $products->where(function($q) {
+          $q->where('summary','>', 0)
+          ->whereHas('metas', function ($q2) {
+            $q2->where('name', '=', 'publish')->where('value', '=', '1');
+          });
+        })
+        ->orWhere(function($q) {
+          $q->whereHas('metas', function ($q2) {
+            $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
+          });
+        });
+
+        // $products = $products->whereHas('metas', function ($q) {
+        //   $q->where('name', '=', 'publish')->where('value', '=', '1');
+        // });      
+        // $products = $products->where('summary','>', 0);
       }
 
     }
@@ -710,6 +726,7 @@ class Product extends Model
         case  "eco": 
         case  "gruzka_priority": 
         case  "strews": 
+        case  "always_publish": 
         case  "bonus": 
           $insert['meta'][$key] = $value;
           break;
