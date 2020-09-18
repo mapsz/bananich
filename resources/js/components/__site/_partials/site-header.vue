@@ -20,7 +20,7 @@
 
     <div class="header-bar" style="position:fixed; width:100%; background-color:white; top:0;">
       <div class="container header-bar-wrap">
-        <a href="/"><img class="logo" src="/image/logo.svg" alt="logo"></a>
+        <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;"></a>
         
         <!-- Presents -->
         <present-bar :cart="cart" :settings="presentSettings"/>
