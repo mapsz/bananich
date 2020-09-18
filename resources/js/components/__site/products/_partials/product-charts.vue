@@ -19,13 +19,20 @@
         <!-- БЖУ -->
         <div class="col-12 col-lg-7 calories-scale">
           <div style="height: 100%;">
-            <div style="display: flex; justify-content: center;"><span><b>Дневная норма</b></span></div>        
+            <div style="display: flex; justify-content: center;">
+              <span 
+                data-toggle="tooltip" 
+                :title="'Углеводы:'+settings.day_norm_carbs+' | Жиры: '+settings.day_norm_fats+' | Белки:'+settings.day_norm_proteins"
+              >
+                <b>Дневная норма</b>
+              </span>
+            </div>        
             <!-- lines -->  
             <div style="height: 100%;display: flex;flex-direction: column;justify-content: center;">              
               <div v-for='(line,i) in lines' :key='i' class="d-flex justify-content-center align-items-center">
                 <div class="product-line" style="margin-right: 20px;">
                   <div class="product-line-header d-flex justify-content-between mb-1">
-                    <span>{{line.name}}</span>
+                    <span>{{line.caption}}</span>
                     <span class="bold">{{line.value}}г</span>
                   </div>
                   <div class="calories-scale-line" style="width:200px"><div class="calories-scale-position" :class="line.color" :style="'width: '+line.percent+'%;'"></div></div>
@@ -78,8 +85,10 @@ computed:{
     ];
   }
 },
-
 mounted(){  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
   this.getSettings();
 },
 methods:{

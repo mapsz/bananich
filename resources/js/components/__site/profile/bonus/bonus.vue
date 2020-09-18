@@ -16,7 +16,7 @@
           <div class="content">
             <div class="bonuse-block d-flex align-items-center justify-content-lg-start justify-content-center">
               <div class="bonuse-num">
-                <span class="bonuse-num-now">{{lastBonus.quantity}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
+                <span class="bonuse-num-now">{{lastBonus.quantity != undefined ? lastBonus.quantity : 0}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
                 <div class="bonuse-num-text">сгорят через</div>
               </div>
               <div class="bonuse-progres">
@@ -141,12 +141,18 @@ export default {
       return (this.bonuses != undefined && this.bonuses[0] != undefined) ? this.bonuses[0].left : 0;
     },
     lastBonus: function(){
+      if(this.bonuses[this.bonuses.length-1] == undefined) return false;
       return this.bonuses[this.bonuses.length-1];
     }
   },
 }
 </script>
 
-<style>
-
+<style scoped>
+@media (max-width: 580px){
+  .rule-item {
+    height: inherit !important;
+    padding: 10px  !important;
+  }
+}
 </style>
