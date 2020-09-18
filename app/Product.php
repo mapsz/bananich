@@ -521,8 +521,10 @@ class Product extends Model
       $products = $products[0];
     }
 
-    dump(DB::getQueryLog());
-    dd($products);
+    if(isset($request['test'])){
+      dump(DB::getQueryLog());
+      dd($products);
+    }
 
 
 
