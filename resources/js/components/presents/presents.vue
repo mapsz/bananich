@@ -113,7 +113,7 @@ export default {
       location.reload();
     },
     async getProducts(){
-      this.products = await ax.fetch('/product/present');
+      this.products = await ax.fetch('/product/present',{'get_all':1});
     }
   },
 }

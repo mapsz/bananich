@@ -54,7 +54,11 @@ class PresentController extends Controller
     }
  
     //Get present products
-    $products = Product::getWithOptions(['ids' => $ids,'get_all'=>1,'no_summ'=>1]);
+    $filter = [
+      'ids' => $ids,
+    ];
+    if(isset($request['get_all'])) array_push($filter['get_all']=1);
+    $products = Product::getWithOptions($filter);
 
 
     //Sort
@@ -78,16 +82,18 @@ class PresentController extends Controller
     $presents = $productsSorted;
 
     //Asing product presents
+    $out = [];
     foreach ($presents as $present) {      
       unset($present->product);
       foreach ($products as $product) {
         if ($product->id == $present->product_id) {
           $present['product'] = $product;
+          array_push($out,$present);
         }
       }
     }
 
-    return response()->json($presents);
+    return response()->json($out);
   }
 
   public function addPresentToCart(Request $request){
