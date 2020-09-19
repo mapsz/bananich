@@ -1,6 +1,6 @@
 <template>
 <div>
-  <header class="header">
+  <header class="header" style="z-index: 100;">
 
     <!-- Navbar -->
     <!-- <div class="header-nav">

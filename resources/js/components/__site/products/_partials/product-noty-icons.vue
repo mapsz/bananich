@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
   .catalog-item-icon{    
-    justify-content: space-around;
+    /* justify-content: space-around; */
   }
   .catalog-item-icon img{
     width:30px;

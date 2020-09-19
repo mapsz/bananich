@@ -207,6 +207,9 @@ class Order extends Model
     //Delete Cart
     Cart::find($cart['id'])->delete();
 
+    //Update Available
+    // Product::updateAvailable($data['product_id']);
+
 
     return $orderId;
 

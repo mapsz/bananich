@@ -14,9 +14,21 @@ class Item extends Model
     
     public static function getWithOptions($request){
 
+        $test = false;
         $parvinBuild = false;
         if(isset($request['parvinBuild'])){
           $parvinBuild = true;
+        }
+        
+        if(isset($request['ItemsInReserve'])){
+          if(isset($request['test'])) $test = true;
+          $productId = $request['productId'];
+          unset($request);
+          $request = [
+            "productId" => $productId,
+            "deliveryDate" => json_encode(['from' => now()->subDays(10)->format('Y-m-d'), 'to' => false]),
+            'status' => ["300","350","400","500","600","700","800","850","900"],
+          ];
         }
     
         //Build Orders
@@ -149,6 +161,10 @@ class Item extends Model
             $query = $query->whereIn('item_status_id',$statuses);
           }
           
+          if(isset($request['productId']) && $request['productId'] > 0){
+            $query = $query->where('product_id',$request['productId']);
+          }
+
           //Parvin
           if($parvinBuild){
             $query = $query->whereIn('item_status_id',[200,100]);
@@ -197,8 +213,19 @@ class Item extends Model
           }
         }
 
-        if(isset($request['test'])){
-          // dd($orders);
+        if(isset($request['productId'])){
+          if(!isset($items[0])){
+            $items = ['summ' => 0, 'orders' => ''];
+          }else{
+            $items = $items[0];
+          }
+        }
+
+
+        if(isset($request['test']) || $test){
+          dump($request);
+          dump($orders);
+          dd($items);
         }
 
         return $items;

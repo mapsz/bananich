@@ -14,6 +14,8 @@
       <div class="col-4" v-if="id">
         <!-- Published -->
         <product-published class="mb-3 border p-2" />
+        <!-- In stock -->
+        <product-in-stock class="mb-3 border p-2" />
         <!-- Main Photo -->
         <product-main-photo class="mb-3 border p-2" />
         <!-- Bonuses -->

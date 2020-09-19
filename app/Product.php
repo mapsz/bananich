@@ -10,6 +10,7 @@ use App\ProductLongMeta;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Goods;
+use App\Item;
 
 class Product extends Model
 {
@@ -178,20 +179,37 @@ class Product extends Model
 
   }
 
+  public static function updateAvailable($ids){
+
+    if($ids == 'all') $ids = Product::pluck('id')->all();
+    if(!is_array($ids))$ids = [$ids];
+
+    // dd($ids);
+
+    foreach ($ids as $key => $id) {
+      $reserve = floatval (Product::getInReserve($id)['summ']);
+      $summary = floatval (Product::getWithOptions(['id' => $id])['summary']);
+      $available = $summary - $reserve;
+      $meta = ProductMeta::where('product_id', $id)->where('name', 'available')->delete();
+
+      $meta = new ProductMeta;
+      $meta->name         = 'available';
+      $meta->product_id   = $id;
+      $meta->value = $available;
+      $meta->save();
+
+    }
+
+    return 1;
+
+  }
+
+  public static function getInReserve($id){
+    return Item::getWithOptions(['productId'=>$id,'ItemsInReserve'=>1]);
+  }
+
   public static function getWithOptions($request){
 
-
-    // $p = Product::whereHas('goods')
-    //   ->with('goods')
-    //   ->get();
-
-    //   ->with(['goods' => function($query)
-    //   {
-    //      $query->where('orders.user_id', $customerID);
-    //      $query->orderBy('orders.created_at', 'DESC');
-    //   }])
-
-    // dd($p);
 
     DB::enableQueryLog();
     
@@ -423,10 +441,10 @@ class Product extends Model
             });
           })
           ->orWhere(function($q) {
-            $q->where('summary','>', 0)
-            ->whereHas('metas', function ($q2) {
-              $q2->where('name', '=', 'publish')->where('value', '=', '1');
-            });
+            $q->where('summary','>', 0);
+            // ->whereHas('metas', function ($q2) {
+            //   $q2->where('name', '=', 'publish')->where('value', '=', '1');
+            // });
           });
         });
       }
@@ -526,8 +544,6 @@ class Product extends Model
       dump(DB::getQueryLog());
       dd($products);
     }
-
-
 
     return $products;
   }

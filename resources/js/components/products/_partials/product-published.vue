@@ -6,7 +6,7 @@
   <div class="d-flex justify-content-between">
     <div class="d-flex">
       <span class="pr-2" :style="!published ? 'font-weight: 600;' : ''">Нет</span>   
-      <b-form-checkbox v-model="published" @change="publish" switch></b-form-checkbox> 
+      <b-form-checkbox v-model="published" @change="publish" switch disabled></b-form-checkbox> 
       <span :style="published ? 'font-weight: 600;' : ''">Да</span>
     </div>
     <div class="d-flex">

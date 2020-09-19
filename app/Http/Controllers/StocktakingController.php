@@ -57,6 +57,9 @@ class StocktakingController extends Controller
       $goods->quantity = $data['quantity'];
       $goods->user_id = $data['user_id'];
       $goods->save();
+
+      //Update Available
+      Product::updateAvailable($data['product_id']);
       
       //Store to DB
       DB::commit();    
