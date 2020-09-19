@@ -10,17 +10,17 @@
             </div>
           </div>
           <div class="col-lg-4">
-            <ul class="footer-nav">
-              <li class="footer-nav-list"><a class="footer-nav-link" href="#!">Разделы</a></li>
-              <li class="footer-nav-list"><a class="footer-nav-link" href="#!">Доставка</a></li>
-              <li class="footer-nav-list"><a class="footer-nav-link" href="#!">О нашей упаковке</a></li>
+            <ul class="footer-nav-sad">
+              <li class="footer-nav-sad-list"><a class="footer-nav-sad-link" href="#!">Разделы</a></li>
+              <li class="footer-nav-sad-list"><a class="footer-nav-sad-link" href="#!">Доставка</a></li>
+              <li class="footer-nav-sad-list"><a class="footer-nav-sad-link" href="#!">О нашей упаковке</a></li>
             </ul>
           </div>
           <div class="col-lg-4">
-            <ul class="footer-nav">
-              <li class="footer-nav-list"><a class="footer-nav-link" href="#!">Условные обозначения</a></li>
-              <li class="footer-nav-list"><a class="footer-nav-link" href="#!">Переработка втор. сырья</a></li>
-              <li class="footer-nav-list"><a class="footer-nav-link" href="#!">О бонусной и реферальной системе</a></li>
+            <ul class="footer-nav-sad">
+              <li class="footer-nav-sad-list"><a class="footer-nav-sad-link" href="#!">Условные обозначения</a></li>
+              <li class="footer-nav-sad-list"><a class="footer-nav-sad-link" href="#!">Переработка втор. сырья</a></li>
+              <li class="footer-nav-sad-list"><a class="footer-nav-sad-link" href="#!">О бонусной и реферальной системе</a></li>
             </ul>
           </div>
         </div>

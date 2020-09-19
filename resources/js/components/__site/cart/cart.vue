@@ -118,7 +118,7 @@ export default {
     }
   },
   mounted(){
-    this.getSettings();
+    // this.getSettings();
   },
   methods:{
    ...mapActions({

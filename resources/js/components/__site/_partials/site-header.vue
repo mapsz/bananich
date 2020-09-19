@@ -2,23 +2,26 @@
 <div>
   <header class="header" style="z-index: 100;">
 
-    <!-- Navbar -->
-    <!-- <div class="header-nav">
-        <div class="container header-nav-wrap">
-          <nav class="navbar">
-            <ul class="navbar-nav">
-              <li class="nav-item"><a href="#" class="nav-link">Доставка</a></li>
-              <li class="nav-item"><a href="#" class="nav-link active">О нашей упаковке</a></li>
-              <li class="nav-item"><a href="#" class="nav-link">Условные обозначения</a></li>
-              <li class="nav-item"><a href="#" class="nav-link">Переработка втор. сырья</a></li>
-              <li class="nav-item"><a href="#" class="nav-link">О бонусной  и реферальной системе</a></li>
+    <!-- navbar-sad -->
+    <div class="header-nav">
+        <div class="container header-nav-wrap-sad">
+          <nav class="navbar-sad">
+            <ul class="navbar-sad-nav m-0">
+              <li class="nav-item-sad"><a href="#" class="nav-link-sad">Доставка</a></li>
+              <li class="nav-item-sad"><a href="#" class="nav-link-sad active">О нашей упаковке</a></li>
+              <li class="nav-item-sad"><a href="#" class="nav-link-sad">Условные обозначения</a></li>
+              <li class="nav-item-sad"><a href="#" class="nav-link-sad">Переработка втор. сырья</a></li>
+              <li class="nav-item-sad"><a href="#" class="nav-link-sad">О бонусной  и реферальной системе</a></li>
             </ul>
           </nav>
-          <div class="phone header-phone"><a href="tel:+79681828252">+7 (968) 182-82-52</a></div>
+          <div class="phone header-phone"><a :href="'tel:'+settings.phone_number">📞{{settings.phone_number}}</a></div>
       </div>
-    </div> -->
+    </div>
 
-    <div class="header-bar" style="position:fixed; width:100%; background-color:white; top:0;">
+    <div class="header-bar" v-scroll="handleScroll" 
+      style="width:100%; background-color:white;"
+      :style="position > 55 ? 'position:fixed; top:0; height: 80px;' : ''"
+    >
       <div class="container header-bar-wrap">
         <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;"></a>
         
@@ -84,7 +87,7 @@
         <!-- Menu -->
         <div class="col-3">
           <div class="tap-bar-nav">
-            <button class="navbar-toggler" style="padding: 0px;">
+            <button class="navbar-sad-toggler" style="padding: 0px;">
               <span></span>
               <span></span>
               <span></span>
@@ -155,25 +158,40 @@ export default {
   data(){return{
     cartDrop:false,
     presentSettings:{},
+    position:0,
   }},
   computed:{
     ...mapGetters({
-      cart:'cart/getCart'
+      cart:'cart/getCart',
+      settings:'settings/beautyGet',
     }),    
   },    
   mounted(){    
     this.getUser();
     this.getCart();
     this.getSettings();
+    this.getOtherSettings();
+    this.handleScroll();
   },
   methods:{
     ...mapActions({
       'getCart':'cart/fetch',
       'getUser':'user/fetch',
+      'getOtherSettings':'settings/fetch',
     }),
     async getSettings(){
       this.presentSettings = await ax.fetch('/present/settings');
     },
+    handleScroll: function (evt, el) {
+      let position = window.scrollY;  
+
+      this.position = position;
+
+      // if(position > 900)
+      //   this.showUp = true;
+      // else
+      //   this.showUp = false;
+    }    
   }
 }
 </script>

@@ -369,7 +369,7 @@ b {
   background: #F2F2F2;
 }
 
-.header-nav-wrap {
+.header-nav-wrap-sad {
   display: -webkit-box;
   display: flex;
   -webkit-box-align: center;
@@ -379,25 +379,25 @@ b {
   height: 100%;
 }
 
-.navbar {
+.navbar-sad {
   width: 100%;
   padding-right: 60px;
 }
 
-.navbar-nav {
+.navbar-sad-nav {
   display: -webkit-box;
   display: flex;
   -webkit-box-pack: justify;
           justify-content: space-between;
 }
 
-.nav-link {
+.nav-link-sad {
   color: #4F4F4F;
   text-decoration: none;
   font-size: 16px;
 }
 
-.nav-link.active {
+.nav-link-sad.active {
   text-decoration: underline;
   color: #000;
 }
@@ -666,7 +666,7 @@ b {
   background: transparent;
 }
 
-.navbar-toggler {
+.navbar-sad-toggler {
   background: transparent;
   border: none;
   text-align: left;
@@ -674,7 +674,7 @@ b {
   margin: 0 auto;
 }
 
-.navbar-toggler span {
+.navbar-sad-toggler span {
   width: 100%;
   height: 2px;
   border-radius: 11px;
@@ -683,11 +683,11 @@ b {
   margin-bottom: 4px;
 }
 
-.navbar-toggler span:nth-child(2) {
+.navbar-sad-toggler span:nth-child(2) {
   width: 15px;
 }
 
-.phone-nav-link {
+.phone-nav-link-sad {
   font-size: 18px;
   color: #000;
   text-decoration: none;
@@ -695,18 +695,18 @@ b {
   display: block;
 }
 
-.phone-nav-item {
+.phone-nav-item-sad {
   border-bottom: 0.8px solid #E0E0E0;
 }
 
-.phone-nav-item:last-child {
+.phone-nav-item-sad:last-child {
   border-bottom: 0;
 }
 
 /*  Адаптив Header */
 
 @media (max-width: 1024px) {
-  .nav-link {
+  .nav-link-sad {
     font-size: 12px;
   }
 
@@ -729,15 +729,15 @@ b {
     display: none;
   }
 
-  .nav-link {
+  .nav-link-sad {
     font-size: 9px;
   }
 
-  .navbar {
+  .navbar-sad {
     padding-right: 10px;
   }
 
-  .navbar-phone {
+  .navbar-sad-phone {
     display: block;
   }
 
@@ -1758,13 +1758,13 @@ footer .phone a {
   margin-right: 20px;
 }
 
-.footer-nav-link {
-  color: #4F4F4F;
+.footer-nav-sad-link {
+  color: #4F4F4F !important;
   text-decoration: none;
   font-size: 18px;
 }
 
-.footer-nav-list {
+.footer-nav-sad-list {
   margin-bottom: 20px;
 }
 
@@ -1811,7 +1811,7 @@ footer .phone a {
 }
 
 @media (max-width: 580px) {
-  .footer-nav-link {
+  .footer-nav-sad-link {
     font-size: 16px;
   }
 
@@ -2451,13 +2451,13 @@ footer .phone a {
   margin-bottom: 120px;
 }
 
-.nav-tabs-sad .nav-item {
+.nav-tabs-sad .nav-item-sad {
   margin-right: 12px;
   margin-bottom: 19px;
   position: relative;
 }
 
-.nav-tabs-sad .nav-link {
+.nav-tabs-sad .nav-link-sad {
   height: 56px;
   line-height: 56px;
   display: block;
@@ -2470,7 +2470,7 @@ footer .phone a {
   text-decoration: none;
 }
 
-.nav-tabs-sad .nav-link.active {
+.nav-tabs-sad .nav-link-sad.active {
   background: #FBE214;
   border: 1px solid #FBE214;
   color: #000000;
@@ -2823,7 +2823,7 @@ footer .phone a {
     margin-bottom: 40px;
   }
 
-  .nav-tabs-sad .nav-link {
+  .nav-tabs-sad .nav-link-sad {
     height: 47px;
     line-height: 47px;
     font-size: 16px;
