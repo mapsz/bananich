@@ -243,7 +243,7 @@ class jugeVuex {
         if(getters.getWaterfallId != d.waterfallId) return;
 
         //Continue
-        dispatch('WaterfallFetch', {'waterfallId':d.waterfallId,'page':d.page+1});
+        dispatch('WaterfallFetch', {'waterfallId':d.waterfallId,'page':d.page+1,'params':d.params});
 
         return;
 
