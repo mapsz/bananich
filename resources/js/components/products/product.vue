@@ -53,7 +53,7 @@ export default {
 
     //Fetch product
     if(this.id){
-      await this.$store.dispatch('product/addFilter',{get_all:1});
+      await this.$store.dispatch('product/addFilter',{'with_summary':1});
       await this.fetchProduct(this.id);
     }
     

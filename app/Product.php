@@ -230,9 +230,8 @@ class Product extends Model
     //Withs
     if("WITH" == "WITH"){
 
-      
       //Summary
-      if(!isset($request['no_summ'])){
+      if(isset($request['with_summary'])){
         $goods = (
           Goods::
             selectRaw('goods.product_id, SUM(quantity) as summary')
@@ -284,7 +283,6 @@ class Product extends Model
       }
 
       //Ids
-      // dd($request['ids']);
       if(isset($request['ids']) && is_array($request['ids'])){
         $products = $products->wherein('id',$request['ids']);
       }
@@ -429,24 +427,38 @@ class Product extends Model
         }      
       }while(0);
 
-
-      //Published
+      //Available
       if(!isset($request['get_all']) && !isset($request['id'])){
 
-        $products = 
-        $products->where(function($q9) {
-            $q9->where(function($q) {
-            $q->whereHas('metas', function ($q2) {
-              $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
+        $products = $products
+          ->where(function($q0) {
+            $q0->where(function($q) {
+              $q->whereHas('metas', function ($q2) {
+                $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
+              });
+            })
+            ->orWhere(function($q) {
+              $q->whereHas('metas', function ($q2) {
+                $q2->where('name', '=', 'available')->where('value', '>', '0');
+              });
             });
-          })
-          ->orWhere(function($q) {
-            $q->where('summary','>', 0);
-            // ->whereHas('metas', function ($q2) {
-            //   $q2->where('name', '=', 'publish')->where('value', '=', '1');
-            // });
           });
-        });
+
+        // $products->where(function($q9) {
+        //   $q9->where(function($q) {
+        //     $q->whereHas('metas', function ($q2) {
+        //       $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
+        //     });
+        //   })
+        //   ->orWhere(function($q) {
+        //     $q->where('summary','>', 0);
+        //     // ->whereHas('metas', function ($q2) {
+        //     //   $q2->where('name', '=', 'publish')->where('value', '=', '1');
+        //     // });
+        //   });
+        // });
+
+
       }
 
     }
@@ -476,7 +488,6 @@ class Product extends Model
       $products = $products->get();
     }
     
-
     //After query work
     if("afterQuery" == "afterQuery"){
 
