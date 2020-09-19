@@ -228,7 +228,7 @@ class jugeVuex {
         }
 
         //Stop if last page
-        if(page >= rPages.last_page){
+        if(d.page >= rPages.last_page){
           await commit('mWaterfalling',false);          
           await commit('mDidFetch',true);   
           return;
