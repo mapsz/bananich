@@ -215,7 +215,9 @@ class jugeVuex {
         console.log(params);
         
         //Fetch
+        if(getters.getWaterfallId != d.waterfallId) return;
         let r = await ax.fetch('/juge',params,'get',false);  
+        if(getters.getWaterfallId != d.waterfallId) return;
 
         // Get pages          
         let rPages = JSON.parse(JSON.stringify(r));
