@@ -15,6 +15,7 @@ class jugeVuex {
       pages:false,
       infinite:false,
       waterfall:false,
+      waterfallId:1,
       waterfalling:false,
       filters:{},
       //Keys      
@@ -40,6 +41,7 @@ class jugeVuex {
       isFetched: (state) => {return state.didFetch;},
       isWaterfalling: (state) => {return state.waterfalling;},
       getWaterfall: (state) => {return state.waterfall;},
+      getWaterfallId: (state) => {return state.waterfallId;},
       //Other      
       getErrors: (state) => {return state.errors;},
       getInputs: (state) => {
@@ -108,7 +110,8 @@ class jugeVuex {
 
         //Waterfall
         if(state.waterfall){
-          dispatch('WaterfallFetch',{'waterfallId':state.waterfall,'page':1});
+          commit('mWaterfallId',state.waterfallId + 1)
+          dispatch('WaterfallFetch',{'waterfallId':state.waterfallId,'page':1});
           return;
         }
 
@@ -307,6 +310,7 @@ class jugeVuex {
       mPages: (state,d) => {return state.pages = d;},
       mInfinite: (state,d) => {return state.infinite = d;},
       mWaterfall: (state,d) => {return state.waterfall = d;},
+      mWaterfallId: (state,d) => {return state.waterfallId = d;},
       mWaterfalling: (state,d) => {return state.waterfalling = d;},
       mErrors: (state,d) => {return state.errors = d;},
       mDidFetch: (state,d) => {return state.didFetch = d;},
