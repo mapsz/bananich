@@ -8,10 +8,10 @@
     <h2 v-if="id" class="text-center my-3">{{product.name}} <a :href="'/product/'+id">{{id}} <span style="font-size:12pt">(просмотр)</span></a></h2>
     
     <div class="row">
-      <div class="col-8">   
+      <div class="col-12 col-lg-8">   
         <juge-form :inputs="inputs" :errors="errors" @submit="submit"></juge-form>
       </div>
-      <div class="col-4" v-if="id">
+      <div class="col-12 col-lg-4" v-if="id">
         <!-- Published -->
         <product-published class="mb-3 border p-2" />
         <!-- In stock -->

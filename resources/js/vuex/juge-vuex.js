@@ -64,13 +64,19 @@ class jugeVuex {
     this.actions = {
       //SINGLE
       async fetchOne({state,commit},id = false){  
+
+        
         if(id){
           commit('mId',id);
         }else{
           id = state.id;
         }
         
-        let r = await ax.fetch('/juge',{model:modelName,id});  
+        let params = JSON.parse(JSON.stringify(state.filters));
+        params.model = modelName;    
+        params.id = id;    
+        
+        let r = await ax.fetch('/juge',params);  
         commit('mRow',r);
       },      
       async fetchInputs({commit,state}){

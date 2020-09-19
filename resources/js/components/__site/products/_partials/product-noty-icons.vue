@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog-item-icon d-flex">
+  <div class="catalog-item-icon">
     <img v-if="product.no_lactose != undefined" src="/image/no-milk.svg" alt="Без лактозы" data-toggle="tooltip" title="Без лактозы">
     <img v-if="product.no_gluten != undefined" src="/image/no-gluten.svg" alt="Без глютена" data-toggle="tooltip" title="Без глютена">
     <img v-if="product.no_sugar != undefined" src="/image/no-sugar.svg" alt="Без сахара" data-toggle="tooltip" title="Без сахара">
@@ -26,6 +26,7 @@ export default {
     /* justify-content: space-around; */
   }
   .catalog-item-icon img{
-    width:30px;
+    /* width:30px; */
+    display: inline;
   }
 </style>

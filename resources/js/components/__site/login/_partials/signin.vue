@@ -37,9 +37,13 @@
   </ul>
 
   <!-- Buttons -->
-  <div class="modal-sad-form-btn">
+  <div class="modal-sad-form-btn d-flex justify-content-between align-items-baseline">
     <!-- Login -->
     <button @click="singin()" class="btn-yellow btn-enter">Войти</button> 
+    <!-- Remember -->
+    <span>
+      <input v-model="remember" id="remember" type="checkbox">  <label for="remember">запомнить меня</label>     
+    </span>
     <!-- Remind password -->
     <a class="forgot-password" href="/password/reset">Забыли пароль</a>
   </div>
@@ -53,6 +57,7 @@ data(){return{
   email:"",
   password:'',
   csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+  remember:false,
   errors:[],
 }},  
 computed:{
@@ -69,7 +74,8 @@ methods:{
     let data  = {
       '_token':this.csrf,
       'email':this.email,
-      'password':this.password
+      'password':this.password,
+      'remember':this.remember
     };
 
     //Post
