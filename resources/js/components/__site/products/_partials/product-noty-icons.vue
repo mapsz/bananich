@@ -22,11 +22,8 @@ export default {
 </script>
 
 <style scoped>
-  .catalog-item-icon{    
-    /* justify-content: space-around; */
-  }
   .catalog-item-icon img{
-    /* width:30px; */
-    display: inline;
+    width:30px;
+    display: inline-block;
   }
 </style>

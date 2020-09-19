@@ -61,6 +61,12 @@
 
             </div>
 
+
+              <div v-if="isFetched && !isWaterfalling">
+                <product-not-found></product-not-found>
+                
+              </div>            
+
           </div>
         </div>
       </div>

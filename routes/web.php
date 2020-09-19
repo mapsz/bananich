@@ -73,6 +73,9 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Order Limits
   Route::get('/order/available/days', 'OrderController@getAvailableDays');
 
+  //Not found
+  Route::put('/not/found', 'NotFoundController@put'); 
+
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
