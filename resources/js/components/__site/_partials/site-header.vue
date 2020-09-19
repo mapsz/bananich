@@ -77,7 +77,7 @@
     </div>
   </header>  
 
-  <div style="margin-top:150px;"></div>
+  <div style="margin-top:70px;"></div>
 
   <!-- Mobile upper header -->
   <div class="tap-bar">
@@ -234,5 +234,13 @@ export default {
     border-radius: 30px;
     padding: 40px 40px 20px;
     z-index: 100;
+}
+
+@media (max-width: 768px){
+  .header-bar {
+    height: 62px !important;
+    position:fixed !important;
+    top:0;
+  }
 }
 </style>
