@@ -19,8 +19,8 @@
     </div>
 
     <div class="header-bar" v-scroll="handleScroll" 
-      style="width:100%; background-color:white;"
-      :style="position > 55 ? 'position:fixed; top:0; height: 80px;' : ''"
+      style="position:absolute; width:100%; background-color:white;"
+      :style="position > 55 ? 'height: 80px;top:0; position:fixed;' : ''"
     >
       <div class="container header-bar-wrap">
         <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;"></a>
@@ -77,7 +77,7 @@
     </div>
   </header>  
 
-  <div style="margin-top:70px;"></div>
+  <div style="margin-top:120px;"></div>
 
   <!-- Mobile upper header -->
   <div class="tap-bar">
@@ -240,7 +240,7 @@ export default {
   .header-bar {
     height: 62px !important;
     position:fixed !important;
-    top:0;
+    top:0 !important;
   }
 }
 </style>
