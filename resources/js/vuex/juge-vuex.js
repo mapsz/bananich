@@ -208,12 +208,14 @@ class jugeVuex {
         if(getters.getWaterfallId != d.waterfallId) return;
 
         //Set params
+        let params = d.params;
+        params.paginate = 9;
+        params.page = d.page;
 
-        console.log(d.params);
+        console.log(params);
         
         //Fetch
-        if(getters.getWaterfallId != d.waterfallId) return;
-        let r = await ax.fetch('/juge',d.params,'get',false);  
+        let r = await ax.fetch('/juge',params,'get',false);  
 
         // Get pages          
         let rPages = JSON.parse(JSON.stringify(r));
