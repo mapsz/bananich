@@ -85,7 +85,7 @@ export default {
     async addPresentToCart(id){
       let r = await ax.fetch('/present/cart',{id},'put');
 
-      this.getCart();
+      this.fetchCart();
     }
   },
 }
