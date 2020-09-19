@@ -111,7 +111,7 @@ class jugeVuex {
         //Waterfall
         if(state.waterfall){
           commit('mWaterfallId',state.waterfallId + 1)
-          dispatch('WaterfallFetch',{'waterfallId':state.waterfallId,'page':1});
+          dispatch('WaterfallFetch',{'waterfallId':state.waterfallId,'page':1,params});
           return;
         }
 
@@ -205,17 +205,15 @@ class jugeVuex {
 
         await commit('mWaterfalling',true);
         //Stop current waterfall is other active
-        if(getters.getWaterfall != d.waterfallId) return;
+        if(getters.getWaterfallId != d.waterfallId) return;
 
         //Set params
-        let params = getters.getParams;
-        params.paginate = 9;
-        params.page = d.page;
 
-        console.log(params);
+        console.log(d.params);
         
         //Fetch
-        let r = await ax.fetch('/juge',params,'get',false);  
+        if(getters.getWaterfallId != d.waterfallId) return;
+        let r = await ax.fetch('/juge',d.params,'get',false);  
 
         // Get pages          
         let rPages = JSON.parse(JSON.stringify(r));
@@ -240,7 +238,7 @@ class jugeVuex {
         }
 
         //Stop if another waterfall
-        if(getters.getWaterfall != d.waterfallId) return;
+        if(getters.getWaterfallId != d.waterfallId) return;
 
         //Continue
         dispatch('WaterfallFetch', {'waterfallId':d.waterfallId,'page':d.page+1});
