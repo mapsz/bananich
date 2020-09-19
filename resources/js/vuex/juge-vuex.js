@@ -198,7 +198,7 @@ class jugeVuex {
         await commit('mWaterfall',1);
         return;
       },
-      async WaterfallFetch({commit,getters},waterfallId,page=1){
+      async WaterfallFetch({commit,getters,dispatch},waterfallId,page=1){
 
         await commit('mWaterfalling',true);
         //Stop current waterfall is other active
