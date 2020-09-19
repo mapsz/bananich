@@ -210,7 +210,7 @@ class Product extends Model
 
   public static function getWithOptions($request){
 
-
+    $timer = microtime(1);
     DB::enableQueryLog();
     
     //No main image
@@ -552,8 +552,11 @@ class Product extends Model
     }
 
     if(isset($request['test'])){
-      dump(DB::getQueryLog());
-      dd($products);
+      dd(
+        microtime(true) - $timer, 
+        DB::getQueryLog(),
+        $products
+      );
     }
 
     return $products;
