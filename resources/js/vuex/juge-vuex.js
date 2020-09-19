@@ -222,8 +222,10 @@ class jugeVuex {
         let data = r.data;
         //Mutate data
         if(rPages.current_page == 1){
+          console.log('mu');
           await commit('mRows',data);
         }else{
+          console.log('muInf');
           await commit('mRowsInfinite',data);
         }
 
