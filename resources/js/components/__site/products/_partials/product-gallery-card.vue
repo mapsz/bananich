@@ -6,10 +6,10 @@
         class="catalog-item-img" 
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
-        <router-link 
-          :to="$route.fullPath+'/product/'+product.id" 
+        <a
+          :href="'/'.$route.fullPath+'/product/'+product.id" 
           style="position:absolute; width:100%; height:100%"          
-        ></router-link>
+        ></a>
         <!-- Bonus -->
         <span v-if="product.bonus" style="
           background-color: #fbe214;

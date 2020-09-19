@@ -3,7 +3,6 @@
 
     <site-header />
 
-    
     <a name="catalogue"></a>
     <main class="home">
       <div class="container">

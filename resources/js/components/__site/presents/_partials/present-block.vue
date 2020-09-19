@@ -2,7 +2,7 @@
   <div class="d-flex">    
 
     <!-- Image -->
-    <div class="cart-bonuse-ico">
+    <div class="cart-bonuse-ico" style="align-self: center;">
       <a href="/presents"><img src="image/icons/gift.svg" alt="Present"></a>
     </div>
 
@@ -25,7 +25,7 @@
     <div v-if="product" class="checkout-info-text">      
       <!-- Product -->
       <div class="d-flex align-items-center">
-        <img :src="product.mainImage" alt="" style="width:50px">
+        <img :src="product.mainImage" alt="" style="width:50px; border-radius: 7px; margin: 0px 5px;">
         <span>{{product.name}}</span>
       </div>
       <!-- Stimulate -->

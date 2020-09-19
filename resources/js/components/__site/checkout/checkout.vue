@@ -61,6 +61,9 @@ export default {
   computed:{
     ...mapGetters({cart:'cart/getCart',checkout:'checkout/get'}),
   },
+  mounted(){
+    fbq('track', 'InitiateCheckout');
+  },
   methods:{    
     ...mapActions({'clean':'checkout/clean'}),
     async doOrder(){
