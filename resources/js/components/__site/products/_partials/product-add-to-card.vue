@@ -19,6 +19,7 @@ export default {
   watch: {
     cart: {
       handler: function (val, oldVal) {
+        if(this.item.count == undefined) return;
         this.count = this.item.count;
       },
       deep: true
