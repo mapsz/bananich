@@ -6,8 +6,7 @@
         class="catalog-item-img" 
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
-        <a
-        
+        <a        
           :href="$route.path + ($route.path == '/' ? '':'/') + 'product/' + product.id" 
           style="position:absolute; width:100%; height:100%"          
         ></a>
