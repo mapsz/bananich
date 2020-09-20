@@ -109,6 +109,9 @@ export default {
     ...mapGetters({
       cart:'cart/getCart',
     }), 
+    path: function(){
+      return this.$route.path;
+    },
   },
   mounted(){ 
     //
