@@ -7,7 +7,7 @@
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
         <a
-          :href="$route.fullPath+($route.fullPath == '/'? '':'/')+'product/'+product.id" 
+          :href="$route.path + ($route.path == '/' ? '':'/') + 'product/' + product.id" 
           style="position:absolute; width:100%; height:100%"          
         ></a>
         <!-- Bonus -->
