@@ -45,9 +45,13 @@ export default {
         caption:"Gruzka",
       },
       {
-        link: this.adminPrefix+"/containers",
-        caption:"Контейнеры",
+        link: this.adminPrefix+"/pages",
+        caption:"Страницы",
       },
+      // {
+      //   link: this.adminPrefix+"/containers",
+      //   caption:"Контейнеры",
+      // },
       {
         link: this.adminPrefix+"/products",
         caption:"Продукты",

@@ -218,7 +218,7 @@ class jugeVuex {
         params.paginate = 9;
         params.page = d.page;
 
-        console.log(params);
+        // console.log(params);
         
         //Fetch
         if(getters.getWaterfallId != d.waterfallId) return;
@@ -233,10 +233,10 @@ class jugeVuex {
         let data = r.data;
         //Mutate data
         if(rPages.current_page == 1){
-          console.log('mu');
+          // console.log('mu');
           await commit('mRows',data);
         }else{
-          console.log('muInf');
+          // console.log('muInf');
           await commit('mRowsInfinite',data);
         }
 

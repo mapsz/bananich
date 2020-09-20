@@ -23,12 +23,14 @@ let bonus = new jugeVuex('bonus');
 let sms = new jugeVuex('sms');
 let interview = new jugeVuex('interview');
 let category = new jugeVuex('category');
+let page = new jugeVuex('page');
+let menus = new jugeVuex('menus');
 // let user = new jugeVuex('user');
 
 let store = {  
   modules:{
     order,delivery,confirm,report,product,item,supplier,stocktaking,
-    purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,settings,category,orderLimits
+    purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,settings,category,orderLimits,page,menus
   }
 };
 

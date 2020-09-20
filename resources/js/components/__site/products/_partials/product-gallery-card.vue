@@ -7,7 +7,7 @@
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
         <a
-          :href="'/'+$route.fullPath+'/product/'+product.id" 
+          :href="$route.fullPath+($route.fullPath == '/'? '':'/')+'product/'+product.id" 
           style="position:absolute; width:100%; height:100%"          
         ></a>
         <!-- Bonus -->
@@ -87,14 +87,7 @@
           <span v-else>{{Number(product.price)}}р</span>
         </template>
         <!-- To Cart -->
-        <template>
-          <div v-if="getItem(product.id)" class="to-cart-number">
-            <button @click="toCart(product.id, getItem(product.id).count-1)" class="back">-</button>
-            <input class="number" :value="getItem(product.id).count" type="text">
-            <button @click="toCart(product.id, getItem(product.id).count+1)" class="next">+</button>
-          </div>
-          <button v-else @click="toCart(product.id)" class="to-cart"><img src="/image/cart.svg" alt="В корзину"></button>
-        </template>
+        <product-add-to-card :product='product'/>
       </div>
     </div>
   </div>  
@@ -103,7 +96,15 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  data(){return{
+    count:0,
+  }},
   props: ['product'],
+  watch: {
+    count: function(){
+      this.count = this.getItem(id);
+    },
+  },
   computed:{
     ...mapGetters({
       cart:'cart/getCart',
@@ -116,14 +117,6 @@ export default {
     ...mapActions({
       'editItem':'cart/editItem',
     }),
-    toCart(id,count = 1){
-      this.editItem({id,count});
-    },
-    getItem(id){
-      if(this.cart == undefined) return false;
-      if(this.cart.items == undefined) return false;
-      return this.cart.items.find(x => x.product_id == id);
-    },
   },
 }
 </script>

@@ -129,6 +129,22 @@ let routes = [];
     {path: adminPrefix+'/orders/limits',           component:orderLimit},
   );
 
+  //Pages
+  import pages from './components/pages/pages.vue';
+  import pageAdd from './components/pages/_partials/page-add.vue';
+  routes.push(
+    {path: adminPrefix+'/pages',           component:pages},
+    {path: adminPrefix+'/page/add',           component:pageAdd},
+  );  
+
+  //Menus
+  import menu from './components/pages/pages.vue';
+  import menuAdd from './components/pages/_partials/page-add.vue';
+  routes.push(
+    {path: adminPrefix+'/menus',           component:menu},
+    {path: adminPrefix+'/menu/add',           component:menuAdd},
+  );
+
   //Sms
   import sms from './components/sms/sms.vue';
   routes.push(

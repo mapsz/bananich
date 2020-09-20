@@ -26,7 +26,6 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Order
   Route::put('/order/put', 'OrderController@put');
 
-
   //Cart
   Route::get('/json/cart', 'CartController@get');
   Route::post('/cart/edit/item', 'CartController@editItem');
@@ -68,7 +67,6 @@ Route::group(['middleware' => 'under-construction'], function () {
 
   //Settings
   Route::get('/json/settings', 'SettingController@get'); 
-
 
   //Order Limits
   Route::get('/order/available/days', 'OrderController@getAvailableDays');
@@ -204,6 +202,9 @@ Route::group(['middleware' => 'under-construction'], function () {
 
   //Site
   Route::group(['middleware' => []], function (){
+
+    //Menus\Pages
+    Route::put('/page', 'PageController@put');
 
     //Favorites
     Route::put('/favorite', 'FavoriteController@put');

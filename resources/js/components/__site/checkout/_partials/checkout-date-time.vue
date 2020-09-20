@@ -8,7 +8,7 @@
       />
     </div>
     <!-- Delivery Time -->
-    <div class="col-lg-6">
+    <div v-if="day" class="col-lg-6">
       <div class="checkout-title">Время доставки</div>      
       <checkout-input v-model="time" :name="'deliveryTime'" :type="'radio'" 
         :list="times" 
@@ -48,6 +48,7 @@ export default {
       if(!this.day) return false;
 
       let day = this.availableDays.find(x => x.date == this.day);
+      if(!day) return false;
       
       let times =[];
       $.each(day.times , ( k, v ) => {

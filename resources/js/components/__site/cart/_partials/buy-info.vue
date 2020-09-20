@@ -12,6 +12,11 @@
       <div  class="cart-info-name">Доставка</div>
       <div class="cart-info-sum">{{cart.shipping}} р</div>
     </li>
+    <!-- Bonus -->
+    <li v-if="cart.bonus > 0" class="cart-info-item">
+      <div  class="cart-info-name">Бонусы</div>
+      <div class="cart-info-sum">{{cart.bonus-(cart.bonus*2)}} р</div>
+    </li>
     <!-- <li class="cart-info-item">
       <div class="cart-info-name">Списанные бонусы</div>
       <div class="cart-info-sum">-230 Б</div>

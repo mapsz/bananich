@@ -69,13 +69,19 @@
 
                     <!-- To Cart -->
                     <template>
-                      <div v-if="getItem(product.id)" class="cart-counter product-counter mr-sm-4 mr-0">
+                      <!-- <div v-if="getItem(product.id)" class="cart-counter product-counter mr-sm-4 mr-0">
                         <button @click="toCart(product.id, getItem(product.id).count-1)" class="back">-</button>
                         <input class="number" :value="getItem(product.id).count" type="text">
                         <button @click="toCart(product.id, getItem(product.id).count+1)" class="next">+</button>
                       </div>
-                      <button v-else @click="toCart(product.id)" class="btn-yellow btn-thick btn-product mr-4">В корзину</button>
+                      <button v-else @click="toCart(product.id)" class="btn-yellow btn-thick btn-product mr-4">В корзину</button> -->
+                      <product-add-to-card :product='product'/>
                     </template>
+
+                    <!-- Left -->
+                    <span v-if="this.product.available <= 5 && this.product.always_publish == undefined">
+                      {{this.product.available}} ед. на складе
+                    </span>
       
                     <!-- Favorites -->
                     <button class="to-favorite">

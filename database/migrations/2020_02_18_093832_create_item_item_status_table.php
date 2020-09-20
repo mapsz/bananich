@@ -14,7 +14,7 @@ class CreateItemItemStatusTable extends Migration
     public function up()
     {
         Schema::create('item_item_status', function (Blueprint $table) {
-            $table->bigIncrements('id');            
+            $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('item_id')->unsigned();
             $table->bigInteger('item_status_id')->unsigned();

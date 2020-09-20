@@ -3,14 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth; 
 use App\Product;
 use App\ProductDiscount;
 use App\Setting;
+use App\Bonus;
 
 class Checkout extends Model
 {
   public static function addToCart($cart){
 
+    
+    //Get bonuses
+    $user = Auth::user();
+    $bonus = 0;
+    if($user){
+      $bonus = Bonus::left($user->id);
+    }
+      
     // Products ids
     $productIds = [];
     foreach ($cart->items as $key => $item) {      
@@ -50,14 +60,20 @@ class Checkout extends Model
         $cart->pre_price += $item->final_price;
       }
 
+      //Bonus
+      $cart->bonus = $bonus;
+
       //Shipping
       if($cart->pre_price < Setting::where('name','free_shipping')->first()->value)
         $cart->shipping = Setting::where('name','shipping_price')->first()->value;
       else
-      $cart->shipping = 0;
+        $cart->shipping = 0;
       
+      
+      //Final summ
       $cart->final_summ = $cart->pre_price;
       $cart->final_summ += $cart->shipping;
+      $cart->final_summ -= $bonus;
     }
 
     return $cart;
