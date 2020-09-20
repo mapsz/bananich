@@ -36,7 +36,10 @@ export default {
     }
   },
   mounted(){
-    this.count = this.item.count;
+    if(this.item.count != undefined){
+      this.count = this.item.count;
+    }
+    
     $(function () {
       $('[data-toggle="out-of-stock"]').popover()
     })
