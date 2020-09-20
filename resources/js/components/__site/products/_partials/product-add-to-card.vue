@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted(){
-    if(this.item.count != undefined){
+    if(this.item != undefined && this.item.count != undefined){
       this.count = this.item.count;
     }
     
