@@ -14,7 +14,6 @@
         'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '2544110289145504'); 
         fbq('track', 'PageView');
-        fbq('track', 'InitiateCheckout');
         </script>
         <noscript>
         <img height="1" width="1" 
