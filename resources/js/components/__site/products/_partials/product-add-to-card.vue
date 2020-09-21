@@ -54,7 +54,6 @@ export default {
       console.log(this.count > this.product.available);
 
       // 
-
       if(parseInt(this.count) > parseInt(this.product.available) && this.product.always_publish == undefined){
         $('#cart-input-'+this.product.id).popover({content:'К сожалению на складе осталось всего '+this.product.available+' единиц этого товара'})
         $('#cart-input-'+this.product.id).popover('show');
@@ -63,8 +62,11 @@ export default {
         this.count = this.product.available;
         return;
       }
-      // console.log(this.product.available);
+
       this.editItem({id:this.product.id,'count':this.count});
+
+      //Pixel
+      fbq('track', 'AddToCart');
     },
   },
 }

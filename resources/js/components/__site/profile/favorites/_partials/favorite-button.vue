@@ -48,7 +48,9 @@ export default {
       if(this.exists){
         this.remove(this.productId);
       }else{
-        this.put(this.productId);
+        this.put(this.productId);        
+        //Pixel
+        fbq('track', 'AddToWishlist');
       }      
     }
   },
