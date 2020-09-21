@@ -13,7 +13,10 @@
         <button class="btn-success btn">Добавить</button>
       </router-link>
 
-      <button @click="noImage()" class="btn-secondary btn">Без главного фото</button>
+      <div>
+        <button @click="noImage()" class="btn-secondary btn">Без главного фото</button>
+        <button @click="noDescription()" class="btn-secondary btn">Без описание</button>
+      </div>
     </div>
 
     <!-- Filter -->
@@ -34,7 +37,12 @@ export default {
   },
   methods:{
     noImage(){
+      this.$store.dispatch('product/clearFilters');      
       this.$store.dispatch('product/addFilter',{no_main_image:1});      
+    },
+    noDescription(){
+      this.$store.dispatch('product/clearFilters');      
+      this.$store.dispatch('product/addFilter',{no_description:1});      
     }
   },
 }

@@ -33,13 +33,13 @@
     <div class="catalog-item-text">
       <!-- Name -->
       <div class="catalog-item-title">
-        <router-link :to="$route.fullPath+'/product/'+product.id">
+        <a :href="$route.path + ($route.path == '/' ? '':'/') + 'product/' + product.id" >
           {{
             product.name + 
             (product.сountry ? ', '+product.сountry:'') + 
             (product.unit_view ? ', '+product.unit_view:'')
           }}
-        </router-link>
+        </a>
       </div>
       <!-- БЖУ -->
       <div class="catalog-item-cal">

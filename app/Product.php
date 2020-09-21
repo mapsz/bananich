@@ -20,6 +20,7 @@ class Product extends Model
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/product/{id}'],
     ['key'    => 'name','label' => 'Название'],    
+    ['key'    => 'available','label' => 'Доступно'],    
     ['key'    => 'price','label' => 'Цена'],
     ['key'    => 'unit_view','label' => 'Единица'],
     ['key'    => 'unit','label' => 'Единица (сис)'],
@@ -281,6 +282,11 @@ class Product extends Model
       //Id
       if(isset($request['id'])){
         $products = $products->where('id', $request['id']);
+      }
+
+      //No description
+      if(isset($request['no_description'])){
+        $products = $products->doesntHave('description');
       }
 
       //Ids
