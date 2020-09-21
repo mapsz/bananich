@@ -17,6 +17,9 @@ export default {
   data(){return{
     //
   }},
+  computed:{
+    ...mapGetters({inputs:'menu/getInputs',errors:'menu/getErrors'}),    
+  },
   mounted(){
     this.fetchInputs();
   },

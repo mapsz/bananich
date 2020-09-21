@@ -77,6 +77,13 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
+    
+    //Menus\Pages
+    Route::put('/page', 'PageController@put');
+    Route::post('/page', 'PageController@post');
+    Route::post('/page/menu/attach', 'PageController@attach');
+    Route::put('/menu', 'MenuController@put');
+
     //Coupons
     Route::post('/coupon', 'CouponController@post');
     Route::put('/coupon', 'CouponController@put');
@@ -208,8 +215,6 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Site
   Route::group(['middleware' => []], function (){
 
-    //Menus\Pages
-    Route::put('/page', 'PageController@put');
 
     //Favorites
     Route::put('/favorite', 'FavoriteController@put');

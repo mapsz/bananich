@@ -7,7 +7,7 @@
       <!-- Title -->
       <h1>Меню</h1>
 
-      <!-- <menu-add></menu-add> -->
+      <menu-add></menu-add>
 
       <!-- List -->
       <juge-list :data="'menu'"></juge-list>

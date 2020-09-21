@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
-{  public $timestamps=false;
+{  
+  public $timestamps=false;
+  public $guarded=[];
 
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/menu/{id}'],
@@ -20,6 +22,7 @@ class Menu extends Model
     [
       'name' => 'sort',
       'caption' => 'Сортировка',
+      'type' => 'number',
     ],  
   ];
 
@@ -30,7 +33,7 @@ class Menu extends Model
   public function jugeGetInputs()   {return $this->inputs;}    
   public function jugeGetKeys()     {return $this->keys;} 
   public function jugeGet($request) {
-    return Page::get();
+    return Menu::with('pages')->get();
   }    
 
   public function types()
@@ -38,8 +41,8 @@ class Menu extends Model
     return $this->belongsToMany('App\MenuType');
   }
   
-  public function page()
+  public function pages()
   {
-    return $this->hasOne('App\Page');
+    return $this->hasMany('App\Page');
   }
 }

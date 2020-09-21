@@ -8,7 +8,8 @@ class Page extends Model
 {
 
   public $timestamps=false;
-
+  public $guarded=[];
+  
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/page/{id}'],
     ['key'    => 'link','label' => 'Ссылка'],
@@ -30,6 +31,11 @@ class Page extends Model
   public function jugeGetInputs()   {return $this->inputs;}    
   public function jugeGetKeys()     {return $this->keys;} 
   public function jugeGet($request) {
+
+    if(isset($request['id'])){
+      return Page::find($request['id']);
+    }
+
     return Page::get();
   }
 

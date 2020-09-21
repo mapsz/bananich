@@ -8,6 +8,14 @@ use App\Page;
 
 class PageController extends Controller
 {
+  public function post(Request $request){
+    $data = $request->all();
+    $id = $data['id'];
+    unset($data['id']);
+    return response()->json(    
+      Page::where('id', $id)->update($data)
+    );
+  }
   public function put(Request $request){
 
     //Validate
@@ -23,5 +31,11 @@ class PageController extends Controller
 
     return response()->json(1);
 
+  }
+  public function attach(Request $request){
+    return response()->json(
+      Page::where('id', $request->pageId)->update(['menu_id' => $request->menuId])
+    );
+    
   }
 }

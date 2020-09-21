@@ -1,10 +1,5 @@
 let routes = [];
 
-// import testtest from './components/testtest.vue';
-// routes.push(
-//   {path: '/testtest',    component:testtest},
-// );
-
 //__site
 
   //Catalogue 
@@ -136,11 +131,13 @@ let routes = [];
   );
 
   //Pages
+  import page from './components/pages/page.vue';
   import pages from './components/pages/pages.vue';
   import pageAdd from './components/pages/_partials/page-add.vue';
   routes.push(
     {path: adminPrefix+'/pages',           component:pages},
     {path: adminPrefix+'/page/add',           component:pageAdd},
+    {path: adminPrefix+'/page/:id',           component:page},
   );  
 
   //Menus

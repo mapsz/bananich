@@ -83,7 +83,7 @@ export default {
       }
 
       if(r > 0){
-        // Piexel
+        // Pixel
         fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
         this.clean();        
         location.href ='/order-thanks';
