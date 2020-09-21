@@ -21,7 +21,7 @@
               <!-- products -->
 
               <div v-for='(product,i) in products' :key='i' class="col-lg-3 col-md-4 col-6">
-                <div class="gifts-item" :class="presentSettings['present_'+product.type] > cart.final_summ ? 'hide' : ''">
+                <div class="gifts-item" :class="presentSettings['present_'+product.type] > cart.pre_price ? 'hide' : ''">
                   <div class="gifts-item-box">
                   <div class="gifts-item-img" :style="'background-image: url('+product.product.mainImage+');'"></div>
                   <div class="gifts-item-text">
@@ -35,12 +35,12 @@
                       (cart.presents.findIndex(x => x.product_id == product.product_id) > -1 ? 'active ' : '') +
                       ('color-'+product.type)
                     "
-                    :disabled="presentSettings['present_'+product.type] > cart.final_summ ? 'disabled' : false"
+                    :disabled="presentSettings['present_'+product.type] > cart.pre_price ? 'disabled' : false"
                   >
                     {{
                       cart.presents.findIndex(x => x.product_id == product.product_id) > -1 ? 
                       ('Подарок в корзине') :
-                      (presentSettings['present_'+product.type] > cart.final_summ ? 'При заказе от ' + presentSettings['present_'+product.type] : 'Получить')
+                      (presentSettings['present_'+product.type] > cart.pre_price ? 'При заказе от ' + presentSettings['present_'+product.type] : 'Получить')
                     }}
                   </button>
 

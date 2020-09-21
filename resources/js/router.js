@@ -2,6 +2,12 @@ let routes = [];
 
 //__site
 
+  //Page
+  import sitePage from './components/__site/pages/page.vue';
+  routes.push(
+    {path: '/page',    component:sitePage},
+  );
+
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';
   routes.push(
