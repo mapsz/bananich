@@ -84,6 +84,10 @@ export default {
         link: this.adminPrefix+"/settings",
         caption:"Настройки",
       },
+      {
+        link: this.adminPrefix+"/coupons",
+        caption:"Купоны",
+      },
     ];
 
     this.auth();

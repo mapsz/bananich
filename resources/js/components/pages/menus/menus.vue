@@ -5,12 +5,12 @@
  
     <div class="container-fluid">
       <!-- Title -->
-      <h1>Страницы</h1>
+      <h1>Меню</h1>
 
       <!-- <menu-add></menu-add> -->
 
       <!-- List -->
-      <!-- <juge-list :data="'menus'"></juge-list> -->
+      <juge-list :data="'menu'"></juge-list>
       
     </div>
 

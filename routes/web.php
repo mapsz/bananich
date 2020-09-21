@@ -77,6 +77,11 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
+    //Coupons
+    Route::post('/coupon', 'CouponController@post');
+    Route::put('/coupon', 'CouponController@put');
+    // Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
+
     //Order Limits
     Route::get('/orders/calendar', 'OrderController@getCalendarOrders');
     Route::get('/order/limit/settings', 'OrderController@getLimitSettings');

@@ -1,5 +1,5 @@
 <template>
-<div class="category-add">
+<div class="add">
   <h3 class="d-inline-block">Добавить меню</h3>
 
 
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style scoped>
-  .category-add {
+  .add {
       background-color: #e4f9e4;
       padding: 20px;
       border: 1px solid green;

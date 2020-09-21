@@ -92,7 +92,7 @@ let routes = [];
 //ADMIN
   let adminPrefix = '/admin';
 
-  ///categories
+  //categories
   import categories from './components/categories/categories.vue';
   import category   from './components/categories/category.vue';
   routes.push(
@@ -101,7 +101,13 @@ let routes = [];
   );
 
 
-  ///settings
+  //coupons
+  import coupons from './components/coupons/coupons.vue';
+  routes.push(
+    {path: adminPrefix+'/coupons',    component:coupons},
+  );
+
+  //settings
   import settings from './components/settings/settings.vue';
   routes.push(
     {path: adminPrefix+'/settings',    component:settings},
@@ -138,11 +144,11 @@ let routes = [];
   );  
 
   //Menus
-  import menu from './components/pages/pages.vue';
+  import menu from './components/pages/menus/menus.vue';
   import menuAdd from './components/pages/_partials/page-add.vue';
   routes.push(
     {path: adminPrefix+'/menus',           component:menu},
-    {path: adminPrefix+'/menu/add',           component:menuAdd},
+    {path: adminPrefix+'/menu/add',        component:menuAdd},
   );
 
   //Sms
