@@ -21,29 +21,12 @@
 
           <div class="col-lg-8">
             <div v-if="cart.items != undefined && cart.items.length == 0">Корзина пуста!</div>
+
             <div v-if="cart.items != undefined && cart.items.length > 0" class="content">
-              <form action="">
-
-                <div v-for='(item,i) in cart.items' :key='i' class="cart-item">                  
-                  <div>
-                    <div class="cart-name"><a :href="'/product/'+item.product_id" style="color:black">{{item.name}}</a></div>
-                    <span class="cart-weight">{{item.unit_digit * item.count}} {{item.unit_name}}</span>
-                  </div>
-                  
-                  <div class="cart-counter">
-                    <button @click="editItem({id:item.product_id, count:item.count-1})" class="back">-</button>
-                    <input class="number" :value="item.count" type="text">
-                    <button @click="editItem({id:item.product_id, count:item.count+1})" class="next">+</button>
-                  </div>
-                  
-                  <div class="cart-price">{{item.final_price}}</div>
-                  <div class="cart-points">+{{Math.round(item.final_price / 10)}}Б</div>
-                  <div @click="removeItem(item.product_id)" class="cart-remove"></div>
-                </div>
-
-              </form>
+              <cart-items />
               <button @click="cartReset()" class="url">Удалить все</button> 
             </div>
+
           </div>
           <div class="col-lg-4">
             <!-- Sitebar -->
@@ -117,6 +100,28 @@ export default {
       return this.settings.free_shipping;     
     }
   },
+  watch: {
+    cart: {
+      handler: async function (val, oldVal) {
+        if(this.cart.items == undefined) return;
+
+        let ids = [];
+
+        $.each(this.cart.items, ( k, v ) => {
+          ids.push(v.product_id);
+        });
+
+        if(ids.length == 0) console.log(555);;
+
+        this.addFilter({ids});
+        this.getProducts();
+        this.clearFilters();
+
+        return;
+      },
+      deep: true
+    }
+  },
   mounted(){
     // this.getSettings();
   },
@@ -126,6 +131,9 @@ export default {
       'cartReset':'cart/cartReset',
       'removeItem':'cart/removeItem',
       'getSettings':'settings/fetch',
+      'getProducts':'product/fetchData',
+      'addFilter':'product/addFilter',
+      'clearFilters':'product/clearFilters',
     }),  
     getItem(id){
       return this.cart.items.find(x => x.product_id == id);

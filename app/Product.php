@@ -291,7 +291,7 @@ class Product extends Model
 
       //Ids
       if(isset($request['ids']) && is_array($request['ids'])){
-        $products = $products->wherein('id',$request['ids']);
+        $products = $products->whereIn('id',$request['ids']);
       }
 
       //Search

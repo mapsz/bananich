@@ -33,7 +33,7 @@
             <div class="product-info">
 
               <!-- Name -->
-              <h1 class="title-page m-0 mb-sm-4">
+              <h1 class="title-page my-4">
                 {{
                   product.name + 
                   (product.сountry ? ', '+product.сountry:'') + 
@@ -43,40 +43,24 @@
               <!-- Icons -->
               <product-noty-icons :product="product" />            
 
-              <!-- Ves -->
-              <div class="product-weight">{{product.unit_view}}</div>
-
-              <!-- Charts -->
-              <div class="row"> 
-                <product-charts />
-              </div>
-
               <!-- Price Cart Favorites -->
               <div class="row"> 
                 
                 <div class="col-md-12 order-1 order-md-2">
-                  <!-- Price -->
-                  <div class="d-flex align-items-center mb-4">                    
-                    <template>
-                      <span v-if="product.discount" class="product-price">
-                        {{Number(product.discount.discount_price)}}р <span class="product-old-price">-{{Number(product.price)}}р</span>                        
-                      </span>
-                      <span v-else class="product-price">{{Number(product.price)}}р</span>
-                    </template>
-                  </div>
+                  <div class="d-flex justify-content-between">
 
-                  <div class="d-flex align-items-sm-center align-items-start justify-content-sm-between justify-content-between">
+                    <!-- Price -->
+                    <div class="d-flex align-items-center">                    
+                      <template>
+                        <span v-if="product.discount" class="product-price">
+                          {{Number(product.discount.discount_price)}}р <span class="product-old-price">-{{Number(product.price)}}р</span>                        
+                        </span>
+                        <span v-else class="product-price">{{Number(product.price)}}р</span>
+                      </template>
+                    </div>
 
                     <!-- To Cart -->
-                    <template>
-                      <!-- <div v-if="getItem(product.id)" class="cart-counter product-counter mr-sm-4 mr-0">
-                        <button @click="toCart(product.id, getItem(product.id).count-1)" class="back">-</button>
-                        <input class="number" :value="getItem(product.id).count" type="text">
-                        <button @click="toCart(product.id, getItem(product.id).count+1)" class="next">+</button>
-                      </div>
-                      <button v-else @click="toCart(product.id)" class="btn-yellow btn-thick btn-product mr-4">В корзину</button> -->
-                      <product-add-to-card :product='product'/>
-                    </template>
+                    <product-add-to-cart class="to-cart-block" :product='product'/>
 
                     <!-- Left -->
                     <span v-if="this.product.available <= 5 && this.product.always_publish == undefined">
@@ -84,12 +68,20 @@
                     </span>
       
                     <!-- Favorites -->
-                    <button class="to-favorite">
+                    <button >
                       <favorite-button :product-id="product.id"/>
                     </button>
+
                   </div>
                 </div>
               </div> 
+
+              <!-- Charts -->
+              <div class="row"> 
+                <product-charts />
+              </div>
+
+
 
               <!-- More info -->
               <div class="product-text mt-5">
@@ -114,88 +106,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <h2 class="product-title mb-4">С этим товаром покупают:</h2>
-        <span style="color: orange;">todo</span> -->
-         <!-- @@@ todo -->
-        <!-- <div class="row">
-
-          <div class="col-lg col-md-4 col-6">
-            <div class="product-item">
-              <a href="#!"><div class="product-item-img" style="background-image: url(image/picture.jpg);"></div></a>
-              <div class="product-item-text">
-                <div class="product-item-title">
-                  <a href="#!">Яблоки сезонные</a>
-                </div>
-                <div class="product-item-cart">
-                    <span>100р</span>
-                    <button class="to-cart"><img src="image/cart.svg" alt="В корзину"></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg col-md-4 col-6">
-            <div class="product-item">
-              <a href="#!"><div class="product-item-img" style="background-image: url(image/picture.jpg);"></div></a>
-              <div class="product-item-text">
-                <div class="product-item-title">
-                  <a href="#!">Яблоки сезонные</a>
-                </div>
-                <div class="product-item-cart">
-                    <span>100р</span>
-                    <button class="to-cart"><img src="image/cart.svg" alt="В корзину"></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg col-md-4 col-6">
-            <div class="product-item">
-              <a href="#!"><div class="product-item-img" style="background-image: url(image/picture.jpg);"></div></a>
-              <div class="product-item-text">
-                <div class="product-item-title">
-                  <a href="#!">Яблоки сезонные</a>
-                </div>
-                <div class="product-item-cart">
-                    <span>100р</span>
-                    <button class="to-cart"><img src="image/cart.svg" alt="В корзину"></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg col-md-4 col-6">
-            <div class="product-item">
-              <a href="#!"><div class="product-item-img" style="background-image: url(image/picture.jpg);"></div></a>
-              <div class="product-item-text">
-                <div class="product-item-title">
-                  <a href="#!">Яблоки сезонные</a>
-                </div>
-                <div class="product-item-cart">
-                    <span>100р</span>
-                    <button class="to-cart"><img src="image/cart.svg" alt="В корзину"></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg col-md-4 col-6">
-            <div class="product-item">
-              <a href="#!"><div class="product-item-img" style="background-image: url(image/picture.jpg);"></div></a>
-              <div class="product-item-text">
-                <div class="product-item-title">
-                  <a href="#!">Яблоки сезонные</a>
-                </div>
-                <div class="product-item-cart">
-                    <span>100р</span>
-                    <button class="to-cart"><img src="image/cart.svg" alt="В корзину"></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div> -->
       </div>
     </main>
   
@@ -256,5 +166,14 @@ export default {
   .catalog-item-icon img{
     height:30px;
     margin-right: 5px;
+  }
+</style>
+
+<style >
+  .to-cart-block .to-cart-big{
+    display:block !important;
+  }
+  .to-cart-block .to-cart{
+    display:none !important;
   }
 </style>

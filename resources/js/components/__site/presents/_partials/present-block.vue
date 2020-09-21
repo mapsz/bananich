@@ -54,6 +54,8 @@ export default {
   watch: {
     cart: {
       handler: function (val, oldVal) {
+        
+        this.clearFilters();
         this.getProduct();
       },
       deep: true
@@ -68,6 +70,7 @@ export default {
       'fetchCart':'cart/fetch',
       'fetchPresents':'presents/fetch',
       'fetchProduct':'product/fetchOne',
+      'clearFilters':'product/clearFilters',
     }),
     getProduct(){
         if(this.cart.presents != undefined && this.cart.presents[0] != undefined){

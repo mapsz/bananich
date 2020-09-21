@@ -70,6 +70,9 @@ class Cart extends Model
     //Get cart
     $cart = self::getCart();
 
+    //Remove if zero
+    if($count == 0) return self::removeItem($productId);
+
     //Attach
     //Get item
     $item = CartItem::where('cart_id',$cart->id)->where('product_id',$productId)->first();

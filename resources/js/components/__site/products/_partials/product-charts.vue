@@ -1,6 +1,6 @@
 <template>
   <!-- КБЖУ -->
-  <div v-show="product.calories > 0" class="col-md-12 order-2 order-md-1 mt-4 mt-sm-0">                  
+  <div v-show="product.calories > 0" class="col-md-12 order-2 order-md-1 mt-4">                  
     <div class="calories">
       <div style="display: flex; text-align: center;justify-content: center;"><span><b>БЖУ на 100гр продукта</b></span></div>    
       <div class="row">

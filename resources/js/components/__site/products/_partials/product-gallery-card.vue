@@ -87,7 +87,7 @@
           <span v-else>{{Number(product.price)}}р</span>
         </template>
         <!-- To Cart -->
-        <product-add-to-card :product='product'/>
+        <product-add-to-cart :product='product'/>
       </div>
     </div>
   </div>  

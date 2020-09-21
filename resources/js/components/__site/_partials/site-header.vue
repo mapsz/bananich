@@ -41,38 +41,7 @@
         </div>
 
         <!-- Cart -->
-        <div class="cart">
-          <button class="cart-btn">
-            <a href="/cart">
-              <img src="/image/cart.svg" alt="cart">
-              <div class="cart-num">{{cart.items != undefined ? cart.items.length : 0}}</div>
-            </a>
-          </button>
-          <div class="cart-sum"><span>{{cart.pre_price}}</span>р</div>
-          <button 
-            class="cart-arr"
-            :class="cartDrop ? 'active' : ''"
-            @click="cartDrop = !cartDrop"
-          >
-            <img src="/image/cart-arr.svg" alt="cart">
-          </button>
-
-          <!-- Выпадающий список Корзина -->
-          <div class="dropdown-sad cart-list" :style="cartDrop ? '' : 'display: none;' " style="position: absolute;">
-            <div class="dropdown-arr"></div>
-
-            <cart-list></cart-list>
-
-            <div class="filter-line-end">
-              <div class="cart-line-name">Всего:</div>
-              <div class="cart-line-sum">{{cart.final_summ}}р</div>
-            </div>
-
-            <a href="/cart"><button class="to-checkout">Оформить заказ</button></a>
-          </div>
-          <!-- Выпадающий список Корзина -->
-          
-        </div>
+        <cart-header />
       </div>
     </div>
   </header>  
@@ -134,7 +103,7 @@
               </button>
             </a>
             <span>Корзина</span>
-            <div class="cart-num-mobile">{{cart.items != undefined ? cart.items.length : 0}}</div>
+            <div v-if="cart.items != undefined" class="cart-num-mobile">{{cart.pre_price}}</div>
           </div>
         </div>
 
