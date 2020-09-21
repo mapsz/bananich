@@ -94,6 +94,8 @@ import 'cropperjs/dist/cropper.css';
 import Cropper from 'cropperjs';
 window.Cropper = Cropper;
 
+import draggable from 'vuedraggable';
+Vue.component("draggable", draggable);
 
 //Loader
 import Loading from 'vue-loading-overlay';

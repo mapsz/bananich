@@ -20,14 +20,29 @@ class Product extends Model
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/product/{id}'],
     ['key'    => 'name','label' => 'Название'],    
+    ['key'    => 'composition','label' => 'Состав'],    
     ['key'    => 'available','label' => 'Доступно'],    
     ['key'    => 'price','label' => 'Цена'],
     ['key'    => 'unit_view','label' => 'Единица'],
     ['key'    => 'unit','label' => 'Единица (сис)'],
     ['key'    => 'description','label' => 'Описание'],
-    ['key'    => 'from','label' => 'Страна'],
+    ['key'    => 'сountry','label' => 'Страна'],
     ['key'    => 'gruzka_priority','label' => 'Приоретет погрузки'],
     ['key'    => 'strews','label' => 'Сыпучка'],
+
+    ['key'    => 'calories','label' => 'Калории'],
+    ['key'    => 'carbohydrates','label' => 'Углеводы'],
+    ['key'    => 'proteins','label' => 'Белки'],
+    ['key'    => 'fats','label' => 'Жиры'],
+
+    
+    [
+      'key'    => 'categories',
+      'label' => 'Категории',
+      'type' => 'list',
+      'show' => 'name',
+    ],
+    
     ['key'    => 'always_publish','label' => 'всегда опубликован'],
     ['key'    => 'updated_at','label' => 'Обнавлён'],    
     ['key'    => 'created_at','label' => 'Создан'],
