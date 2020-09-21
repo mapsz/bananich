@@ -27,6 +27,7 @@ class Product extends Model
     ['key'    => 'from','label' => 'Страна'],
     ['key'    => 'gruzka_priority','label' => 'Приоретет погрузки'],
     ['key'    => 'strews','label' => 'Сыпучка'],
+    ['key'    => 'always_publish','label' => 'всегда опубликован'],
     ['key'    => 'updated_at','label' => 'Обнавлён'],    
     ['key'    => 'created_at','label' => 'Создан'],
   ];
