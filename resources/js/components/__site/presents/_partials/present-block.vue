@@ -31,9 +31,10 @@
       <!-- Stimulate -->
       <div 
         v-if="cart.final_summ < presentSettings.present_s"
-        class="d-flex align-items-center"
+        class=""
       >
         <span>Закажите еще на {{presentSettings.present_s - cart.final_summ}}р и получите подарок!</span>
+        <a href="/catalogue" class="mt-2 url">Докупить</a>
       </div>
 
     </div>

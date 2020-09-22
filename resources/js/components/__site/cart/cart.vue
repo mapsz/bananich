@@ -59,11 +59,11 @@
                 <a v-else href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
                 
 
-                <div v-if="user && !(settings.min_order > cart.pre_price)" class="cart-message">
+                <div v-if="user && !(settings.min_order > cart.pre_price) && cart.pre_price > 0" class="cart-message">
                   <div class="cart-message-ico">
                     <img src="image/icons/bonus.svg" alt="Bonus">
                   </div>
-                  <div class="cart-message-text">
+                  <div  class="cart-message-text">
                     <span>За этот заказ вы получите {{Math.round(cart.pre_price / 10)}} бонусов! </span> 
                     <div class="cart-message-date">
                       Успейте потратить за 21 день!

@@ -99,7 +99,7 @@
               </button>
             </a>
             <span>Корзина</span>
-            <div v-if="cart.items != undefined" class="cart-num-mobile">{{cart.pre_price}}</div>
+            <div v-if="cart.items != undefined && cart.items.length > 0" class="cart-num-mobile">{{cart.pre_price}}</div>
           </div>
         </div>
 
