@@ -26,7 +26,7 @@
 
     <div class="cart-items">
 
-      <div v-for='(item,i) in cart.items' :key='i' class="item p-3 mb-3" style="position:relative">
+      <div v-for='(item,i) in items' :key='i' class="item p-3 mb-3" style="position:relative">
         
         <span @click="removeItem(item.product_id)" class="item-remove"></span>
         <div class="row">
@@ -35,7 +35,7 @@
             <div class="d-flex">
               <div style="line-height: 1;">          
                 <!-- Name -->
-                <span class="font-weight-bold d-block pr-3">{{item.name}}</span>
+                <span class="font-weight-bold d-block pr-3">{{item.product != undefined ? item.product.name : ''}}</span>
                 <!-- Count -->
                 <span style="color:gray;font-size:11pt;">{{item.count}}</span>
               </div>
@@ -45,11 +45,13 @@
           <div class="col-12  col-lg-5 mt-3 mt-lg-0">
             <div class="d-flex justify-content-between" style="height: 100%;align-items: center;">
               <!-- Add to cart -->
-              <span><button><product-add-to-cart :product="products.find(x => x.id == item.product_id)"/></button></span>
+              <span v-if="!item.present"><button><product-add-to-cart :product="products.find(x => x.id == item.product_id)"/></button></span>
               <!-- Bonus -->
-              <span style="color:gray;font-size:10pt;">+{{Math.round(item.final_price / 10)}}Б</span>
+              <span v-if="!item.present" style="color:gray;font-size:10pt;">{{'+'+Math.round(item.final_price / 10)+'Б'}}</span>
+              <!-- Present -->
+              <div v-else class="cart-bonuse-ico" style="align-self: center;width: 30px;"><a href="/presents"><img src="image/icons/gift.svg" alt="Present"></a></div>
               <!-- Price -->
-              <span class="font-weight-bold pr-lg-3" >{{item.final_price}}р</span>
+              <span class="font-weight-bold pr-lg-3" >{{item.present ? 'Подарок' :item.final_price+'р'}}</span>
             </div>
           </div>
 
@@ -77,6 +79,24 @@ export default {
     }),
     freeShipping: function(){
       return this.settings.free_shipping;     
+    },
+    items: function(){
+      if(this.cart.items == undefined) return [];
+      let items = JSON.parse(JSON.stringify(this.cart.items));
+
+      //Present
+      if(this.cart.presents != undefined && this.cart.presents[0] != undefined){
+        let present = this.cart.presents[0];
+        present['present'] = true;
+        items.push(present);
+      }
+
+      $.each(items, ( k, v ) => {
+        items[k]['product'] = this.products.find(x => x.id == v.product_id);        
+      });
+
+      return items;
+
     }
   },
   methods:{

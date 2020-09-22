@@ -111,7 +111,12 @@ export default {
           ids.push(v.product_id);
         });
 
-        if(ids.length == 0) console.log(555);;
+        //Present
+        if(this.cart.presents != undefined && this.cart.presents[0] != undefined){
+          ids.push(this.cart.presents[0].product_id);
+        }
+
+        if(ids.length == 0) return;
 
         this.addFilter({ids});
         this.getProducts();
