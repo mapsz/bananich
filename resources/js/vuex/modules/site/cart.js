@@ -3,6 +3,7 @@ let cart = {
 
   state: {  
     cart:false,
+    localCart:localStorage.cart,
   },
   getters: {   
     getCart : (state) => {
@@ -13,6 +14,22 @@ let cart = {
     async fetch({commit}){
       let r = await ax.fetch('/json/cart',{},'get',false);
       commit('mCart',r); 
+
+
+      if(localStorage.cart == undefined || localStorage.cart == false || localStorage.cart == 'false'){
+        localStorage.cart = JSON.stringify(r);
+        return;
+      }
+
+      let localCart = JSON.parse(localStorage.cart) 
+
+      if(moment(localCart.updated_at).diff(r.updated_at) > 0 || (r.items.length < 1 && localCart.items.length > 0)){
+        commit('mCart',localCart); 
+      }else{
+        localStorage.cart = JSON.stringify(r);
+      }
+      
+
     },
     async editItem({dispatch},data){
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
@@ -25,6 +42,7 @@ let cart = {
     },    
     async cartReset({dispatch}){
       let r = await ax.fetch('/cart/reset',{},'delete');
+      localStorage.cart = false;
       dispatch('fetch');
     }
   },  
