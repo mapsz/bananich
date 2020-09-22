@@ -2,12 +2,6 @@ let routes = [];
 
 //__site
 
-  //Page
-  import sitePage from './components/__site/pages/page.vue';
-  routes.push(
-    {path: '/page',    component:sitePage},
-  );
-
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';
   routes.push(
@@ -46,7 +40,6 @@ let routes = [];
       ]
     }
   );
-
 
 
   //Order thanks
@@ -267,6 +260,24 @@ let routes = [];
   import stocktaking from './components/report/stocktaking/stocktaking.vue';
   routes.push(
     {path: adminPrefix+'/report/stocktaking',component: stocktaking},
+  );
+
+  //404
+  import site404 from './components/__site/404/v-404.vue';
+  routes.push(
+    {
+      path: '/404', 
+      component: site404
+    },
+  );
+  
+  //Pages
+  import sitePage from './components/__site/pages/page.vue';
+  routes.push(
+    {
+      path: '*', 
+      component: sitePage
+    },
   );
 
 

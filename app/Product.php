@@ -461,27 +461,12 @@ class Product extends Model
                 $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
               });
             })
-            ->orWhere(function($q) {
-              $q->whereHas('metas', function ($q2) {
+            ->orWhere(function($q4) {
+              $q4->whereHas('metas', function ($q2) {
                 $q2->where('name', '=', 'available')->where('value', '>', '0');
               });
             });
           });
-
-        // $products->where(function($q9) {
-        //   $q9->where(function($q) {
-        //     $q->whereHas('metas', function ($q2) {
-        //       $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
-        //     });
-        //   })
-        //   ->orWhere(function($q) {
-        //     $q->where('summary','>', 0);
-        //     // ->whereHas('metas', function ($q2) {
-        //     //   $q2->where('name', '=', 'publish')->where('value', '=', '1');
-        //     // });
-        //   });
-        // });
-
 
       }
 

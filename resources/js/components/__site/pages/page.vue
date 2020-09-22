@@ -2,14 +2,44 @@
   <div>
     <site-header/>
       <div class="container">
-        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=10FaZe1Eb0aQxgOef1c3MH8anpCNiFXA0" width="640" height="480"></iframe>
+        <span v-if="currentPage.text" class="my-3" v-html="currentPage.text"></span>
       </div>
     <site-footer/>
   </div>
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
+  computed:{
+    ...mapGetters({
+      pages:'page/get',
+    }),    
+    currentPage(){
+      if(this.pages == undefined) return false;
+      
+      let curPage = false;
+      $.each(this.pages , ( k, page ) => {
+        console.log('/'+page.link);
+        console.log(this.$route.path);
+        console.log('---');
+        if('/'+page.link == this.$route.path){
+          curPage = page;
+          return;
+        }
+      });
+
+      return curPage;
+    }
+  },
+  async mounted(){   
+    this.fetch();
+  },
+  methods:{
+    ...mapActions({
+      'fetch':'page/fetchData',
+    }),
+  }
 
 }
 </script>
