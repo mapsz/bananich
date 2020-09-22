@@ -1,7 +1,7 @@
 <template>
-<div class="sitebar sitebar-cat">
+<div v-if="!isMobile || (!search && !active)" class="sitebar sitebar-cat">
   <div class="sitebar-title">Разделы</div>
-  <ul v-if="!isMobile || (!search && !active)" class="sitebar-wrap">
+  <ul  class="sitebar-wrap">
     <!-- All -->
     <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
       <a @click.prevent="setActive(0)" class="sitebar-link " href="/">Все</a>
