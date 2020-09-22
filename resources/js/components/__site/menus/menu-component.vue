@@ -8,7 +8,7 @@
     <li v-for='(menu,i) in menus' :key='i' class="m-2">
       <a 
         v-if="menu.pages != undefined && menu.pages[0] != undefined" 
-        :href="menu.pages[0].link" 
+        :href="'/'+menu.pages[0].link" 
         class="nav-link-sad"
         style="font-size:12pt"
       >
@@ -21,7 +21,6 @@
 <script>
 export default {
   props: ['columns','menus'],
-
 }
 </script>
 

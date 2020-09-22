@@ -20,7 +20,7 @@
       <div class="container header-bar-wrap">
 
         <!-- Logo -->
-        <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;"></a>
+        <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;padding:5px"></a>
         
         <!-- Presents -->
         <present-bar :cart="cart" :settings="presentSettings"/>
@@ -55,18 +55,26 @@
 
         <!-- Menu -->
         <div class="col-3">
-          <div class="tap-bar-nav">
-            <button class="navbar-sad-toggler" style="padding: 0px;">
+          <div class="tap-bar-nav" style="position: relative;z-index: 99;">
+            <button @click="menuDrop = !menuDrop" class="navbar-sad-toggler" style="padding: 0px;">
               <span></span><span></span><span></span>
             </button>
             <span>Меню</span>
           </div>
+          <div  v-show="menuDrop" class="mobile-menu">
+            <div class="mobile-only mb-2" style="border-bottom: 1px solid gray;padding: 10px;">
+              <div style="display: flex;justify-content: space-between;">
+                <h4 >Меню</h4>
+                <span @click="menuDrop = false">❌</span>
+              </div>
+            </div>
+            <menu-component :columns="1" :menus="menus"></menu-component>
+          </div>
         </div>
 
         <!-- Profile -->
-        <div class="col-3">
-          <div class="tap-bar-user">
-            <a href="/profile">
+        <div @click="profileDrop = !profileDrop" class="col-3">
+          <div class="tap-bar-user" style="position: relative;z-index: 99;">
               <button class="tap-bar-user-btn">
                 <svg display="none">
                   <symbol id="tap-bar-user" viewBox="0 0 21 22">
@@ -77,8 +85,22 @@
                   <use xlink:href="#tap-bar-user"></use>
                 </svg>
               </button>
-            </a>
-            <span>Профиль</span>
+              <span>Профиль</span>
+          </div>
+
+          <div  v-show="profileDrop" class="mobile-menu">
+            <div class="mobile-only mb-2" style="border-bottom: 1px solid gray;padding: 10px;">
+              <div style="display: flex;justify-content: space-between;">
+                <h4 >Профиль</h4>
+                <span @click="profileDrop = false">❌</span>
+              </div>
+            </div>
+            <ul class="menu-navbarmenu-navbar">
+              <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
+              <li class="m-2"><a href="/profile/favorites" class="nav-link-sad" style="font-size:12pt">Избранное</a> </li>
+              <li class="m-2"><a href="/profile/bonus" class="nav-link-sad" style="font-size:12pt">Бонусы</a> </li>
+              <li class="m-2"><a href="/profile/orders" class="nav-link-sad" style="font-size:12pt">Мои заказы</a> </li>
+            </ul>
           </div>
         </div>
 
@@ -128,7 +150,9 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    menuDrop:false,
     cartDrop:false,
+    profileDrop:false,
     presentSettings:{},
     searchShow:false,
     position:0,
@@ -155,6 +179,7 @@ export default {
     this.handleScroll();
     this.getMenu();
   },
+    
   methods:{
     ...mapActions({
       'getMenu':'menu/fetchData',
@@ -233,5 +258,17 @@ export default {
     position:fixed !important;
     top:0 !important;
   }
+}
+
+.mobile-menu{  
+  position: fixed !important;
+  background-color: white;
+  top: 0px;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  overflow: scroll;
+  box-shadow: none;
+  border-radius: 0px;
 }
 </style>
