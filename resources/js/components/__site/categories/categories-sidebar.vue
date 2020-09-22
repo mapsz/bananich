@@ -68,9 +68,17 @@ methods:{
     'fetch':'category/fetch',
   }),
   changeCategory(category){
+
+    
+    console.log(1111);
+    console.log($);
+
     this.active = category.id;
     this.activeCategoty = category;
     this.$router.push('/category/'+category.id);
+    //To top
+    $('html,body').stop().animate({ scrollTop: $('.content-page').offset().top }, 300);
+
   }
 },
 }

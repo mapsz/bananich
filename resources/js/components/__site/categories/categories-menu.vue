@@ -14,7 +14,7 @@
     >
       <a
         class="sitebar-link"
-        @click.prevent="setActive(category)"
+        @click.prevent="changeCategory(category)"
         :href="'/category/'+category.id"
       >
         <div class="sitebar-text">{{category.name}}</div> 
@@ -89,8 +89,15 @@ export default {
       'fetch':'category/fetch',
       'addFilter':'product/addFilter',
       'fetchProducts':'product/fetchData',
-    }),  
+    }), 
+    changeCategory(category){
+      this.setActive(category);
+
+
+      $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top - 100)}, 300);
+    } 
   },
+
 }
 </script>
 
