@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <!-- Crear -->
+      <!-- Clear -->
       <div v-if="currentFiltersCount" class="my-3" style='
         cursor: pointer;
         color: red;
@@ -35,7 +35,11 @@
       
       <!-- Categories -->
       <div class="dropdown-sad-item filter-dd" :class="dropCategory ? 'active' : ''">
-        <a @click="dropCategory=!dropCategory" class="dropdown-sad-btn">Раздел</a>
+        <a @click="dropCategory=!dropCategory" class="dropdown-sad-btn"
+          :style="(
+              (getCurrentFilters.categories != undefined && categories.length > 0)
+            ) ? 'background-color: #fbe214;' : ''"
+        >Раздел</a>
         <ul class="dropdown-sad-list">
           <li><a 
               href="#" 
@@ -54,8 +58,14 @@
         </ul>
       </div>
 
+      <!-- Price -->
       <div class="dropdown-sad-item filter-dd filter-cell" >
-        <a @click="dropPrice=!dropPrice" href="#!" class="dropdown-sad-btn">Цена</a>
+        <a @click="dropPrice=!dropPrice" href="#!" class="dropdown-sad-btn"
+          :style="(
+              (getCurrentFilters.price_from != undefined && getCurrentFilters.price_from > 0) ||
+              (getCurrentFilters.price_to != undefined && getCurrentFilters.price_to > 0)
+            ) ? 'background-color: #fbe214;' : ''"          
+        >Цена</a>
           <div v-if="dropPrice" class="cell-list">
             <div class="cell-list-wrap">
               <label class="cell-list-input">От <input v-model="filters.price_from" placeholder="0" type="text"> р</label>
@@ -64,18 +74,14 @@
           </div>
       </div>
 
-      <label class="filter-line">
-        <div class="filter-line-left">
-          Товары за бонусы
-        </div>
-        <div class="filter-line-right">
-          <input v-model="filters.bonus" class="checkbox" name="sort" type="checkbox">
-          <div class="checkbox-box"></div>
-        </div>
-      </label>
-      
+      <!-- Ccal -->
       <div class="dropdown-sad-item filter-dd filter-cell" :class="dropCcal ? 'active' : ''">
-        <a @click="dropCcal=!dropCcal" href="#!" class="dropdown-sad-btn">Калорийность</a>
+        <a @click="dropCcal=!dropCcal" href="#!" class="dropdown-sad-btn"
+          :style="(
+              (getCurrentFilters.cal_from != undefined && getCurrentFilters.cal_from > 0) ||
+              (getCurrentFilters.cal_to != undefined && getCurrentFilters.cal_to > 0)
+            ) ? 'background-color: #fbe214;' : ''"        
+        >Калорийность</a>
           <div v-if="dropCcal" class="cell-list">
             <div class="cell-list-text">На 100гр продукта</div>
             <div class="cell-list-wrap">
@@ -85,8 +91,21 @@
           </div>
       </div>
 
-      <div class="dropdown-sad-item filter-dd filter-cell filter-cell-bju" :class="dropBZU ? 'active' : ''">
-        <a @click="dropBZU=!dropBZU" href="#!" class="dropdown-sad-btn">Белки / Жиры / Углеводы</a>
+      <!-- PFC -->
+      <div 
+        class="dropdown-sad-item filter-dd filter-cell filter-cell-bju" 
+        :class="dropBZU ? 'active' : ''"
+      >
+        <a @click="dropBZU=!dropBZU" href="#!" class="dropdown-sad-btn"
+          :style="(
+              (getCurrentFilters.carb_from != undefined && getCurrentFilters.carb_from > 0) ||
+              (getCurrentFilters.carb_to != undefined && getCurrentFilters.carb_to > 0) ||
+              (getCurrentFilters.fat_from != undefined && getCurrentFilters.fat_from > 0) ||
+              (getCurrentFilters.fat_to != undefined && getCurrentFilters.fat_to > 0) ||
+              (getCurrentFilters.prot_from != undefined && getCurrentFilters.prot_from > 0) ||
+              (getCurrentFilters.prot_to != undefined && getCurrentFilters.prot_to > 0)
+            ) ? 'background-color: #fbe214;' : ''"
+        >Белки / Жиры / Углеводы</a>
           <div v-if="dropBZU" class="cell-list">
             <div class="cell-list-wrap">
               <div class="cell-list-title">Белки</div>
@@ -106,6 +125,16 @@
           </div>
       </div>
 
+      <!-- Bonus -->
+      <label class="filter-line">
+        <div class="filter-line-left">
+          Товары за бонусы
+        </div>
+        <div class="filter-line-right">
+          <input v-model="filters.bonus" class="checkbox" name="sort" type="checkbox">
+          <div class="checkbox-box"></div>
+        </div>
+      </label>
       <!-- no_lactose -->
       <label class="filter-line">
         <div class="filter-line-left">
@@ -298,5 +327,14 @@ methods:{
     padding: 0px 5px;
     margin-bottom: 5px;
     border-radius: 10px;    
+  }
+
+  .dropdown-sad-btn{
+    border-radius: 10px;
+    padding: 0 5px;
+  }
+
+  .filter-line{
+    padding-left: 5px;
   }
 </style>
