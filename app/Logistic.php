@@ -1,5 +1,8 @@
 <?php
 
+// Possible Inputs
+// https://doc.maxoptra.com/docs/pages/viewpage.action?pageId=28672408
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +23,8 @@ class Logistic extends Model
     $password = 'vfuk6ZXW';
     $accountId = 'dostavoshka';
 
+    // now()->format('d.m.yy')
+
     $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/authentication/createSession?accountID='.$accountId.'&user='.$login.'&password='.$password);
 
     $sessionID = $response->getBody()->getContents();
@@ -36,7 +41,7 @@ class Logistic extends Model
 
     //
 
-    $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/distribution-api/schedules/getScheduleByAOCOnDate?sessionID='.$sessionID.'&date=16.05.2020&aocID=1748');
+    $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/distribution-api/schedules/getScheduleByAOCOnDate?sessionID='.$sessionID.'&date=22.09.2020&aocID=1748');
 
 
     $ras = $response->getBody()->getContents();

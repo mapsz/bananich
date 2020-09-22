@@ -6,23 +6,20 @@
     <div class="header-nav">
         <div class="container header-nav-wrap-sad">
           <nav class="navbar-sad">
-            <ul class="navbar-sad-nav m-0">
-              <li class="nav-item-sad"><a href="#" class="nav-link-sad">Доставка</a></li>
-              <li class="nav-item-sad"><a href="#" class="nav-link-sad active">О нашей упаковке</a></li>
-              <li class="nav-item-sad"><a href="#" class="nav-link-sad">Условные обозначения</a></li>
-              <li class="nav-item-sad"><a href="#" class="nav-link-sad">Переработка втор. сырья</a></li>
-              <li class="nav-item-sad"><a href="#" class="nav-link-sad">О бонусной  и реферальной системе</a></li>
-            </ul>
+            <menu-component :menus="menus"></menu-component>
           </nav>
           <div class="phone header-phone"><a :href="'tel:'+settings.phone_number">📞{{settings.phone_number}}</a></div>
       </div>
     </div>
 
+    <!-- Header -->
     <div class="header-bar" v-scroll="handleScroll" 
       style="position:absolute; width:100%; background-color:white;"
       :style="position > 55 ? 'height: 80px;top:0; position:fixed;' : ''"
     >
       <div class="container header-bar-wrap">
+
+        <!-- Logo -->
         <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;"></a>
         
         <!-- Presents -->
@@ -31,6 +28,7 @@
         <!-- Product input -->
         <product-input-search />
 
+        <!-- User -->
         <div class="group-icon">
           <bonus-header-button />
           <div class="user">
@@ -57,9 +55,7 @@
         <div class="col-3">
           <div class="tap-bar-nav">
             <button class="navbar-sad-toggler" style="padding: 0px;">
-              <span></span>
-              <span></span>
-              <span></span>
+              <span></span><span></span><span></span>
             </button>
             <span>Меню</span>
           </div>
@@ -131,6 +127,7 @@ export default {
   }},
   computed:{
     ...mapGetters({
+      menus:'menu/get',
       cart:'cart/getCart',
       settings:'settings/beautyGet',
     }),    
@@ -141,9 +138,11 @@ export default {
     this.getSettings();
     this.getOtherSettings();
     this.handleScroll();
+    this.getMenu();
   },
   methods:{
     ...mapActions({
+      'getMenu':'menu/fetchData',
       'getCart':'cart/fetch',
       'getUser':'user/fetch',
       'getOtherSettings':'settings/fetch',
