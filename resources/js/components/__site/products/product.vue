@@ -18,9 +18,8 @@
         <div class="row product">
           <!-- Image -->
           <div class="col-md-6">
-            <img 
-              v-if="product.images != undefined && product.images[0] != undefined"            
-              :src="product.images[0]" 
+            <img    
+              :src="product.productImage" 
               style="    
                 border-radius: 20px;
                 width: 100%;

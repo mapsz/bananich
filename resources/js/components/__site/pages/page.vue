@@ -1,8 +1,8 @@
 <template>
   <div>
     <site-header/>
-      <div class="container">
-        <span v-if="currentPage.text" class="my-3" v-html="currentPage.text"></span>
+      <div class="container my-5">
+        <span v-if="currentPage.text" class="" v-html="currentPage.text"></span>
       </div>
     <site-footer/>
   </div>

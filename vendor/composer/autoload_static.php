@@ -521,6 +521,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\Http\\Controllers\\CheckoutController' => __DIR__ . '/../..' . '/app/Http/Controllers/CheckoutController.php',
         'App\\Http\\Controllers\\ContainerController' => __DIR__ . '/../..' . '/app/Http/Controllers/ContainerController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\CouponController' => __DIR__ . '/../..' . '/app/Http/Controllers/CouponController.php',
         'App\\Http\\Controllers\\DeliveryController' => __DIR__ . '/../..' . '/app/Http/Controllers/DeliveryController.php',
         'App\\Http\\Controllers\\DiscountController' => __DIR__ . '/../..' . '/app/Http/Controllers/DiscountController.php',
         'App\\Http\\Controllers\\ErrorController' => __DIR__ . '/../..' . '/app/Http/Controllers/ErrorController.php',

@@ -46,7 +46,7 @@
     </div>
   </header>  
 
-  <div style="margin-top:120px;"></div>
+  <div style="display: block;  height: 108px;"></div>
 
   <!-- Mobile upper header -->
   <div class="tap-bar">

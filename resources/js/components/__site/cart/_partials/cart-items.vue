@@ -115,6 +115,7 @@ export default {
 
 <style scoped>
 .cart-items .item-remove {  
+  z-index:10;
   position: absolute;
   display: block;
   right: 10px;

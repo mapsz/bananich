@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Goods;
 use App\Item;
+use Intervention\Image\Facades\Image;
 
 class Product extends Model
 {
@@ -506,6 +507,14 @@ class Product extends Model
           $product->images = self::getImages($product->id);
           $product->mainImage = self::getMainImage($product->id);
         }
+
+        if(isset($request['id'])){
+          foreach ($products as $product) {
+            $product->productImage = self::getProductImage($product->id);
+          }
+        }
+
+
       }
 
       //Metas
@@ -605,6 +614,27 @@ class Product extends Model
 
     return $image;
 
+  }
+
+  public static function getProductImage($id){
+
+    $xpath = '/products/images/product';
+    $path = public_path() . $xpath;
+    $files = scandir($path);
+    
+    $image = false;
+    foreach ($files as $file) {
+      if(strpos($file,$id.'.') === 0){
+        $image = $xpath .'/'. $file;
+        break;
+      }
+    }
+
+    if(!$image) $image = self::makeProductImage($id);
+
+    if(!$image) $image = $xpath .'/no-image.png';
+
+    return $image;
   }
 
   public function archiveUpdate(){
@@ -838,6 +868,24 @@ class Product extends Model
     }
 
     return $product->id;
+  }
+
+  public static function makeProductImage($id){
+
+    $images = self::getImages($id);
+    if(count($images) == 0) return false;
+
+    $img = Image::make(public_path() . $images[0]);
+
+    $img->resize(540, null, function ($constraint) {
+      $constraint->aspectRatio();
+    });
+
+    $img->save(public_path() . '/products/images/product/' . $img->basename);
+
+    if(!$img) return false;
+
+    return '/products/images/product/' . $img->basename;
   }
 
   public static function setDiscount($data){

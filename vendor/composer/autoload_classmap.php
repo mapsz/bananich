@@ -43,6 +43,7 @@ return array(
     'App\\Http\\Controllers\\CheckoutController' => $baseDir . '/app/Http/Controllers/CheckoutController.php',
     'App\\Http\\Controllers\\ContainerController' => $baseDir . '/app/Http/Controllers/ContainerController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\CouponController' => $baseDir . '/app/Http/Controllers/CouponController.php',
     'App\\Http\\Controllers\\DeliveryController' => $baseDir . '/app/Http/Controllers/DeliveryController.php',
     'App\\Http\\Controllers\\DiscountController' => $baseDir . '/app/Http/Controllers/DiscountController.php',
     'App\\Http\\Controllers\\ErrorController' => $baseDir . '/app/Http/Controllers/ErrorController.php',
