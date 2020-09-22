@@ -11,7 +11,7 @@
           style="position:absolute; width:100%; height:100%"          
         ></a>
         <!-- Bonus -->
-        <span v-if="product.bonus" style="
+        <span v-if="product.bonus == 1" style="
           background-color: #fbe214;
           color: black;
           padding: 10px;

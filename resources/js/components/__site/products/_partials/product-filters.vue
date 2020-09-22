@@ -86,7 +86,7 @@
             <div class="cell-list-text">На 100гр продукта</div>
             <div class="cell-list-wrap">
               <label class="cell-list-input">От <input v-model="filters.cal_from" placeholder="0" type="text"> ккал</label>
-              <label class="cell-list-input">От <input v-model="filters.cal_to" placeholder="1000" type="text"> ккал</label>
+              <label class="cell-list-input">До <input v-model="filters.cal_to" placeholder="1000" type="text"> ккал</label>
             </div>
           </div>
       </div>
