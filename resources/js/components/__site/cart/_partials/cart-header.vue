@@ -1,5 +1,5 @@
 <template>
-  <div class="cart">
+  <div class="cart" v-click-outside="hide">
     <button class="cart-btn">
       <a href="/cart">
         <img src="/image/cart.svg" alt="cart">
@@ -17,7 +17,7 @@
 
     <!-- Выпадающий список Корзина -->
     <div class="dropdown-sad cart-list" :style="cartDrop ? '' : 'display: none;' " style="position: absolute;">
-      <div class="dropdown-arr"></div>
+      <div class="dropdown-arr" ></div>
 
       <cart-list></cart-list>
 
@@ -44,7 +44,10 @@ export default {
       cart:'cart/getCart',
       settings:'settings/beautyGet',
     }),    
-  },   
+  }, 
+  methods:{    
+    hide(){this.cartDrop=false;},
+  },  
 }
 </script>
 

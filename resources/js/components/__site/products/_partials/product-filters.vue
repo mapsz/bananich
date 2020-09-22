@@ -1,16 +1,16 @@
 <template>
 
-  <div class="filt">
+  <div class="filt" v-click-outside="hide">
     <!-- Button -->
-    <div class="d-flex">
-      <button @click="dropFilter = !dropFilter" class="filter-btn">
+    <div class="d-flex" >
+      <button  @click="dropFilter = !dropFilter" class="filter-btn">
         <img src="/image/filter.svg" alt="Фильтр">
         <span>Фильтры</span>      
       </button>
       <div v-show="currentFiltersCount > 0" class="filter-num">{{currentFiltersCount}}</div>
     </div>
 
-    <form class="dropdown-sad filter-list" style="position: absolute;" :style="dropFilter ? '' : 'display: none;'">
+    <form   class="dropdown-sad filter-list" style="position: absolute;" :style="dropFilter ? '' : 'display: none;'">
 
       <div class="dropdown-sad-arr"></div>
 
@@ -213,6 +213,7 @@ computed:{
 
 }, 
 methods:{
+  hide(){this.dropFilter =false;},
   ...mapActions({
     'addFilter':'product/addFilter',
     'clearFilters':'product/clearFilters',

@@ -1,5 +1,5 @@
 <template>
-  <div class="sort" style="margin-right: 4px;">
+  <div class="sort" style="margin-right: 4px;" v-click-outside="hide">
 
     <button @click="dropSorts = !dropSorts" class="filter-btn">
       <img src="/image/sort.svg" alt="Сортировка">
@@ -60,6 +60,7 @@ export default {
     ],
   }},
   methods:{    
+    hide(){this.dropSorts =false;},
     ...mapActions({
       'addFilter':'product/addFilter',
       'productsFetch':'product/fetchData',
