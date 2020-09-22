@@ -69,9 +69,6 @@ methods:{
   }),
   changeCategory(category){
 
-    
-    console.log(1111);
-    console.log($);
 
     this.active = category.id;
     this.activeCategoty = category;

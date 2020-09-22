@@ -204,6 +204,7 @@ computed:{
     let count = 0;
     for (const [key, value] of Object.entries(this.getCurrentFilters)) {
       if(!(value[0] != undefined && value[0] == 0)){
+        if(key == 'search') return;
         if(value) count++;
       }
     }
