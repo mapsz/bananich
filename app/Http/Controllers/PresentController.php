@@ -42,7 +42,7 @@ class PresentController extends Controller
 
   }
 
-  public function getProduct(){
+  public function getProduct(Request $request){
 
     //Get presents
     $presents = Present::with('product')->orderBy('type')->get();
@@ -55,9 +55,10 @@ class PresentController extends Controller
  
     //Get present products
     $filter = [
-      'ids' => $ids,
+      'ids' => $ids
     ];
-    if(isset($request['get_all'])) array_push($filter['get_all']=1);
+    if(isset($request['get_all'])) $filter['get_all']=1;
+
     $products = Product::getWithOptions($filter);
 
 

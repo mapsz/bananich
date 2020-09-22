@@ -22,13 +22,13 @@
 
               <div v-for='(product,i) in products' :key='i' class="col-lg-3 col-md-4 col-6">
                 <div class="gifts-item" :class="presentSettings['present_'+product.type] > cart.pre_price ? 'hide' : ''">
-                  <div class="gifts-item-box">
-                  <div class="gifts-item-img" :style="'background-image: url('+product.product.mainImage+');'"></div>
-                  <div class="gifts-item-text">
-                    <div class="gifts-item-title">{{product.product.name}}</div>
-                  </div>
-                </div>
-                  <button                   
+                  <a :href="'/product/' + product.product.id " class="gifts-item-box">
+                    <div class="gifts-item-img" :style="'background-image: url('+product.product.mainImage+');'"></div>
+                    <div class="gifts-item-text">
+                      <div class="gifts-item-title">{{product.product.name}}</div>
+                    </div>
+                  </a>
+                  <button
                     @click="addPresentToCart(product.product_id)"
                     class="gifts-item-button"
                     :class="                    
