@@ -1,7 +1,8 @@
 <template>  
-  <form @submit.prevent="doSearch()">
+  <form class="d-flex" @submit.prevent="doSearch()">
     <input v-model="search" class="search-input" type="text" placeholder="Поиск">
-    <button class="search-btn"><img src="/image/search.svg" alt="search"></button>
+    <button class="search-btn-fix" style="margin-left: -30px;"><img src="/image/search.svg" alt="search"></button>
+    <span v-if="searchFilter" @click="search = '';doSearch()" class="ml-3 align-self-center" style="cursor:pointer">❌</span>
   </form>
 </template>
 
@@ -13,6 +14,9 @@ export default {
   }},
   computed:{  
     ...mapGetters({'getCurrentFilters':'product/getFilters',}),
+    searchFilter:function(){
+      return (this.getCurrentFilters.search != undefined && this.getCurrentFilters.search !== "") ?  true : false;
+    }
   },
   watch: {
     getCurrentFilters: {
@@ -22,7 +26,7 @@ export default {
         }
       },
       deep: true
-    }
+    },
   },
   methods:{
     ...mapActions({
@@ -38,6 +42,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .search-btn-fix{
 
+  }
 </style>
