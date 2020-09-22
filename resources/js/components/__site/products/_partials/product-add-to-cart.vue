@@ -50,30 +50,28 @@ export default {
     if(this.item != undefined && this.item.count != undefined){
       this.count = this.item.count;
     }
-    
-    $(function () {
-      $('[data-toggle="out-of-stock"]').popover()
-    })
   },
   methods:{    
     ...mapActions({
       'editItem':'cart/editItem',
     }),
-    toCart(){
-      // 
+    async toCart(){
+      //Chech out of stock
       if(parseInt(this.count) > parseInt(this.product.available) && this.product.always_publish == undefined){
         $('#cart-input-'+this.product.id).popover({content:'К сожалению на складе осталось всего '+this.product.available+' единиц этого товара',placement:'top'})
         $('#cart-input-'+this.product.id).popover('show');
-
-        console.log(this.product.available);
         this.count = this.product.available;
         return;
       }
 
-      this.editItem({id:this.product.id,'count':this.count});
+      //Edit cart
+      let r = await this.editItem({id:this.product.id,'count':this.count});
+
+      // console.log(r);
 
       //Pixel
-      fbq('track', 'AddToCart');
+      if(typeof fbq === 'function')
+        fbq('track', 'AddToCart');
     },
   },
 }

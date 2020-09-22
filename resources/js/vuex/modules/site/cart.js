@@ -11,12 +11,13 @@ let cart = {
   },
   actions:{
     async fetch({commit}){
-      let r = await ax.fetch('/json/cart');
+      let r = await ax.fetch('/json/cart',{},'get',false);
       commit('mCart',r); 
     },
     async editItem({dispatch},data){
-      let r = await ax.fetch('/cart/edit/item',data,'post');
-      dispatch('fetch');
+      let r = await ax.fetch('/cart/edit/item',data,'post',false);
+      dispatch('fetch');      
+      return r;
     },
     async removeItem({dispatch},id){
       let r = await ax.fetch('/cart/remove/item',{id},'delete');
