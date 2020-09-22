@@ -198,14 +198,13 @@ class Product extends Model
 
   public static function updateAvailable($ids){
 
+    $all = $ids;
     if($ids == 'all') $ids = Product::pluck('id')->all();
     if(!is_array($ids))$ids = [$ids];
 
-    // dd($ids);
-
     foreach ($ids as $key => $id) {
       $reserve = floatval (Product::getInReserve($id)['summ']);
-      $summary = floatval (Product::getWithOptions(['id' => $id])['summary']);
+      $summary = floatval (Product::getWithOptions(['id' => $id, 'with_summary' => 1])['summary']);
       $available = $summary - $reserve;
       $meta = ProductMeta::where('product_id', $id)->where('name', 'available')->delete();
 
@@ -214,6 +213,9 @@ class Product extends Model
       $meta->product_id   = $id;
       $meta->value = $available;
       $meta->save();
+
+      if($all == 'all') dump(count($ids) - $key);
+      // dump(11);
 
     }
 

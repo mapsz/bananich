@@ -5,6 +5,7 @@
     <div>
       <h5>Доступно</h5>
       <span>{{parseFloat(product.summary - reserve.summ)}}</span>
+      <span v-if="parseFloat(product.summary - reserve.summ) != parseFloat(product.available)" style="color:red">{{parseFloat(product.available)}}</span>
     </div>
 
     <div>
