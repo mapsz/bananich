@@ -36,7 +36,6 @@
               <h1 class="title-page my-4">
                 {{
                   product.name + 
-                  (product.сountry ? ', '+product.сountry:'') + 
                   (product.unit_view ? ', '+product.unit_view:'')
                 }}
               </h1>
