@@ -1,7 +1,7 @@
 <template>
   <div  class="d-flex justify-content-center mt-4">
     <!-- Button -->
-    <button class="btn-yellow btn-thick"  data-toggle="modal" data-target="#no-found-modal">Здесь нет того что я ищу</button>
+    <button class="btn-yellow btn-thick"  data-toggle="modal" data-target="#no-found-modal">Здесь нет того, что я ищу</button>
 
     <!-- Modal -->
     <div class="modal fade" id="no-found-modal" tabindex="-1" role="dialog" aria-labelledby="no-found-modalLabel" aria-hidden="true">
@@ -14,11 +14,20 @@
             </button>
           </div>
           <div class="modal-body">
+              
+          <div v-if="!thanks">
+            Напишите, что вам хотелось бы видеть на нашем сайте:
             <div class="input-group">
               <textarea v-model="notFound" class="form-control" rows="5" aria-label="With textarea" width="100%"></textarea>
             </div>
           </div>
-          <div class="modal-footer">
+          <div v-else>
+            Спасибо за обратную связь! мы внимательно читаем ваши пожелания и по возможности расширяем ассортимент!
+          </div>
+          
+          
+          </div>
+          <div v-if="!thanks" class="modal-footer">
             <button @click="sendNotFound()" type="button" class="btn btn-primary">Отправить</button>
           </div>
         </div>
@@ -32,12 +41,18 @@
 export default {
 data(){return{
   notFound:'',
+  thanks:false,
 }},
 methods:{
   async sendNotFound(){
-    console.log(this.notFound);
+
+    if (!this.notFound.length > 0)return;
 
     let r = ax.fetch('/not/found',{'comment':this.notFound},'put');
+
+    if(r) this.thanks = true;
+
+
 
   }
 },

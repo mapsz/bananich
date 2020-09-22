@@ -49,7 +49,7 @@
               </div>
 
               <!-- Nothing Found -->
-              <span v-if="products.length < 1 && isFetched && !isWaterfalling"><b>Ничего не найдено</b></span>
+              <span v-if="products.length < 1 && isFetched && !isWaterfalling" class="m-3"><b>Ничего не найдено</b></span>
               <!-- Loading -->
               <div v-if="isWaterfalling || !isFetched" class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
