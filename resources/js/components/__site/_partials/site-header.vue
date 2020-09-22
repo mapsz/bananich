@@ -108,7 +108,7 @@
         <!-- Search -->
         <template>
           <div @click="searchShow=!searchShow" class="col-3">
-            <div class="tap-bar-search">
+            <div class="tap-bar-search" :style="search ? 'background-color: #fbe214;border-radius: 7px;' : ''">
               <button class="tap-bar-search-btn"><img src="/image/search.svg" alt="search" style="margin: auto;"></button>
               <span>Поиск</span>
             </div>
@@ -138,7 +138,14 @@ export default {
       menus:'menu/get',
       cart:'cart/getCart',
       settings:'settings/beautyGet',
+      getCurrentFilters:'product/getFilters'
     }),    
+    search:function(){
+      if(this.getCurrentFilters.search != undefined && this.getCurrentFilters.search !== ""){
+        return true;
+      }
+      return false;
+    }
   },    
   mounted(){    
     this.getUser();
