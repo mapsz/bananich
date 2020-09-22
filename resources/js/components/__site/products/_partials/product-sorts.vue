@@ -1,9 +1,9 @@
 <template>
-  <div class="sort">
+  <div class="sort" style="margin-right: 4px;">
 
     <button @click="dropSorts = !dropSorts" class="filter-btn">
       <img src="/image/sort.svg" alt="Сортировка">
-      <span>По популярности</span>
+      <span>{{sort.caption}}</span>
     </button>
 
     <form  v-show="dropSorts" class="dropdown-sad sort-list" >
@@ -16,23 +16,8 @@
         </div>
       </div>
 
-      <label class="filter-line">
-        По популярности <input v-model="sort" class="checkbox" name="sort" type="radio" value="sortPopular"><div class="checkbox-box"></div>
-      </label>
-      <label class="filter-line">
-        Сначала дешевле <input v-model="sort" class="checkbox" name="sort" type="radio" value="sortCheap"><div class="checkbox-box"></div>
-      </label>
-      <label class="filter-line">
-        Сначала дороже <input v-model="sort" class="checkbox" name="sort" type="radio" value="sortExpensive"><div class="checkbox-box"></div>
-      </label>
-      <label class="filter-line">
-        По величине скидки <input v-model="sort" class="checkbox" name="sort" type="radio" value="sortDiscount"><div class="checkbox-box"></div>
-      </label>
-      <label class="filter-line">
-        По калорийности <input v-model="sort" class="checkbox" name="sort" type="radio" value="sortCcal"><div class="checkbox-box"></div>
-      </label>
-      <label class="filter-line">
-        По категории <input v-model="sort" class="checkbox" name="sort" type="radio" value="sortCategory"><div class="checkbox-box"></div>
+      <label v-for='(sort_,i) in sorts' :key='i' class="filter-line">
+        {{sort_.caption}} <input v-model="sort" class="checkbox" name="sort" type="radio" :value="sort_"><div class="checkbox-box"></div>
       </label>
       <button @click.prevent="doSort()" class="btn-yellow">Смотреть товары</button>
     </form>
@@ -45,7 +30,34 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{    
     dropSorts:false,
-    sort:'sortPopular',
+    sort:
+      {
+        name:'sortPopular',
+        caption:'По популярности',
+      }
+      ,
+    sorts:[
+      {
+        name:'sortPopular',
+        caption:'По популярности',
+      },
+      {
+        name:'sortCheap',
+        caption:'Сначала дешевле',
+      },
+      {
+        name:'sortExpensive',
+        caption:'Сначала дороже',
+      },
+      {
+        name:'sortDiscount',
+        caption:'По величине скидки',
+      },
+      {
+        name:'sortCcal',
+        caption:'По калорийности',
+      },
+    ],
   }},
   methods:{    
     ...mapActions({
@@ -55,7 +67,7 @@ export default {
 
     doSort(){   
       this.dropSorts = false;
-      this.addFilter({sort:this.sort});
+      this.addFilter({sort:this.sort.name});
       this.productsFetch();
     }
   },

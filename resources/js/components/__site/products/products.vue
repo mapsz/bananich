@@ -30,7 +30,7 @@
           <div v-if="active || !isMobile" class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
             
             <div class="title-wrap title-page">
-              <h2 class="title-h2">{{currentCategory.name}}</h2>
+              <h2 class="title-h2">{{active.name}}</h2>
               <!-- Фильтр и сортировка -->
               <div class="filter">            
                 <!-- Sort -->

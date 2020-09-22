@@ -2,12 +2,12 @@
 
   <div class="filt">
     <!-- Button -->
-    <div>
+    <div class="d-flex">
       <button @click="dropFilter = !dropFilter" class="filter-btn">
         <img src="/image/filter.svg" alt="Фильтр">
         <span>Фильтры</span>      
       </button>
-      <div v-if="currentFiltersCount > 0" class="cart-num">{{currentFiltersCount}}</div>
+      <div v-show="currentFiltersCount > 0" class="filter-num">{{currentFiltersCount}}</div>
     </div>
 
     <form class="dropdown-sad filter-list" style="position: absolute;" :style="dropFilter ? '' : 'display: none;'">
@@ -289,8 +289,12 @@ methods:{
     }
   }
 
-  .cart-num { 
-    right: -25px !important;
-    left: inherit !important;
+  .filter-num{
+    font-size: 10pt;
+    margin-left: 3px;
+    background-color: #fbe214;
+    padding: 0px 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;    
   }
 </style>
