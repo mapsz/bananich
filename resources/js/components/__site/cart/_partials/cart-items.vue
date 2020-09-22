@@ -28,7 +28,7 @@
 
       <div v-for='(item,i) in items' :key='i' class="item p-3 mb-3" style="position:relative">
         
-        <span @click="removeItem(item.product_id)" class="item-remove"></span>
+        <span v-if="!item.present" @click="removeItem(item.product_id)" class="item-remove"></span>
         <div class="row">
 
           <div class="col-12 col-lg-7">
