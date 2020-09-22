@@ -1,10 +1,10 @@
 <template>
-  <div class="col-lg-4" :class="active === false ? '' : 'mobile-hide'">            
+  <div class="col-lg-4" >            
     <div class="sitebar sitebar-cat">
       <div class="sitebar-title">Разделы</div>
       <ul class="sitebar-wrap">
         <!-- All -->
-        <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
+        <li class="sitebar-category sitebar-category-all" >
           <a class="sitebar-link " href="/">Все</a>
         </li>
         <!-- Categories -->

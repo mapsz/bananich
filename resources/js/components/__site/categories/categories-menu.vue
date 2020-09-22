@@ -1,7 +1,7 @@
 <template>
 <div class="sitebar sitebar-cat">
   <div class="sitebar-title">Разделы</div>
-  <ul v-if="!active || !isMobile" class="sitebar-wrap">
+  <ul v-if="!isMobile || (!search && !active)" class="sitebar-wrap">
     <!-- All -->
     <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
       <a @click.prevent="setActive(0)" class="sitebar-link " href="/">Все</a>
@@ -65,8 +65,18 @@ export default {
     ...mapGetters({
       categories:'category/get',
       active:'category/getActive',
+      products:'product/get',
+      getCurrentFilters:'product/getFilters'
     }),
     isMobile:function(){return window.screen.width <= 768;},
+    search:function(){
+
+      if(this.getCurrentFilters.search != undefined && this.getCurrentFilters.search !== ""){
+        return true;
+      }      
+
+      return false;
+    }
   },
   async mounted(){
     await this.fetch();

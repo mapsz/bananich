@@ -27,7 +27,7 @@
             <categories-menu v-scroll="handleScroll" />
           </div>
 
-          <div v-if="active || !isMobile" class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
+          <div v-if="!isMobile || isFetched" class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
             
             <div class="title-wrap title-page">
               <h2 class="title-h2">{{active.name}}</h2>
@@ -41,30 +41,26 @@
             </div>
 
             <!-- Product list -->
-            <div v-if="768" class="row">
+            <div class="row">
 
               <!-- Карточка товара -->
               <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 ">
                 <product-gallery-card :product="product" />
               </div>
 
+              <!-- Nothing Found -->
               <span v-if="products.length < 1 && isFetched && !isWaterfalling"><b>Ничего не найдено</b></span>
+              <!-- Loading -->
               <div v-if="isWaterfalling || !isFetched" class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
               </div>
 
-              <!-- <div 
-                v-infinite-scroll="loadMore" 
-                infinite-scroll-distance="10"
-              ></div> -->
-
             </div>
 
-
-              <div v-if="isFetched && !isWaterfalling">
-                <product-not-found></product-not-found>
-                
-              </div>            
+            <!-- Not found -->
+            <div v-if="isFetched && !isWaterfalling">
+              <product-not-found></product-not-found>                
+            </div>            
 
           </div>
         </div>

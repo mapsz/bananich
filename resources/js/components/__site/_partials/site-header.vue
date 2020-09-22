@@ -25,8 +25,10 @@
         <!-- Presents -->
         <present-bar :cart="cart" :settings="presentSettings"/>
         
-        <!-- Product input -->
-        <product-input-search />
+        <!-- Search -->
+        <div class="search">
+          <product-input-search />
+        </div>
 
         <!-- User -->
         <div class="group-icon">
@@ -104,12 +106,17 @@
         </div>
 
         <!-- Search -->
-        <div class="col-3">
-          <div class="tap-bar-search">
-            <button class="tap-bar-search-btn"><img src="/image/search.svg" alt="search" style="margin: auto;"></button>
-            <span>Поиск</span>
+        <template>
+          <div @click="searchShow=!searchShow" class="col-3">
+            <div class="tap-bar-search">
+              <button class="tap-bar-search-btn"><img src="/image/search.svg" alt="search" style="margin: auto;"></button>
+              <span>Поиск</span>
+            </div>
+          </div>        
+          <div v-show="searchShow" class="search-modal">
+            <product-input-search />
           </div>
-        </div>
+        </template>
 
       </div>
     </div>
@@ -123,6 +130,7 @@ export default {
   data(){return{
     cartDrop:false,
     presentSettings:{},
+    searchShow:false,
     position:0,
   }},
   computed:{
@@ -202,6 +210,14 @@ export default {
     border-radius: 30px;
     padding: 40px 40px 20px;
     z-index: 100;
+}
+
+.search-modal{
+  position: absolute;
+  top: -70px;
+  background-color: white;
+  width: 100%;
+  padding: 10px;
 }
 
 @media (max-width: 768px){
