@@ -24,6 +24,8 @@ let cart = {
       let localCart = JSON.parse(localStorage.cart) 
 
       if(moment(localCart.updated_at).diff(r.updated_at) > 0 || (r.items.length < 1 && localCart.items.length > 0)){
+        localCart.session_id = r.session_id;
+        localCart.user_id = r.user_id;
         commit('mCart',localCart); 
       }else{
         localStorage.cart = JSON.stringify(r);
