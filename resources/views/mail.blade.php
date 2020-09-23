@@ -1,7 +1,3 @@
-<template>
-<div>
-  <div style="position: relative;  height: 50px;"></div>
-  
     <!-- Mail -->
     <div style="position: relative;width:100%;margin: auto">
       
@@ -38,6 +34,7 @@
       
       <!-- Content -->
       <div class="content" style="
+        box-sizing: border-box;
         width: 600px;
         margin: auto;
         border: 1px #fbd610 solid;
@@ -66,6 +63,7 @@
 
       <!-- Footer -->
       <div class="footer" style="
+        box-sizing: border-box;
         width: 600px;
         margin: auto;
         border: 1px #fbd610 solid;
@@ -120,28 +118,3 @@
       </div>
 
     </div>
-    
-      404
-    <!-- <site-footer/> -->
-</div>
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style scoped>
-
-
-
-.header-image{
-  width: 160px;
-  height: 160px;
-
-  background: url('http://bananich.ru/mail/banana.png');
-  background-repeat: round;
-}
-
-</style>

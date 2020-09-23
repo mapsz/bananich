@@ -9,7 +9,17 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+// */
+
+// Route::get('/mail', function(){
+
+//   Mail::send('mail', ['name' => 'dataname'], function($m){
+//     $m->to('mapss@inbox.lv','to');
+//     $m->from('no-reply@bananich.ru');
+//   });
+
+//   return view('mail');
+// });
 
 
 Route::group(['middleware' => 'under-construction'], function () {
