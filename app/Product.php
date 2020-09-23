@@ -241,8 +241,11 @@ class Product extends Model
       $request['ids'] = $ids;
     }
 
-    //Pre settings
-    isset($request['short_query']) ? $request['short_query'] = true : $request['short_query'] = false;
+    if(isset($request['catalogue'])){
+      $request['no_long_metas'] = 1;
+      $request['no_description'] = 1;
+      $request['no_images'] = 1;
+    }
       
     //New Product
     $products = new Product();
@@ -273,23 +276,27 @@ class Product extends Model
       }
 
       //Metas
-      if(!$request['short_query'] || isset($request['with_metas'])){
+      if(!isset($request['no_metas'])){
         $products = $products->with('metas');
-        $products = $products->with('longMetas');
       }      
-      
+
+      //Long Metas
+      if(!isset($request['no_long_metas'])){
+        $products = $products->with('longMetas');
+      }
+
       //Description
-      if(!$request['short_query'] || isset($request['with_description'])){
+      if(!isset($request['no_description'])){
         $products = $products->with('description');
       }
 
       //Discounts
-      if(!$request['short_query'] || isset($request['with_final_price'])){
+      if(!isset($request['no_final_price'])){
         $products = $products->with('discounts');
       }
       
       //Categories
-      if(!$request['short_query'] || isset($request['categories'])){
+      if(!isset($request['no_categories'])){
         $products = $products->with('categories');
       }
       
@@ -303,7 +310,7 @@ class Product extends Model
       }
 
       //No description
-      if(isset($request['no_description'])){
+      if(isset($request['doesnt_have_description'])){
         $products = $products->doesntHave('description');
       }
 
@@ -454,21 +461,19 @@ class Product extends Model
 
       //Available
       if(!isset($request['get_all']) && !isset($request['id'])){
-
         $products = $products
           ->where(function($q0) {
             $q0->where(function($q) {
-              $q->whereHas('metas', function ($q2) {
-                $q2->where('name', '=', 'always_publish')->where('value', '=', '1');
+              $q->whereIn('id', function ($query) {
+                  $query->select('product_id')->from('product_metas')->where('name', '=', 'always_publish')->where('value', '=', '1');
               });
             })
-            ->orWhere(function($q4) {
-              $q4->whereHas('metas', function ($q2) {
-                $q2->where('name', '=', 'available')->where('value', '>', '0');
+            ->orWhere(function($q4) {              
+              $q4->whereIn('id', function ($query) {
+                $query->select('product_id')->from('product_metas')->where('name', '=', 'available')->where('value', '>', '0');
               });
             });
           });
-
       }
 
     }
@@ -502,23 +507,27 @@ class Product extends Model
     if("afterQuery" == "afterQuery"){
 
       //Images
-      if(!$request['short_query'] || isset($request['with_images'])){
+      if(!isset($request['no_images'])){
         foreach ($products as $product) {
-          $product->images = self::getImages($product->id);
-          $product->mainImage = self::getMainImage($product->id);
+          $product->images = self::getImages($product->id);          
         }
-
-        if(isset($request['id'])){
-          foreach ($products as $product) {
-            $product->productImage = self::getProductImage($product->id);
-          }
-        }
-
-
       }
 
+      //Main_Images
+      foreach ($products as $product) {
+        $product->mainImage = self::getMainImage($product->id);    
+      } 
+      
+      //Product_Images
+      if(isset($request['id'])){
+        foreach ($products as $product) {
+          $product->productImage = self::getProductImage($product->id);
+        }
+      }
+
+
       //Metas
-      if(!$request['short_query'] || isset($request['with_metas'])){        
+      if(!isset($request['no_metas'])){        
         foreach ($products as $product) {
           //Metas
           foreach ($product['metas'] as $meta) {
@@ -541,7 +550,7 @@ class Product extends Model
       }
 
       //Final price
-      if(!$request['short_query'] || isset($request['with_final_price'])){
+      if(!isset($request['no_final_price'])){
         foreach ($products as $product) {
           $product->final_price = $product->price;
           //Discount exist
