@@ -39,6 +39,7 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Cart
   Route::get('/json/cart', 'CartController@get');
   Route::post('/cart/edit/item', 'CartController@editItem');
+  Route::post('/cart/session', 'CartController@changeSession');
   Route::delete('/cart/remove/item', 'CartController@removeItem'); 
   Route::delete('/cart/reset', 'CartController@resetItems');
 

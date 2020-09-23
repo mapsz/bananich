@@ -18,6 +18,22 @@ class CartController extends Controller
 
   }
 
+  public function changeSession(Request $request){
+
+    $currentCart = Cart::getCart();
+    $neededCart = Cart::where('id', $request->id)->where('session_id', $request->session_id)->where('user_id', $request->user_id)->first();
+
+    if(!$neededCart->exists) return response()->json(false);
+
+    $neededCart->session_id = $currentCart->session_id;
+    $neededCart->user_id = $currentCart->user_id;
+
+    $currentCart->delete();
+
+    return response()->json($neededCart->save() ? Cart::getCart() : false);    
+
+  }
+
   public function editItem(Request $request){
 
     //Validate
@@ -27,9 +43,10 @@ class CartController extends Controller
     ])->validate();
 
     //Edit cart
-    Cart::editItem($request->id,$request->count);
+    $cart = Cart::editItem($request->id,$request->count);
 
-    return response()->json(1);
+    //Return
+    return response()->json($cart ? $cart : false);
 
   }
 
@@ -40,10 +57,10 @@ class CartController extends Controller
     ])->validate();
 
     //Remove
-    Cart::removeItem($request->id);
+    $cart = Cart::removeItem($request->id);
 
     //Return
-    return response()->json(1);
+    return response()->json($cart ? $cart : false);
 
   }
 

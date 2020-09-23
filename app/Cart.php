@@ -88,9 +88,9 @@ class Cart extends Model
     $item->count = $count;
 
     //Save
-    $item->save();
+    if(!$item->save()) return false;
 
-    return $item;
+    return $cart;
   }
 
   public static function removeItem($productId){
@@ -99,9 +99,9 @@ class Cart extends Model
     $cart = self::getCart();
 
     //Remove item
-    $item = CartItem::where('cart_id',$cart->id)->where('product_id',$productId)->delete();
+    if(!CartItem::where('cart_id',$cart->id)->where('product_id',$productId)->delete()) return false;
 
-    return $item;
+    return $cart;
   }
 
   public static function resetItems(){
