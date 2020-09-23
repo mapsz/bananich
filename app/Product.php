@@ -331,8 +331,8 @@ class Product extends Model
       //Category
       if(isset($request['category']) && $request['category'] > 0){
         $categoryId = $request['category'];
-        $products = $products->whereHas('categories', function ($q)use($categoryId) {
-          $q->where('categoty_id', '=', $categoryId);
+        $products = $products->whereIn('id', function ($query)use($categoryId) {
+          $query->select('product_id')->from('products_categories')->where('categoty_id', '=', $categoryId);
         });
       }  
       
@@ -465,7 +465,7 @@ class Product extends Model
           ->where(function($q0) {
             $q0->where(function($q) {
               $q->whereIn('id', function ($query) {
-                  $query->select('product_id')->from('product_metas')->where('name', '=', 'always_publish')->where('value', '=', '1');
+                $query->select('product_id')->from('product_metas')->where('name', '=', 'always_publish')->where('value', '=', '1');
               });
             })
             ->orWhere(function($q4) {              
