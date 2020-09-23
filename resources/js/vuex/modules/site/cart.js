@@ -69,11 +69,31 @@ let cart = {
       
 
     },
-    async editItem({commit},data){
+    async editItem({commit,state},data){
+      data.cart_id = state.cart.id;
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
-      localStorage.cart = JSON.stringify(r);
-      commit('mCart',r); 
-      return r;
+      if(r){
+
+        //Find cart
+        let cart = JSON.parse(JSON.stringify(state.cart));
+        let index = cart.items.findIndex(x => x.product_id == data.id);
+
+        //Fetch if error
+        if(index == -1){
+          dispatch('fetch');
+          return;
+        }
+
+        //Set new count
+        cart.items[index].count = data.count;
+
+        //Commit
+        localStorage.cart = JSON.stringify(r);
+        commit('mCart',cart); 
+
+        return true;
+      }
+      return false;
     },
     async removeItem({commit},id){
       let r = await ax.fetch('/cart/remove/item',{id},'delete');

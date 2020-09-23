@@ -65,22 +65,19 @@ class Cart extends Model
   
   }
 
-  public static function editItem($productId,$count){
-
-    //Get cart
-    $cart = self::getCart();
+  public static function editItem($productId,$count,$cart_id){
 
     //Remove if zero
     if($count == 0) return self::removeItem($productId);
 
     //Attach
     //Get item
-    $item = CartItem::where('cart_id',$cart->id)->where('product_id',$productId)->first();
+    $item = CartItem::where('cart_id',$cart_id)->where('product_id',$productId)->first();
 
     //Create item if not exist
     if(!$item){
       $item = new CartItem;
-      $item->cart_id = $cart->id;
+      $item->cart_id = $cart_id;
       $item->product_id = $productId;
     }
 
@@ -90,7 +87,7 @@ class Cart extends Model
     //Save
     if(!$item->save()) return false;
 
-    return $cart;
+    return true;
   }
 
   public static function removeItem($productId){

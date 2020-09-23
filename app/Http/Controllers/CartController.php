@@ -39,11 +39,12 @@ class CartController extends Controller
     //Validate
     Validator::make($request->all(), [
       'id'  => 'required|exists:products',
-      'count' => 'required|numeric|max:1000'
+      'count' => 'required|numeric|max:1000',
+      'cart_id' => 'required|numeric|max:1000',
     ])->validate();
 
     //Edit cart
-    $cart = Cart::editItem($request->id,$request->count);
+    $cart = Cart::editItem($request->id,$request->count,$request->cart_id);
 
     //Return
     return response()->json($cart ? $cart : false);
