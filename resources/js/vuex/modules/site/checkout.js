@@ -34,7 +34,7 @@ let checkout = {
       commit('mCheckout',checkout); 
     },
     async clean({commit}){
-      localStorage.checkout = {}
+      localStorage.removeItem('checkout');
       //Mutate
       commit('mCheckout',{}); 
     }

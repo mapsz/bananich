@@ -11,7 +11,7 @@ let cart = {
     },
   },
   actions:{
-    async fetch({commit}){
+    async fetch({commit,dispatch}){
       let r = await ax.fetch('/json/cart',{},'get',false);
       commit('mCart',r); 
 
@@ -27,6 +27,10 @@ let cart = {
         localCart.session_id = r.session_id;
         localCart.user_id = r.user_id;
         commit('mCart',localCart); 
+        //Add items
+        $.each( localCart.items, ( k, v ) => {
+          dispatch('editItem',v);
+        });
       }else{
         localStorage.cart = JSON.stringify(r);
       }
@@ -35,11 +39,13 @@ let cart = {
     },
     async editItem({dispatch},data){
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
-      dispatch('fetch');      
+      localStorage.cart = JSON.stringify(r);
+      dispatch('fetch');
       return r;
     },
     async removeItem({dispatch},id){
       let r = await ax.fetch('/cart/remove/item',{id},'delete');
+      localStorage.cart = JSON.stringify(r);
       dispatch('fetch');
     },    
     async cartReset({dispatch}){

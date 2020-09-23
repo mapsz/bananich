@@ -34,6 +34,7 @@ export default {
       'productsFetch':'product/fetchData',
     }),
     async doSearch(){
+      if(this.$route.path != '/') this.$router.push('/');      
       await this.addFilter({'category':false});
       await this.addFilter({'search':this.search});
       await this.productsFetch();

@@ -49,7 +49,9 @@ export default {
     //Set type
     if(this.type) this.fType = this.type;
     //Value
-    if(this.checkout[this.name]) this.value = this.checkout[this.name];
+    if(this.checkout[this.name]){
+      this.value = this.checkout[this.name];
+    } 
     else this.value = null;
 
     
