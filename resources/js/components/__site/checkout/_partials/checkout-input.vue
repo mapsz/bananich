@@ -11,8 +11,14 @@
     </div>
   </div>
 
-  
-  <input v-else-if="fType == 'checkbox'" v-model="value" class="custom-checkbox" type="checkbox" id="gift" :name="inputName" >
+  <!-- Chechbox -->
+  <input v-else-if="fType == 'checkbox'" 
+    v-model="value" 
+    class="custom-checkbox" 
+    type="checkbox" 
+    :id="name" 
+    :name="inputName" 
+  >
 
   <!-- Simple -->
   <input v-else v-model="value" class="form-input" :placeholder="fPlaceholder" :type="fType" :name="inputName">
@@ -23,7 +29,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   model: {event: 'blur'},
-  props: ['name', 'placeholder', 'type', 'list'],
+  props: ['name', 'placeholder', 'type', 'list', 'checked'],
   data(){return{
     value:'',
     fType:'text',
@@ -45,6 +51,9 @@ export default {
     //Value
     if(this.checkout[this.name]) this.value = this.checkout[this.name];
     else this.value = null;
+
+    
+    this.value = (this.checked != undefined && this.checked) ? true : false;
 
   },
   methods:{    

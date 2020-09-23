@@ -1,11 +1,11 @@
 <template> 
 <div class="col-lg-5">
   <div class="checkout-checkout">
-    <delivery-block></delivery-block>
-
     <!-- Sitebar -->
       <div v-scroll="handleScroll" class="cart-sitebar" style="margin-bottom:20px">
         <buy-info />
+        <!-- Aggrees -->
+        <checkout-agreements />
         <!-- Errors -->
         <ul>
           <template v-for='error in errors'>

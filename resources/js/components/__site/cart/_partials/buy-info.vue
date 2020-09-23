@@ -8,6 +8,7 @@
       <div class="cart-info-name">Товары ({{cart.items != undefined ? cart.items.length : 0}} шт)</div>
       <div class="cart-info-sum">{{cart.pre_price}} р</div>
     </li>
+    <!-- Shipping -->
     <li v-if="cart.shipping > 0" class="cart-info-item">
       <div  class="cart-info-name">Доставка</div>
       <div class="cart-info-sum">{{cart.shipping}} р</div>

@@ -3,7 +3,6 @@
   <div class="col-12">
     <div class="checkout-title">Ваши данные</div>
     <div>
-
       <!-- Pre data -->
       <template>
         <div class="form-group"> 

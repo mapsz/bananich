@@ -85,8 +85,8 @@ export default {
       if(r > 0){
         // Pixel
         fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
-        this.clean();        
-        location.href ='/order-thanks';
+        this.clean();
+        // location.href ='/order-thanks';
       }
         
 

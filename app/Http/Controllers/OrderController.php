@@ -39,7 +39,6 @@ class OrderController extends Controller
   }
 
   public function put(Request $request){
-
     
     //Get data
     $data = $request->all();
@@ -52,7 +51,6 @@ class OrderController extends Controller
     $cartValidate = [
       'items'           => ['bail','min:1'],
       'final_summ'      => ['bail','required','numeric','max:200000', 'min:'.$settings['min_order']],
-      // 'items.*.count'   => ['max:100'],
 
     ];
     $cartMessages = [
@@ -65,9 +63,11 @@ class OrderController extends Controller
 
     //Validate
     $validate = [
-      'name'      => ['required', 'string', 'max:190'],
-      'email'     => ['required', 'string', 'email', 'max:190'],
-      'phone'     => ['required', 'regex:/^8(\d){10}?$/', ],
+      'aggreOffer'         => ['required','accepted'],
+      'aggrePersonal'      => ['required','accepted'],
+      'name'                => ['required', 'string', 'max:190'],
+      'email'               => ['required', 'string', 'email', 'max:190'],
+      'phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
       'addressApart'      => ['max:20' ],
       'addressNumber'     => ['max:20' ],
       'addressPorch'       => ['max:20' ],
@@ -86,6 +86,8 @@ class OrderController extends Controller
       $validate['toOtherComment'] = ['string', 'max:1000'];
     }     
     $messages = [
+      'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
+      'aggrePersonal.accepted'      => 'Необходимо согласие на обработку персональных данных',
       'toOtherComment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
       'toOtherPhone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
       'toOtherPhone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
