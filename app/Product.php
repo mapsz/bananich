@@ -338,9 +338,9 @@ class Product extends Model
       
       //Categories
       if(isset($request['categories']) && is_array($request['categories']) && isset($request['categories'][0]) && $request['categories'][0] > 0){
-        $categories = $request['categories'];
-        $products = $products->whereHas('categories', function ($q)use($categories) {
-          $q->wherein('categoty_id', $categories);
+        $categories = $request['categories'];        
+        $products = $products->whereIn('id', function ($query)use($categories) {
+          $query->select('product_id')->from('products_categories')->whereIn('categoty_id', $categories);
         });
       }          
 
