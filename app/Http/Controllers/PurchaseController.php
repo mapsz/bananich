@@ -60,6 +60,9 @@ class PurchaseController extends Controller
       $purchase->date = $data['date'];
       $purchase->comment = isset($data['comment']) ? $data['comment'] : "";
       $purchase->save();      
+
+      //Update Available
+      Product::updateAvailable($data['product_id']);
       
       //Store to DB
       DB::commit();    
@@ -176,7 +179,10 @@ class PurchaseController extends Controller
       $purchase->price = $data['price'];
       $purchase->date = Carbon::now();
       $purchase->comment = "Смена цены";
-      $purchase->save();      
+      $purchase->save();   
+      
+      //Update Available
+      Product::updateAvailable($data['product_id']);   
       
       //Store to DB
       DB::commit();    

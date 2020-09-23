@@ -49,20 +49,26 @@
               </div>
 
               <!-- Nothing Found -->
-              <span v-if="products.length < 1 && isFetched && !isWaterfalling" class="m-3"><b>Ничего не найдено</b></span>
-              <!-- Loading -->
-              <div v-if="isWaterfalling || !isFetched" class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
+              <span v-if="products.length < 1 && isFetched && !isWaterfalling" class="m-3" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;"><b>Ничего не найдено</b></span>
 
             </div>
-
-            <!-- Not found -->
-            <div v-if="isFetched && !isWaterfalling">
-              <product-not-found></product-not-found>                
-            </div>            
+            
+        
 
           </div>
+
+          <!-- Loading -->
+          <div v-if="isWaterfalling || !isFetched" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <!-- Not found -->
+          <div v-if="isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;">
+            <product-not-found></product-not-found>                
+          </div>     
+
+
         </div>
       </div>
     </main>

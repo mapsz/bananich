@@ -54,7 +54,10 @@ class WriteoffController extends Controller
           $writeoff->user_id = $data['user_id'];
           $writeoff->date = $data['date'];
           $writeoff->comment = isset($data['comment']) ? $data['comment'] : "";
-          $writeoff->save();      
+          $writeoff->save();   
+          
+          //Update Available
+          Product::updateAvailable($data['product_id']);   
           
           //Store to DB
           DB::commit();    
