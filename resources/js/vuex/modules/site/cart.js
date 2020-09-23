@@ -69,7 +69,7 @@ let cart = {
       
 
     },
-    async editItem({commit,state},data){
+    async editItem({commit,state,dispatch},data){
       data.cart_id = state.cart.id;
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
       if(r){
@@ -90,6 +90,7 @@ let cart = {
         //Commit
         localStorage.cart = JSON.stringify(r);
         commit('mCart',cart); 
+        dispatch('fetch');
 
         return true;
       }
