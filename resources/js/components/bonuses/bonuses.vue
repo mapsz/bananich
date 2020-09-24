@@ -16,6 +16,9 @@
 
 <script>
 export default {
+  mounted(){    
+    this.$store.dispatch('bonus/addFilter',{all_users:1});
+  },
 }
 </script>
 

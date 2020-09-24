@@ -1,16 +1,10 @@
 <template>
 <div>
   <gruzka-navbar></gruzka-navbar>
-  <div class="container-fluid">
-    <!-- Add -->
-    <router-link :to="'/user/add'">
-      <button class="btn btn-success">Добавить пользователя</button>
-    </router-link>
-   
-
+  <div class="container-fluid">  
 
     <!-- List -->
-    <user-list />
+    <juge-list :data="'user'"></juge-list>
 
   </div>
 

@@ -2,38 +2,51 @@
 <div class="container-fluid">
 
 
-    
-  <!-- Actions -->
-  <div class="my-3">
-    <!-- Add -->
-    <div class="purchases-add">
-      <button v-if="!add" @click="add=true" class="btn btn-success">Добавить</button>
-      <div v-if="add">
-        <div class="add-bonus-container mb-3">
-          <h3 class="d-inline-block">Добавить</h3>
-          <!-- Close -->
-          <button @click="add=false" class="btn btn-danger" style="float: right;">X</button>
-        </div>
-      </div>
-    </div>
-  </div>  
-
-
-
-
   <!-- Form -->
-  <!-- <div v-if="product && suppliers.length > 0" class="add-suppliers-form">
+  <div >
+    <h5>Добавить</h5>
     <juge-form :inputs="inputs" :errors="errors" @submit="put"></juge-form>
-  </div> -->
+  </div>
+
+
 
 </div>
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
   add:false,
+  errors:false
 }},
+  computed:{
+    ...mapGetters({inputs:'bonus/getInputs'}),    
+  },
+  mounted(){
+    this.fetchInputs();
+  },
+  methods:{ 
+    ...mapActions({
+      'fetchInputs':'bonus/fetchInputs',
+    }),
+    async put(data){
+      this.errors = false;
+
+      let r = await ax.fetch('/bonus/add',data,'put');
+
+      //Catch errors
+      if(!r){      
+        if(ax.lastResponse.status == 422){
+          this.errors = ax.lastResponse.data.errors;
+          return;
+        }
+      }
+
+
+      if(r) location.reload();
+    }
+  }
 }
 </script>
 

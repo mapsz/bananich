@@ -10,6 +10,17 @@ use App\BonusAdd;
 class BonusController extends Controller
 {
   public function add(Request $request){
-    //
+    
+    //Validate
+    Validator::make($request->all(), [
+      'id'        => ['required', 'numeric', 'exists:users'],
+      'count'     => ['required', 'numeric', 'min:1'],
+      'dieDays'   => ['numeric', 'min:1'],
+    ])->validate();
+
+    $comment = isset($request->comment) ? $request->comment : null;
+    $dieDays = isset($request->dieDays) ? $request->dieDays : false;    
+
+    return response()->json(Bonus::add($request->id, $request->count, 1, null, $comment, $dieDays));
   }
 }

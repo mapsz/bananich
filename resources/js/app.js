@@ -28,7 +28,7 @@ window.load = new load;
 
 //Moment
 import moment from 'moment';
-Vue.use(moment)
+window.moment = moment;
 
 //Toasted
 window.terror= function(){console.log('error xzz')};

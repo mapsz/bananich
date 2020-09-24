@@ -190,10 +190,7 @@ class Product extends Model
     foreach ($files as $key => $file) {
       if($file == '.' || $file == '..' || strpos($file,'no-image') !== false) continue;
 
-
       $img = Image::make($path .'/'. $file);
-
-      
       
       dump(
         count($files) - $key . ' -  ' .
@@ -201,40 +198,15 @@ class Product extends Model
         $img->mime . '  ' .
         $img->extension . '  ' 
 
-      );
+      );    
 
-      
-
-      try {
-        $img->save($savePath.'50/' . $img->filename.'.jpg',50,'jpg');
-        $img->save($savePath.'60/' . $img->filename.'.jpg',60,'jpg');
-        $img->save($savePath.'70/' . $img->filename.'.jpg',70,'jpg');
-        $img->save($savePath.'80/' . $img->filename.'.jpg',80,'jpg');
-        $img->save($savePath.'90/' . $img->filename.'.jpg',90,'jpg');
-      } catch (\Throwable $th) {
-        dd($img);
-      }
-
-
-
-
+      $img->save($savePath.'50/' . $img->filename.'.jpg',50,'jpg');
+      $img->save($savePath.'60/' . $img->filename.'.jpg',60,'jpg');
+      $img->save($savePath.'70/' . $img->filename.'.jpg',70,'jpg');
+      $img->save($savePath.'80/' . $img->filename.'.jpg',80,'jpg');
+      $img->save($savePath.'90/' . $img->filename.'.jpg',90,'jpg');
     }
 
-
-    // $images = self::getImages($id);
-    // if(count($images) == 0) return false;
-
-    // $img = Image::make(public_path() . $images[0]);
-
-    // $img->resize(540, null, function ($constraint) {
-    //   $constraint->aspectRatio();
-    // });
-
-    // $img->save(public_path() . '/products/images/product/' . $img->basename);
-
-    // if(!$img) return false;
-
-    // return '/products/images/product/' . $img->basename;
 
     return true;
 

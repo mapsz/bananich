@@ -19,36 +19,67 @@ class Bonus extends Model
     ['key'    => 'user.name','label' => 'пользователь'],
     ['key'    => 'action_user.name','label' => 'исполнитель'],
     ['key'    => 'created_at','label' => 'дата'],
+    ['key'    => 'comment.comment','label' => 'коммент'],
+  ];
+  protected $inputs = [
+    [
+      'name' => 'id',
+      'caption' => 'ид пользователя',
+      'required' => true,
+    ],
+    [
+      'name' => 'count',
+      'caption' => 'количество',
+      'required' => true,
+    ],
+    [
+      'name' => 'comment',
+      'caption' => 'коммент',
+    ],
+    [
+      'name' => 'dieDays',
+      'caption' => 'срок жизни(дни)',
+    ],
   ];
 
   public static function getWithOptions($request = null){
 
+    
+
     //Query
     $query = new Bonus;
 
-    //Add type
-    $query = $query->join('bonus_types', 'bonuses.bonus_type_id', '=', 'bonus_types.id');
-    $query = $query->select('bonuses.*', 'bonus_types.name as bonus_type');
+    if('with'=='with'){
+      //Add type
+      $query = $query->join('bonus_types', 'bonuses.bonus_type_id', '=', 'bonus_types.id');
+      $query = $query->select('bonuses.*', 'bonus_types.name as bonus_type');
 
-    //Add users
-    $query = $query->with('user');
-    $query = $query->with('action_user');
-    $query = $query->with('addBonus');
+      //Add users
+      $query = $query->with('user');
+      $query = $query->with('action_user');
+      $query = $query->with('addBonus');
+      $query = $query->with('comment');
+    }
 
     if('where'=='where'){
       $user = Auth::user();
       $userId = $user->id;
 
-      $query = $query->whereHas('user', function($q)use($userId){
-        $q->where('id', '=', $userId);
-      });
+      if(!isset($request['all_users'])){
+        $query = $query->whereHas('user', function($q)use($userId){
+          $q->where('id', '=', $userId);
+        });
+      }
     }
+
 
     //Sort
     $query = $query->orderBy('created_at', 'DESC');
 
     //Bonus
     $bonus = $query->get();
+
+    
 
 
     return $bonus;
@@ -1574,6 +1605,7 @@ class Bonus extends Model
 
   //JugeCRUD  
   public function jugeGetKeys()     {return $this->keys;}  
+  public function jugeGetInputs()     {return $this->inputs;}  
   public function jugeGet($request) {return $this->getWithOptions($request);}
 
   //Relations
@@ -1588,5 +1620,8 @@ class Bonus extends Model
   }
   public function addBonus(){
     return $this->hasOne('App\BonusAdd');
+  }
+  public function comment(){
+    return $this->hasOne('App\BonusComment');
   }
 }

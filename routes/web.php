@@ -88,6 +88,8 @@ Route::group(['middleware' => 'under-construction'], function () {
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
 
+    //Bonus
+    Route::put('/bonus/add', 'BonusController@add');
     
     //Menus\Pages
     Route::put('/page', 'PageController@put');
