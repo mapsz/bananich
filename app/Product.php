@@ -203,13 +203,19 @@ class Product extends Model
 
       );
 
-      // dd($img);
+      
 
-      $img->save($savePath.'50/' . $img->filename.'.jpg',50,'jpg');
-      $img->save($savePath.'60/' . $img->filename.'.jpg',60,'jpg');
-      $img->save($savePath.'70/' . $img->filename.'.jpg',70,'jpg');
-      $img->save($savePath.'80/' . $img->filename.'.jpg',80,'jpg');
-      $img->save($savePath.'90/' . $img->filename.'.jpg',90,'jpg');
+      try {
+        $img->save($savePath.'50/' . $img->filename.'.jpg',50,'jpg');
+        $img->save($savePath.'60/' . $img->filename.'.jpg',60,'jpg');
+        $img->save($savePath.'70/' . $img->filename.'.jpg',70,'jpg');
+        $img->save($savePath.'80/' . $img->filename.'.jpg',80,'jpg');
+        $img->save($savePath.'90/' . $img->filename.'.jpg',90,'jpg');
+      } catch (\Throwable $th) {
+        dd($img);
+      }
+
+
 
 
     }
