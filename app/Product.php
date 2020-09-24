@@ -745,7 +745,7 @@ class Product extends Model
       'unit'                  => 'max:50',
       'unit_sys'              => 'numeric',
       'calories'              => 'numeric',
-      'carbohydrates'          => 'numeric',
+      'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
       'fats'                  => 'numeric',
       'сountry'               => 'max:50',

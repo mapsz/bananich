@@ -47,7 +47,8 @@ class FileUpload extends Model
     //Move file
     if(\File::move($cacheFilePath, $fullPath)){
       if($resize){
-        Image::make($fullPath)->resize($resize['w'], $resize['h'])->save($fullPath);
+        // $img->save($savePath.'90/' . $img->filename.'.jpg',90,'jpg');
+        Image::make($fullPath)->resize($resize['w'], $resize['h'])->save($pathName.'.jpg',90,'jpg');
       }
       return true;
     }else

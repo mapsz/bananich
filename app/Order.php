@@ -142,6 +142,9 @@ class Order extends Model
   }
 
   public static function placeOrder($data, $cart){
+
+
+    dd($data, $cart);
     
     //Customer
     if(Auth::user()){
@@ -200,6 +203,9 @@ class Order extends Model
 
         //Save status
         Item::find($putItem->id)->statuses()->attach(100);
+        
+        //Update Available
+        Product::updateAvailable($item['product_id']);
 
       }      
     }
@@ -207,8 +213,6 @@ class Order extends Model
     //Delete Cart
     Cart::find($cart['id'])->delete();
 
-    //Update Available
-    // Product::updateAvailable($data['product_id']);
 
 
     return $orderId;

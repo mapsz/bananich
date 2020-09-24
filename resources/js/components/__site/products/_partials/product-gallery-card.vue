@@ -36,7 +36,6 @@
         <a :href="$route.path + ($route.path == '/' ? '':'/') + 'product/' + product.id" >
           {{
             product.name + 
-            (product.сountry ? ', '+product.сountry:'') + 
             (product.unit_view ? ', '+product.unit_view:'')
           }}
         </a>

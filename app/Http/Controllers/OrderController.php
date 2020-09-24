@@ -46,38 +46,39 @@ class OrderController extends Controller
     //Get Cart
     $cart = Cart::getCart()->toArray();
     $settings = new Setting(); $settings = $settings->getList(1);
+
+    // dd($cart);
     
     //Validate Cart
     $cartValidate = [
       'items'           => ['bail','min:1'],
-      'final_summ'      => ['bail','required','numeric','max:200000', 'min:'.$settings['min_order']],
-
+      'pre_price'      => ['bail','required','numeric','max:200000', 'min:'.$cart['min_summ']],
     ];
     $cartMessages = [
       'required'               => 'ошибка!',
-      'final_summ.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
-      'final_summ.min'         => 'Минимальная сумма заказа ' . $settings['min_order'] . 'р',
+      'pre_price.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
+      'pre_price.min'         => 'Минимальная сумма заказа ' . $cart['min_summ'] . 'р',
       'items.min'              => 'Корзина пуста!'
     ];
     Validator::make($cart, $cartValidate, $cartMessages)->validate();
 
     //Validate
     $validate = [
-      'aggreOffer'         => ['required','accepted'],
-      'aggrePersonal'      => ['required','accepted'],
+      'aggreOffer'          => ['required','accepted'],
+      'aggrePersonal'       => ['required','accepted'],
       'name'                => ['required', 'string', 'max:190'],
       'email'               => ['required', 'string', 'email', 'max:190'],
       'phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
-      'addressApart'      => ['max:20' ],
-      'addressNumber'     => ['max:20' ],
-      'addressPorch'       => ['max:20' ],
-      'addressStreet'     => ['required', 'string', 'max:170' ],
-      'deliveryDate'      => ['required'],
-      'deliveryTime'      => ['required'],
-      'container'          => ['required'],
-      'payMethod'          => ['required'],
-      'confirm'            => ['required'],
-      'comment'            => ['max:1000'],
+      'addressApart'        => ['max:20' ],
+      'addressNumber'       => ['max:20' ],
+      'addressPorch'        => ['max:20' ],
+      'addressStreet'       => ['required', 'string', 'max:170' ],
+      'deliveryDate'        => ['required'],
+      'deliveryTime'        => ['required'],
+      'container'           => ['required'],
+      'payMethod'           => ['required'],
+      'confirm'             => ['required'],
+      'comment'             => ['max:1000'],
     ];   
     //Toother
     if(isset($data['toOther']) && $data['toOther']){
@@ -112,29 +113,9 @@ class OrderController extends Controller
     ];
     Validator::make($request->data, $validate,$messages)->validate();
 
+    
     //Place order
     $orderId = Order::placeOrder($request->data, $cart);
-
-
-    //Put order
-    // $orderId = Order::put($request->data);
-    // if(!$orderId) return response()->json(0);
-    
-    // //Put items
-    // foreach($cart['items'] as $item){
-    //   $putItem = new Item;
-    //   $putItem->order_id    = $orderId;
-    //   $putItem->product_id  = $item['product_id'];
-    //   $putItem->name        = $item['name'];
-    //   $putItem->quantity    = $item['count'];
-    //   $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : '';
-    //   $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
-    //   $putItem->price       = $item['price'];
-    //   $putItem->save();
-    // }
-
-    // //Delete Cart
-    // Cart::find($cart['id'])->delete();
 
     return response()->json($orderId);
 

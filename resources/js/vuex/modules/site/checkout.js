@@ -1,4 +1,4 @@
-import { cleanData } from "jquery";
+// import { cleanData } from "jquery";
 
 let checkout = {
   namespaced: true,

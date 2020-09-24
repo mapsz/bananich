@@ -44,18 +44,22 @@ export default {
     },
   },
   mounted(){
+
     //Set placeholder
     if(this.placeholder) this.fPlaceholder = this.placeholder;
+
     //Set type
     if(this.type) this.fType = this.type;
+    
     //Value
     if(this.checkout[this.name]){
       this.value = this.checkout[this.name];
+    }else{
+      this.value = null;
     } 
-    else this.value = null;
 
     
-    this.value = (this.checked != undefined && this.checked) ? true : false;
+    // this.value = (this.checked != undefined && this.checked) ? true : '';
 
   },
   methods:{    

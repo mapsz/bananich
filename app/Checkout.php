@@ -88,7 +88,6 @@ class Checkout extends Model
     //Cant be less zero
     if($cart->final_summ < 0) $cart->final_summ = 0;
 
-
     //Min summ
     $cart->min_summ = $settings['first_order'];
     if($cart->user_id > 0){
@@ -99,7 +98,6 @@ class Checkout extends Model
       }
     }
     
-
     return $cart;
 
   }
