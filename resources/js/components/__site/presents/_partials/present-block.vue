@@ -22,9 +22,9 @@
     </a>
 
     <!-- Info -->
-    <div v-if="cart.presents != undefined && cart.presents.length>0" class="checkout-info-text">      
+    <div class="checkout-info-text">      
       <!-- Product -->
-      <div class="d-flex align-items-center">
+      <div v-if="cart.presents != undefined && cart.presents.length>0" class="d-flex align-items-center">
         <img :src="product.mainImage" alt="" style="width:50px; border-radius: 7px; margin: 0px 5px;">
         <span>{{product.name}}</span>
       </div>
