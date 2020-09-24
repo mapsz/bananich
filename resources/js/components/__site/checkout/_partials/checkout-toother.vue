@@ -4,7 +4,7 @@
     
     <div class="form-checkbox" style="margin-bottom: 0px;">
       <checkout-input v-model="show" :name="'toOther'" :type="'checkbox'" />
-      <label for="gift" class="gift">Заказ для другого человека</label>
+      <label for="toOther" class="gift">Заказ для другого человека</label>
     </div>
 
     <div v-show="show" style="margin-top: 20px;">

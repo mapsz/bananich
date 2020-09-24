@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB;
 use App\Product;
 use App\ProductDiscount;
 use App\Setting;
@@ -97,6 +98,38 @@ class Checkout extends Model
         $cart->min_summ = $settings['min_order'];
       }
     }
+
+
+    $cart = $cart->toArray();
+
+    //Check presents
+    if(isset($cart['presents']) && isset($cart['presents'][0])){
+      do{
+        //Get present
+        $present = Present::where('product_id', $cart['presents'][0]['product_id'])->first();  
+        if(!$present){
+          DB::table('cart_presents')->where('cart_id',$cart['id'])->where('product_id',$present['product_id'])->delete();
+          $cart['presents'] = [];
+          continue;          
+        } 
+
+        
+        
+        //Get present setting
+        $settings = Setting::where('name','present_'.$present->type)->first();
+        
+        //Get min sum
+        $present_min_sum = $settings->value;
+        
+        //Check present
+        if($present_min_sum > $cart['pre_price']){
+          DB::table('cart_presents')->where('cart_id',$cart['id'])->where('product_id',$present['product_id'])->delete();
+          $cart['presents'] = [];          
+          continue;          
+        } 
+
+      }while(0);
+    }    
     
     return $cart;
 

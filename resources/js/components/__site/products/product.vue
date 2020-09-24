@@ -28,7 +28,7 @@
             >
           </div>
 
-          <div class="col-md-6">
+          <div v-if="product.name != undefined" class="col-md-6">
             <div class="product-info">
 
               <!-- Name -->

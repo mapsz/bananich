@@ -144,7 +144,7 @@ class Order extends Model
   public static function placeOrder($data, $cart){
 
 
-    dd($data, $cart);
+    // dd($data, $cart);
     
     //Customer
     if(Auth::user()){

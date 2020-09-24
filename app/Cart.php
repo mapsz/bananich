@@ -64,7 +64,7 @@ class Cart extends Model
     }
 
     //Checkout
-    Checkout::addToCart($cart);
+    $cart = Checkout::addToCart($cart);
 
     return $cart;
   
@@ -124,11 +124,11 @@ class Cart extends Model
 
    //Attach
    //Delete presents
-   $present = CartPresent::where('cart_id',$cart->id)->delete();
+   $present = CartPresent::where('cart_id',$cart['id'])->delete();
 
    //Create presents
     $present = new CartPresent;
-    $present->cart_id = $cart->id;
+    $present->cart_id = $cart['id'];
     $present->product_id = $productId;   
     $present->count = $count;
 

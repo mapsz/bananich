@@ -13,7 +13,7 @@
           cart.presents == undefined || 
           cart.presents[0] == undefined
         ) &&
-        cart.final_summ >= presentSettings.present_s 
+        cart.pre_price >= presentSettings.present_s 
 
       " 
       href="/presents" class="url mt-2 mt-sm-3"
@@ -22,7 +22,7 @@
     </a>
 
     <!-- Info -->
-    <div v-if="product" class="checkout-info-text">      
+    <div v-if="cart.presents != undefined && cart.presents.length>0" class="checkout-info-text">      
       <!-- Product -->
       <div class="d-flex align-items-center">
         <img :src="product.mainImage" alt="" style="width:50px; border-radius: 7px; margin: 0px 5px;">
@@ -30,10 +30,10 @@
       </div>
       <!-- Stimulate -->
       <div 
-        v-if="cart.final_summ < presentSettings.present_s"
+        v-if="cart.pre_price < presentSettings.present_s"
         class=""
       >
-        <span>Закажите еще на {{presentSettings.present_s - cart.final_summ}}р и получите подарок!</span>
+        <span>Закажите еще на {{presentSettings.present_s - cart.pre_price}}р и получите подарок!</span>
         <a href="/catalogue" class="mt-2 url">Докупить</a>
       </div>
 

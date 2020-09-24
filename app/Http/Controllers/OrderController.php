@@ -44,7 +44,7 @@ class OrderController extends Controller
     $data = $request->all();
 
     //Get Cart
-    $cart = Cart::getCart()->toArray();
+    $cart = Cart::getCart();
     $settings = new Setting(); $settings = $settings->getList(1);
 
     // dd($cart);
