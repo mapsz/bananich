@@ -10,7 +10,7 @@ use App\FileUpload;
 class CategoryController extends Controller
 {
     public function getAll(){
-        $cat = Category::orderBy('sort')->get();
+        $cat = Category::orderBy('sort','desc')->get();
 
 
         foreach ($cat as $key => $v) {
