@@ -190,6 +190,10 @@ class Product extends Model
     foreach ($files as $key => $file) {
       if($file == '.' || $file == '..' || strpos($file,'no-image') !== false) continue;
 
+      
+      dump(count($files) - $key);
+      dump($img->basename);
+
       $img = Image::make($path .'/'. $file);
 
       // dd($img);
@@ -201,7 +205,6 @@ class Product extends Model
       $img->save($savePath.'90/' . $img->filename.'.jpg',90,'jpg');
 
 
-      dump(count($files) - $key);
     }
 
 
