@@ -88,7 +88,6 @@ class Checkout extends Model
     //Cant be less zero
     if($cart->final_summ < 0) $cart->final_summ = 0;
 
-    // dd(44);
 
     //Min summ
     $cart->min_summ = $settings['first_order'];
@@ -100,7 +99,6 @@ class Checkout extends Model
       }
     }
     
-    dd($cart);
 
     return $cart;
 
