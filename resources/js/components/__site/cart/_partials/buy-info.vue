@@ -18,6 +18,13 @@
       <div  class="cart-info-name">Бонусы</div>
       <div class="cart-info-sum">{{cart.bonus-(cart.bonus*2)}} р</div>
     </li>
+    
+    <!-- Coupon -->
+    <li v-if="cart.coupon != undefined " class="cart-info-item">
+      <div  class="cart-info-name">{{cart.coupon.code}}</div>
+      <div class="cart-info-sum">{{cart.coupon.discount-(cart.coupon.discount*2)}} р</div>
+    </li>
+    
     <!-- <li class="cart-info-item">
       <div class="cart-info-name">Списанные бонусы</div>
       <div class="cart-info-sum">-230 Б</div>

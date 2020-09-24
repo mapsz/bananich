@@ -33,6 +33,7 @@ class Checkout extends Model
 
     //Items data
     $cart->final_summ = 0;
+    $cart->pre_price = 0;
     foreach ($cart->items as $key => $item) {
       foreach ($products as $product) {
         //Skip
@@ -59,8 +60,9 @@ class Checkout extends Model
 
     
     //Coupons    
+    $couponDiscount = 0;
     if(isset($cart->coupon)){
-      $couponDiscount = $cart->coupon->discount;
+      $couponDiscount = intval($cart->coupon->discount);
     }
     
 
@@ -70,11 +72,12 @@ class Checkout extends Model
     }else{
       $cart->bonus = $max_bonus_summ;
     }   
+    $cart->bonus = intval($cart->bonus);
   
     //Shipping      
     $free_shipping = Setting::where('name','free_shipping')->first()->value;
     $price_shipping = Setting::where('name','shipping_price')->first()->value;
-    $cart->shipping = ($cart->pre_price < $free_shipping) ? $price_shipping : 0;
+    $cart->shipping = ($cart->pre_price < $free_shipping) ? intval($price_shipping) : 0;
   
     //Final summ
     $cart->final_summ = $cart->pre_price;

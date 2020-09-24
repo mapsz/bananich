@@ -1,10 +1,24 @@
 <template>
 
+  <div>
+    
+    <div>
+      <form v-if="cart.coupon == undefined" class="cart-promo" @submit.prevent="add()">
+        <input v-model="coupon" type="text" placeholder="Ввести промокод" class="cart-promo-input">
+        <button type="submit" class="cart-promo-btn">Применить</button>
+      </form>
 
-  <form class="cart-promo" @submit.prevent="add()">
-    <input v-model="coupon" type="text" placeholder="Ввести промокод" class="cart-promo-input">
-    <button type="submit" class="cart-promo-btn">Применить</button>
-  </form>
+      <span v-else>Промокод: <b>{{cart.coupon.code}}</b></span>
+
+    </div>
+
+    <span v-for='(errorz,z) in errors' :key='z+"d"' class="juge-form-error">
+      <span v-for='(error,j) in errorz' :key='j'>
+        {{error}}
+      </span>    
+    </span>
+
+  </div>
   
 </template>
 
@@ -12,7 +26,8 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    coupon:''
+    coupon:'',
+    errors:[],
   }},
   computed:{
     ...mapGetters({
@@ -20,12 +35,23 @@ export default {
     }),
   },
   methods:{
+   ...mapActions({
+      'fetchCart':'cart/fetch',
+    }), 
     async add(){
+      this.errors = [];
 
-      let r = ax.fetch('/coupon/cart' , {coupon:this.coupon},'put');
+      let r = await ax.fetch('/coupon/cart' , {coupon:this.coupon},'put');
 
-      
-      console.log(this.coupon);
+      //Catch errors
+      if(!r){      
+        if(ax.lastResponse.status == 422){
+          this.errors = ax.lastResponse.data.errors;
+          return;
+        }
+      }
+
+      if(r){this.fetchCart()}
     }
   },
 
