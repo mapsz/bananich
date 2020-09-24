@@ -46,13 +46,13 @@
                 </div>
                 <buy-info />
 
-                <span v-if="settings.min_order > cart.pre_price"
+                <span v-if="cart.min_summ > cart.pre_price"
                   style="    
                     color: red;
                     font-size: 14pt;
                   "
                 >
-                  Минимальная сумма заказа {{settings.min_order}}
+                  Минимальная сумма заказа {{cart.min_summ}}
                 </span>
                 <a v-else href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
                 

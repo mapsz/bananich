@@ -9,6 +9,7 @@ class Setting extends Model
   private $settings = [
     'free_shipping'             => 1500,
     'min_order'                 => 1200,
+    'first_order'               => 1000,
     'shipping_price'            => 200,
     'phone_number'              => '+79219444137',
     'day_norm_fats'             => '60',

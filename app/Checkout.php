@@ -13,6 +13,10 @@ class Checkout extends Model
 {
   public static function addToCart($cart){
 
+    //Get settings
+    $settings = new Setting;
+    $settings = $settings->getList(1);
+
     
     //Get bonuses
     $user = Auth::user();
@@ -56,15 +60,12 @@ class Checkout extends Model
         }        
       } 
     }
-
-
     
     //Coupons    
     $couponDiscount = 0;
     if(isset($cart->coupon)){
       $couponDiscount = intval($cart->coupon->discount);
-    }
-    
+    }    
 
     //Bonus
     if($max_bonus_summ >= $bonus){
@@ -75,18 +76,31 @@ class Checkout extends Model
     $cart->bonus = intval($cart->bonus);
   
     //Shipping      
-    $free_shipping = Setting::where('name','free_shipping')->first()->value;
-    $price_shipping = Setting::where('name','shipping_price')->first()->value;
+    $free_shipping = $settings['free_shipping'];
+    $price_shipping = $settings['shipping_price'];
     $cart->shipping = ($cart->pre_price < $free_shipping) ? intval($price_shipping) : 0;
   
     //Final summ
     $cart->final_summ = $cart->pre_price;
     $cart->final_summ += $cart->shipping;
     $cart->final_summ -= $cart->bonus;
-    $cart->final_summ -= $couponDiscount;
-    
+    $cart->final_summ -= $couponDiscount;    
     //Cant be less zero
     if($cart->final_summ < 0) $cart->final_summ = 0;
+
+    // dd(44);
+
+    //Min summ
+    $cart->min_summ = $settings['first_order'];
+    if($cart->user_id > 0){
+      //Logged
+      $orders = User::where('id',$cart->user_id)->with('orders')->first()->orders;
+      if(count($orders) > 0){
+        $cart->min_summ = $settings['min_order'];
+      }
+    }
+    
+    dd($cart);
 
     return $cart;
 
