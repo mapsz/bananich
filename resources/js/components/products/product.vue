@@ -20,6 +20,8 @@
         <product-main-photo class="mb-3 border p-2" />
         <!-- Bonuses -->
         <product-bonus class="mb-3 border p-2" />
+        <!-- Popular -->
+        <product-popular class="mb-3 border p-2" />
         <!-- Categories -->
         <product-categories class="mb-3 border p-2" />
         <!-- Discount -->

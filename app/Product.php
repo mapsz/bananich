@@ -440,6 +440,13 @@ class Product extends Model
         });
       }  
 
+      //Popular
+      if(isset($request['popular']) && $request['popular'] && $request['popular'] != 'false'){
+        $products = $products->whereHas('metas', function ($q) {
+          $q->where('name', '=', 'popular')->where('value', '=', '1');
+        });
+      }  
+
       //Noties
       do{
         //No egg
@@ -838,6 +845,7 @@ class Product extends Model
         case  "strews": 
         case  "always_publish": 
         case  "bonus": 
+        case  "popular": 
           $insert['meta'][$key] = $value;
           break;
         case "composition": 
