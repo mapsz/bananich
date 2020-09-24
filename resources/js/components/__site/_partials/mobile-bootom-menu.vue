@@ -77,7 +77,7 @@
 
         <!-- Search -->
         <template>
-          <div @click="searchShow=!searchShow" class="col-3" v-click-outside="hideSearch"> 
+          <div @click="searchShow=!searchShow" class="col-3" > 
             <div class="tap-bar-search" :style="search ? 'background-color: #fbe214;border-radius: 7px;' : ''">
               <button class="tap-bar-search-btn"><img src="/image/search.svg" alt="search" style="margin: auto;"></button>
               <!-- <span>Поиск</span> -->
@@ -101,6 +101,14 @@ export default {
       profileDrop:false,    
       searchShow:false,
   }},
+  watch: {
+    menuDrop: function(){
+      if(this.menuDrop) this.searchShow=false;
+    },
+    profileDrop: function(){
+      if(this.profileDrop) this.searchShow=false;
+    },
+  },
   computed:{
     ...mapGetters({
       menus:'menu/get',
