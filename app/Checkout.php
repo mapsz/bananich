@@ -17,6 +17,7 @@ class Checkout extends Model
     //Get bonuses
     $user = Auth::user();
     $bonus = 0;
+    $max_bonus_summ = 0;
     if($user){
       $bonus = Bonus::left($user->id);
     }
@@ -28,23 +29,14 @@ class Checkout extends Model
     }
 
     //Get Products
-    $products = Product::getWithOptions(
-      [
-        'ids' => $productIds, 
-        'short_query' => 1, 
-        'with_metas' => 1,
-        'with_discounts'=> 1,
-        'with_final_price' => 1
-      ]
-    );
+    $products = Product::getWithOptions(['ids' => $productIds]);
 
     //Items data
     $cart->final_summ = 0;
     foreach ($cart->items as $key => $item) {
       foreach ($products as $product) {
         //Skip
-        if($product->id != $item->product_id) continue;
-        
+        if($product->id != $item->product_id) continue;        
         //Add data
         $item->name             = $product->name;
         $item->unit             = $product->unit;
@@ -54,27 +46,44 @@ class Checkout extends Model
         $item->price_per_unit   = $product->price;
         $item->price            = $product->price * $item->count;
         $item->discount         = isset($product->discount) ? $product->discount : false;
-
         //pre price
         $item->final_price = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
         $cart->pre_price += $item->final_price;
-      }
-
-      //Bonus
-      $cart->bonus = $bonus;
-
-      //Shipping
-      if($cart->pre_price < Setting::where('name','free_shipping')->first()->value)
-        $cart->shipping = Setting::where('name','shipping_price')->first()->value;
-      else
-        $cart->shipping = 0;
-      
-      
-      //Final summ
-      $cart->final_summ = $cart->pre_price;
-      $cart->final_summ += $cart->shipping;
-      $cart->final_summ -= $bonus;
+        //Bonus
+        if($product->bonus){
+          $max_bonus_summ += $item->final_price;
+        }        
+      } 
     }
+
+
+    
+    //Coupons    
+    if(isset($cart->coupon)){
+      $couponDiscount = $cart->coupon->discount;
+    }
+    
+
+    //Bonus
+    if($max_bonus_summ >= $bonus){
+      $cart->bonus = $bonus;
+    }else{
+      $cart->bonus = $max_bonus_summ;
+    }   
+  
+    //Shipping      
+    $free_shipping = Setting::where('name','free_shipping')->first()->value;
+    $price_shipping = Setting::where('name','shipping_price')->first()->value;
+    $cart->shipping = ($cart->pre_price < $free_shipping) ? $price_shipping : 0;
+  
+    //Final summ
+    $cart->final_summ = $cart->pre_price;
+    $cart->final_summ += $cart->shipping;
+    $cart->final_summ -= $cart->bonus;
+    $cart->final_summ -= $couponDiscount;
+    
+    //Cant be less zero
+    if($cart->final_summ < 0) $cart->final_summ = 0;
 
     return $cart;
 

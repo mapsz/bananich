@@ -52,7 +52,6 @@ class PurchaseController extends Controller
 
       //Save purchase
       $purchase = new Purchase;
-      $purchase->id = $goods->id;
       $purchase->good_id = $goods->id;
       $purchase->supplier_id = $data['supplier_id'];
       $purchase->user_id = $data['user_id'];

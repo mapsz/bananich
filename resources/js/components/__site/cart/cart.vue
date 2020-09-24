@@ -41,14 +41,12 @@
                   <div v-if="user" class="mb-4">
                     <bonus-cart-block></bonus-cart-block>
                   </div>
-                  <form class="cart-promo">
-                    <input type="text" placeholder="Ввести промокод" class="cart-promo-input">
-                    <button class="cart-promo-btn">Применить</button>
-                  </form>
+                  <!-- Coupons -->
+                  <cart-coupon />
                 </div>
                 <buy-info />
 
-                <span v-if="settings.min_order > cart.final_summ"
+                <span v-if="settings.min_order > cart.pre_price"
                   style="    
                     color: red;
                     font-size: 14pt;

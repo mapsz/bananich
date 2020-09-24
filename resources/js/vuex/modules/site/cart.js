@@ -93,10 +93,9 @@ let cart = {
       }
       return false;
     },
-    async removeItem({commit},id){
+    async removeItem({dispatch},id){
       let r = await ax.fetch('/cart/remove/item',{id},'delete');
-      localStorage.cart = JSON.stringify(r);
-      commit('mCart',r); 
+      dispatch('fetch');
       return r;
     },    
     async cartReset({dispatch}){

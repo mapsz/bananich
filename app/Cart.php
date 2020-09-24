@@ -19,6 +19,7 @@ class Cart extends Model
 
     //Cart
     $cart = Cart::with('items');
+    $cart = $cart->with('coupons');
     $cart = $cart->with('presents');
 
     //User Loged in
@@ -56,6 +57,10 @@ class Cart extends Model
         $cart->session_id = $session;
         $cart->save();
       }  
+    }
+
+    if(isset($cart->coupons) && isset($cart->coupons[0])){
+      $cart->coupon = $cart->coupons[0];
     }
 
     //Checkout
@@ -141,5 +146,8 @@ class Cart extends Model
   public function presents(){
     return $this->hasMany('App\CartPresent');
   }
+  public function coupons(){
+    return $this->belongsToMany('App\Coupon','coupon_cart')->latest();
+  }    
 
 }

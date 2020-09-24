@@ -43,6 +43,9 @@ Route::group(['middleware' => 'under-construction'], function () {
   Route::delete('/cart/remove/item', 'CartController@removeItem'); 
   Route::delete('/cart/reset', 'CartController@resetItems');
 
+  //Coupon
+  Route::any('/coupon/cart', 'CouponController@cartAttach');
+
   //Session
   Route::get('/json/session', 'SessionController@get');
 
