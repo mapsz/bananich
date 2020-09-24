@@ -101,7 +101,7 @@ class Cart extends Model
     $cart = self::getCart();
 
     //Remove item
-    if(!CartItem::where('cart_id',$cart->id)->where('product_id',$productId)->delete()) return false;
+    if(!CartItem::where('cart_id',$cart['id'])->where('product_id',$productId)->delete()) return false;
 
     return $cart;
   }
