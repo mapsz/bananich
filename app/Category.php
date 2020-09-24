@@ -90,6 +90,8 @@ class Category extends Model
       }
     }while(0);
 
+    $query = $query->orderBy('sort');
+
     //Get
     $categories = $query->get();
 
