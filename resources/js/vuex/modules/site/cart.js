@@ -15,8 +15,6 @@ let cart = {
       let r = await ax.fetch('/json/cart',{},'get',false);
 
       let localCart = JSON.parse(localStorage.cart);
-      console.log('cart');
-      console.log(r);
 
       //Save to local
       if(
@@ -31,7 +29,6 @@ let cart = {
 
       //Set from local
       if(localCart.items.length > 0){
-        console.log(111);
         
         let newCart = await ax.fetch('/cart/session',{'id':localCart.id,'session_id':localCart.session_id,'user_id':localCart.user_id},'post');
 

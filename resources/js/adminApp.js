@@ -41,6 +41,11 @@ library.add(faCog);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
+
+// Bootstrap vue
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+Vue.use(BootstrapVue)
+
 //Router
 import VueRouter from 'vue-router';
 import routes from './router.js';

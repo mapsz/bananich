@@ -25,8 +25,10 @@ window.ax = new ax;
 import load from './juge/juge-loader.js';
 window.load = new load;
 
+
 //Moment
-window.moment = require('moment');
+import moment from 'moment';
+Vue.use(moment)
 
 //Toasted
 window.terror= function(){console.log('error xzz')};

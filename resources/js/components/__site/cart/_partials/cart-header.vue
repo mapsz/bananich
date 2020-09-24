@@ -3,7 +3,7 @@
     <button class="cart-btn">
       <a href="/cart">
         <img src="/image/cart.svg" alt="cart">
-        <div v-if="cart.items != undefined && cart.items.length > 0" class="cart-num">{{cart.pre_price}}</div>
+        <div v-if="cart.items != undefined && cart.items.length > 0" class="cart-num">{{cart.pre_price}}р</div>
       </a>
     </button>
     <div class="cart-sum"></div>
