@@ -2,21 +2,24 @@
   <div v-if="!active">
   <ul  class="sitebar-wrap">
     <!-- Categories -->
-    <li 
-      v-for='(category,i) in categories' :key='i'
-      :class="active.id == category.id ? 'active' : ''"
-      class="sitebar-category"
-    >
-      <a
-        class="sitebar-link"
-        @click.prevent="changeCategory(category)"
-        :href="'/category/'+category.id"
+    <template v-for='(category,i) in categories'>
+      <li 
+        :key="i"   
+        v-if="category.main_menu == 1"
+        :class="active.id == category.id ? 'active' : ''"
+        class="sitebar-category"
       >
-        <div class="sitebar-text">{{category.name}}</div> 
-        <div class="sitebar-bg" :style='"background-image: url("+category.mainImage+"); background-color: #ebeff2;"'></div>
-      </a>
+        <a
+          class="sitebar-link"
+          @click.prevent="changeCategory(category)"
+          :href="'/category/'+category.id"
+        >
+          <div class="sitebar-text">{{category.name}}</div> 
+          <div class="sitebar-bg" :style='"background-image: url("+category.mainImage+"); background-color: #ebeff2;"'></div>
+        </a>
 
-    </li>
+      </li>
+    </template>
   </ul>
   </div>
 </template>
