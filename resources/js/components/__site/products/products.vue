@@ -8,6 +8,7 @@
       <div class="container">
         <h1 class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
 
+        <!-- To top -->
         <a v-if="showUp" href="#catalogue" style="
           position: fixed;
           z-index: 9999;
@@ -19,15 +20,14 @@
           background-color: #fbe21485;
           color: black;
         ">Наверх ⇑</a>
-        <div class="row content-page">
-          
+        <div class="row content-page">          
 
-          <!-- Categories Sidebar -->
-          <div class="col-lg-4">
+          <!-- Desktop menu -->
+          <div v-if="!isMobile" class="col-lg-4">
             <categories-menu v-scroll="handleScroll" />
           </div>
 
-          <div v-if="!isMobile || isFetched" class="col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
+          <div  class="col-12 col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
             
             <div class="title-wrap title-page">
               <h2 class="title-h2">{{active.name}}</h2>
@@ -40,33 +40,37 @@
               </div>
             </div>
 
-            <!-- Product list -->
-            <div class="row">
+            <!-- Moblie menu -->
+            <categories-menu-mobile v-if="isMobile" />
 
+            <!-- Product list -->
+            <div class="row" v-if="!isMobile || active">
               <!-- Карточка товара -->
               <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 ">
                 <product-gallery-card :product="product" />
               </div>
-
-              <!-- Nothing Found -->
-              <span v-if="products.length < 1 && isFetched && !isWaterfalling" class="m-3" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;"><b>Ничего не найдено</b></span>
-
             </div>
+
+            <!-- Nothing Found -->
+            <span v-if="products.length < 1 && isFetched && !isWaterfalling" class="m-3" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;">
+              <b>Ничего не найдено</b>
+            </span>            
             
-        
-
-          </div>
-
-          <!-- Loading -->
-          <div v-if="isWaterfalling || !isFetched" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;">
-            <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
+            <!-- Loading -->
+            <div v-if="(!isMobile || active) && (isWaterfalling || !isFetched)" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
             </div>
+
+            <!-- Not found -->
+            <div v-if="isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px; 0">
+              <product-not-found></product-not-found>                
+            </div>             
+
           </div>
-          <!-- Not found -->
-          <div v-if="isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;">
-            <product-not-found></product-not-found>                
-          </div>     
+
+
 
 
         </div>
@@ -113,10 +117,8 @@ export default {
     }
   },
   async mounted(){
-    // this.getCart();
     this.fetchFavorites();
-    await this.setWaterfall(1);
-    if(!this.isMobile) this.fetch();
+    this.setWaterfall(1);
   },
   methods:{
     ...mapActions({

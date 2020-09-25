@@ -613,7 +613,12 @@ class Product extends Model
 
       //Available unit
       foreach ($products as $product) {
-        $product->available_unit = intval(floatval ($product->available) / floatval ($product->unit));
+        if($product->unit == 0){
+          $product->available_unit = 0;
+        }else{
+          $product->available_unit = intval(floatval ($product->available) / floatval ($product->unit));
+        }
+        
       }
 
     }
