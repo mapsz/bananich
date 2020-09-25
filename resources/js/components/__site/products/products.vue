@@ -2,11 +2,14 @@
   <div>
 
     <site-header />
+    
 
     <a name="catalogue"></a>
     <main class="home">
       <div class="container">
         <h1 class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
+
+        
 
         <!-- To top -->
         <a v-if="showUp" href="#catalogue" style="
@@ -21,6 +24,9 @@
           color: black;
         ">Наверх ⇑</a>
         <div class="row content-page">          
+
+          
+      <div class="row">{{cart}}</div>
 
           <!-- Desktop menu -->
           <div v-if="!isMobile" class="col-lg-4">
