@@ -84,8 +84,8 @@ export default {
 
       if(r > 0){
         // Pixel
-        this.clean();
-        location.href ='/order-thanks';
+        // this.clean();
+        // location.href ='/order-thanks';
       }
         
 

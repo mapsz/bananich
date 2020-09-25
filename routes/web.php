@@ -34,7 +34,7 @@ Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
   });
 
   //Order
-  Route::put('/order/put', 'OrderController@put');
+  Route::any('/order/put', 'OrderController@put');
 
   //Cart
   Route::get('/json/cart', 'CartController@get');

@@ -46,8 +46,6 @@ class OrderController extends Controller
     //Get Cart
     $cart = Cart::getCart();
     $settings = new Setting(); $settings = $settings->getList(1);
-
-    // dd($cart);
     
     //Validate Cart
     $cartValidate = [
@@ -112,8 +110,20 @@ class OrderController extends Controller
       'name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
     ];
     Validator::make($request->data, $validate,$messages)->validate();
+    
+    //Check items available
+    $available = Product::checkCartAvailable($cart);
+    if ($available['r'] == false){
+      $text = $available['leftUnit'] == 0 ? 
+        'ууупс... кажется, вы не успели и "'.$available['name'].'" только что раскупили😞' :
+        'ууупс... кажется, вы не успели и "'.$available['name'].'" почти весь раскупили😞 На складе осталось всего '.$available['leftUnit'].' штук'
+      ;
+      Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
+    }
 
     
+    // dd($data);
+
     //Place order
     $orderId = Order::placeOrder($request->data, $cart);
 
