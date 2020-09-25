@@ -10,6 +10,8 @@
         <h1 class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
 
         
+          
+          <div >{{cart}}</div>
 
         <!-- To top -->
         <a v-if="showUp" href="#catalogue" style="
@@ -25,8 +27,6 @@
         ">Наверх ⇑</a>
         <div class="row content-page">          
 
-          
-      <div class="row">{{cart}}</div>
 
           <!-- Desktop menu -->
           <div v-if="!isMobile" class="col-lg-4">

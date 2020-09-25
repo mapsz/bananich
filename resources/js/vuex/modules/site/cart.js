@@ -14,7 +14,11 @@ let cart = {
     async fetch({commit,dispatch}){
       let r = await ax.fetch('/json/cart',{},'get',false);
 
-      let localCart = JSON.parse(localStorage.cart);
+      let localCart = false;
+      if(localStorage.cart != undefined){
+        localCart = JSON.parse(localStorage.cart);
+      }
+      
 
       //Save to local
       if(
@@ -44,25 +48,6 @@ let cart = {
       localStorage.cart = JSON.stringify(r);
       commit('mCart',r); 
       return;
-
-      // if(localStorage.cart == undefined || localStorage.cart == false || localStorage.cart == 'false'){
-      //   localStorage.cart = JSON.stringify(r);
-      //   return;
-      // }
-
-      // let localCart = JSON.parse(localStorage.cart) 
-
-      // if(moment(localCart.updated_at).diff(r.updated_at) > 0 || (r.items.length < 1 && localCart.items.length > 0)){
-      //   localCart.session_id = r.session_id;
-      //   localCart.user_id = r.user_id;
-      //   commit('mCart',localCart); 
-      //   //Add items
-      //   $.each( localCart.items, ( k, v ) => {
-      //     dispatch('editItem',v);
-      //   });
-      // }else{
-      //   localStorage.cart = JSON.stringify(r);
-      // }
       
 
     },
