@@ -12,17 +12,7 @@
         :class="active.id == category.id ? 'active' : ''"
         class="sitebar-category"
       >
-        <!-- <a
-          class="sitebar-link"
-          @click.prevent="changeCategory(category)"
-          :href="'/category/'+category.id"
-        >
-          <div class="sitebar-text">{{category.name}}</div> 
-        </a> -->
-
-        <!-- <a @click.prevent="" :href="'/category/'+category.id" class="sitebar-link" data-toggle="collapse" >aaa</a> -->
-
-        <template> 
+        <template v-if="category.categories != undefined && category.categories[0]"> 
           <a 
             @click.prevent="" 
             class="sitebar-link"  
@@ -50,6 +40,16 @@
             </ul>        
           </div>
         </template> 
+
+        <a
+          v-else
+          class="sitebar-link"
+          @click.prevent="changeCategory(category)"
+          :href="'/category/'+category.id"
+        >
+          <div class="sitebar-text">{{category.name}}</div> 
+        </a>
+
       </li>
     </ul>
   </div>
