@@ -145,12 +145,24 @@ export default {
 }
 
 
+@media (min-width: 767px){
+  .logo {
+    height: 90px !important;
+    /* width: 90px !important; */
+    margin-left: 35px  !important;
+  }
+}
+
 @media (max-width: 768px){
   .header-bar {
     height: 62px !important;
     position:fixed !important;
     top:0 !important;
   }
+
+
+
+
 }
 
 </style>

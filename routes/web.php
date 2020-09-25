@@ -22,7 +22,7 @@
 // });
 
 
-Route::group(['middleware' => 'under-construction'], function () {
+Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
 
     
   Route::get('/home', function(){

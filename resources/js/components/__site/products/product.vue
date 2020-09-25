@@ -15,7 +15,7 @@
           </ol>
         </nav>
 
-        <div class="row product">
+        <div class="row product" style="margin-bottom: 40px;">
           <!-- Image -->
           <div class="col-md-6">
             <img    
@@ -101,6 +101,13 @@
                   <span class="mb-3" v-html="product.benefit"></span>
                 </template>
               </div>
+
+
+              <!-- To Cart -->
+              <div v-if="isMobile" class="d-flex justify-content-center mt-4">
+                <product-add-to-cart class="to-cart-block" :product='product'/>
+              </div>
+
             </div>
           </div>
         </div>
@@ -123,6 +130,7 @@ export default {
     id:this.$route.params.id,
   }},
   computed:{
+    isMobile:function(){return window.screen.width <= 768;},
     ...mapGetters(
       {
         categories:'category/get',

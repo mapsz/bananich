@@ -28,7 +28,7 @@
           
           </div>
           <div v-if="!thanks" class="modal-footer">
-            <button @click="sendNotFound()" type="button" class="btn btn-primary">Отправить</button>
+            <button @click="sendNotFound()" type="button" class="btn btn-primary" style="background-color: #fbe214;color: black;border: 1px solid yellow;">Отправить</button>
           </div>
         </div>
       </div>

@@ -54,7 +54,7 @@
             </div>
 
             <!-- Nothing Found -->
-            <span v-if="products.length < 1 && isFetched && !isWaterfalling" class="m-3" style="display: flex;justify-content: center;  width: 100%;  margin: 20px;">
+            <span v-if="products.length < 1 && isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
               <b>Ничего не найдено</b>
             </span>            
             
@@ -66,7 +66,7 @@
             </div>
 
             <!-- Not found -->
-            <div v-if="isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px; 0">
+            <div v-if="!isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
               <product-not-found></product-not-found>                
             </div>             
 
