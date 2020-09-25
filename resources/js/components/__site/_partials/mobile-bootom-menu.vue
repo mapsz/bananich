@@ -154,6 +154,8 @@ export default {
   overflow: scroll;
   box-shadow: none;
   border-radius: 0px;
+  box-shadow: 0 0 15px rgb(0 0 0);
+  border: 1px solid #b6b6b6;
 }
 
 .cart-num-mobile {

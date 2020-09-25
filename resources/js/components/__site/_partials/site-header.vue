@@ -15,7 +15,9 @@
     <!-- Header -->
     <div class="header-bar" v-scroll="handleScroll" 
       style="position:absolute; width:100%; background-color:white;"
-      :style="position > 55 ? 'height: 80px;top:0; position:fixed;' : ''"
+      :style="
+        isMobile ? '' : (position > 55 ? 'height: 80px;top:0; position:fixed;' : '')
+      "
     >
       <div class="container header-bar-wrap">
 
@@ -46,7 +48,7 @@
     </div>
   </header>  
 
-  <div style="display: block;  height: 108px;"></div>
+  <div style="display: block; " :style="isMobile ? 'height: 62px;' : 'height: 108px;'"></div>
 
   <!-- Mobile upper header -->
   <div class="tap-bar">
@@ -64,7 +66,8 @@ export default {
     presentSettings:{},
     position:0,
   }},
-  computed:{
+  computed:{    
+    isMobile:function(){return window.screen.width <= 768;},
     ...mapGetters({
       menus:'menu/get',
       cart:'cart/getCart',

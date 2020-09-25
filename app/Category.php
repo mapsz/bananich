@@ -12,13 +12,19 @@ class Category extends Model
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/category/{id}'],
     ['key'    => 'name','label' => 'Название','type' => 'link', 'link' => '/admin/category/{id}'],
-    ['key'    => 'sort','label' => 'Сортировка']
+    ['key'    => 'sort','label' => 'Сортировка'],
+    ['key'    => 'main_menu','label' => 'главное меню']
   ];
   protected $inputs = [
     [
       'name' => 'name',
       'caption' => 'Название',
       'required' => true,
+    ],
+    [
+      'name' => 'main_menu',
+      'caption' => 'главное меню',
+      'type' => 'checkbox',
     ],
     [
       'name' => 'sort',
@@ -89,6 +95,9 @@ class Category extends Model
     do{
       if(isset($request['id'])){
         $query = $query->where('id', $request['id']);
+      }
+      if(isset($request['menu'])){
+        $query = $query->where('main_menu', 1);
       }
     }while(0);
 

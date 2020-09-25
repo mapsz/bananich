@@ -17,11 +17,11 @@
             @click.prevent="" 
             class="sitebar-link"  
             data-toggle="collapse"  
-            :href="'#multiCollapseExample'+category.id" 
-            :aria-controls="'multiCollapseExample'+category.id" 
+            :href="'#CollapseCategory-'+category.id" 
+            :aria-controls="'CollapseCategory-'+category.id" 
           >{{category.name}}</a>
 
-          <div class="pl-3 collapse multi-collapse" :id="'multiCollapseExample'+category.id"  >
+          <div class="pl-3 collapse multi-collapse" :id="'CollapseCategory-'+category.id"  >
             <ul  class="sitebar-wrap">
               <li 
                 v-for='(cat,i) in category.categories' :key='i'
