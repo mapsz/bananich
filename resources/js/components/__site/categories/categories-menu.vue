@@ -7,50 +7,53 @@
         <a @click.prevent="setPopular()" class="sitebar-link " href="/">Популярное</a>
       </li>
       <!-- Categories -->
-      <li 
-        v-for='(category,i) in categories' :key='i'
-        :class="active.id == category.id ? 'active' : ''"
-        class="sitebar-category"
-      >
-        <template v-if="category.categories != undefined && category.categories[0]"> 
-          <a 
-            @click.prevent="" 
-            class="sitebar-link"  
-            data-toggle="collapse"  
-            :href="'#CollapseCategory-'+category.id" 
-            :aria-controls="'CollapseCategory-'+category.id" 
-          >{{category.name}}</a>
-
-          <div class="pl-3 collapse multi-collapse" :id="'CollapseCategory-'+category.id"  >
-            <ul  class="sitebar-wrap">
-              <li 
-                v-for='(cat,i) in category.categories' :key='i'
-                :class="active.id == cat.id ? 'active' : ''"
-                class="sitebar-category"
-                style="margin-bottom:10px"
-              >
-                <a                  
-                  class="sitebar-link"
-                  @click.prevent="changeCategory(cat)"
-                  :href="'/category/'+cat.id"
-                >
-                  <div class="sitebar-text">{{cat.name}}</div> 
-                </a> 
-              </li>   
-            </ul>        
-          </div>
-        </template> 
-
-        <a
-          v-else
-          class="sitebar-link"
-          @click.prevent="changeCategory(category)"
-          :href="'/category/'+category.id"
+      <template v-for='(category,i) in categories'>
+        <li        
+          :key="i"   
+          v-if="category.main_menu == 1"
+          :class="active.id == category.id ? 'active' : ''"
+          class="sitebar-category"
         >
-          <div class="sitebar-text">{{category.name}}</div> 
-        </a>
+          <template v-if="category.categories != undefined && category.categories[0]"> 
+            <a 
+              @click.prevent="" 
+              class="sitebar-link"  
+              data-toggle="collapse"  
+              :href="'#CollapseCategory-'+category.id" 
+              :aria-controls="'CollapseCategory-'+category.id" 
+            >{{category.name}}</a>
 
-      </li>
+            <div class="pl-3 collapse multi-collapse" :id="'CollapseCategory-'+category.id"  >
+              <ul  class="sitebar-wrap">
+                <li 
+                  v-for='(cat,i) in category.categories' :key='i'
+                  :class="active.id == cat.id ? 'active' : ''"
+                  class="sitebar-category"
+                  style="margin-bottom:10px"
+                >
+                  <a                  
+                    class="sitebar-link"
+                    @click.prevent="changeCategory(cat)"
+                    :href="'/category/'+cat.id"
+                  >
+                    <div class="sitebar-text">{{cat.name}}</div> 
+                  </a> 
+                </li>   
+              </ul>        
+            </div>
+          </template> 
+
+          <a
+            v-else
+            class="sitebar-link"
+            @click.prevent="changeCategory(category)"
+            :href="'/category/'+category.id"
+          >
+            <div class="sitebar-text">{{category.name}}</div> 
+          </a>
+
+        </li>
+      </template>
     </ul>
   </div>
 </template>
@@ -68,9 +71,6 @@ export default {
     }),
   },
   watch: {
-    products: function(){
-      console.log(this.products);
-    },
     $route: function(){
       this.setRoute();
     },
@@ -88,13 +88,18 @@ export default {
     }),    
     async changeCategory(category){
       //Category in cat
-      if(!(category.categories != undefined && category.categories[0])){
+      if(category.categories == undefined || category.categories[0] == undefined){
+        
         //Set Products
         this.setActive(category);
         await this.addFilter({'popular':0})  
         this.addFilter({'category':category.id})  
         this.fetchProducts();
-        this.$router.push('/category/'+category.id);
+        
+        let route = '/category/'+category.id;
+
+        console.log(route);
+        this.$router.push(route);
       }
     },
     async setPopular(){

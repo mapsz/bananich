@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function getAll(){
       // $cat = Category::orderBy('sort','desc')->get();
-      $categories = Category::jugeGet(['no_products' => 1,'menu' => 1]);
+      $categories = Category::jugeGet(['no_products' => 1]);
       
       return response()->json($categories);
     }
