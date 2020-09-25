@@ -5,7 +5,7 @@
     <template v-for='(category,i) in categories'>
       <li 
         :key="i"   
-        v-if="category.main_menu == 1"
+        v-if="category.main_menu == 1 || parent"
         :class="active.id == category.id ? 'active' : ''"
         class="sitebar-category"
       >
@@ -28,7 +28,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    //
+    parent:false,
   }},
   computed:{
     isMobile:function(){return window.screen.width <= 768;},
@@ -69,6 +69,7 @@ export default {
     },
     async setRoute(){
       if(!this.isMobile) return;
+      this.parent = false;
       this.setActive(false);
       let id = this.$route.params.id;
       //Get base categories
@@ -88,6 +89,7 @@ export default {
 
       //Category in cat
       if(category.categories != undefined && category.categories[0]){
+        this.parent = category;
         this.setCategories(category.categories);
         return;
       }else{
