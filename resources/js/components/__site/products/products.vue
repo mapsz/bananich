@@ -9,10 +9,6 @@
       <div class="container">
         <h1 class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
 
-        
-          
-          <div >{{cart}}</div>
-
         <!-- To top -->
         <a v-if="showUp" href="#catalogue" style="
           position: fixed;
