@@ -18,7 +18,7 @@
         :href="'/category/'+category.id"
       >
         <div class="sitebar-text">{{category.name}}</div> 
-        <div class="sitebar-bg" :style='"background-image: url("+category.photo+"); background-color: #ebeff2;"'></div>
+        <div class="sitebar-bg" :style='"background-image: url("+category.mainImage+"); background-color: #ebeff2;"'></div>
       </a>
 
     </li>
@@ -56,6 +56,10 @@ export default {
         this.fetchProducts();
     },
     $route: async function(){
+      // if(this.isMobile && (category.categories != undefined && category.categories[0] != undefined)) return;
+
+      return;
+
       this.setActive(this.$route.params.id != undefined ? this.categories.find(x => x.id == this.$route.params.id) : false);
       // this.active = this.$route.params.id != undefined ? this.$route.params.id : false;
       // this.activeCategoty = this.categories.find(x => x.id == this.$route.params.id);
@@ -89,8 +93,20 @@ export default {
       'fetch':'category/fetch',
       'addFilter':'product/addFilter',
       'fetchProducts':'product/fetchData',
+      setCategories:'category/setCategories',
     }), 
     changeCategory(category){
+
+      if(this.isMobile && (category.categories != undefined && category.categories[0] != undefined)){
+        console.log(category.categories);
+        this.setCategories(category.categories);
+        this.$router.push('/category/'+category.id)
+        return;
+      }
+
+      
+
+
       this.setActive(category);
 
 

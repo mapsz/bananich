@@ -20,6 +20,9 @@ let category = {
     },
     async setActive({commit},set){
       commit('mActive',set); 
+    },
+    async setCategories({commit},categories){
+      commit('mCategory',categories); 
     }
   },  
   mutations:{

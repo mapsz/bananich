@@ -68,6 +68,7 @@ let routes = [];
   );
   routes.push(
     {path: '/category/:catId/product/:id',    component:siteProduct},
+    {path: '/category/:catId/category/:catId/product/:id',    component:siteProduct},
   );
 
   //Cart
@@ -92,6 +93,7 @@ let routes = [];
   routes.push(
     {path: adminPrefix+'/categories',    component:categories},
     {path: adminPrefix+'/category/:id',    component:category},
+    {path: adminPrefix+'/category/:catId/category/:id',    component:category},
   );
 
 

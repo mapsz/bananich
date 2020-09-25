@@ -112,7 +112,7 @@ class Cart extends Model
     $cart = self::getCart();
 
     //Remove items
-    $item = CartItem::where('cart_id',$cart->id)->delete();
+    $item = CartItem::where('cart_id',$cart['id'])->delete();
 
     return $item;
 

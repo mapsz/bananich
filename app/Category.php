@@ -70,18 +70,20 @@ class Category extends Model
   //JugeCRUD  
   public function jugeGetInputs()   {return $this->inputs;}    
   public function jugeGetKeys()     {return $this->keys;} 
-  public function jugeGet($request) {
+  public static function jugeGet($request) {
       
     $query = new Category;
 
 
     //With
-    do{
+    if("WITH" == "WITH"){
       //Products
-      $query = $query->with('products');
+      if(!isset($request['no_products'])){
+        $query = $query->with('products');
+      }
       //Categories
       $query = $query->with('categories');
-    }while(0);
+    }
 
     //Where
     do{
@@ -99,6 +101,10 @@ class Category extends Model
     foreach ($categories as $key => $cat) {
       $cat['images']       = self::getImages($cat->id);
       $cat['mainImage']    = self::getMainImage($cat->id);
+      foreach ($cat->categories as $key => $c) {
+        $c['images']       = self::getImages($c->id);
+        $c['mainImage']    = self::getMainImage($c->id);
+      }
     }
 
     //Single

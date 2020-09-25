@@ -30,6 +30,7 @@ export default {
     product: {
       handler: function (val, oldVal) {
         if(this.product == undefined) return;
+        if(this.item == undefined) return;
         this.count = this.item.count;
       },
       deep: true
@@ -57,10 +58,10 @@ export default {
     }),
     async toCart(){
       //Chech out of stock
-      if(parseInt(this.count) > parseInt(this.product.available) && this.product.always_publish == undefined){
-        $('#cart-input-'+this.product.id).popover({content:'К сожалению на складе осталось всего '+this.product.available+' единиц этого товара',placement:'top'})
+      if(parseInt(this.count) > parseInt(this.product.available_unit) && this.product.always_publish == undefined){
+        $('#cart-input-'+this.product.id).popover({content:'К сожалению на складе осталось всего '+this.product.available_unit+' единиц этого товара',placement:'top'})
         $('#cart-input-'+this.product.id).popover('show');
-        this.count = this.product.available;
+        this.count = this.product.available_unit;
         return;
       }
 

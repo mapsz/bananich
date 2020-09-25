@@ -10,14 +10,10 @@ use App\FileUpload;
 class CategoryController extends Controller
 {
     public function getAll(){
-        $cat = Category::orderBy('sort','desc')->get();
-
-
-        foreach ($cat as $key => $v) {
-            $v->photo = Category::getMainImage($v->id);
-        }
-
-        return response()->json($cat);
+      // $cat = Category::orderBy('sort','desc')->get();
+      $categories = Category::jugeGet(['no_products' => 1]);
+      
+      return response()->json($categories);
     }
 
     public function put(Request $request){

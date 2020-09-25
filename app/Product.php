@@ -565,7 +565,6 @@ class Product extends Model
         }
       }
 
-
       //Metas
       if(!isset($request['no_metas'])){        
         foreach ($products as $product) {
@@ -603,7 +602,7 @@ class Product extends Model
       }
       
       //Unit
-      foreach ($products as $product) {        
+      foreach ($products as $product) {
         $product->unit             = isset($product->unit) ? $product->unit : 1;
         // $product->unit_view        = isset($product->unit_view) ? $product->unit_view : $product->unit;
         
@@ -611,6 +610,12 @@ class Product extends Model
         $product->unit_digit       = preg_replace('/[^0-9]/', '', isset($product->unit_view) ? $product->unit_view : $product->unit);
         $product->unit_name        = preg_replace('/\ /', '', preg_replace('/\d/', '', $product->unit_view));;
       }
+
+      //Available unit
+      foreach ($products as $product) {
+        $product->available_unit = intval(floatval ($product->available) / floatval ($product->unit));
+      }
+
     }
 
     //Single

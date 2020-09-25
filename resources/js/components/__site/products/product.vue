@@ -61,8 +61,8 @@
                     <product-add-to-cart class="to-cart-block" :product='product'/>
 
                     <!-- Left -->
-                    <span v-if="this.product.available <= 5 && this.product.always_publish == undefined">
-                      {{this.product.available}} ед. на складе
+                    <span v-if="this.product.available_unit <= 5 && this.product.always_publish == undefined">
+                      {{this.product.available_unit}} ед. на складе
                     </span>
       
                     <!-- Favorites -->

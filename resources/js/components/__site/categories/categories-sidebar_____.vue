@@ -13,13 +13,14 @@
           :class="active == category.id? 'active' : ''"
           class="sitebar-category"
         >
+        asdasd
           <a
             class="sitebar-link"
             @click.prevent="changeCategory(category)"
             :href="'/category/'+category.id"
           >
-            <div class="sitebar-text">{{category.name}}</div> 
-            <div class="sitebar-bg" :style='"background-image: url("+category.photo+"); background-color: #ebeff2;"'></div>
+            <div class="sitebar-text">{{category.id}}</div> 
+            <div class="sitebar-bg" :style='"background-image: url("+category.mainImage+"); background-color: #ebeff2;"'></div>
           </a>
 
         </li>
@@ -68,6 +69,12 @@ methods:{
     'fetch':'category/fetch',
   }),
   changeCategory(category){
+
+    console.log(category);
+
+    //Cat in cat
+    if(categoty)
+    return;
 
 
     this.active = category.id;
