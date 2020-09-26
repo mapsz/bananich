@@ -58,7 +58,7 @@
             <categories-menu-mobile v-if="isMobile" />
 
             <!-- Product list -->
-            <div class="row" v-if="!isMobile || active">
+            <div class="row" v-if="!isMobile || active || isSearch">
               <!-- Карточка товара -->
               <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 " style="padding-left: 3px; padding-right: 3px;">
                 <product-gallery-card :product="product" />
@@ -118,6 +118,7 @@ export default {
       isFetched:'product/isFetched',
       isWaterfalling:'product/isWaterfalling',
       active:'category/getActive',
+      getCurrentFilters:'product/getFilters'
     }), 
     isMobile:function(){return window.screen.width <= 768;},
     currentCategory:function(){
@@ -133,6 +134,13 @@ export default {
       if (this.$route.params.parent_cat_id == undefined) return {'id':0,'name':''};
       if (this.categories[0] == undefined) return {'id':0,'name':''};
       return this.categories.find(x => x.id == this.$route.params.parent_cat_id);
+    },
+    isSearch:function(){
+      if(this.getCurrentFilters == undefined) return false;
+      if(this.getCurrentFilters.search == undefined) return false;
+      if(this.getCurrentFilters.search == '') return false;
+
+      return true;
     }
   },
   async mounted(){

@@ -21,14 +21,15 @@ class CartController extends Controller
   public function changeSession(Request $request){
 
     $currentCart = Cart::getCart();
+
     $neededCart = Cart::where('id', $request->id)->where('session_id', $request->session_id)->where('user_id', $request->user_id)->first();
 
     if(!$neededCart->exists) return response()->json(false);
 
-    $neededCart->session_id = $currentCart->session_id;
-    $neededCart->user_id = $currentCart->user_id;
+    $neededCart->session_id = $currentCart['session_id'];
+    $neededCart->user_id = $currentCart['user_id'];
 
-    $currentCart->delete();
+    Cart::find($currentCart['id'])->delete();
 
     return response()->json($neededCart->save() ? Cart::getCart() : false);    
 

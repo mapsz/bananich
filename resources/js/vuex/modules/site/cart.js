@@ -17,8 +17,8 @@ let cart = {
       let localCart = false;
       if(localStorage.cart != undefined){
         localCart = JSON.parse(localStorage.cart);
-      }
-      
+      }      
+
 
       //Save to local
       if(
@@ -31,9 +31,11 @@ let cart = {
         return;
       } 
 
+    
       //Set from local
       if(localCart.items.length > 0){
         
+
         let newCart = await ax.fetch('/cart/session',{'id':localCart.id,'session_id':localCart.session_id,'user_id':localCart.user_id},'post');
 
         if(newCart){

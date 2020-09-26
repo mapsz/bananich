@@ -34,7 +34,7 @@
         class=""
       >
         <span>Закажите еще на {{presentSettings.present_s - cart.pre_price}}р и получите подарок!</span>
-        <a href="/catalogue" class="mt-2 url">Докупить</a>
+        <a href="/" class="mt-2 url">Докупить</a>
       </div>
 
     </div>

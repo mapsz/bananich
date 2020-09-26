@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!active">
+  <div v-if="!active && !isSearch">
   <ul  class="sitebar-wrap">
     <!-- Categories -->
     <template v-for='(category,i) in categories'>
@@ -43,7 +43,13 @@ export default {
       if (this.categories[0] == undefined) return {'id':0,'name':''};
 
       return this.categories.find(x => x.id == this.$route.params.cat_id);
+    },
+    isSearch:function(){
+      if(this.getCurrentFilters == undefined) return false;
+      if(this.getCurrentFilters.search == undefined) return false;
+      if(this.getCurrentFilters.search == '') return false;
 
+      return true;
     }
   },
   watch: {

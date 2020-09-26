@@ -35,7 +35,13 @@
             <div class="d-flex">
               <div style="line-height: 1;">          
                 <!-- Name -->
-                <span class="font-weight-bold d-block pr-3">{{item.product != undefined ? item.product.name : ''}}</span>
+                <span class="font-weight-bold d-block pr-3">
+                  {{
+                    item.product != undefined ? 
+                    item.product.name + (item.product.unit_name != '' ? ', '+item.product.unit_view : '')
+                    :''
+                    }}
+                  </span>
                 <!-- Count -->
                 <span style="color:gray;font-size:11pt;">{{item.count}}</span>
               </div>

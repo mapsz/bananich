@@ -51,7 +51,7 @@
               <li class="m-2"><a href="/profile/orders" class="nav-link-sad" style="font-size:12pt">Мои заказы</a> </li>
             </ul>
             <div v-else style="font-size: 12pt;color: black;"> 
-              <a href="/register" style="font-size: 12pt;color: black; text-decoration: underline !important;">Зарегистрироватсья</a> 
+              <a href="/register" style="font-size: 12pt;color: black; text-decoration: underline !important;">Зарегистрироваться</a> 
               или 
               <a href="/login" style="font-size: 12pt;color: black; text-decoration: underline !important;">войти</a> 
             </div>
