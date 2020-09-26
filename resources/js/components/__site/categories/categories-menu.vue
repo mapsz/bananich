@@ -69,6 +69,10 @@ export default {
       products:'product/get',
       getCurrentFilters:'product/getFilters'
     }),
+    currentCategories:function(){
+      
+
+    }
   },
   watch: {
     $route: function(){
@@ -78,6 +82,8 @@ export default {
   async mounted(){
     await this.fetch();
     this.setRoute();
+
+
   },
   methods:{
     ...mapActions({

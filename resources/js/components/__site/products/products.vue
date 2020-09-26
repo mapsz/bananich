@@ -7,6 +7,14 @@
     <a name="catalogue"></a>
     <main class="home">
       <div class="container">
+        <!-- Breadcrumbs -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Каталог</a></li>
+            <li v-if="parentCategory.id > 0" class="breadcrumb-item"><a :href="'/category/'+parentCategory.id">{{parentCategory.name}}</a></li>
+            <li v-if="currentCategory.id > 0" class="breadcrumb-item active">{{currentCategory.name}}</li>
+          </ol>
+        </nav>
 
         <h1 v-if="!isMobile || $route.path == '/'" class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
 
@@ -101,7 +109,7 @@ export default {
       errors:'product/getErrors',
       cart:'cart/getCart',
       filters:'product/getFilters',
-      categories:'category/get',      
+      categories:'category/getAll',      
       pages:'product/getPages',
       infinite:'product/getInfinite',
       isFetched:'product/isFetched',
@@ -110,13 +118,18 @@ export default {
     }), 
     isMobile:function(){return window.screen.width <= 768;},
     currentCategory:function(){
-        if (this.categories[0] != undefined) {
-          let cat =  this.categories.find(x => x.id == this.filters.category);
-          if (cat != undefined) return cat;
-          return  {id:0,name:''};
-        }
+      if (this.categories[0] != undefined) {
+        let cat =  this.categories.find(x => x.id == this.filters.category);
+        if (cat != undefined) return cat;
+        return  {id:0,name:''};
+      }       
         
-       return {id:0,name:''};
+      return {id:0,name:''};
+    },
+    parentCategory:function(){
+      if (this.$route.params.parent_cat_id == undefined) return {'id':0,'name':''};
+      if (this.categories[0] == undefined) return {'id':0,'name':''};
+      return this.categories.find(x => x.id == this.$route.params.parent_cat_id);
     }
   },
   async mounted(){
