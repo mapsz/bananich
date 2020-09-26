@@ -111,7 +111,7 @@ export default {
     },
     async setRoute(){
       this.setActive(false);
-      let id = this.$route.params.id;
+      let id = this.$route.params.cat_id;
       //Get base categories
       if(id == undefined){
         this.setPopular();

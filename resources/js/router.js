@@ -5,7 +5,8 @@ let routes = [];
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';
   routes.push(
-    {path: '/category/:id',    component:siteProducts},
+    {path: '/category/:cat_id',    component:siteProducts},
+    {path: '/category/:parent_cat_id/category/:cat_id',    component:siteProducts},
     {path: '/catalogue',    component:siteProducts},
     {path: '/',    component:siteProducts,},
   );

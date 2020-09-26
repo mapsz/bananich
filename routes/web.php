@@ -11,15 +11,23 @@
 |
 // */
 
-// Route::get('/mail', function(){
+Route::get('/mail', function(){
 
-//   Mail::send('mail', ['name' => 'dataname'], function($m){
-//     $m->to('mapss@inbox.lv','to');
-//     $m->from('no-reply@bananich.ru');
-//   });
 
-//   return view('mail');
-// });
+  $order = App\Order::getWithOptions(['id'=>14408]);
+
+  dump(  $order->toarray());
+
+
+  Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
+    $m->to('jurijsgergelaba@yandex.ru','to');
+    $m->from('no-reply@bananich.ru');
+    $m->subject('Ваш Бананыч заказ получен!');
+  });
+
+
+  return view('mail.mailOrder')->with(['order' => $order->toarray()]);
+});
 
 
 Route::group(['middleware' => ['under-construction','HttpsRR']], function () {

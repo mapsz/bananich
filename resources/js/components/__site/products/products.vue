@@ -7,7 +7,8 @@
     <a name="catalogue"></a>
     <main class="home">
       <div class="container">
-        <h1 class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
+
+        <h1 v-if="!isMobile || $route.path == '/'" class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
 
         <!-- To top -->
         <a v-if="showUp" href="#catalogue" style="

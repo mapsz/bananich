@@ -38,6 +38,13 @@ export default {
       products:'product/get',
       getCurrentFilters:'product/getFilters'
     }),
+    currentCategory:function(){
+      if (this.$route.params.cat_id == undefined) return {'id':0,'name':''};
+      if (this.categories[0] == undefined) return {'id':0,'name':''};
+
+      return this.categories.find(x => x.id == this.$route.params.cat_id);
+
+    }
   },
   watch: {
     $route: function(){
@@ -63,15 +70,15 @@ export default {
     async changeCategory(category){
       if(!this.isMobile) return;
       //Scroll
-      $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top - 100)}, 300);
+      $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top-200)}, 300);
       //Route
-      this.$router.push('/category/'+category.id);
+      this.$router.push((this.$route.path == '/' ? '' : this.$route.path) + '/category/'+category.id);
     },
     async setRoute(){
       if(!this.isMobile) return;
       this.parent = false;
       this.setActive(false);
-      let id = this.$route.params.id;
+      let id = this.$route.params.cat_id;
       //Get base categories
       if(id == undefined){
         this.fetch();
