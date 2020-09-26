@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Item;
+use App\Bonus;
 use Carbon\Carbon;
 
 class Order extends Model
@@ -223,6 +224,12 @@ class Order extends Model
 
     //Delete Cart
     Cart::find($cart['id'])->delete();
+
+    //Remove Bonuses
+    if($bonus > 0){
+      Bonus::remove($customer_id, $bonus, 2, $orderId);
+    }
+    
 
     return $orderId;
 

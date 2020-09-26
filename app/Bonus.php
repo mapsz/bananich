@@ -1594,7 +1594,6 @@ class Bonus extends Model
   
     foreach ($bo as $key => $bonus) {
       self::add($bonus['user_id'], $bonus['bonus'], 1, $order = null, 'Перенос бонусов', 21);
-      self::add($bonus['user_id'], 200, 1, $order = null, 'Дополнительно', 3);
       dump(count($bo) - $key);
     }
   
