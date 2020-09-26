@@ -108,6 +108,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'M' => 
         array (
             'Monolog\\' => 8,
+            'MikeMcLin\\WpPassword\\' => 21,
         ),
         'L' => 
         array (
@@ -352,6 +353,10 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'MikeMcLin\\WpPassword\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mikemclin/laravel-wp-password/src',
+        ),
         'League\\Flysystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
@@ -480,6 +485,10 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
             array (
                 0 => __DIR__ . '/..' . '/scrivo/highlight.php',
             ),
+            'Hautelook' => 
+            array (
+                0 => __DIR__ . '/..' . '/hautelook/phpass/src',
+            ),
         ),
     );
 
@@ -487,6 +496,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\ArchiveProduct' => __DIR__ . '/../..' . '/app/ArchiveProduct.php',
         'App\\Bonus' => __DIR__ . '/../..' . '/app/Bonus.php',
         'App\\BonusAdd' => __DIR__ . '/../..' . '/app/BonusAdd.php',
+        'App\\BonusComment' => __DIR__ . '/../..' . '/app/BonusComment.php',
         'App\\BonusRemove' => __DIR__ . '/../..' . '/app/BonusRemove.php',
         'App\\Cart' => __DIR__ . '/../..' . '/app/Cart.php',
         'App\\CartItem' => __DIR__ . '/../..' . '/app/CartItem.php',
@@ -562,6 +572,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
+        'App\\Http\\Middleware\\HttpsRR' => __DIR__ . '/../..' . '/app/Http/Middleware/HttpsRR.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
@@ -574,12 +585,15 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\ItemStatus' => __DIR__ . '/../..' . '/app/ItemStatus.php',
         'App\\JugeCRUD' => __DIR__ . '/../..' . '/app/JugeCRUD.php',
         'App\\ListConfig' => __DIR__ . '/../..' . '/app/ListConfig.php',
+        'App\\Listeners\\LogFailedAuthenticationAttempt' => __DIR__ . '/../..' . '/app/Listeners/LogFailedAuthenticationAttempt.php',
         'App\\Listeners\\addBonus' => __DIR__ . '/../..' . '/app/Listeners/addBonus.php',
         'App\\Listeners\\cancelBonus' => __DIR__ . '/../..' . '/app/Listeners/cancelBonus.php',
         'App\\Listeners\\removeBonus' => __DIR__ . '/../..' . '/app/Listeners/removeBonus.php',
         'App\\Logistic' => __DIR__ . '/../..' . '/app/Logistic.php',
         'App\\Menu' => __DIR__ . '/../..' . '/app/Menu.php',
         'App\\MenuType' => __DIR__ . '/../..' . '/app/MenuType.php',
+        'App\\NotFound' => __DIR__ . '/../..' . '/app/NotFound.php',
+        'App\\Notifications\\BananichResetPasswordNotification' => __DIR__ . '/../..' . '/app/Notifications/BananichResetPasswordNotification.php',
         'App\\Order' => __DIR__ . '/../..' . '/app/Order.php',
         'App\\OrderStatus' => __DIR__ . '/../..' . '/app/OrderStatus.php',
         'App\\Page' => __DIR__ . '/../..' . '/app/Page.php',
@@ -615,7 +629,6 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\UserComment' => __DIR__ . '/../..' . '/app/UserComment.php',
         'App\\UserReferal' => __DIR__ . '/../..' . '/app/UserReferal.php',
         'App\\Writeoff' => __DIR__ . '/../..' . '/app/Writeoff.php',
-        'App\\notFound' => __DIR__ . '/../..' . '/app/notFound.php',
         'App\\ordersLimit' => __DIR__ . '/../..' . '/app/ordersLimit.php',
         'App\\statisticOrder' => __DIR__ . '/../..' . '/app/statisticOrder.php',
         'App\\statisticProduct' => __DIR__ . '/../..' . '/app/statisticProduct.php',
@@ -1544,6 +1557,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'Hamcrest\\Type\\IsString' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Type/IsString.php',
         'Hamcrest\\Util' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
         'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
+        'Hautelook\\Phpass\\PasswordHash' => __DIR__ . '/..' . '/hautelook/phpass/src/Hautelook/Phpass/PasswordHash.php',
         'Highlight\\Autoloader' => __DIR__ . '/..' . '/scrivo/highlight.php/Highlight/Autoloader.php',
         'Highlight\\HighlightResult' => __DIR__ . '/..' . '/scrivo/highlight.php/Highlight/HighlightResult.php',
         'Highlight\\Highlighter' => __DIR__ . '/..' . '/scrivo/highlight.php/Highlight/Highlighter.php',
@@ -2804,6 +2818,10 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'League\\Flysystem\\Util\\MimeType' => __DIR__ . '/..' . '/league/flysystem/src/Util/MimeType.php',
         'League\\Flysystem\\Util\\StreamHasher' => __DIR__ . '/..' . '/league/flysystem/src/Util/StreamHasher.php',
         'MenuTableSeeder' => __DIR__ . '/../..' . '/database/seeds/MenuTableSeeder.php',
+        'MikeMcLin\\WpPassword\\Contracts\\WpPassword' => __DIR__ . '/..' . '/mikemclin/laravel-wp-password/src/Contracts/WpPassword.php',
+        'MikeMcLin\\WpPassword\\Facades\\WpPassword' => __DIR__ . '/..' . '/mikemclin/laravel-wp-password/src/Facades/WpPassword.php',
+        'MikeMcLin\\WpPassword\\WpPassword' => __DIR__ . '/..' . '/mikemclin/laravel-wp-password/src/WpPassword.php',
+        'MikeMcLin\\WpPassword\\WpPasswordProvider' => __DIR__ . '/..' . '/mikemclin/laravel-wp-password/src/WpPasswordProvider.php',
         'Mockery' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'Mockery\\Adapter\\Phpunit\\Legacy\\TestListenerForV5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/Legacy/TestListenerForV5.php',
         'Mockery\\Adapter\\Phpunit\\Legacy\\TestListenerForV6' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/Legacy/TestListenerForV6.php',

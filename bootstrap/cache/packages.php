@@ -49,6 +49,17 @@
       0 => 'LarsJanssen\\UnderConstruction\\UnderConstructionServiceProvider',
     ),
   ),
+  'mikemclin/laravel-wp-password' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'MikeMcLin\\WpPassword\\WpPasswordProvider',
+    ),
+    'aliases' => 
+    array (
+      'WpPassword' => 'MikeMcLin\\WpPassword\\Facades\\WpPassword',
+    ),
+  ),
   'nesbot/carbon' => 
   array (
     'providers' => 

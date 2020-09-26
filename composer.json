@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^1.2",
         "larsjanssen6/underconstruction": "^6.1",
+        "mikemclin/laravel-wp-password": "^2.0",
         "sopamo/laravel-filepond": "^0.3.0",
         "spatie/laravel-permission": "^3.10",
         "tymon/jwt-auth": "^1.0"
