@@ -194,7 +194,7 @@ class Bonus extends Model
       $bonus = new Bonus;      
       $bonus->action_user_id = $actionUserId;
       $bonus->user_id = $userId;
-      $add->bonus_type_id = $type;
+      $bonus->bonus_type_id = $type;
       $bonus->quantity = $quantity;
       $bonus->left = $currentCount - $quantity;
       $bonus->save();
