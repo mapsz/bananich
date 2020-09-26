@@ -83,7 +83,7 @@ export default {
       }
 
       if(r > 0){
-        Pixel
+        // Pixel
         this.clean();
         location.href ='/order-thanks';
       }

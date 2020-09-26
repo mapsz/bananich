@@ -34,7 +34,7 @@ watch: {
       }else{
         this.published = true;
       }     
-      if(this.product.always_publish == undefined){
+      if(this.product.always_publish == undefined || this.product.always_publish == 0){
         this.alwaysPublished = false;
       }else{
         this.alwaysPublished = true;

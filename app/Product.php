@@ -236,23 +236,29 @@ class Product extends Model
     $ids = [];
     foreach ($cart['items'] as $key => $item) {array_push($ids,$item['product_id']);}
 
-    $products = self::getWithOptions(['with_summary' => 1, 'ids' => $ids]);
+    self::updateAvailable($ids);
+    $products = self::getWithOptions(['ids' => $ids]);
+
 
     foreach ($products as $key => $product) {
       foreach ($cart['items'] as $key => $item) {
         if($product->id == $item['product_id']){
-          if((floatval($item['count']) * floatval($item['unit'])) > floatval($product->summary)){
+          if($product->always_publish) continue;
+          if(intval($item['count']) > intval($product->available_unit)){
             return [
               'r' => false,
               'product' => $product->id,
               'name' => $product->name,
-              'left' => $product->summary,
-              'leftUnit' => intval(floatval($product->summary) / floatval($item['unit'])) 
+              'leftUnit' => intval($product->available_unit) 
             ];
           }
         }
       }
     }
+
+
+    
+    
 
     return ['r' => true];
 

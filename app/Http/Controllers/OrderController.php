@@ -113,6 +113,7 @@ class OrderController extends Controller
     
     //Check items available
     $available = Product::checkCartAvailable($cart);
+
     if ($available['r'] == false){
       $text = $available['leftUnit'] == 0 ? 
         'ууупс... кажется, вы не успели и "'.$available['name'].'" только что раскупили😞' :
