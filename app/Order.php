@@ -157,16 +157,18 @@ class Order extends Model
     if('Order' == 'Order'){
 
       //Bonus
-      $bonus = 0; //@@ todo
-      $shipping = 0; //@@ todo
+      $bonus = $cart['bonus'];
+      $shipping = $cart['shipping'];
 
       //Save order
       $order = new Order;
       $order->customer_id = $customer_id;
       $order->date = now();
       $order->delivery_date = $data['deliveryDate'];
-      $order->delivery_time_from = $data['deliveryTime']['from'];
-      $order->delivery_time_to = $data['deliveryTime']['to'];
+      $order->delivery_time_from = $data['deliveryTime']['from'].':00:00';
+      $order->delivery_time_to = $data['deliveryTime']['to'].':00:00';
+      $order->container = $data['container'];
+      $order->pay_method = $data['payMethod'];
       $order->confirm = $data['confirm'];
       $order->comment = $data['comment'];
       $order->name = $data['name'];
@@ -210,10 +212,17 @@ class Order extends Model
       }      
     }
 
+    if($data['toOther']){
+      DB::table('order_to_other')->insert([
+        'order_id' => $orderId, 
+        'phone' => $data['toOtherName'],
+        'name' => $data['toOtherPhone'],
+        'comment' => $data['toOtherComment']
+      ]);
+    }
+
     //Delete Cart
     Cart::find($cart['id'])->delete();
-
-
 
     return $orderId;
 

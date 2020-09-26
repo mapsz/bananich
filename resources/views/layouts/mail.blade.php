@@ -1,35 +1,47 @@
     <!-- Mail -->
-    <div style="position: relative;width:100%;margin: auto">
-      
+    <div 
+      style='
+        position: relative;
+        width:100%;
+        margin: auto
+    '>      
       <!-- Header -->
       <div style="
-        display:flex;
-        justify-content: space-between;
-        align-items: center;
         width: 600px;
         height: 160px;
         margin: auto;
         background: #FBD610;
       ">
-        <span style="
-          display: flex;
-          flex-direction: column;
-          padding-left: 50px;
-          font-family: Open Sans;
-          font-style: normal;
-          font-size: 30px;
-          line-height: 100%;
-          color: #000000;
-        ">
-          <span><b>Бананыч.</b></span>  
-          <span>Доставка полезного</span>  
-        </span>
-        <span class="header-image" style="
-          width: 160px;
-          height: 160px;
-          background: url('http://bananich.ru/mail/banana.png');
-          background-repeat: round;        
-        "></span>
+
+        <table>
+          <tbody>
+            <tr>
+              <td width="50"></td>
+              <td width="450">
+                <span style="
+                  font-family: Arial;
+                  font-style: normal;
+                  font-size: 30px;
+                  line-height: 100%;
+                  color: #000000;
+                ">
+                  <div align="left">
+                    <span><b>Бананыч.</b></span><br>
+                    <span>Доставка полезного</span>  
+                  </div>
+                </span>
+              </td>
+              <td align="right" valign="middle" width="160" height='155' 
+                style="
+                  background: url('http://bananich.ru/mail/banana.png');
+                  background-repeat: round;        
+                "
+              >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
       
       <!-- Content -->
@@ -41,7 +53,7 @@
         border-top: 0px;  
         border-bottom: 0px;  
         padding: 10px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-family: Arial;
       '>
         <div style="
           margin: 10px;
@@ -55,7 +67,6 @@
 
         </div>
       </div>
-      
 
       <!-- Footer -->
       <div style="
@@ -66,51 +77,91 @@
         border-top: 0px;  
         padding: 10px;"
       >
-        <div style="
-          display: flex;
-          justify-content: space-around;"
-        >
-          <!-- text -->
-          <span style="
-            display:flex;
-            flex-direction:column;
-          ">
-            <span>
-              <b>
-                Пишите или звоните,
-                мы всегда рады общению!
-              </b>
-            </span>
-            <span>
-              Ваш Бананыч
-            </span>
 
-          </span>
-          <!-- links -->
-          <span >
-            <!-- Socs -->
-            <div style="
-              display:flex;
-            ">
-              <a href="https://instagram.com/bananich.ru" target="_blank">
-                <img src="http://bananich.ru/image/insta.svg" alt="" style="margin-right: 10px;">
-              </a>
-              <a href="https://vk.com/bananichru" target="_blank">
-                <img src="http://bananich.ru/image/vk.svg" alt="">
-              </a>
-            </div>
-            <a href="https://bananich.ru">bananich.ru</a>
-            
-          </span>
-        </div>
+        <table>
+          <tbody>
+            <tr>              
+              <td width="80" height="80" 
+                style="
+                  background: url('https://bananich.ru/mail/logo.jpg');
+                  background-repeat: no-repeat;    
+                  background-position: center;
+                "
+              >
+              <td width="400">
+                <p>
+                  <b>
+                    Пишите или звоните, <br>
+                    мы всегда рады общению!
+                  </b>
+                </p>
+                <p>
+                  Ваш Бананыч
+                </p>
 
-        <!-- Unfollow -->
-        <div style="  
-          display: flex;
-          justify-content: center;
-        ">
-          <a href="https://bananich.ru/unsubscribe">Отписаться</a>
-        </div>
+              </td>
+              <td>                
+                <table>
+                  <tr>
+                    <td width="30" height="20">
+                      <a width="46" height="80" href="https://instagram.com/bananich.ru" target="_blank" >
+                        <table><tr><td width="35" height="20" style="
+                            background: url('http://bananich.ru/mail/insta.jpg');
+                            background-repeat: no-repeat;        
+                        ">                          
+                        </td></tr></table>                      
+                      </a>
+                    </td>
+                    <td>
+                      <a width="20" height="20" href="https://vk.com/bananichru" target="_blank" >
+                        <table><tr><td width="35" height="20" style="
+                            background: url('http://bananich.ru/mail/vk.jpg');
+                            background-repeat: no-repeat;        
+                        ">                          
+                        </td></tr></table>                      
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <a href="https://bananich.ru" style="color:black">bananich.ru</a>
+                    </td>
+                  </tr>
+                </table>
+
+
+
+                  {{-- <!-- Socs -->
+                  <div style="">
+                    <a width="80" height="80" href="https://instagram.com/bananich.ru" target="_blank" >
+                    <div width="80" height="80" 
+                      style="
+                        background: url('https://bananich.ru/image/logo.svg');
+                        background-repeat: round;        
+                    ">
+
+                    </div>
+                    </a>
+                    <a href="https://vk.com/bananichru" target="_blank">
+                      <img src="http://bananich.ru/image/vk.svg" alt="">
+                    </a>
+                  </div>
+                  <a href="https://bananich.ru" style="color:black">bananich.ru</a> --}}
+                  
+                {{-- </span> --}}
+
+              </td>
+
+            </tr>
+            <tr >
+              <td colspan="3" width="600" align="center">
+                <a href="https://bananich.ru/unsubscribe" style="color:black">Отписаться</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
       </div>
 
     </div>

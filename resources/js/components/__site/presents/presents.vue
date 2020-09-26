@@ -40,7 +40,7 @@
                     {{
                       cart.presents.findIndex(x => x.product_id == product.product_id) > -1 ? 
                       ('Подарок в корзине') :
-                      (presentSettings['present_'+product.type] > cart.pre_price ? 'При заказе от ' + presentSettings['present_'+product.type] : 'Получить')
+                      (presentSettings['present_'+product.type] > cart.pre_price ? 'При заказе от ' + presentSettings['present_'+product.type] + ', ' + product.type: 'Получить')
                     }}
                   </button>
 

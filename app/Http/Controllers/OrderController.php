@@ -121,6 +121,7 @@ class OrderController extends Controller
       Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
     }
 
+
     //Place order
     $orderId = Order::placeOrder($request->data, $cart);
 

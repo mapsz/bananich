@@ -19,11 +19,11 @@ Route::get('/mail', function(){
   dump(  $order->toarray());
 
 
-  Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
-    $m->to('jurijsgergelaba@yandex.ru','to');
-    $m->from('no-reply@bananich.ru');
-    $m->subject('Ваш Бананыч заказ получен!');
-  });
+  // Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
+  //   $m->to('aslanovadaria@yandex.ru','to');
+  //   $m->from('no-reply@bananich.ru');
+  //   $m->subject('Ваш Бананыч заказ получен!');
+  // });
 
 
   return view('mail.mailOrder')->with(['order' => $order->toarray()]);

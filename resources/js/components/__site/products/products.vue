@@ -8,7 +8,7 @@
     <main class="home">
       <div class="container">
         <!-- Breadcrumbs -->
-        <nav aria-label="breadcrumb">
+        <nav v-if="$route.path != '/'" aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Каталог</a></li>
             <li v-if="parentCategory.id > 0" class="breadcrumb-item"><a :href="'/category/'+parentCategory.id">{{parentCategory.name}}</a></li>
