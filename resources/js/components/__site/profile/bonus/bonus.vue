@@ -16,12 +16,17 @@
 
           <div class="content">
 
-            <div v-show="currentBonus" class="bonuse-block d-flex align-items-center justify-content-lg-start justify-content-center">
-              <div class="bonuse-num">
-                <span class="bonuse-num-now">{{lastBonus.quantity != undefined ? lastBonus.quantity : 0}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
+            
+            <div v-show="currentBonus" class="bonuse-block row">
+              <!-- Current -->
+              <div class="bonuse-num col-12 col-md-6" style="  margin-right: 0px; display: flex;flex-direction: column;">
+                <span class="bonuse-num-now-a">
+                  <span class="bonuse-num-now">{{lastBonus.quantity != undefined ? lastBonus.quantity : 0}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
+                </span>
                 <div class="bonuse-num-text">сгорят через</div>
               </div>
-              <div class="bonuse-progres">
+              <!-- Chart -->
+              <div class="bonuse-progres col-12 col-md-6" style="height: auto;">
                 <div>
                   <div class="bonus-chart-block my-3">
                     <div style="width:100%; position: relative; z-index: 2;">
@@ -44,7 +49,6 @@
                       <div class="story-date">{{moment(bonus.created_at).lang('ru').format('lll')}}</div>
                       <div class="story-track">
                         {{bonus.bonus_type_id == 1 ? 'Админ' : ''}}
-                        <!-- TRK09845098 -->
                       </div>
                     </div>
                     <div class="story-bonuse">{{bonus.quantity}} Б</div>
@@ -211,7 +215,22 @@ export default {
       height: inherit !important;
       padding: 10px  !important;
     }
+
+     
   }
+
+  @media (max-width: 767px){   
+    .bonuse-num{
+      align-items: center;
+    } 
+  }
+
+  @media (min-width: 768px){
+    .bonuse-num-now-a{
+      align-self: flex-end;
+    }      
+  }
+
   .bonus-chart-block{
     width: 180px;    
     height: 180px;

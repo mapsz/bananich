@@ -44,12 +44,17 @@
                 <h4 >Профиль</h4>
               </div>
             </div>
-            <ul class="menu-navbarmenu-navbar">
+            <ul v-if="user" class="menu-navbarmenu-navbar">
               <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
               <li class="m-2"><a href="/profile/favorites" class="nav-link-sad" style="font-size:12pt">Избранное</a> </li>
               <li class="m-2"><a href="/profile/bonus" class="nav-link-sad" style="font-size:12pt">Бонусы</a> </li>
               <li class="m-2"><a href="/profile/orders" class="nav-link-sad" style="font-size:12pt">Мои заказы</a> </li>
             </ul>
+            <div v-else style="font-size: 12pt;color: black;"> 
+              <a href="/register" style="font-size: 12pt;color: black; text-decoration: underline !important;">Зарегистрироватсья</a> 
+              или 
+              <a href="/login" style="font-size: 12pt;color: black; text-decoration: underline !important;">войти</a> 
+            </div>
           </div>
         </div>
 
@@ -113,6 +118,7 @@ export default {
   },
   computed:{
     ...mapGetters({
+      user:'user/get',
       menus:'menu/get',
       cart:'cart/getCart',
       settings:'settings/beautyGet',

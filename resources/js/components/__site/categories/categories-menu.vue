@@ -17,7 +17,7 @@
           <template v-if="category.categories != undefined && category.categories[0]"> 
             <a 
               @click.prevent="" 
-              class="sitebar-link"  
+              class="sitebar-link dropdown-sad-btn active"  
               data-toggle="collapse"  
               :href="'#CollapseCategory-'+category.id" 
               :aria-controls="'CollapseCategory-'+category.id" 

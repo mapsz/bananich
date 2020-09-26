@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
 
 class User extends Authenticatable
@@ -74,6 +75,12 @@ class User extends Authenticatable
   }
   public function orders(){
     return $this->hasMany('App\Order','customer_id');
+  }
+
+  public function sendPasswordResetNotification($token)
+  {
+      // Your your own implementation.
+      $this->notify(new BananichResetPasswordNotification($token));
   }
 
 }

@@ -16,7 +16,10 @@
           </ol>
         </nav>
 
-        <h1 v-if="!isMobile || $route.path == '/'" class="title-h1"><span>Бананыч.</span> Доставка полезного</h1>
+        <h1 v-if="!isMobile || $route.path == '/'" class="title-h1">
+          <span>ЭКОдоставка</span> 
+           по выгодным ценам
+        </h1>
 
         <!-- To top -->
         <a v-if="showUp" href="#catalogue" style="
