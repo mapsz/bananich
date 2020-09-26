@@ -50,14 +50,14 @@ class Order extends Model
   public static function getAvailableDays(){
 
     //Get settings
-    $settings = Order::getLimitSettings();
+    $settings = self::getLimitSettings();
     $endTime = 24 - $settings['order_limit_day_end_time'];
 
     $from = now()->add($endTime,'hour');
     $to   = now()->add($endTime,'hour')->add($settings['order_limit_days_count'],'days');
 
     //Get orders$endTime
-    $orders = Order::withStatus()
+    $orders = self::withStatus()
       ->where('delivery_date', '>=', $from)
       ->where('delivery_date', '<=', $to)
       ->get()->toArray();

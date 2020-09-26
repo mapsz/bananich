@@ -11,23 +11,23 @@
 |
 // */
 
-Route::get('/mail', function(){
+// Route::get('/mail', function(){
 
 
-  $order = App\Order::getWithOptions(['id'=>14408]);
+//   $order = App\Order::getWithOptions(['id'=>14408]);
 
-  dump(  $order->toarray());
-
-
-  // Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
-  //   $m->to('aslanovadaria@yandex.ru','to');
-  //   $m->from('no-reply@bananich.ru');
-  //   $m->subject('Ваш Бананыч заказ получен!');
-  // });
+//   dump(  $order->toarray());
 
 
-  return view('mail.mailOrder')->with(['order' => $order->toarray()]);
-});
+//   // Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
+//   //   $m->to('aslanovadaria@yandex.ru','to');
+//   //   $m->from('no-reply@bananich.ru');
+//   //   $m->subject('Ваш Бананыч заказ получен!');
+//   // });
+
+
+//   return view('mail.mailOrder')->with(['order' => $order->toarray()]);
+// });
 
 
 Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
