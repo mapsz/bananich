@@ -130,13 +130,14 @@ class OrderController extends Controller
     //Mail
     $order = Order::getWithOptions(['id'=>$orderId]);
     $email = $order->email;
+    $data = ["email" => $email, "orderId" => $orderId];
 
-    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($email){
-      $m->to($email,'to');
+    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
+      $m->to($data['email'],'to');
       $m->from('no-reply@bananich.ru');
-      $m->subject('Бананыч заказ №'.$orderId.' получен!');
+      $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
     });
-    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
+    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
       $m->to('bbananich@yandex.ru','to');
       $m->from('no-reply@bananich.ru');
       $m->subject('Бананыч заказ №'.$orderId.' получен!');
