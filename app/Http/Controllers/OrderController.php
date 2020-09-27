@@ -14,6 +14,7 @@ use App\Discount;
 use App\Cart;
 use App\Setting;
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -125,6 +126,21 @@ class OrderController extends Controller
 
     //Place order
     $orderId = Order::placeOrder($request->data, $cart);
+
+    //Mail
+    $order = Order::getWithOptions(['id'=>$orderId]);
+    $email = $order->email;
+
+    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($email){
+      $m->to($email,'to');
+      $m->from('no-reply@bananich.ru');
+      $m->subject('Ваш Бананыч заказ получен!');
+    });
+    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
+      $m->to('bbananich@yandex.ru','to');
+      $m->from('no-reply@bananich.ru');
+      $m->subject('Ваш Бананыч заказ получен!');
+    });
 
     return response()->json($orderId);
 
