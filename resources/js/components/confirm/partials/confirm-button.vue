@@ -1,5 +1,5 @@
 <template>
-  <a :href="'/confirm/'+data.id">
+  <a :href="'/admin/confirm/'+data.id">
     <font-awesome-icon 
       class="text-primary" 
       icon="check-square" 

@@ -13,7 +13,7 @@ class Order extends Model
 {
 
   protected $keys = [
-    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/order/{id}'],
+    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/order/{id}'],
     ['key'    => 'address','label' => 'адрес'], 
     ['key'    => 'appart', 'label' => 'квартира'],    
     ['key'    => 'porch', 'label' => 'подъезд'],     

@@ -18,7 +18,7 @@
 <div>{{$order['address']}} {{$order['appart']}} {{($order['porch'] != '') ? 'п. ' . $order['porch'] : ''}}</div>
 <div>{{$order['name']}}</div>
 <div>{{$order['phone']}} </div>
-<div>{{$order['confirm']}} </div>
+<div>{{$order['confirm'] == 1 ? 'По звонку оператора' : 'Без звонка оператора'}} </div>
 
 <table  style="border: 1px solid gray;width: 100%; margin: 20px 0 0 0;" >
   <thead style="font-weight: 600;">

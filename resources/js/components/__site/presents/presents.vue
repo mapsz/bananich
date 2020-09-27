@@ -19,7 +19,6 @@
             <div class="row row-min content pb-2">
 
               <!-- products -->
-
               <div v-for='(product,i) in products' :key='i' class="col-lg-3 col-md-4 col-6">
                 <div class="gifts-item" :class="presentSettings['present_'+product.type] > cart.pre_price ? 'hide' : ''">
                   <a :href="'/product/' + product.product.id " class="gifts-item-box">

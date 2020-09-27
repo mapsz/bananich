@@ -17,7 +17,7 @@ if (!mix.inProduction()) {
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+   .sass('resources/sass/app.scss', 'public/css').version();;
 
-mix.js('resources/js/adminApp.js', 'public/js')
+mix.js('resources/js/adminApp.js', 'public/js').version();
 
