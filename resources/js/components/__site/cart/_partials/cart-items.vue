@@ -31,7 +31,7 @@
         <span v-if="!item.present" @click="removeItem(item.product_id)" class="item-remove"></span>
         <div class="row">
 
-          <div class="col-12 col-lg-7">
+          <div class="col-12 col-lg-7" style="align-self: center;">
             <div class="d-flex">
               <div style="line-height: 1;">          
                 <!-- Name -->
@@ -43,7 +43,7 @@
                     }}
                   </span>
                 <!-- Count -->
-                <span style="color:gray;font-size:11pt;">{{item.count}}</span>
+                <!-- <span style="color:gray;font-size:11pt;">{{item.count}}</span> -->
               </div>
             </div>
           </div>

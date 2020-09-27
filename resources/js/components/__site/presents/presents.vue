@@ -37,14 +37,18 @@
                     :disabled="presentSettings['present_'+product.type] > cart.pre_price ? 'disabled' : false"
                   >
                     {{
-                      cart.presents.findIndex(x => x.product_id == product.product_id) > -1 ? 
-                      ('Подарок в корзине') :
                       (
-                        presentSettings['present_'+product.type] > cart.pre_price ?
-                        'При заказе от ' + presentSettings['present_'+product.type] :
-                        'Получить'
-                      )  + ', ' + product.type
+                        cart.presents.findIndex(x => x.product_id == product.product_id) > -1 ? 
+                        ('Подарок в корзине') :
+                        (
+                          presentSettings['present_'+product.type] > cart.pre_price ?
+                          'При заказе от ' + presentSettings['present_'+product.type] :
+                          'Получить'
+                        )
+                      )
                     }}
+                    <span style="text-transform:uppercase">{{product.type}}</span>
+                    
                   </button>
 
                   <!-- <button class="gifts-item-button color-m" disabled="disabled">При заказе от 1000р</button> -->
