@@ -124,4 +124,14 @@ export default {
 </script>
 
 <style scoped>
+
+.catalog-item-img{
+  height: 233px !important;
+}
+
+@media (max-width: 580px){
+  .catalog-item-img {
+    height: 140px  !important;
+  }
+}
 </style>

@@ -60,7 +60,7 @@
             <!-- Product list -->
             <div class="row" v-if="!isMobile || active || isSearch">
               <!-- Карточка товара -->
-              <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 " style="">
+              <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 " style="padding-left: 5px; padding-right: 5px;">
                 <product-gallery-card :product="product" />
               </div>
             </div>
