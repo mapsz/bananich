@@ -11,7 +11,7 @@ use App\Checkout;
 class Cart extends Model
 {
 
-  public static function getCart(){
+  public static function getCart($request = []){
   
     //Get user, session
     $user = Auth::User();
@@ -21,7 +21,10 @@ class Cart extends Model
     $cart = Cart::with('items');
     $cart = $cart->with('coupons');
     $cart = $cart->with('presents');
-    $cart = $cart->with('presents.product');
+    if(isset($request['presentProduct'])){
+      $cart = $cart->with('presents.product');
+    }
+    
 
     //User Loged in
     if($user){

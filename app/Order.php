@@ -436,6 +436,7 @@ class Order extends Model
         
         //Items
         foreach ($order->items as $ik => $item) {
+          $item->gram_sys = $item->gram_sys == 0 ? 1 : $item->gram_sys;
 
           //Price
           $item->price = round($item->price,$round);
