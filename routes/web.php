@@ -704,6 +704,15 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
     });
 
+    //Delivery    
+    Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
+    Route::put('/put/delivery', 'DeliveryController@put');      
+    Route::delete('/delivery', 'DeliveryController@delete');
+    //Pay
+    Route::get('/json/pay/methods', 'PayController@getMethods');
+    //Return Item
+    Route::put('/return/item', 'ReturnItemController@put');      
+    Route::delete('/return/item', 'ReturnItemController@delete');     
 
     //Gruzka
     Route::put('/gruzka/confirm', 'GruzkaController@confirm');
@@ -789,6 +798,8 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
       //Product Published
       Route::post('/product/publish', 'ProductController@publish');
+
+
 
       //Delivery days
       Route::post('/product/delivery/days', 'ProductController@editDeliveryDays');
@@ -897,20 +908,11 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     //     //Settings
     //     Route::post('/settings', 'SettingController@post');  
 
-    //     //Return Item
-    //     Route::put('/return/item', 'ReturnItemController@put');      
-    //     Route::delete('/return/item', 'ReturnItemController@delete');      
+ 
 
     //     //Confirm
     //     Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
 
-    //     //Pay
-    //     Route::get('/json/pay/methods', 'PayController@getMethods');
-
-    //     //Delivery    
-    //     Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
-    //     Route::put('/put/delivery', 'DeliveryController@put');      
-    //     Route::delete('/delivery', 'DeliveryController@delete');      
 
     //     //Statistics
     //     Route::get('/json/statistics', 'StatisticController@jsonGet');

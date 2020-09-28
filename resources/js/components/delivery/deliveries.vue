@@ -58,7 +58,7 @@ export default {
       this.showList = !this.showList;
     },
     goById(){
-      this.$router.push('/delivery/'+this.byId);
+      this.$router.push('/admin/delivery/'+this.byId);
     }   
   },
 }

@@ -14,6 +14,7 @@ use App\Pay;
 use App\Sms;
 use App\Bonus;
 use App\Interview;
+use App\Product;
 use App\User;
 use Carbon\Carbon;
 use App\Events\OrderSuccess;
@@ -59,6 +60,10 @@ class DeliveryController extends Controller
     try {
       DB::beginTransaction();
 
+      
+      //Set status
+      $order->Statuses()->attach(1,['user_id' => Auth::user()->id]);
+
       //Set Deliveries
       foreach ($items as $item) {
         if($item['quantity_result'] > 0){
@@ -82,11 +87,13 @@ class DeliveryController extends Controller
               'user_id' => $userId,
             ]
           );
+
+
+          //Update Available
+          Product::updateAvailable($item['product_id']);          
         }
       }
 
-      //Set status
-      $order->Statuses()->attach(1,['user_id' => Auth::user()->id]);
 
       //Set Pays
       foreach ($pays as $pay) {
