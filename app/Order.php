@@ -551,6 +551,7 @@ class Order extends Model
 
       // Gruzka_priority
       if(isset($request['gruzka_priority'])){
+        //Sort
         foreach ($orders as $k => $order) {
           
           $sort = $order->items->toArray();
@@ -563,8 +564,17 @@ class Order extends Model
 
           $order->unsetRelation('items');
           $order->items = $sort;
+
+          
+          //Get images
+          $items = $order->items;
+          foreach ($items as  $k => $item) {
+            $items[$k]['image'] = Product::getMainImage($item['product_id']);    
+          } 
+          $order->items = $items;
           
         }
+
       }    
 
     }
