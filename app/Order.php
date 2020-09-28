@@ -271,7 +271,15 @@ class Order extends Model
       }]);
       $query = $query->with(["statuses" => function($q){
         $q->orderBy('created_at','DESC');
-      }]);      
+      }]);
+
+      // Gruzka_priority
+      if(isset($request['gruzka_priority'])){
+        $query = $query->with(['items.product.metas' => function($q)
+            {
+              $q->where('name', 'gruzka_priority');
+            }]);
+      }
     }
     
     //Sort
@@ -546,8 +554,11 @@ class Order extends Model
         foreach ($orders as $k => $order) {
           
           $sort = $order->items->toArray();
+          foreach ($sort as $key => $item) {
+            $sort[$key]['gruzka_priority'] = isset($item['product']['metas']['gruzka_priority']) ? $item['product']['metas']['gruzka_priority'] : 0;
+          }
           usort($sort, function($a, $b) { //@@@ sort
-            return $a['product']['gruzka_priority'] <=> $b['product']['gruzka_priority'];
+            return $a['gruzka_priority'] <=> $b['gruzka_priority'];
           });
 
           $order->unsetRelation('items');

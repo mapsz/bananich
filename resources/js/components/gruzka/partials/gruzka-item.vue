@@ -20,7 +20,7 @@
     </div>
     <!-- Polka -->
     <div class="row mt-3 justify-content-between">
-      Полка: {{item.product.gruzka_priority}}
+      Полка: {{item.gruzka_priority}}
     </div>
     <!-- Comment -->
     <div v-if="item.comment" class="row mt-2">
