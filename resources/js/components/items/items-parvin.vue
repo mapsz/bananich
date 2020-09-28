@@ -19,7 +19,13 @@
         <tr v-for="item in items" :key="item.name">
           <td>{{item.name}}</td>
           <td>{{item.summ}}</td>
-          <td v-if="item.product != undefined && item.product.suppliers != undefined && item.product.suppliers[0] != undefined">{{item.product.suppliers[0].contact_name}}</td>
+          <td v-if="item.product != undefined && item.product.suppliers != undefined && item.product.suppliers[0] != undefined">
+            <span v-for='(supplier,i) in item.product.suppliers' :key='i'>
+              {{supplier.name + ' '}}
+            </span>
+           
+            
+          </td>
         </tr>
       </tbody>
     </table>
