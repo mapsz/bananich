@@ -18,15 +18,29 @@ Route::get('/mail', function(){
 
   // dump(  $order->toarray());
 
+  $user = App\User::find(751);
 
-  // Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m){
+  // dd($user);
+
+
+  // Mail::send('mail.open', ['user' => $user->toarray()], function($m){
   //   $m->to('aslanovadaria@yandex.ru','to');
+  //   // $m->to('mapss@inbox.lv','to');
+  //   // $m->to('jurijsgergelaba@yandex.ru','to');
   //   $m->from('no-reply@bananich.ru');
   //   $m->subject('Ваш Бананыч заказ получен!');
   // });
 
+  Mail::send('mail.open', ['user' => $user->toarray()], function($m){
+    $m->to('aslanovadaria@yandex.ru','to');
+    // $m->to('mapss@inbox.lv','to');
+    // $m->to('jurijsgergelaba@yandex.ru','to');
+    $m->from('no-reply@bananich.ru');
+    $m->subject('Бананыч вернулся! И у нас много новостей)');
+  });
 
-  return view('mail.open');
+
+  return view('mail.open', ['user' => $user->toarray()]);
 });
 
 

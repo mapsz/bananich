@@ -48,10 +48,10 @@ class CouponController extends Controller
     $coupon = Coupon::where('code',$request->coupon)->first();
 
     //Delete old
-    DB::table('coupon_cart')->where('cart_id',$cart->id)->delete();
+    DB::table('coupon_cart')->where('cart_id',$cart['id'])->delete();
 
     //Attach coupon
-    $cart->coupons()->attach($coupon->id);
+    Cart::find($cart['id'])->coupons()->attach($coupon->id);
 
     return response()->json($cart);
   }
