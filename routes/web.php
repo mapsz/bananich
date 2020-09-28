@@ -704,6 +704,13 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
     });
 
+
+    //Gruzka
+    Route::put('/gruzka/confirm', 'GruzkaController@confirm');
+    Route::put('/gruzka/noitem', 'GruzkaController@noItem');
+    Route::put('/gruzka/done', 'GruzkaController@done');
+
+
     //Items    
     Route::get('/json/items', 'ItemController@jsonGet');
 
@@ -909,11 +916,6 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     //     Route::get('/json/statistics', 'StatisticController@jsonGet');
 
 
-
-    //     //Gruzka
-    //     Route::put('/gruzka/confirm', 'GruzkaController@confirm');
-    //     Route::put('/gruzka/noitem', 'GruzkaController@noItem');
-    //     Route::put('/gruzka/done', 'GruzkaController@done');
 
     //     //Permissions
     //     // Route::get('/', 'PermissionController@redirect');
