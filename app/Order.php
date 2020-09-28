@@ -144,8 +144,6 @@ class Order extends Model
 
   public static function placeOrder($data, $cart){
 
-
-    // dd($data, $cart);
     
     //Customer
     if(Auth::user()){
@@ -190,6 +188,7 @@ class Order extends Model
 
     //Items
     if('Items' == 'Items'){
+
       //Put items
       foreach($cart['items'] as $item){
 
@@ -210,7 +209,31 @@ class Order extends Model
         //Update Available
         Product::updateAvailable($item['product_id']);
 
-      }      
+      }       
+      
+      //Put presents
+      foreach($cart['presents'] as $item){
+
+        //Save item
+        $putItem = new Item;
+        $putItem->order_id    = $orderId;
+        $putItem->product_id  = $item['product_id'];
+        $putItem->name        = $item['product']['name'];
+        $putItem->quantity    = $item['count'];        
+        $putItem->gram_sys    = isset($item['product']['unit']) ? $item['product']['unit'] : 1;
+        $putItem->gram        = isset($item['product']['unit_view']) ? $item['product']['unit_view'] : $putItem->gram_sys;
+        $putItem->price       = 0;
+        if(!$putItem->save()) return false;
+
+        //Save status
+        Item::find($putItem->id)->statuses()->attach(100);
+        
+        //Update Available
+        Product::updateAvailable($item['product_id']);
+
+      } 
+      
+      
     }
 
     if($data['toOther']){

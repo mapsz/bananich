@@ -21,6 +21,7 @@ class Cart extends Model
     $cart = Cart::with('items');
     $cart = $cart->with('coupons');
     $cart = $cart->with('presents');
+    $cart = $cart->with('presents.product');
 
     //User Loged in
     if($user){

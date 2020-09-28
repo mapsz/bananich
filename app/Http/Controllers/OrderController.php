@@ -124,24 +124,39 @@ class OrderController extends Controller
     }
 
 
-    //Place order
-    $orderId = Order::placeOrder($request->data, $cart);
+    
+    try {
+      DB::beginTransaction();
 
-    //Mail
-    $order = Order::getWithOptions(['id'=>$orderId]);
-    $email = $order->email;
-    $data = ["email" => $email, "orderId" => $orderId];
+      //Place order
+      $orderId = Order::placeOrder($request->data, $cart);
 
-    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
-      $m->to($data['email'],'to');
-      $m->from('no-reply@bananich.ru');
-      $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
-    });
-    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
-      $m->to('bbananich@yandex.ru','to');
-      $m->from('no-reply@bananich.ru');
-      $m->subject('Бананыч заказ №'.$orderId.' получен!');
-    });
+      if(!$orderId) throw new Exception('order error');
+
+      //Mail
+      $order = Order::getWithOptions(['id'=>$orderId]);
+      $email = $order->email;
+      $data = ["email" => $email, "orderId" => $orderId];
+
+      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
+        $m->to($data['email'],'to');
+        $m->from('no-reply@bananich.ru');
+        $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
+      });
+      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
+        $m->to('bbananich@yandex.ru','to');
+        $m->from('no-reply@bananich.ru');
+        $m->subject('Бананыч заказ №'.$orderId.' получен!');
+      });
+            
+      //Store to DB
+      DB::commit();    
+    } catch (Exception $e) {          
+      // Rollback from DB
+      DB::rollback();
+      return response(['code' => 'wo1','text' => 'order error'], 512)->header('Content-Type', 'text/plain');
+    }
+    
 
     return response()->json($orderId);
 

@@ -231,7 +231,7 @@ export default {
 
       if(r == 1){
         this.orderId = 0;
-        window.location.href = '/gruzkas'
+        window.location.href = '/admin/gruzkas'
       }
     }
   }
