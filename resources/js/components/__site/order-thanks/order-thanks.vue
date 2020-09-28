@@ -27,7 +27,6 @@ export default {
 computed:{
   ...mapGetters({user:'user/get'}),
   mounted(){    
-    fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
   },
 },
 
