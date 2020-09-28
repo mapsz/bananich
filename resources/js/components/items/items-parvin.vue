@@ -10,12 +10,16 @@
           <th>
             Сумма
           </th>
+          <th>
+            Поставщики
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.name">
           <td>{{item.name}}</td>
           <td>{{item.summ}}</td>
+          <td v-if="item.product != undefined && item.product.suppliers != undefined && item.product.suppliers[0] != undefined">{{item.product.suppliers[0].contact_name}}</td>
         </tr>
       </tbody>
     </table>

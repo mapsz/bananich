@@ -161,9 +161,15 @@ class Item extends Model
             $query = $query->whereIn('item_status_id',$statuses);
           }
           
+          // Product id
           if(isset($request['productId']) && $request['productId'] > 0){
             $query = $query->where('product_id',$request['productId']);
           }
+
+          //Supliers
+          // if(isset($request['productId']) && $request['productId'] > 0){
+            $query = $query->with('product.suppliers');
+          // }         
 
           //Parvin
           if($parvinBuild){
@@ -253,7 +259,5 @@ class Item extends Model
                 ->withTimestamps()
                 ->withPivot('user_id','quantity', 'created_at');
     }
-    public function delivery(){
-        return $this->hasOne('App\Delivery');
-    }
-}
+
+  }
