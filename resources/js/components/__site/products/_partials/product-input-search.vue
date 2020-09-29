@@ -35,6 +35,7 @@ export default {
     }),
     async doSearch(){
       if(this.$route.path != '/') this.$router.push('/');      
+      await this.addFilter({'popular':0});
       await this.addFilter({'category':false});
       await this.addFilter({'search':this.search});
       await this.productsFetch();
@@ -44,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-  .search-btn-fix{
+  /* .search-btn-fix{
 
-  }
+  } */
 </style>

@@ -57,7 +57,6 @@ let cart = {
       data.cart_id = state.cart.id;
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
       if(r){
-
         //Find cart
         let cart = JSON.parse(JSON.stringify(state.cart));
         let index = cart.items.findIndex(x => x.product_id == data.id);
@@ -89,7 +88,17 @@ let cart = {
       let r = await ax.fetch('/cart/reset',{},'delete');
       localStorage.cart = false;
       dispatch('fetch');
-    }
+    },
+    async editContainer({commit},id){
+      let r = await ax.fetch('/cart/container',{id},'post',false);
+      commit('mCart',r);
+      return r;
+    },
+    async removeContainer({commit}){
+      let r = await ax.fetch('/cart/container',{},'delete',false);
+      commit('mCart',r); 
+      return r;
+    }, 
   },  
   mutations:{
     mCart: (state,data) => {return state.cart = data;},

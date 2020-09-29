@@ -24,6 +24,12 @@
       <div  class="cart-info-name">{{cart.coupon.code}}</div>
       <div class="cart-info-sum">{{cart.coupon.discount-(cart.coupon.discount*2)}} р</div>
     </li>
+
+    <!-- container -->
+    <li v-if="cart.container != undefined && cart.container != false" class="cart-info-item">
+      <div  class="cart-info-name">Упаковка</div>
+      <div class="cart-info-sum">{{parseInt(cart.container.price)}} р</div>
+    </li>
     
     <!-- <li class="cart-info-item">
       <div class="cart-info-name">Списанные бонусы</div>

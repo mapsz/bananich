@@ -62,7 +62,7 @@ export default {
     ...mapGetters({cart:'cart/getCart',checkout:'checkout/get'}),
   },
   mounted(){
-    fbq('track', 'InitiateCheckout');
+    if(window.location.hostname != "bananich.loc") fbq('track', 'InitiateCheckout');
   },
   methods:{    
     ...mapActions({'clean':'checkout/clean'}),

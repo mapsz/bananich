@@ -83,7 +83,6 @@ class OrderController extends Controller
       'addressStreet'       => ['required', 'string', 'max:170' ],
       'deliveryDate'        => ['required'],
       'deliveryTime'        => ['required'],
-      'container'           => ['required'],
       'payMethod'           => ['required'],
       'confirm'             => ['required'],
       'comment'             => ['max:1000'],

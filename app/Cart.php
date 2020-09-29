@@ -21,6 +21,7 @@ class Cart extends Model
     $cart = Cart::with('items');
     $cart = $cart->with('coupons');
     $cart = $cart->with('presents');
+    $cart = $cart->with('containers');
     if(isset($request['presentProduct'])){
       $cart = $cart->with('presents.product');
     }
@@ -142,6 +143,19 @@ class Cart extends Model
    return $present;
   }
 
+  public static function editContainer($cart,$productId){
+    self::removeContainer($cart);
+    $cartContainer = new CartContainer;
+    $cartContainer->cart_id = $cart['id'];
+    $cartContainer->product_id = $productId;
+    $cartContainer->count = 1;
+    return $cartContainer->save();
+  }
+
+  public static function removeContainer($cart){
+    return CartContainer::where('cart_id',$cart['id'])->delete();
+  }
+
 
   //Relations
   public function items(){
@@ -149,6 +163,9 @@ class Cart extends Model
   }
   public function presents(){
     return $this->hasMany('App\CartPresent');
+  }
+  public function containers(){
+    return $this->hasMany('App\CartContainer');
   }
   public function coupons(){
     return $this->belongsToMany('App\Coupon','coupon_cart')->latest();

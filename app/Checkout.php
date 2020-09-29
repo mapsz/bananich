@@ -33,6 +33,13 @@ class Checkout extends Model
       array_push($productIds, $item->product_id);
     }
 
+    //Container
+    $container = false;
+    if(isset($cart->containers) && isset($cart->containers[0])){
+      $container = $cart->containers[0]->toArray();
+      array_push($productIds, $container['product_id']);
+    }
+
     //Get Products
     $products = Product::getWithOptions(['ids' => $productIds]);
 
@@ -61,6 +68,16 @@ class Checkout extends Model
         }        
       } 
     }
+
+    //Container
+    if($container){
+      foreach ($products as $key => $product) {
+        if($product->id == $container['product_id']){
+          $container = $product;
+          break;
+        }
+      }
+    }
     
     //Coupons    
     $couponDiscount = 0;
@@ -85,7 +102,8 @@ class Checkout extends Model
     $cart->final_summ = $cart->pre_price;
     $cart->final_summ += $cart->shipping;
     $cart->final_summ -= $cart->bonus;
-    $cart->final_summ -= $couponDiscount;    
+    $cart->final_summ -= $couponDiscount;
+    $cart->final_summ += $container ? $container->price : 0;
     //Cant be less zero
     if($cart->final_summ < 0) $cart->final_summ = 0;
 
@@ -99,8 +117,12 @@ class Checkout extends Model
       }
     }
 
-
+    //Cart to array
     $cart = $cart->toArray();
+
+    //Container
+    $cart['container'] = $container;
+    unset($cart['containers']);
 
     //Check presents
     if(isset($cart['presents']) && isset($cart['presents'][0])){

@@ -66,6 +66,8 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   Route::post('/cart/session', 'CartController@changeSession');
   Route::delete('/cart/remove/item', 'CartController@removeItem'); 
   Route::delete('/cart/reset', 'CartController@resetItems');
+  Route::post('/cart/container', 'CartController@editContainer');
+  Route::delete('/cart/container', 'CartController@removeContainer');
 
   //Coupon
   Route::any('/coupon/cart', 'CouponController@cartAttach');

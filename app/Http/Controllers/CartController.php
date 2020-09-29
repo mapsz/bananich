@@ -75,4 +75,22 @@ class CartController extends Controller
     return response()->json(1);
 
   }
+
+  public function editContainer(Request $request){    
+    //Get cart
+    $cart = Cart::getCart();
+
+    Cart::editContainer($cart,$request->id);
+
+    return response()->json(Cart::getCart());
+  }
+
+  public function removeContainer(Request $request){    
+    //Get cart
+    $cart = Cart::getCart();
+
+    Cart::removeContainer($cart);
+    
+    return response()->json(Cart::getCart());
+  }
 }

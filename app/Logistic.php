@@ -22,8 +22,8 @@ class Logistic extends Model
     $login = 'vvenkov@yandex.ru';
     $password = 'vfuk6ZXW';
     $accountId = 'dostavoshka';
+    $date = now()->format('d.m.yy');
 
-    // now()->format('d.m.yy')
 
     $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/authentication/createSession?accountID='.$accountId.'&user='.$login.'&password='.$password);
 
@@ -41,7 +41,7 @@ class Logistic extends Model
 
     //
 
-    $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/distribution-api/schedules/getScheduleByAOCOnDate?sessionID='.$sessionID.'&date=22.09.2020&aocID=1748');
+    $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/distribution-api/schedules/getScheduleByAOCOnDate?sessionID='.$sessionID.'&date='.$date.'&aocID=1748');
 
 
     $ras = $response->getBody()->getContents();

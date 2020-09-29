@@ -166,7 +166,7 @@ class Order extends Model
       $order->delivery_date = $data['deliveryDate'];
       $order->delivery_time_from = $data['deliveryTime']['from'].':00:00';
       $order->delivery_time_to = $data['deliveryTime']['to'].':00:00';
-      $order->container = $data['container'];
+      $order->container = 0;
       $order->pay_method = $data['payMethod'];
       $order->confirm = $data['confirm'];
       $order->comment = $data['comment'];
@@ -232,10 +232,27 @@ class Order extends Model
         Product::updateAvailable($item['product_id']);
 
       } 
-      
+
+      //Container
+      if($cart['container']){
+        //Save item
+        $putItem = new Item;
+        $putItem->order_id    = $orderId;
+        $putItem->product_id  = $cart['container']->id;
+        $putItem->name        = $cart['container']->name;
+        $putItem->quantity    = 1;
+        $putItem->gram_sys    = 1;
+        $putItem->gram        = 1;
+        $putItem->price       = $cart['container']->price;
+        if(!$putItem->save()) return false;
+
+        //Save status
+        Item::find($putItem->id)->statuses()->attach(100);
+      }
       
     }
 
+    //To other
     if($data['toOther']){
       DB::table('order_to_other')->insert([
         'order_id' => $orderId, 
@@ -245,6 +262,7 @@ class Order extends Model
       ]);
     }
 
+    //Coupon
     if(isset($cart['coupon'])){
       
       //Check if coupons exist
