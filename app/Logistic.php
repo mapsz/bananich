@@ -10,13 +10,23 @@ use GuzzleHttp\Client;
 
 class Logistic extends Model
 {
+
+  // public static function xmlDecode(){
+
+  //   $string = 
+
+
+  //   simplexml_load_string 
+  // }
+
+
   public static function get(){
 
     $client = new Client([
       'headers' => [
           'Content-Type' => 'application/x-www-form-urlencoded;'
       ],
-  ]);
+    ]);
 
     $name = 'dostavoshka';
     $login = 'vvenkov@yandex.ru';
