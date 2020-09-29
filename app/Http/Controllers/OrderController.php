@@ -275,9 +275,9 @@ class OrderController extends Controller
     $item->order_id     = $request->orderId;
     $item->product_id   = $product->id;
     $item->name         = $product->name;
-    $item->quantity     = 1;
-    $item->gram         = $product->unit != null ? $product->unit : $product->unit_sys;
-    $item->gram_sys     = $product->unit_sys;
+    $item->quantity     = 1;      
+    $item->gram_sys    = isset($item['product']['unit']) ? $item['product']['unit'] : 1;
+    $item->gram        = isset($item['product']['unit_view']) ? $item['product']['unit_view'] : $item->gram_sys;
     $item->price        = $product->price;
     //Save Item
     if(!$item->save())
