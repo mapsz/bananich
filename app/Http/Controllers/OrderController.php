@@ -39,6 +39,15 @@ class OrderController extends Controller
     return response()->json($settings);
   }
 
+  public function updateAvailable(Request $request){
+    $items = Item::where('order_id',$request->id)->pluck('product_id');
+        
+    Product::updateAvailable($items->toArray());
+
+    return;
+
+  }
+
   public function put(Request $request){
     
     //Get data
@@ -122,8 +131,6 @@ class OrderController extends Controller
       ;
       Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
     }
-
-
     
     try {
       DB::beginTransaction();

@@ -57,7 +57,8 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   });
 
   //Order
-  Route::any('/order/put', 'OrderController@put');
+  Route::put('/order/put', 'OrderController@put');
+  Route::any('/order/update/available', 'OrderController@updateAvailable');
 
   //Cart
   Route::get('/json/cart', 'CartController@get');

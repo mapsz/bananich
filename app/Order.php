@@ -207,7 +207,7 @@ class Order extends Model
         Item::find($putItem->id)->statuses()->attach(100);
         
         //Update Available
-        Product::updateAvailable($item['product_id']);
+        // Product::updateAvailable($item['product_id']);
 
       }       
       

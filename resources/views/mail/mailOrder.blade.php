@@ -24,7 +24,7 @@
   <thead style="font-weight: 600;">
     <tr>
       <td>Товар</td>
-      <td>Кличество</td>
+      <td>Количество</td>
       <td>Цена</td>
     </tr>
   </thead>

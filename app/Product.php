@@ -236,7 +236,7 @@ class Product extends Model
     $ids = [];
     foreach ($cart['items'] as $key => $item) {array_push($ids,$item['product_id']);}
 
-    self::updateAvailable($ids);
+    // self::updateAvailable($ids);
     $products = self::getWithOptions(['ids' => $ids]);
 
 
@@ -283,7 +283,7 @@ class Product extends Model
       $meta->save();
 
       if($all == 'all') dump(count($ids) - $key);
-      // dump(11);
+
 
     }
 
