@@ -17,7 +17,7 @@
 export default {
   mounted(){
     //Set filters
-    this.$store.dispatch('item/addFilter',{status:[600,500]});
+    this.$store.dispatch('item/addFilter',{status:[600,500,400]});
     this.$store.dispatch('item/addFilter',{piece:1});
     this.$store.dispatch('item/addFilter',{strews:1});
     //Fetch
@@ -31,7 +31,7 @@ export default {
           from:(this.filters.date.from) ? moment(this.filters.date.from,this.filters.date.format).format('YYYY-MM-DD') : false,
           to:(this.filters.date.to) ? moment(this.filters.date.to,this.filters.date.format).format('YYYY-MM-DD') : false,
         },
-        status:[600,500],
+        status:[600,500,400],
         strews:1,
       })
       if(!r) return;

@@ -148,7 +148,7 @@ class Item extends Model
             ->groupBy('items.product_id')
             ->orderBy('summ', 'desc')
           );
-          
+
           //Items where
           //Statuses
           if(isset($request['itemStatus']) && $request['itemStatus'] > -1){
