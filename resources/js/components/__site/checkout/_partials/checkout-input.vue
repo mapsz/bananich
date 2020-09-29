@@ -58,7 +58,7 @@ export default {
       this.value = null;
     } 
     
-    this.value = (this.checked != undefined && this.checked) ? true : false;
+    if(this.checked != undefined && this.checked) this.value = true;
 
   },
   methods:{    
