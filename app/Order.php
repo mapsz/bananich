@@ -245,6 +245,20 @@ class Order extends Model
       ]);
     }
 
+    if(isset($cart['coupon'])){
+      
+      //Check if coupons exist
+      $coupon = Coupon::where('code',$cart['coupon']->code)->first();
+      if($coupon != null){
+        //Attach coupon
+        Order::find($orderId)->coupons()->attach($coupon->id,['discount' => $coupon->discount]);
+      }
+      $coupon->count--;
+      $coupon->save();
+
+    }
+
+    
     //Delete Cart
     Cart::find($cart['id'])->delete();
 
