@@ -186,7 +186,8 @@ class Item extends Model
           //Get strews
           if(isset($request['strews'])){
             foreach ($items as $key => $item) {
-              $item->strews = $item->product->metas->strews;
+              if(isset($item->product->metas->strews)) $item->strews = $item->product->metas->strews;
+              else $item->strews = 0;
               unset($item->product);
             }
           }     
