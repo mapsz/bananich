@@ -57,9 +57,8 @@ export default {
     }else{
       this.value = null;
     } 
-
     
-    // this.value = (this.checked != undefined && this.checked) ? true : '';
+    this.value = (this.checked != undefined && this.checked) ? true : false;
 
   },
   methods:{    

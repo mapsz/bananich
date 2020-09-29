@@ -42,7 +42,7 @@
     <button @click="singin()" class="btn-yellow btn-enter">Войти</button> 
     <!-- Remember -->
     <span>
-      <input v-model="remember" id="remember" type="checkbox">  <label for="remember">запомнить меня</label>     
+      <input v-model="remember" id="remember" type="checkbox" >  <label for="remember">запомнить меня</label>     
     </span>
     <!-- Remind password -->
     <a class="forgot-password" href="/password/reset">Забыли пароль</a>
@@ -57,7 +57,7 @@ data(){return{
   email:"",
   password:'',
   csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-  remember:false,
+  remember:true,
   errors:[],
 }},  
 computed:{
