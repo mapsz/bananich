@@ -735,7 +735,10 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
 
     //Items    
-    Route::get('/json/items', 'ItemController@jsonGet');
+    Route::get('/json/items', 'ItemController@jsonGet');    //  
+    Route::get('/json/item/statuses', 'ItemStatusController@jsonGetStatuses');
+    Route::delete('/item', 'ItemController@delete');
+    Route::post('/item', 'ItemController@post');
 
     //Bonus
     Route::put('/bonus/add', 'BonusController@add');
@@ -961,10 +964,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     //     Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
     //     Route::put('/order/status', 'OrderStatusController@putStatus');
 
-    //     //Item
-    //     Route::get('/json/item/statuses', 'ItemStatusController@jsonGetStatuses');
-    //     Route::delete('/item', 'ItemController@delete');
-    //     Route::post('/item', 'ItemController@post');
+
 
     //     //Container
     //     Route::put('/container', 'ContainerController@put');
