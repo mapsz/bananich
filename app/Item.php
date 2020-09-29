@@ -113,8 +113,10 @@ class Item extends Model
           
           //Strews
           if(isset($request['strews'])){
-            $query = $query->whereHas('product', function($q){
-              $q->where('strews', '>', 0);
+            $query = $query->whereHas('product', function($q2){
+              $q2->whereHas('metas', function ($q) {
+                $q->where('name', '=', 'strews')->where('value', '>', '0');
+              });
             });
           }    
         }
@@ -186,7 +188,7 @@ class Item extends Model
           //Get strews
           if(isset($request['strews'])){
             foreach ($items as $key => $item) {
-              $item->strews = $item->product->strews;
+              $item->strews = $item->product->metas->strews;
               unset($item->product);
             }
           }     

@@ -474,6 +474,13 @@ class Product extends Model
         });
       }  
 
+      //Strews
+      if(isset($request['strews']) && $request['strews'] && $request['strews'] != 'false'){
+        $products = $products->whereHas('metas', function ($q) {
+          $q->where('name', '=', 'strews')->where('value', '>', '0');
+        });
+      }  
+
       //Popular
       if(isset($request['popular']) && $request['popular'] && $request['popular'] != 'false'){
         $products = $products->whereHas('metas', function ($q) {
