@@ -113,7 +113,7 @@ class Item extends Model
           
           //Strews
           if(isset($request['strews'])){
-            $q2->whereHas('product.metas', function ($q) {
+            $query = $query->whereHas('product.metas', function ($q) {
               $q->where('name', '=', 'strews')->where('value', '>', '0');
             });
           }    
