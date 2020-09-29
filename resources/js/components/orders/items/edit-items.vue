@@ -33,7 +33,7 @@
     <span class="form-control" style="cursor: no-drop;">{{pricePerUnit}}</span>
   </div>  
   <!-- Discounts -->
-  <div v-if="item.product != undefined && item.product.discounts.length > 0" class="item-discounts my-2">
+  <div v-if="item.product != undefined && item.product.discounts != undefined  && item.product.discounts.length > 0" class="item-discounts my-2">
     <div class="item-discount-title">Акции:</div>
     <div 
       v-for="discount in item.product.discounts" 
@@ -52,7 +52,7 @@
     </div>
   </div>   
   <!-- Final price -->
-  <div v-if="item.product != undefined && item.product.discounts.length > 0" class="input-group input-group-sm my-2">
+  <div v-if="item.product != undefined && item.product.discounts != undefined && item.product.discounts.length > 0" class="input-group input-group-sm my-2">
     <div class="input-group-prepend">
       <span class="input-group-text">Цена с учетом скидок</span>
     </div>
