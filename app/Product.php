@@ -732,7 +732,7 @@ class Product extends Model
 
     if(!$image) $image = self::makeProductImage($id);
 
-    if(!$image) $image = $xpath .'/no-image.png';
+    if(!$image) $image = $xpath .'/no-image.svg';
 
     return $image;
   }
