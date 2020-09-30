@@ -8,7 +8,7 @@
       <br>
       <div class="row">
         <div class="col-6">
-          <div>Водила: <a :href="'/admin/user/'+logistic.driver_id"></a>{{logistic.driver_id}} </div>
+          <div>Водила: <a :href="'/admin/user/'+logistic.driver_id">{{logistic.driver_id}}</a> </div>
           <div>имя:{{logistic.driver.name != undefined? logistic.driver.name : ''}}</div>
           <div>фамилия:{{logistic.driver.surname != undefined? logistic.driver.surname : ''}}</div>
           <div>телефон:{{logistic.driver.phone != undefined? logistic.driver.phone : ''}}</div>
