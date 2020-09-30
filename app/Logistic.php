@@ -6,6 +6,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
 
 class Logistic extends Model
@@ -13,10 +14,8 @@ class Logistic extends Model
 
   // public static function xmlDecode(){
 
-  //   $string = 
 
 
-  //   simplexml_load_string 
   // }
 
 
@@ -53,11 +52,19 @@ class Logistic extends Model
 
     $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/distribution-api/schedules/getScheduleByAOCOnDate?sessionID='.$sessionID.'&date='.$date.'&aocID=1748');
 
-
     $ras = $response->getBody()->getContents();
 
 
-    dump($ras);
+    DB::table('logistic_raw')->insert([
+      ['raw' => $ras,'date' => now(),'created_at'=>now()]
+    ]);
+
+    
+    // $obj = simplexml_load_string ($ras);
+
+    // dd($obj);
+
+    // dump($ras);
 
   }
 }

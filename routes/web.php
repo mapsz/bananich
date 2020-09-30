@@ -11,6 +11,11 @@
 |
 // */
 
+Route::get('/test', function(){
+
+  App\Logistic::xmlDecode();
+});
+
 Route::get('/mail', function(){
 
 
