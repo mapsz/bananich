@@ -337,8 +337,7 @@ class Order extends Model
 
       // Gruzka_priority
       if(isset($request['gruzka_priority'])){
-        $query = $query->with(['items.product.metas' => function($q)
-            {
+        $query = $query->with(['items.product.metas' => function($q){
               $q->where('name', 'gruzka_priority');
             }]);
       }
@@ -625,19 +624,27 @@ class Order extends Model
       // Gruzka_priority
       if(isset($request['gruzka_priority'])){
         //Sort
-        foreach ($orders as $k => $order) {
-          
-          $sort = $order->items->toArray();
-          foreach ($sort as $key => $item) {
-            $sort[$key]['gruzka_priority'] = isset($item['product']['metas']['gruzka_priority']) ? $item['product']['metas']['gruzka_priority'] : 0;
+        foreach ($orders as $k => $order) {          
+
+          //Attach gruzka priority
+          foreach ($order->items as $key => $item) {
+            foreach ($item->product->metas as $key => $meta) {
+              if($meta->name == 'gruzka_priority'){
+                $item->gruzka_priority = $meta->value;
+                $item->product->gruzka_priority = $meta->value;
+              } 
+            }            
           }
-          usort($sort, function($a, $b) { //@@@ sort
+          
+          //Sort gruzka priority
+          $sort = $order->items->toArray();
+          usort($sort, function($a, $b){
             return $a['gruzka_priority'] <=> $b['gruzka_priority'];
           });
 
+          //Attach sortet items
           $order->unsetRelation('items');
           $order->items = $sort;
-
           
           //Get images
           $items = $order->items;
