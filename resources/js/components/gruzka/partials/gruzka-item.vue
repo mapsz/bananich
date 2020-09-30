@@ -5,7 +5,7 @@
     <!-- Image -->
     <div class="product-image justify-content-center row mt-3">      
       <img 
-        :src="'/products/images/main/1681.jpg'" 
+        :src="item.image" 
         alt=""
       >
     </div>
