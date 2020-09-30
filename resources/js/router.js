@@ -132,6 +132,12 @@ let routes = [];
     {path: adminPrefix+'/orders/limits',           component:orderLimit},
   );
 
+  //Logistics
+  import logistics from './components/logistics/logistics.vue';
+  routes.push(
+    {path: adminPrefix+'/orders/logistics',           component:logistics},
+  );
+
   //Pages
   import page from './components/pages/page.vue';
   import pages from './components/pages/pages.vue';
@@ -199,8 +205,10 @@ let routes = [];
 
   //User
   import users from './components/users/users.vue';
+  import user from './components/users/user.vue';
   routes.push(
     {path: adminPrefix+'/users',component: users},
+    {path: adminPrefix+'/user/:id',component: user},
   );
 
   //Items

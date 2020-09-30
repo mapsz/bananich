@@ -17,7 +17,7 @@ class CreateCartContainersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('cart_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
-            $table->integer('count')->unsigned();            
+            $table->integer('count')->unsigned();
             // $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade')->onUpdate('cascade');
         });
     }

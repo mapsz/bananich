@@ -167,8 +167,12 @@
         <order-statuses></order-statuses>
       </div>
     </div>
-    <!-- ??? -->
-    <div class="col-12 col-md-4 ">      
+    <!-- Logistics -->
+    <div class="col-12 col-md-4 order-container">   
+      <div class="order-inner-container">  
+        <h4>Логистика</h4>
+        <order-logistic />
+      </div>
     </div>
     <!-- Checkout -->
     <div class="col-12 col-md-4 order-container">
@@ -218,10 +222,11 @@ export default {
     },
   },
   async mounted(){
+    await this.addFilter({'with_logistic':true});
     await this.fetchOne(this.id);
   },  
   methods:{
-    ...mapActions({fetchOne:'order/fetchOne'}),
+    ...mapActions({fetchOne:'order/fetchOne',addFilter:'order/addFilter'}),
     //Order
     async getOrder(){
       this.fetchOne(this.id);

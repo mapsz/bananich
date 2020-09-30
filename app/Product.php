@@ -953,6 +953,7 @@ class Product extends Model
 
       }
 
+      //Images
       if($insert['image']){
         if(!self::saveImages($insert['image'], $product->id)){
           throw new Exception('error save file');
@@ -1005,7 +1006,6 @@ class Product extends Model
   public static function deleteDiscount($productId){
     ProductDiscount::where('product_id', $productId)->delete();
   }
-
 
 
   //JugeCRUD

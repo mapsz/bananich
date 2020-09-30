@@ -8,18 +8,92 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 class Logistic extends Model
 {
 
-  // public static function xmlDecode(){
+  public $guarded = [];
+  public $timestamps = false;
+  public $keys = [
+    ['key'    => 'id','label' => '#',],
+    ['key'    => 'order_id','label' => 'заказ','type' => 'link', 'link' => '/admin/order/{order_id}'],
+    ['key'    => 'address','label' => 'адрес'],     
+    ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
+    ['key'    => 'date', 'label' => 'дата'],     
+    ['key'    => 'driver.name', 'label' => 'водила'],
+    ['key'    => 'driver_id', 'label' => 'водила id'],
+  ];
 
 
+  public static function saveFromRaw(){
 
-  // }
+    if(DB::table('logistics')->where('date',now()->format('yy-m-d'))->exists()) return true;
 
+    $logistic = self::getFromRaw();
 
-  public static function get(){
+    DB::table('logistics')->insert($logistic);
+
+    return true;
+  }
+
+  public static function getFromRaw(){
+
+    $date = now()->format('yy-m-d');
+
+    //Get raw
+    $raws = DB::table('logistic_raw')->where('date',$date)->get();
+
+    //Find non error raw
+    $raw = false;
+    foreach ($raws as $key => $v) {
+      if(!strpos($v->raw,'<error>')){
+        $raw = $v->raw;
+        break;
+      }      
+    }
+    
+    //Return if no errorless raw
+    if(!$raw) return false;
+
+    //To object
+    $obj = simplexml_load_string ($raw);
+
+    //Make beauty array
+    $logistics = [];
+    $vehicles = (array)$obj->scheduleResponse->vehicles;
+    foreach ($vehicles as $key => $vehicle) {
+      //To array
+      $vehicleArr = (array) $vehicle;
+      //Get attr data
+      $driverId = $vehicleArr['@attributes']['driverExternalID'];
+      //Get locations
+      $locations = (array) $vehicleArr['run'];
+      $locations = $locations['location'];
+      foreach ($locations as $location) {
+        //To array
+        $locationArr = (array) $location;
+
+        //Add Logistic
+        if(isset($locationArr['order'])) {
+          $order = (array) $locationArr['order'];
+          $order = $order['@attributes'];
+          $add = [];
+          $add['driver_id'] =           intval($driverId);
+          $add['address'] =             $locationArr['@attributes']['address'];
+          $add['plan_arrival_time'] =   Carbon::createFromFormat('d.m.yy H:i',$locationArr['@attributes']['planArrivalTime'])->format('H:i:s');
+          $add['order_id'] =            $order['orderReference'];
+          $add['date'] =                $date;
+          array_push($logistics,$add);
+        }
+      }
+    }
+
+    return $logistics;
+
+  }
+
+  public static function getFromMaxopra(){
 
     $client = new Client([
       'headers' => [
@@ -67,4 +141,36 @@ class Logistic extends Model
     // dump($ras);
 
   }
+
+  
+  public function jugeGetKeys()     {return $this->keys;}  
+  public static function jugeGet($request = []) {
+
+    //Query
+    $query = new Logistic;
+
+    //With
+    if('with' == 'with'){
+      $query = $query->with('driver');
+    }
+
+    //Where
+    if('Where' == 'Where'){
+      // $query = $query->with('driver');
+    }
+
+    //Get
+    $logistics = $query->get();
+    
+    //Return
+    return $logistics;
+    
+  }
+
+  public function driver()
+  {
+    return $this->belongsTo('App\User','driver_id');
+  }
+
+
 }

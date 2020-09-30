@@ -300,6 +300,13 @@ class Order extends Model
 
     //With
     if('With' == 'With'){
+
+      //Logistic
+      if(isset($request['with_logistic'])){
+        $query = $query->with('logistics');    
+        $query = $query->with('logistics.driver');    
+      }
+
       //Pay method
       $query = $query->with('pays.method');
       //Coupons
@@ -420,7 +427,17 @@ class Order extends Model
     //Postedit data
     if("EDIT" == "EDIT"){   
 
+
+
       foreach ($orders as $ok => $order) {
+
+        //Logistic
+        if(isset($request['with_logistic'])){
+          foreach ($order->logistics as $key => $logistic) {
+            $logistic->driver->mainPhoto = User::getMainImage($logistic->driver->id);    
+          }
+        }
+
         //Remove MaxDate
         unset($orders[$ok]->MaxDate);
         
@@ -696,6 +713,9 @@ class Order extends Model
   }    
   public function pays(){
     return $this->hasMany('App\Pay');
+  }  
+  public function logistics(){
+    return $this->hasMany('App\Logistic');
   }
 
   //JugeCRUD  

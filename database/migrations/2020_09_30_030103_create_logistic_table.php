@@ -13,9 +13,13 @@ class CreateLogisticTable extends Migration
      */
     public function up()
     {
-        Schema::create('logistic', function (Blueprint $table) {
+        Schema::create('logistics', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+            $table->bigInteger('driver_id')->unsigned();
+            $table->bigInteger('order_id')->unsigned();
+            $table->char('address',255);
+            $table->time('plan_arrival_time');
+            $table->date('date');
         });
     }
 
@@ -26,6 +30,6 @@ class CreateLogisticTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logistic');
+        Schema::dropIfExists('logistics');
     }
 }

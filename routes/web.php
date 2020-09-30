@@ -13,7 +13,7 @@
 
 Route::get('/test', function(){
 
-  App\Logistic::xmlDecode();
+  // App\Logistic::getFromRaw();
 });
 
 Route::get('/mail', function(){
@@ -23,7 +23,7 @@ Route::get('/mail', function(){
 
   // dump(  $order->toarray());
 
-  $user = App\User::find(751);
+  // $user = App\User::find(751);
 
   // dd($user);
 
@@ -36,16 +36,16 @@ Route::get('/mail', function(){
   //   $m->subject('Ваш Бананыч заказ получен!');
   // });
 
-  Mail::send('mail.open', ['user' => $user->toarray()], function($m){
-    $m->to('aslanovadaria@yandex.ru','to');
-    // $m->to('mapss@inbox.lv','to');
-    // $m->to('jurijsgergelaba@yandex.ru','to');
-    $m->from('no-reply@bananich.ru');
-    $m->subject('Бананыч вернулся! И у нас много новостей)');
-  });
+  // Mail::send('mail.open', ['user' => $user->toarray()], function($m){
+  //   $m->to('aslanovadaria@yandex.ru','to');
+  //   // $m->to('mapss@inbox.lv','to');
+  //   // $m->to('jurijsgergelaba@yandex.ru','to');
+  //   $m->from('no-reply@bananich.ru');
+  //   $m->subject('Бананыч вернулся! И у нас много новостей)');
+  // });
 
 
-  return view('mail.open', ['user' => $user->toarray()]);
+  // return view('mail.open', ['user' => $user->toarray()]);
 });
 
 
@@ -104,6 +104,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   Route::get('/auth/user', 'UserController@getAuthUser');
   Route::post('/user', 'UserController@post');
   Route::post('/user/address', 'UserController@postAddress');
+  Route::post('/user/main/photo', 'UserController@editMainPhoto');
 
   //Present
   Route::get('/present/settings', 'PresentController@getSettings'); 

@@ -37,6 +37,10 @@ export default {
         link: this.adminPrefix+"/orders/limits",
         caption:"Лимит заказов",
       },
+      {
+        link: this.adminPrefix+"/orders/logistics",
+        caption:"Логистика",
+      },
     ];
   }
 }

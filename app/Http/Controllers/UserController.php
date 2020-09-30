@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\UserAddress;
 use App\UserComment;
+use App\FileUpload;
 
 class UserController extends Controller
 {
@@ -42,14 +43,22 @@ class UserController extends Controller
   }
 
   public function post(Request $request){
-
-    if(!Auth::user()) return false;
+    
+    $user = Auth::user();
+    if(!$user) return false;
     if(!isset($request->data)) return false;
 
     $data = $request->data;
 
+    if(isset($data['id'])){
+      if(!DB::table('model_has_roles')->where('role_id',2)->where('model_type','App\User')->where('model_id',$user->id)->exists()) return false; 
+      $user = User::find($data['id']);
+    }else{      
+      $user = Auth::user();
+    }
+
     //Remove self phone
-    if(isset($data['phone']) && (Auth::user()->phone == $data['phone'])) unset($data['phone']);
+    if(isset($data['phone']) && ($user->phone == $data['phone'])) unset($data['phone']);
 
     //Validate Cart
     $validate = [
@@ -64,11 +73,26 @@ class UserController extends Controller
     Validator::make($data, $validate, $messages)->validate();
 
     //Update
-    $user = User::find(Auth::user()->id);
+    $user = User::find($user->id);
     $user->name       = $data['name'];
     $user->surname    = $data['surname'];
     $user->phone      = isset($data['phone']) ? $data['phone'] : $user->phone;
     $user->save();
+
+    if(isset($data['images'])){
+      //Images
+      foreach ($data['images'] as $k => $image) {
+        //Set path
+        $path = public_path().'/users/images/source/';
+        $name = FileUpload::generateFileName($path,$user->id);
+
+        //Save Image
+        if(!FileUpload::saveFile($image,$path.$name)){
+          return false;
+        }
+      }   
+    }
+
 
     return response()->json($user);
     
@@ -142,6 +166,21 @@ class UserController extends Controller
     return response()->json(User::jugeGet(['id' => Auth::user()->id]));
 
   }
+
+  public function editMainPhoto(Request $request){
+
+    //Set path
+    $path = public_path().'/users/images/main/';
+    $name = $request->userId;
+
+    //Save Image
+    if(!FileUpload::saveFile($request->file, $path.$name, ['w' => 200, 'h' => 200])){
+      return false;
+    }
+  
+    return response()->json(1);
+
+}
 
 
   public function jsonGet(Request $request){

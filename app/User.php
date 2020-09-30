@@ -22,6 +22,44 @@ class User extends Authenticatable
       'email_verified_at' => 'datetime',
   ];
 
+  protected $keys = [
+    ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/user/{id}'],
+    ['key'    => 'email','label' => 'E-mail'],    
+    ['key'    => 'name','label' => 'Имя'],    
+    ['key'    => 'surname','label' => 'Фамилия'],    
+    ['key'    => 'phone','label' => 'Телефон'],    
+  ];  
+
+  protected $inputs = [
+    [
+      'name' => 'images',
+      'caption' => 'Фото',
+      'type' => 'file',
+      'fileMax' => 1,
+    ],
+    [
+      'name' => 'email',
+      'caption' => 'E-mail',
+      'required' => true,
+    ],
+    [
+      'name' => 'name',
+      'caption' => 'Имя',
+      'required' => true,
+    ],
+    [
+      'name' => 'surname',
+      'caption' => 'Фамилия',
+    ],
+    [
+      'name' => 'phone',
+      'caption' => 'Телефон',
+    ]
+
+];
+  
+  public function jugeGetKeys()   {return $this->keys;}
+  public function jugeGetInputs()   {return $this->inputs;}
   public static function jugeGet($request){
 
     //Make query
@@ -55,12 +93,57 @@ class User extends Authenticatable
     //Get
     $users = $query->get();
 
+    //Images
+    foreach ($users as $user) {
+      $user->images = self::getImages($user->id);          
+    }
+    //Main_Images
+    foreach ($users as $user) {
+      $user->mainImage = self::getMainImage($user->id);    
+    } 
+
     //To single id
     if(isset($request['id']) && $request['id'] > 0){
       $users = $users[0];
     }    
 
     return $users;
+  }
+
+  public static function getImages($id){
+
+    $path = public_path() . '/users/images/source';
+    $files = scandir($path);
+
+    $rFiles = [];
+    foreach ($files as $file) {
+      if(strpos($file,$id.'_') === 0){
+        array_push($rFiles,'/users/images/source/' .$file);
+      }      
+    }
+
+    return $rFiles;
+
+  }  
+  
+  public static function getMainImage($id){
+
+    $xpath = '/users/images/main';
+    $path = public_path() . $xpath;
+    $files = scandir($path);
+    
+    $image = false;
+    foreach ($files as $file) {
+      if(strpos($file,$id.'.') === 0){
+        $image = $xpath .'/'. $file;
+        break;
+      }
+    }
+
+    if(!$image) $image = $xpath .'/no-image.png';
+
+    return $image;
+
   }
 
 
