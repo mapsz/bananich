@@ -43,9 +43,7 @@ class Bonus extends Model
   ];
 
   public static function getWithOptions($request = null){
-
     
-
     //Query
     $query = new Bonus;
 

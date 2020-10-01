@@ -13,9 +13,9 @@ class Sms extends Model
   //Put sms send
   public static function putSmsToSend($data){
 
-   //Save
-   try {
-    DB::beginTransaction();
+    //Save
+    try {
+      DB::beginTransaction();
 
       //Put sms
       $sms        = new Sms;
@@ -27,11 +27,11 @@ class Sms extends Model
       $smsSend = new SmsSend;
       $smsSend->sms_id    = $sms->id;
       $smsSend->priority  = $data['priority'];
-      $smsSend->mailing   = $data['mailing'];
+      $smsSend->mailing   = isset($data['mailing']) ? $data['mailing'] : 0;
       $smsSend->save();
 
       //Store to DB
-      DB::commit();    
+      DB::commit();  
     } catch (Exception $e) {          
       // Rollback from DB
       DB::rollback();
