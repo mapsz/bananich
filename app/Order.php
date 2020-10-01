@@ -433,6 +433,7 @@ class Order extends Model
         //Logistic
         if(isset($request['with_logistic'])){
           foreach ($order->logistics as $key => $logistic) {
+            if($logistic->driver == null) continue;
             $logistic->driver->mainPhoto = User::getMainImage($logistic->driver->id);    
           }
         }

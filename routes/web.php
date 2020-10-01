@@ -724,6 +724,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
     });
 
+    //User    
+    Route::get('/login/as/user', 'UserController@loginAsUser');  
+
     //Delivery    
     Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
     Route::put('/put/delivery', 'DeliveryController@put');      

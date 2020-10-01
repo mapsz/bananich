@@ -27,12 +27,10 @@
                 <!-- Order -->
                 <div v-for='(order,i) in orders' :key='i' class="order-item">
                   <div class="order-wrap">
-
                     <div>
                       <div class="order-name"><a href="#" class="order-name-btn">{{fDate(order.created_at)}}</a></div> 
                       <div class="order-track">{{order.id}}</div> <!-- Класс active или cancellation у родителя order-item меняет оформление -->
-                    </div>
-                  
+                    </div>                             
                     <div class="order-right">
                       <div class="order-status">
                         {{order.status}}
@@ -47,10 +45,30 @@
                           <div class="order-value-text">{{order.total}} руб   </div>
                         </div>
                       </div>
-
+                    </div> 
+                  </div>
+                  
+                  <div v-if="order.logistics != undefined && order.logistics[0] != undefined" class="order-courier">
+                    <div class="order-box d-flex align-sm-items-center">
+                      <div v-if="order.logistics[0].driver" class="order-courier-ava" :style="`background-image: url('`+order.logistics[0].driver.mainPhoto+`');`"></div>
+                      <div class="d-sm-flex align-items-center">
+                        <div v-if="order.logistics[0].driver" class="order-box-text mr-sm-3 mr-md-5">
+                          <span>Курьер</span> 
+                          {{order.logistics[0].driver.name}} {{order.logistics[0].driver.surname}} 
+                        </div>
+                        <div class="order-box-text"><span>Доставка</span>
+                          с {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").subtract(40,'minutes').format('HH:mm')}}
+                          до {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").add(40,'minutes').format('HH:mm')}}
+                         </div>
+                      </div>
                     </div>
 
-                  </div>
+                    <div v-if="order.logistics[0].driver" class="order-box">
+                      <div class="order-box-text d-sm-block d-none"><span>Телефон</span> {{order.logistics[0].driver.phone}} </div>
+                      <a class="order-box-call d-sm-none" :href="'tel:'+order.logistics[0].driver.phone"><img src="/image/phone.svg" alt="Phone"></a>
+                    </div>
+
+                  </div>                  
                 </div>
 
 
@@ -69,7 +87,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    //
+    moment:moment,
   }},
   computed:{
     ...mapGetters({orders:'order/get',user:'user/get'}), 
@@ -79,6 +97,7 @@ export default {
       handler: async function (val, oldVal) {
         if(this.user){
           await this.addFilter({customerId:this.user.id})
+          await this.addFilter({with_logistic:true})
           await this.fetch();
         }
       },

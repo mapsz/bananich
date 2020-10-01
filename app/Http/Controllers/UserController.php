@@ -180,7 +180,12 @@ class UserController extends Controller
   
     return response()->json(1);
 
-}
+  }
+
+  public function loginAsUser(Request $request){    
+    Auth::loginUsingId($request->id);
+    return redirect('/profile');
+  }
 
 
   public function jsonGet(Request $request){

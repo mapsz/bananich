@@ -14,15 +14,12 @@
   </span>
   <!-- ID -->
   <div v-if="id > 0">
-    <div><b>{{id}}</b></div>
+    <div><b><a :href='"/admin/user/"+id'>{{id}}</a> </b></div>
   </div>
   <!-- Info -->
   <div v-if="!edit">
     <span v-if="id == 0">(Гость)</span>
-    <span v-else>
-      <a :href="'https://bananich.ru/wp-admin/user-edit.php?user_id='+id" target="_blank">
-        wordpress
-      </a>  
+    <span v-else> 
       <div>{{user.name}} <span v-if="user.surname">{{user.surname}}</span></div>
       <div>{{user.phone}}</div>
       <div>{{user.email}}</div>
