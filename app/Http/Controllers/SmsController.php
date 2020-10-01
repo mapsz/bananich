@@ -71,6 +71,13 @@ class SmsController extends Controller
 
   }
 
+  public function smsAddInput(request $request){
+
+
+    return response()->json(555);
+
+  }
+
 
 
 }
