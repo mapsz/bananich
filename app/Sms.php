@@ -11,7 +11,7 @@ class Sms extends Model
 
 
   //Put sms send
-  public static function putSmsSend($data){
+  public static function putSmsToSend($data){
 
    //Save
    try {

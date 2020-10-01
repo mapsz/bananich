@@ -60,8 +60,10 @@ data(){return{
   ]  
 }},
 methods:{
-  sendSms(a){
-    console.log(a);
+  sendSms(sms){
+    let r = ax.fetch('/sms/add/send' , sms, 'put');
+
+    // if(r) location.reload();
     
   }
 },

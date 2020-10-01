@@ -222,8 +222,7 @@ export default {
 
       if(!r) return;
 
-      this.orders = r;
-        
+      this.orders = r;        
     },
     goById(){
       this.$router.push('/admin/gruzka/'+this.byId);

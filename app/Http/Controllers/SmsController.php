@@ -10,7 +10,7 @@ class SmsController extends Controller
 {
   public static function toSend(){
 
-    if(now()->hour > 20 || now()->hour < 10) return response()->json(0);
+    // if(now()->hour > 20 || now()->hour < 10) return response()->json(0);
 
 
     $toSend = SmsSend::with('sms')
@@ -39,18 +39,14 @@ class SmsController extends Controller
   public function sendAdd(request $request){
 
 
-    if(!isset($request->data)){
-      return response()->json(0);
-    }
-
-    $data = unserialize($request->data);
+    $data = $request->all();
 
     if(!isset($data['body'])){
-      return response()->json(0);
+      return response()->json(-1);
     }    
 
     if(!isset($data['to']) || $data['to'] < 1){
-      return response()->json(0);
+      return response()->json(-2);
     }    
     if(!isset($data['priority']) || $data['priority'] < 1){
       $priority = 0;
