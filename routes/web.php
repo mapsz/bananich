@@ -122,7 +122,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   Route::get('/sms/to/send', 'SmsController@toSend');
   Route::get('/sms/send/confirm', 'SmsController@sendConfirm');
   Route::put('/sms/add/send', 'SmsController@sendAdd');
-  Route::put('/sms/add/input', 'SmsController@smsAddInput');
+  Route::get('/sms/add/input', 'SmsController@smsAddInput');
 
   //Errors
   Route::put('/error', 'ErrorController@put');
