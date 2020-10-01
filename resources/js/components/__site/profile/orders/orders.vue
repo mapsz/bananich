@@ -42,7 +42,7 @@
                         </div>
                         <div class="order-values">
                           <div class="order-value-img"><img src="/image/order/money.svg" alt="Сумма"></div>
-                          <div class="order-value-text">{{order.total}} руб   </div>
+                          <div class="order-value-text">{{order.total}} руб</div>
                         </div>
                       </div>
                     </div> 
