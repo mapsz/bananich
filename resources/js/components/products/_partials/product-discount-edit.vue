@@ -2,9 +2,7 @@
   <div>
     <h3>Скидка</h3>
     
-    <div v-for='(inputs,i) in inputsList' :key='i' >
-      <juge-form :inputs="inputs" :errors="errors" @submit="postSettings" @click="edit=i"></juge-form>
-    </div>
+    <juge-form v-if="inputList" :inputs="inputList" :errors="errors" @submit="postSettings" @click="edit=i"></juge-form>
 
   </div>
 </template>
@@ -26,55 +24,39 @@ data(){return{
       type:"number",
       value:0,
     },
-    {
-      name:'type',
-      caption:'Тип',
-      type:"number",
-      value:1,
-    },
   ],
   errors:false,
 }},
 computed:{
   ...mapGetters({product:'product/getOne'}),
-  inputsList:function(){
-    if(this.product.discounts == undefined) return [this.input];
+  inputList:function(){
+    if(this.product == undefined) return false;
+    if(this.product.discounts == undefined) return false;
+    if(this.product.discounts[0] == undefined) return [this.input];
     
-    let inputs = [];
-    $.each(this.product.discounts , ( k, v ) => {
-      let put = [
-        {
-          name:'discount_price',
-          caption:'Цена с скидкой',
-          type:"number",
-        },
-        {
-          name:'quantity',
-          caption:'Количество',
-          type:"number",
-          value:v.discount_price,
-        },
-        {
-          name:'type',
-          caption:'Тип',
-          type:"number",
-          value:v.type,
-        }
-      ];
-
-
-      inputs.push(put);
-
-    });
-
+    let input = [
+      {
+        name:'discount_price',
+        caption:'Цена с скидкой',
+        type:"number",
+        value:this.product.discounts[0].discount_price
+      },
+      {
+        name:'quantity',
+        caption:'Количество',
+        type:"number",
+        value:this.product.discounts[0].quantity,
+      },
+    ];
     
-    return inputs;
+    return input;
   }
 },
 methods:{
   postSettings(a){
-    console.log(this.edit);
-    console.log(a);
+    a.product_id = this.product.id;
+    let r = ax.fetch('/product/discount/set', a , 'post');
+    console.log(r);
   }
 },
 }

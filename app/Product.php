@@ -1001,6 +1001,8 @@ class Product extends Model
     $discount->quantity = isset($data['quantity']) ? $data['quantity'] : 0;
     $discount->type = isset($data['type']) ? $data['quantity'] : 1;
     $discount->save();
+
+    return 1;
   }  
 
   public static function deleteDiscount($productId){

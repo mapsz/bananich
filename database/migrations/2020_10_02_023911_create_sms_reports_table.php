@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSmsTable extends Migration
+class CreateSmsReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateSmsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sms', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('body');
-            $table->char('from',13)->nullable();
-            $table->char('to',13)->nullable();
+        Schema::create('sms_reports', function (Blueprint $table) {
+            $table->bigInteger('sms_id')->unsigned()->primary();
+            $table->tinyInteger('status')->unsigned();
+            $table->timestamp('timestamp');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateSmsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sms');
+        Schema::dropIfExists('sms_reports');
     }
 }

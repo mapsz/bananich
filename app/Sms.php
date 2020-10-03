@@ -79,6 +79,10 @@ class Sms extends Model
   //Send
   public function send(){
     return $this->hasOne('App\SmsSend','sms_id');
+  }    
+  //Report
+  public function report(){
+    return $this->hasOne('App\SmsReport','sms_id');
   }  
 
 }

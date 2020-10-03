@@ -105,8 +105,7 @@ class ProductController extends Controller
     Validator::make($request->all(), [
       'product_id'      => 'required|exists:products,id',
       'discount_price'  => 'required|numeric',
-      'quantity'        => 'numeric',
-      'name'            => 'max:99',
+      'quantity'        => 'numeric'
     ])->validate();
 
     //Set
