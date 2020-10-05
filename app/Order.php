@@ -205,6 +205,16 @@ class Order extends Model
 
         //Save status
         Item::find($putItem->id)->statuses()->attach(100);
+
+        //Discount
+        if(isset($item['discount']) && isset($item['discount']->discount_price) && $item['discount']->discount_price > 0){
+          self::putDiscount((object)[
+              'product_id' => $item['product_id'],
+              'discount_price' => $item['discount']->discount_price ,
+              'quantity' => $item['discount']->quantity 
+            ],
+          $orderId);
+        }        
         
         //Update Available
         // Product::updateAvailable($item['product_id']);
@@ -252,6 +262,7 @@ class Order extends Model
       
     }
 
+
     //To other
     if($data['toOther']){
       DB::table('order_to_other')->insert([
@@ -289,6 +300,30 @@ class Order extends Model
     return $orderId;
 
   }
+ 
+  private static function putDiscount($d,$orderId){
+
+    //Check exists
+    $discount = Discount::
+        where('product_id',$d->product_id)
+      ->where('discount_price',$d->discount_price)
+      ->where('quantity',$d->quantity)
+      ->first();
+
+    if(!$discount){
+      //Save discount
+      $discount = new Discount;
+      $discount->product_id = $d->product_id;
+      $discount->discount_price = $d->discount_price;
+      $discount->quantity = $d->quantity;
+      $discount->save();
+    }
+
+    // Discount::find($discount->id)->orders()->attach($orderId);
+    Order::find($orderId)->discounts()->attach($discount->id);
+
+
+  }   
 
   public static function getWithOptions($request){
 
@@ -425,8 +460,6 @@ class Order extends Model
 
     //Postedit data
     if("EDIT" == "EDIT"){   
-
-
 
       foreach ($orders as $ok => $order) {
 

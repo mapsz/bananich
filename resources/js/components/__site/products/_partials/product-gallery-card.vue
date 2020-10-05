@@ -7,7 +7,7 @@
         :style='"background-image:url(\""+product.mainImage+"\")"'
       > 
         <a        
-          :href="$route.path + ($route.path == '/' ? '':'/') + 'product/' + product.id" 
+          :href="($route.path == '/profile/favorites' ? '' : $route.path) + ($route.path == '/'  ? '':'/') + 'product/' + product.id" 
           style="position:absolute; width:100%; height:100%"          
         ></a>
         <!-- Bonus -->
@@ -33,7 +33,7 @@
     <div class="catalog-item-text">
       <!-- Name -->
       <div class="catalog-item-title">
-        <a :href="$route.path + ($route.path == '/' ? '':'/') + 'product/' + product.id" >
+        <a :href="($route.path == '/profile/favorites' ? '' : $route.path) + ($route.path == '/' ? '':'/') + 'product/' + product.id" >
           {{
             product.name + 
             (product.unit_view ? ', '+product.unit_view:'')

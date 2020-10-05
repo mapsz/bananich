@@ -56,6 +56,7 @@
       :required="input.required != undefined && input.required ? true : false"
       class="juge-form-input" 
       :aria-describedby="input.name + '-info'"
+      :style='input.width == undefined ? "" : "width:"+input.width+";"'
     >
     
   </span>  

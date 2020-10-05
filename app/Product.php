@@ -358,9 +358,7 @@ class Product extends Model
       }
 
       //Discounts
-      if(!isset($request['no_final_price'])){
-        $products = $products->with('discounts');
-      }
+      $products = $products->with('discounts');
       
       //Categories
       if(!isset($request['no_categories'])){
@@ -629,17 +627,24 @@ class Product extends Model
         $product['description'] = $description;
       }
 
-      //Final price
-      if(!isset($request['no_final_price'])){
-        foreach ($products as $product) {
-          $product->final_price = $product->price;
-          //Discount exist
-          if(isset($product->discount) && $product->discount){
-            $product->final_price = $product->discount->discount_price;
-          }
-
-          $product->final_price = $product->final_price;
+      //Discounts
+      foreach ($products as $product) {
+        $product->discount;
+        $product->discount = null;
+        if(isset($product->discounts) && isset($product->discounts[0])){
+          $product->discount = $product->discounts[0];
         }
+      }
+
+      //Final price
+      foreach ($products as $product) {
+        $product->final_price = $product->price;
+        //Discount exist
+        if(isset($product->discount) && $product->discount){
+          $product->final_price = $product->discount->discount_price;
+        }
+
+        $product->final_price = $product->final_price;
       }
       
       //Unit
@@ -679,6 +684,7 @@ class Product extends Model
 
     return $products;
   }
+
 
   public static function getImages($id){
 

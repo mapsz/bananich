@@ -113,25 +113,6 @@ class DeliveryController extends Controller
         //Set bonuses
         $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
         Bonus::add($order->customer_id,$bonusCount,'buy',$order->id);
-        //Wordpress add bonus
-        do{
-          if($_SERVER['HTTP_ORIGIN'] == "http://bananich.loc") continue;
-          $wpUser = User::find($order->customer_id);
-          $wpBonus = [
-            'user_number' => $wpUser->phone,
-            'type' => 1,          
-            'value' => $bonusCount,
-            'date' => now(),
-            'expire' => Bonus::getDieDate(2),
-            'activate' => now(),
-            'comment' => $order->id,
-            'wtf' => 'mangozz'
-          ];
-          $wpBonus = json_encode($wpBonus);
-          $wpBonusEnc = base64_encode ($wpBonus);
-          file_get_contents('https://bananich.ru/wp-json/bonus/add?data='.$wpBonusEnc);
-        }while(0);
-
 
 
         //Send Interview
