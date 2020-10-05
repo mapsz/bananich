@@ -87,7 +87,7 @@ export default {
         if(window.location.hostname != "bananich.loc") fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});        
         this.clean();
         ax.fetch('/order/update/available', {id:r});
-        // location.href ='/order-thanks';
+        location.href ='/order-thanks';
       }
         
 
