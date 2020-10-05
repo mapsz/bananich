@@ -33,21 +33,18 @@ class DeliveryController extends Controller
     Validator::make($request->all(), [
       'comment'     => 'max:250',
     ])->validate();
-  
-    
+      
     //Data
     $orderId  = $request->all()['orderId'];    
     $items    = $request->all()['items'];
     $userId   = Auth::user()->id;
     $comment  = ""; if(isset($request->comment)) $comment = $request->comment;
 
-
     //Get Order
     $order = Order::getWithOptions(['id' => $orderId]);
 
     // dd($order->statuses[0]->id);
     if($order->statuses[0]->id == 1) return response()->json(-1);
-
           
     //Set pays
     do{
@@ -65,7 +62,6 @@ class DeliveryController extends Controller
     //Database
     try {
       DB::beginTransaction();
-
       
       //Set status
       $order->Statuses()->attach(1,['user_id' => Auth::user()->id]);
@@ -100,7 +96,6 @@ class DeliveryController extends Controller
         }
       }
 
-
       //Set Pays
       foreach ($pays as $pay) {
         Pay::create(
@@ -112,7 +107,6 @@ class DeliveryController extends Controller
           ]
         );
       }
-
       
       if($order->customer_id){
 
@@ -124,8 +118,6 @@ class DeliveryController extends Controller
         // Interview::sendInterview($order->customer_id,1);
 
       }
-
-
       
       //Store to DB
       DB::commit();    
@@ -134,8 +126,6 @@ class DeliveryController extends Controller
       DB::rollback();
       return response(['code' => 'de1','text' => 'delivery put error'], 512)->header('Content-Type', 'text/plain');
     }    
-
-
 
     //Return
     return response()->json(1);
