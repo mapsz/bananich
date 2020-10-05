@@ -12,7 +12,7 @@
       <!-- Image -->
       <div style="flex:1;display: flex;justify-content: center;">
         <img 
-          :src="item.image" 
+          :src="'/products/images/main/'+item.product_id+'.jpg'" 
           :alt="item.name"
           style="height: 35px;"
         >

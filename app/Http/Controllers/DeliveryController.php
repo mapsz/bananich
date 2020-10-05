@@ -33,13 +33,22 @@ class DeliveryController extends Controller
     Validator::make($request->all(), [
       'comment'     => 'max:250',
     ])->validate();
+  
     
     //Data
     $orderId  = $request->all()['orderId'];    
     $items    = $request->all()['items'];
     $userId   = Auth::user()->id;
     $comment  = ""; if(isset($request->comment)) $comment = $request->comment;
-      
+
+
+    //Get Order
+    $order = Order::getWithOptions(['id' => $orderId]);
+
+    // dd($order->statuses[0]->id);
+    if($order->statuses[0]->id == 1) return response()->json(-1);
+
+          
     //Set pays
     do{
       $pays = [];
@@ -52,9 +61,6 @@ class DeliveryController extends Controller
         array_push($pays,['id' => $request->payMethod,'value' => $request->sum]);
       }
     }while(0);
-
-    //Get Order
-    $order = Order::getWithOptions(['id' => $orderId]);
 
     //Database
     try {
@@ -114,9 +120,8 @@ class DeliveryController extends Controller
         $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
         Bonus::add($order->customer_id,$bonusCount,'buy',$order->id);
 
-
         //Send Interview
-        Interview::sendInterview($order->customer_id,1);
+        // Interview::sendInterview($order->customer_id,1);
 
       }
 
@@ -173,26 +178,9 @@ class DeliveryController extends Controller
       //Event      
       event(new OrderSuccessCancel($orderId));
 
-      //Wordpress remove bonus
-      if($order->customer_id){        
-        do{
-          if($_SERVER['HTTP_ORIGIN'] == "http://bananich.loc") continue;
-          $wpUser = User::find($order->customer_id);          
-          $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
-          $wpBonus = [
-            'user_number' => $wpUser->phone,
-            'type' => 2,          
-            'value' => $bonusCount - ($bonusCount*2),
-            'date' => now(),
-            'expire' => 0,
-            'activate' => 0,
-            'comment' => "Отмена заказа " . $order->id,
-            'wtf' => 'mangozz'
-          ];
-          $wpBonus = json_encode($wpBonus);
-          $wpBonusEnc = base64_encode ($wpBonus);
-          file_get_contents('https://bananich.ru/wp-json/bonus/add?data='.$wpBonusEnc);
-        }while(0);
+      //Remove bonus
+      if($order->customer_id){
+        Bonus::cancelOrderBonus($orderId);
       }
 
       //Store to DB

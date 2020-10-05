@@ -244,6 +244,9 @@ class Item extends Model
     public function jugeGet($request) {return $this->getWithOptions($request);}
 
     //Relations
+    public function delivery(){
+      return $this->hasOne('App\Delivery');
+    }
     public function orders(){
       return $this->belongsTo('App\Order');
     }
