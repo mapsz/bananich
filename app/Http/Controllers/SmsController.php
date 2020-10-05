@@ -31,7 +31,7 @@ class SmsController extends Controller
     }
 
     $smsSend = SmsSend::where('sms_id',$request->id)
-                    ->update(['send' => now()]);
+                    ->update(['send' => now(),'status' => $request->status]);
 
     return response()->json(1);
 

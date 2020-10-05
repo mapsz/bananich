@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToSmsTable extends Migration
+class AddStatusToSmsSendsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddStatusToSmsTable extends Migration
      */
     public function up()
     {
-        Schema::table('sms', function (Blueprint $table) {
+        Schema::table('sms_sends', function (Blueprint $table) {
             $table->tinyInteger('status')->default(0);
         });
     }
@@ -25,7 +25,7 @@ class AddStatusToSmsTable extends Migration
      */
     public function down()
     {
-        Schema::table('sms', function (Blueprint $table) {
+        Schema::table('sms_sends', function (Blueprint $table) {
             $table->dropColumn('status');
         });
     }
