@@ -14,31 +14,6 @@
 Route::get('/test', function(){
   echo 'Здесь происходит, что-то очень важное 🎩';
 
-  $bonuses = App\Bonus::where('created_at', '<', '2020-09-27 13:02:20')->pluck('user_id');
-
-  $users = [];
-  foreach ($bonuses as $key => $user) {
-    
-    $gg = App\Bonus::where('user_id', $user)->get();
-
-    if($gg->count() == 1) array_push($users, $user);
-   
-  }
-
-  $bonuses = App\Bonus::whereIn('user_id', $users)->with('user')->with('addBonus')->get();
-
-  foreach ($bonuses as $key => $bonus) {
-    // dump($bonus->toArray());
-
-    // dump('user ' . $bonus->user->name . "({$bonus->user->phone})" . '  -  '. 'bonus ' .$bonus->left);
-
-    $body = "{$bonus->user->name}. Здравствуйте! Бананыч вернулся! У нас много новостей и крутой сайт, а у вас- {$bonus->left} бонусов, которые вы можете потратить на bananich.ru до 10.18! Ждем вас!";
-    
-    dump($body);
-
-    App\Sms::putSmsToSend(['to' => $bonus->user->phone,  'body' => $body, 'priority' => 5]);
-
-  }
 
   
 
@@ -152,6 +127,43 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
+
+    Route::get('/admin/test', function(){
+      echo 'Здесь происходит, что-то очень важное 🎩🎩';
+    
+      $bonuses = App\Bonus::where('created_at', '<', '2020-09-27 13:02:20')->pluck('user_id');
+
+      $users = [];
+      foreach ($bonuses as $key => $user) {
+        
+        $gg = App\Bonus::where('user_id', $user)->get();
+    
+        if($gg->count() == 1) array_push($users, $user);
+       
+      }
+    
+      $bonuses = App\Bonus::whereIn('user_id', $users)->with('user')->with('addBonus')->get();
+    
+      foreach ($bonuses as $key => $bonus) {
+        // dump($bonus->toArray());
+    
+        // dump('user ' . $bonus->user->name . "({$bonus->user->phone})" . '  -  '. 'bonus ' .$bonus->left);
+    
+        $body = "{$bonus->user->name}. Здравствуйте! Бананыч вернулся! У нас много новостей и крутой сайт, а у вас- {$bonus->left} бонусов, которые вы можете потратить на bananich.ru до 10.18! Ждем вас!";
+        
+        dump($body);
+    
+        App\Sms::putSmsToSend(['to' => $bonus->user->phone,  'body' => $body, 'priority' => 5]);
+    
+      } 
+      
+    
+      // App\Logistic::getFromRaw();
+    });
+
+
+
+
 
     //VEsi
     Route::get('make/vesi', function(){
