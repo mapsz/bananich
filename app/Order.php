@@ -303,6 +303,8 @@ class Order extends Model
  
   private static function putDiscount($d,$orderId){
 
+    if($d->quantity == 0) $d->quantity = 99999;
+
     //Check exists
     $discount = Discount::
         where('product_id',$d->product_id)
