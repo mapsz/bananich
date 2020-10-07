@@ -49,7 +49,7 @@ Route::get('/mail', function(){
   // });
 
 
-  // return view('mail.open', ['user' => $user->toarray()]);
+  return view('mail.open', ['user' => $user->toarray()]);
 });
 
 

@@ -99,7 +99,7 @@
           <div>
             <!-- Quantity -->
             <span>
-              {{item.gram_sys * item.quantity}}
+              {{Math.round(item.gram_sys * item.quantity  * 10000) / 10000}}
             </span>
             /
             <!-- Price -->

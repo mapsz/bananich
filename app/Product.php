@@ -416,6 +416,11 @@ class Product extends Model
         $products = $products->where('price', '>=', intval($d['from']))->where('price', '<=', intval($d['to']));
       }
 
+      //Discounts Only
+      if(isset($request['only_discounts']) && $request['only_discounts'] && $request['only_discounts'] != 'false'){
+        $products = $products->whereHas('discounts');
+      }        
+
       //КБЖУ
       do{
         //Сalories

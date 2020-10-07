@@ -2,10 +2,14 @@
   <div  class="sitebar sitebar-cat">
     <div class="sitebar-title">Разделы</div>
     <ul  class="sitebar-wrap">
-      <!-- All -->
+      <!-- Discounts -->
       <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
-        <a @click.prevent="setPopular()" class="sitebar-link " href="/">Популярное</a>
+        <a @click.prevent="setDiscounts()" class="sitebar-link " href="/">Акции</a>
       </li>
+      <!-- Popular -->
+      <!-- <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
+        <a @click.prevent="setPopular()" class="sitebar-link " href="/">Популярное</a>
+      </li> -->
       <!-- Categories -->
       <template v-for='(category,i) in categories'>
         <li        
@@ -98,7 +102,7 @@ export default {
         
         //Set Products
         this.setActive(category);
-        await this.addFilter({'popular':0})  
+        await this.addFilter({'only_discounts':0})  
         this.addFilter({'category':category.id})  
         this.fetchProducts();
         
@@ -111,16 +115,23 @@ export default {
     async setPopular(){
       this.$router.push('/');
       this.setActive(false);
-      await this.addFilter({'category':0})  
-      await this.addFilter({'popular':1})  
+      await this.addFilter({'category':0});  
+      await this.addFilter({'popular':1}) ; 
       this.fetchProducts();    
+    },
+    async setDiscounts(){
+      this.$router.push('/');
+      this.setActive(false);
+      await this.addFilter({'category':0})  ;
+      await this.addFilter({'only_discounts':1})  ;
+      this.fetchProducts(); 
     },
     async setRoute(){
       this.setActive(false);
       let id = this.$route.params.cat_id;
       //Get base categories
       if(id == undefined){
-        this.setPopular();
+        this.setDiscounts();
         return;
       }
 
@@ -130,7 +141,7 @@ export default {
       //Category not found
       if(category == undefined){
         this.$router.push('/');
-        this.setPopular();
+        this.setDiscounts();
         return;
       }
 
