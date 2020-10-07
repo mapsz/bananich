@@ -14,8 +14,15 @@
 Route::get('/test', function(){
   echo 'Здесь происходит, что-то очень важное 🎩';
 
+    
 
-  
+  // foreach ($smss as $key => $sms) {
+  //   App\Sms::putSmsToSend([
+  //     'to' => $sms['to'],
+  //     'body' =>  "{$sms['name']}, здравствуйте! У Бананыча новая акция недели! 7 самых ходовых сезонных фруктов и овощей по себестоимости и отменного качества! Успейте заказать! https://bananich.ru/discounts"
+  //   ]);
+    // die;
+  // }
 
   // App\Logistic::getFromRaw();
 });
@@ -27,7 +34,7 @@ Route::get('/mail', function(){
 
   // dump(  $order->toarray());
 
-  $user = App\User::find(751);
+  // $user = App\User::find(751);
 
   // dd($user);
 
@@ -49,7 +56,7 @@ Route::get('/mail', function(){
   // });
 
 
-  return view('mail.rasilka', ['user' => $user->toarray()]);
+  // return view('mail.rasilka', ['user' => $user->toarray()]);
 });
 
 

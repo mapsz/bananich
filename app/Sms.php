@@ -8,6 +8,16 @@ use App\SmsSend;
 
 class Sms extends Model
 {
+  //Keys
+  protected $keys = [
+    ['key'    => 'to','label' => 'Номер'],
+    ['key'    => 'count','label' => 'количество'],
+    ['key'    => 'body','label' => 'текст'],
+    ['key'    => 'send.priority','label' => 'приоритет'],
+    ['key'    => 'send.send','label' => 'отправленно'],
+    ['key'    => 'send.delivered','label' => 'доставленно'],
+    ['key'    => 'created_at','label' => 'дата'],
+  ];
 
 
   //Put sms send
@@ -26,7 +36,7 @@ class Sms extends Model
       //Put send sms
       $smsSend = new SmsSend;
       $smsSend->sms_id    = $sms->id;
-      $smsSend->priority  = $data['priority'];
+      $smsSend->priority  = isset($data['priority']) ? $data['priority'] : 0;
       $smsSend->mailing   = isset($data['mailing']) ? $data['mailing'] : 0;
       $smsSend->save();
 
@@ -41,17 +51,6 @@ class Sms extends Model
     return 1;
 
   }
-
-  //Keys
-  protected $keys = [
-    ['key'    => 'to','label' => 'Номер'],
-    ['key'    => 'count','label' => 'количество'],
-    ['key'    => 'body','label' => 'текст'],
-    ['key'    => 'send.priority','label' => 'приоритет'],
-    ['key'    => 'send.send','label' => 'отправленно'],
-    ['key'    => 'send.delivered','label' => 'доставленно'],
-    ['key'    => 'created_at','label' => 'дата'],
-  ];
 
   //JugeCRUD
   public function jugeGetKeys()       {return $this->keys;}

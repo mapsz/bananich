@@ -167,3 +167,14 @@ class User extends Authenticatable
   }
 
 }
+
+
+// >2 orders list
+// SELECT u.id, u.email, u.`name` FROM (
+// 	SELECT COUNT('customer_id') AS `c`, customer_id FROM orders
+// 	GROUP BY customer_id
+// ) AS gg
+// INNER JOIN users u
+// ON gg.customer_id = u.id
+// WHERE c > 1
+// AND c < 999

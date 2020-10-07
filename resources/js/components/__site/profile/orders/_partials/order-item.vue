@@ -8,7 +8,7 @@
       <div class="">
         <!-- Date -->
         <div class="order-name dropdown-sad-item" :class="showMore ? 'active' : ''">
-          <a href="#" @click.prevent="showMore = !showMore" class="dropdown-sad-btn">{{moment(order.created_a).locale("ru").format('MMMM D')}}</a>
+          <a href="#" @click.prevent="showMore = !showMore" class="dropdown-sad-btn">{{moment(order.created_at).locale("ru").format('MMMM D')}}</a>
         </div> 
         <!-- ID -->
         <div class="order-track">{{order.id}}</div> <!-- Класс active или cancellation у родителя order-item меняет оформление -->
