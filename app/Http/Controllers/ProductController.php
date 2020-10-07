@@ -108,8 +108,14 @@ class ProductController extends Controller
       'quantity'        => 'numeric'
     ])->validate();
 
+    //Remove discount
+    if($request->discount_price == 0){
+      Product::deleteDiscount($request->product_id);
+    }
     //Set
-    Product::setDiscount($request->all());
+    else{
+      Product::setDiscount($request->all());
+    }  
 
     return response()->json(1);
   }

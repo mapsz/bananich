@@ -50,7 +50,7 @@
             <label 
               :for="mInput.multi == undefined || !mInput.multi ? mInput.name + '-input' : ''"          
             >
-              {{mInput.caption}}:
+              {{mInput.caption != "" ? mInput.caption+':' : ''}}
             </label>
           </div>       
           <!-- Input -->

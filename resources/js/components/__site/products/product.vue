@@ -51,7 +51,7 @@
                     <div class="d-flex align-items-center">                    
                       <template>
                         <span v-if="product.discount" class="product-price">
-                          {{Number(product.discount.discount_price)}}р <span class="product-old-price">-{{Number(product.price)}}р</span>                        
+                          <span style="color: rgb(255, 92, 0);">{{Number(product.discount.discount_price)}}р</span> <span class="product-old-price">-{{Number(product.price)}}р</span>                        
                         </span>
                         <span v-else class="product-price">{{Number(product.price)}}р</span>
                       </template>
@@ -70,6 +70,14 @@
                       <favorite-button :product-id="product.id"/>
                     </button>
 
+                  </div>                  
+                  <!-- Discount annonce -->  
+                  <div v-if="product.discount && product.discount.quantity >= 1" style="
+                    font-size: 9pt;
+                    font-style: italic;
+                    color: rgb(255, 92, 0);
+                  ">
+                    *Скидка на первые <b style="color: rgb(255, 92, 0)">{{product.discount.quantity}}</b> ед.
                   </div>
                 </div>
               </div> 

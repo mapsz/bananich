@@ -88,6 +88,13 @@
         <!-- To Cart -->
         <product-add-to-cart :product='product'/>
       </div>
+      <!-- Discount annonce -->  
+      <div v-if="product.discount && product.discount.quantity >= 1" style="
+        font-size: 9pt;
+        font-style: italic;
+        color: rgb(255, 92, 0);
+        margin: 0 -10px;
+      ">*Скидка на первые <b style="color: rgb(255, 92, 0)">{{product.discount.quantity}}</b> ед.</div>
     </div>
   </div>  
 </template>
