@@ -8,6 +8,7 @@ let routes = [];
     {path: '/category/:cat_id',    component:siteProducts},
     {path: '/category/:parent_cat_id/category/:cat_id',    component:siteProducts},
     {path: '/catalogue',    component:siteProducts},
+    {path: '/discounts',    component:siteProducts,},
     {path: '/',    component:siteProducts,},
   );
 

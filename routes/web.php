@@ -27,13 +27,13 @@ Route::get('/mail', function(){
 
   // dump(  $order->toarray());
 
-  // $user = App\User::find(751);
+  $user = App\User::find(751);
 
   // dd($user);
 
 
-  // Mail::send('mail.open', ['user' => $user->toarray()], function($m){
-  //   $m->to('aslanovadaria@yandex.ru','to');
+  // Mail::send('mail.rasilka', ['user' => $user->toarray()], function($m){
+  //   // $m->to('aslanovadaria@yandex.ru','to');
   //   // $m->to('mapss@inbox.lv','to');
   //   // $m->to('jurijsgergelaba@yandex.ru','to');
   //   $m->from('no-reply@bananich.ru');
@@ -49,7 +49,7 @@ Route::get('/mail', function(){
   // });
 
 
-  return view('mail.open', ['user' => $user->toarray()]);
+  return view('mail.rasilka', ['user' => $user->toarray()]);
 });
 
 

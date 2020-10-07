@@ -1,8 +1,21 @@
 <template>
   <div v-if="!active && !isSearch">
   <ul  class="sitebar-wrap">
+    
+    <!-- Discounts -->
+    <li class="sitebar-category">
+      <a
+        class="sitebar-link"
+        @click.prevent="setDiscounts()"
+        :href="'/discounts/'"
+      >
+        <div class="sitebar-text">Акции</div> 
+        <div class="sitebar-bg" :style='"background-image: url(/image/r-1.png); background-color: #ebeff2;"'></div>
+      </a>
+    </li>
     <!-- Categories -->
     <template v-for='(category,i) in categories'>
+      
       <li 
         :key="i"   
         v-if="category.main_menu == 1 || parent"
@@ -80,10 +93,29 @@ export default {
       //Route
       this.$router.push((this.$route.path == '/' ? '' : this.$route.path) + '/category/'+category.id);
     },
+    setDiscounts(){
+      if(!this.isMobile) return;
+      //Scroll
+      $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top-200)}, 300);
+      //Route
+      this.$router.push('/discounts');
+    },
     async setRoute(){
       if(!this.isMobile) return;
       this.parent = false;
       this.setActive(false);
+      
+
+      if(this.$route.path == "/discounts"){
+        console.log(111);
+        //Set Products
+        await this.setActive(1);
+        await this.addFilter({'category':0});
+        await this.addFilter({'only_discounts':1});
+        this.fetchProducts(); 
+        return;       
+      }
+
       let id = this.$route.params.cat_id;
       //Get base categories
       if(id == undefined){

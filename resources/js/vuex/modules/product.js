@@ -11,7 +11,7 @@ product.actions.put = async ({commit},data)=>{
 
   //Catch errors
   if(ax.lastResponse.status == 422){
-    console.log(ax.lastResponse.data.errors);
+    // console.log(ax.lastResponse.data.errors);
     commit('mErrors',ax.lastResponse.data.errors);
     return;
   }
@@ -28,7 +28,7 @@ product.actions.post = async ({commit},data)=>{
 
 
 
-  console.log(ax);
+  // console.log(ax);
   
 };
 

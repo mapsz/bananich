@@ -20,9 +20,9 @@ export default {
       
       let curPage = false;
       $.each(this.pages , ( k, page ) => {
-        console.log('/'+page.link);
-        console.log(this.$route.path);
-        console.log('---');
+        // console.log('/'+page.link);
+        // console.log(this.$route.path);
+        // console.log('---');
         if('/'+page.link == this.$route.path){
           curPage = page;
           return;

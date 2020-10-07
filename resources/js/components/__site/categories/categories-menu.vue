@@ -108,7 +108,7 @@ export default {
         
         let route = '/category/'+category.id;
 
-        console.log(route);
+        // console.log(route);
         this.$router.push(route);
       }
     },
@@ -122,8 +122,8 @@ export default {
     async setDiscounts(){
       this.$router.push('/');
       this.setActive(false);
-      await this.addFilter({'category':0})  ;
-      await this.addFilter({'only_discounts':1})  ;
+      await this.addFilter({'category':0});
+      await this.addFilter({'only_discounts':1});
       this.fetchProducts(); 
     },
     async setRoute(){
