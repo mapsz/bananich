@@ -66,27 +66,35 @@ class Logistic extends Model
       //To array
       $vehicleArr = (array) $vehicle;
       //Get attr data
-      $driverId = $vehicleArr['@attributes']['driverExternalID'];
-      //Get locations
-      $locations = (array) $vehicleArr['run'];
-      $locations = $locations['location'];
-      foreach ($locations as $location) {
-        //To array
-        $locationArr = (array) $location;
+      if(!is_array($vehicleArr)) $vehicleArr = [$vehicleArr];
+      
+      foreach ($vehicleArr as $key => $vehicleA) {    
+        
+        $driverId = ((array)$vehicleA)['@attributes']['driverExternalID'];
 
-        //Add Logistic
-        if(isset($locationArr['order'])) {
-          $order = (array) $locationArr['order'];
-          $order = $order['@attributes'];
-          $add = [];
-          $add['driver_id'] =           intval($driverId);
-          $add['address'] =             $locationArr['@attributes']['address'];
-          $add['plan_arrival_time'] =   Carbon::createFromFormat('d.m.yy H:i',$locationArr['@attributes']['planArrivalTime'])->format('H:i:s');
-          $add['order_id'] =            $order['orderReference'];
-          $add['date'] =                $date;
-          array_push($logistics,$add);
+        //Get locations
+        $locations = (array) $vehicleA;
+        $locations = (array) $locations['run'];
+        $locations = $locations['location'];
+        foreach ($locations as $location) {
+          //To array
+          $locationArr = (array) $location;
+  
+          //Add Logistic
+          if(isset($locationArr['order'])) {
+            $order = (array) $locationArr['order'];
+            $order = $order['@attributes'];
+            $add = [];
+            $add['driver_id'] =           intval($driverId);
+            $add['address'] =             $locationArr['@attributes']['address'];
+            $add['plan_arrival_time'] =   Carbon::createFromFormat('d.m.yy H:i',$locationArr['@attributes']['planArrivalTime'])->format('H:i:s');
+            $add['order_id'] =            $order['orderReference'];
+            $add['date'] =                $date;
+            array_push($logistics,$add);
+          }
         }
       }
+
     }
 
     return $logistics;
