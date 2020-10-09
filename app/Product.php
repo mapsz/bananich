@@ -690,7 +690,6 @@ class Product extends Model
     return $products;
   }
 
-
   public static function getImages($id){
 
     $path = public_path() . '/products/images/source';
@@ -908,6 +907,7 @@ class Product extends Model
         case  "always_publish": 
         case  "bonus": 
         case  "popular": 
+        case  "termobox": 
           $insert['meta'][$key] = $value;
           break;
         case "composition": 

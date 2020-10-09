@@ -24,6 +24,8 @@
         <product-bonus class="mb-3 border p-2" />
         <!-- Popular -->
         <product-popular class="mb-3 border p-2" />
+        <!-- Termobox -->
+        <product-termobox class="mb-3 border p-2" />
         <!-- Categories -->
         <product-categories class="mb-3 border p-2" />
         <!-- Delivery Days -->
