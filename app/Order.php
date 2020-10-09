@@ -519,7 +519,8 @@ class Order extends Model
         foreach ($order->items as $ik => $item) {
           foreach($item->product->metas as $meta){
             if($meta->name == 'termobox' && $meta->value){
-              $termobox .= $item->name.', ';
+              // $termobox .= $item->name.', ';
+              $termobox = 'Есть термобокс';
               break;
             }
           }          
