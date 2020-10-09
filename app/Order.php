@@ -45,6 +45,7 @@ class Order extends Model
     ['key'    => 'total', 'label' => 'Итог(Предварительно)'],
     ['key'    => 'total_result', 'label' => 'Итог(Погружено)'],
     ['key'    => 'pay_method', 'label' => 'Метод оплаты',"sortable" => false],
+    ['key'    => 'termobox', 'label' => 'termobox',"type" => 'list'],
   ];  
 
   public static function getAvailableDays(){
@@ -356,6 +357,7 @@ class Order extends Model
       //Items
       $query = $query->with('items');
       $query = $query->with('items.product');
+      $query = $query->with('items.product.metas');
       //Item containers
       $query = $query->with('items.containers');
       //Item statuses
@@ -511,6 +513,18 @@ class Order extends Model
           }
           $order['pay_method'] = $pay_methods;  
         }
+
+        //Termobox
+        $termobox = array();
+        foreach ($order->items as $ik => $item) {
+          foreach($item->product->metas as $meta){
+            if($meta->name == 'termobox' && $meta->value){
+              array_push($termobox,$item->name);
+              break;
+            }
+          }          
+        }  
+        $orders[$ok]['termobox'] = $termobox;
 
       }
 

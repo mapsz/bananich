@@ -18,13 +18,6 @@
     <search-filter  :model="model" />
   </div>
 
-<!-- 
-  TODO @@@
-  наличие возврвтов/ 
-  метод оплаты/ 
-  водитель/  
--->
-
   <!-- List -->
   <div class="container-fluid" ref="orderList">
     <juge-list :data="model"></juge-list>
