@@ -45,7 +45,7 @@ class Order extends Model
     ['key'    => 'total', 'label' => 'Итог(Предварительно)'],
     ['key'    => 'total_result', 'label' => 'Итог(Погружено)'],
     ['key'    => 'pay_method', 'label' => 'Метод оплаты',"sortable" => false],
-    ['key'    => 'termobox', 'label' => 'termobox',"type" => 'list'],
+    ['key'    => 'termobox', 'label' => 'termobox'],
   ];  
 
   public static function getAvailableDays(){
