@@ -515,11 +515,11 @@ class Order extends Model
         }
 
         //Termobox
-        $termobox = array();
+        $termobox = "";
         foreach ($order->items as $ik => $item) {
           foreach($item->product->metas as $meta){
             if($meta->name == 'termobox' && $meta->value){
-              array_push($termobox,$item->name);
+              $termobox .= $item->name.', ';
               break;
             }
           }          
