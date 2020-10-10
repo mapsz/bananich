@@ -1,9 +1,8 @@
 <template>
 <div>
-
   <!-- List -->
   <div class="container" ref="orderList">    
-    <h2>{{today}}</h2>
+    <h2 class="mb-2">{{today}}</h2>
     <div v-for='(order,i) in fOrders' :key='i' > 
       <span><b>Заказ № {{order.id}}</b> </span>
       <ul>
