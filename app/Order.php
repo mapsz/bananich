@@ -460,10 +460,15 @@ class Order extends Model
     }
 
     //Get
-    $orders = $query->paginate($limit);
+    if(isset($request['no_pages'])){
+      $orders = $query->get();
+    }else{
+      $orders = $query->paginate($limit);
+    }
+    
 
     //Postedit data
-    if("EDIT" == "EDIT"){   
+    if("EDIT" == "EDIT"){
 
       foreach ($orders as $ok => $order) {
 
@@ -519,6 +524,7 @@ class Order extends Model
         foreach ($order->items as $ik => $item) {
           foreach($item->product->metas as $meta){
             if($meta->name == 'termobox' && $meta->value){
+              $item->termobox = true;
               // $termobox .= $item->name.', ';
               $termobox = 'Есть термобокс';
               break;

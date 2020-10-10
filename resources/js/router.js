@@ -120,7 +120,9 @@ let routes = [];
   //Orders
   import order from './components/orders/order.vue';
   import orders from './components/orders/orders.vue';
+  import orderTermobox from './components/orders/orders-termobox.vue';
   routes.push(
+    {path: adminPrefix+'/orders/termobox',      component:orderTermobox},
     {path: adminPrefix+'/order/:id',           component:order},
     {path: adminPrefix+'/orders',              component:orders},
     {path: adminPrefix+'/main',                component:orders},
