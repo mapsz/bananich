@@ -464,8 +464,7 @@ class Order extends Model
       $orders = $query->get();
     }else{
       $orders = $query->paginate($limit);
-    }
-    
+    }    
 
     //Postedit data
     if("EDIT" == "EDIT"){
