@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button>Оформить №</button>
+    <button>Оформить #</button>
   </div>
 </template>
 
