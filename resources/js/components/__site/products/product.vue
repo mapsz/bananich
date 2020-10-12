@@ -77,7 +77,7 @@
                     font-style: italic;
                     color: rgb(255, 92, 0);
                   ">
-                    *Скидка на первые <b style="color: rgb(255, 92, 0)">{{product.discount.quantity}}</b> ед.
+                    *Скидка на {{product.discount.quantity == 1 ? 'первую' : 'первыe'}} <b style="color: rgb(255, 92, 0)">{{product.discount.quantity}}</b> ед.
                   </div>
                 </div>
               </div> 

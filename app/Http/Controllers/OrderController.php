@@ -10,6 +10,7 @@ use App\Order;
 use App\OrderStatus;
 use App\Item;
 use App\Product;
+use App\ProductMeta;
 use App\Discount;
 use App\Cart;
 use App\Setting;
@@ -26,9 +27,47 @@ class OrderController extends Controller
 
   public function getAvailableDays(){
 
+    //Get days
     $days = Order::getAvailableDays();
 
-    return response()->json($days);
+    //Get Cart
+    $cart = Cart::getCart(['presentProduct' => true]);
+
+    //Get products
+    $ids = [];
+    foreach ($cart['items'] as $key => $item) {
+      array_push($ids,$item['product_id']);
+    }
+    $availableProductDays = ProductMeta::whereIn('product_id',$ids)->where('name', '=', 'deliveryDays')->get();
+
+    //Remove available days 
+    $daysLoop = $days;
+    foreach ($daysLoop as $i => $day) {
+      $day['dateOfWeek'] = Carbon::createFromIsoFormat('YYYY-MM-DD',$day['date'])->isoFormat('d');
+      $day['dateOfWeek'] = $day['dateOfWeek'] == 0 ? 7 : $day['dateOfWeek'];
+      foreach ($availableProductDays as $j => $productDays) {
+        $pDays = json_decode($productDays->value);
+        $available = false;
+        foreach ($pDays as $k => $pDay) {
+          if($pDay == $day['dateOfWeek']){
+            $available = true;
+            break;
+          }
+        }
+        if(!$available){
+          unset($days[$i]);
+          break;
+        }
+      }
+    }
+
+    //Return formate
+    $rDate = [];
+    foreach ($days as $key => $day) {
+      array_push($rDate,$day);
+    }
+
+    return response()->json($rDate);
 
   }
 
