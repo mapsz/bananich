@@ -1,27 +1,34 @@
 <template>
-<div class="d-flex">  
+<div class="row">  
   <!-- Activate/Deactivate     -->
-  <div class="date-activate-deactivate mr-2">
+  <div class="col-12 col-md-1 date-activate-deactivate mr-2 align-self-center mb-2 mb-md-0">
+    <div class="d-flex justify-content-md-center">
     <span class="date-activate-deactivate-button">
-      <!-- <toggle-button v-model="active" :labels="{checked: 'On', unchecked: 'Off'}"/> -->
-
-    <b-form-checkbox v-model="active" switch size="lg"/>
-
-    </span>
+      <b-form-checkbox v-model="active" switch size="lg"/>
+    </span>    
+    <!-- Inactvie -->
+    <div v-if="!active" >Дата</div>
+    </div>
   </div>    
-  <!-- Date Menu -->
-  <div v-if="active" class="input-group input-group-sm date-menu" style="width: auto;">
-    <!-- From/To -->
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="date-from">От:</span>
+  <!-- Date Menu -->    
+  <template v-if="active" >
+    <div class="input-group input-group-sm date-menu" style="width: auto; max-width:100%">
+      <!-- From/To -->
+      <div class="d-flex m-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="date-from">От:</span>
+        </div>
+        <flat-pickr v-model="date.from" :config="config"></flat-pickr>    
+      </div>
+      <div class="d-flex m-2">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="date-to">До:</span>
+        </div>
+        <flat-pickr v-model="date.to" :config="config"></flat-pickr>
+      </div>
     </div>
-    <flat-pickr v-model="date.from" :config="config"></flat-pickr>    
-    <div class="input-group-prepend">
-      <span class="input-group-text" id="date-to">До:</span>
-    </div>
-    <flat-pickr v-model="date.to" :config="config"></flat-pickr>
     <!-- Near Dates -->
-    <div class="ml-2">
+    <div class="col-12 col-md-6 p-0 d-flex-sm justify-content-between align-self-center">
       <span 
         v-for="date in nearDates" :key="date.caption"
         class="near-date"
@@ -31,9 +38,7 @@
         {{date.caption}}
       </span>
     </div>  
-  </div>
-  <!-- Inactvie -->
-  <div v-else >Дата</div>
+  </template>
 </div>
 </template>
 
@@ -130,7 +135,7 @@ export default {
 <style scoped>
   .near-date {
     cursor: pointer;
-    margin: 0px 10px;
+    margin: 0px 5px;
   }
   .near-date:hover {
     color: limegreen;

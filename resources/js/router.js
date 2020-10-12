@@ -85,9 +85,31 @@ let routes = [];
     {path: '/checkout',    component:siteCheckout},
   );
 
+//DRIVER
+  let driverPrefix = '/driver';
+
+  //driver
+  import driver from './components/driver/driver.vue';
+  routes.push(
+    {path: driverPrefix,    component:driver},
+  );
+
+  //Delivery
+  import deliveries from './components/driver/delivery/deliveries.vue';
+  import delivery from './components/driver/delivery/delivery.vue';
+  routes.push(
+    {path: driverPrefix+'/delivery/:id',component: delivery},
+    {path: driverPrefix+'/deliveries',component: deliveries},
+  );  
 
 //ADMIN
   let adminPrefix = '/admin';
+
+  //Delivery
+  routes.push(
+    {path: adminPrefix+'/delivery/:id',component: delivery},
+    {path: adminPrefix+'/deliveries',component: deliveries},
+  );  
 
   //categories
   import categories from './components/categories/categories.vue';
@@ -234,13 +256,6 @@ let routes = [];
     {path: adminPrefix+'/statistics',component: statistics},
   );
 
-  //Delivery
-  import deliveries from './components/delivery/deliveries.vue';
-  import delivery from './components/delivery/delivery.vue';
-  routes.push(
-    {path: adminPrefix+'/delivery/:id',component: delivery},
-    {path: adminPrefix+'/deliveries',component: deliveries},
-  );
 
   //Report
   import reports from './components/report/report/reports.vue';

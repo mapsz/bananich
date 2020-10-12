@@ -5,7 +5,7 @@
   */
 
 /*!
-  * vue-router v3.1.5
+  * vue-router v3.4.6
   * (c) 2020 Evan You
   * @license MIT
   */
@@ -56,6 +56,12 @@
  * Date: 2020-05-04T22:49Z
  */
 
+/*!
+ * vuex v3.5.1
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+
 /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
 
@@ -78,12 +84,6 @@
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-
-/**
- * vuex v3.3.0
- * (c) 2020 Evan You
- * @license MIT
  */
 
 /**!
@@ -110,3 +110,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+//! moment.js
+
+//! moment.js locale configuration

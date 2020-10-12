@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Order;
 
 class Logistic extends Model
 {
@@ -17,12 +19,29 @@ class Logistic extends Model
   public $timestamps = false;
   public $keys = [
     ['key'    => 'id','label' => '#',],
-    ['key'    => 'order_id','label' => 'заказ','type' => 'link', 'link' => '/admin/order/{order_id}'],
+    ['key'    => 'order_id','label' => 'заказ #','type' => 'link', 'link' => '/admin/order/{order_id}'],
     ['key'    => 'address','label' => 'адрес'],     
     ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
     ['key'    => 'date', 'label' => 'дата'],     
     ['key'    => 'driver.name', 'label' => 'водила'],
     ['key'    => 'driver_id', 'label' => 'водила id'],
+  ];
+
+  public $driverKeys = [
+    ['key'    => 'order_id','label' => 'заказ №'],
+    ['key'    => 'address','label' => 'адрес'],     
+    ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
+    ['key'    => 'date', 'label' => 'дата'],
+    [
+      'key'    => 'order-status', 'label' => 'статус заказа',
+      'type' => 'custom',
+      'component' => 'driver-logistic-order-status',
+    ],
+    [
+      'key'    => 'deliver', 'label' => 'выдача',
+      'type' => 'custom',
+      'component' => 'driver-logistic-deliver',
+    ],
   ];
 
 
@@ -61,17 +80,11 @@ class Logistic extends Model
 
     //Make beauty array
     $logistics = [];
-    $vehicles = (array)$obj->scheduleResponse->vehicles;
-    foreach ($vehicles as $key => $vehicle) {
-      //To array
-      $vehicleArr = (array) $vehicle;
-      //Get attr data
-      if(!is_array($vehicleArr)) $vehicleArr = [$vehicleArr];
-      
-      foreach ($vehicleArr as $key => $vehicleA) {    
-        
+    $vehicles = $obj->scheduleResponse->vehicles;
+    
+    foreach ($vehicles as $key => $vehicle) {      
+      foreach ($vehicle as $key => $vehicleA) {                 
         $driverId = ((array)$vehicleA)['@attributes']['driverExternalID'];
-
         //Get locations
         $locations = (array) $vehicleA;
         $locations = (array) $locations['run'];
@@ -151,8 +164,13 @@ class Logistic extends Model
   }
 
   
+  public function getDriverKeys()     {return $this->driverKeys;}  
   public function jugeGetKeys()     {return $this->keys;}  
   public static function jugeGet($request = []) {
+
+    if(isset($request['driver_build']) && $request['driver_build']){
+      $request['driver'] = Auth::user()->id;
+    }
 
     //Query
     $query = new Logistic;
@@ -160,11 +178,29 @@ class Logistic extends Model
     //With
     if('with' == 'with'){
       $query = $query->with('driver');
+      $query = $query->with('order');      
+      $query = $query->with(['order.statuses' => function($q){
+        $q->orderBy('created_at','DESC');
+      }]);  
     }
 
     //Where
     if('Where' == 'Where'){
-      // $query = $query->with('driver');
+      //Driver
+      if(isset($request['driver'])){
+        $query = $query->where('driver_id', '=', $request['driver']);
+      }
+
+      //Delivery Date
+      if(isset($request['deliveryDate'])){
+        $deliveryDate = json_decode($request['deliveryDate']);
+        if(isset($deliveryDate->from) && $deliveryDate->from){
+          $query = $query->where('date', '>=', $deliveryDate->from);
+        }
+        if(isset($deliveryDate->to) && $deliveryDate->to){
+          $query = $query->where('date', '<=', $deliveryDate->to);
+        }      
+      }
     }
 
     //Get
@@ -178,6 +214,10 @@ class Logistic extends Model
   public function driver()
   {
     return $this->belongsTo('App\User','driver_id');
+  }
+  public function order()
+  {
+    return $this->belongsTo('App\Order');
   }
 
 

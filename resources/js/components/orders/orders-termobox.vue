@@ -7,7 +7,7 @@
       <span><b>Заказ № {{order.id}}</b> </span>
       <ul>
         <li v-for='(item,j) in order.termoItems' :key='j' > 
-          {{item.quantity_result == null ? 0 : quantity_result}} {{item.name}}
+          {{item.quantity_result == null ? 0 : item.quantity_result}} {{item.name}}
         </li>
       </ul>
     </div>
@@ -49,8 +49,8 @@ export default {
   },
   async mounted(){
     await this.addFilter({no_pages:1})
-    await this.addFilter({deliveryDate:{from:'2020-09-27',to:'2020-09-27'}})
-    // await this.addFilter({deliveryDate:{from:this.today,to:this.today}})
+    // await this.addFilter({deliveryDate:{from:'2020-09-27',to:'2020-09-27'}})
+    await this.addFilter({deliveryDate:{from:this.today,to:this.today}})
     await this.fetch();
   },
   methods:{    
