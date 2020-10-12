@@ -236,6 +236,7 @@ computed:{
         if(
           key != 'search' && 
           key != 'popular' && 
+          key != 'only_discounts' && 
           value
         ) {count++;}
       }

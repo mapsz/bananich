@@ -31,12 +31,12 @@ export default {
   methods:{
     ...mapActions({
       'addFilter':'product/addFilter',
+      'clearFilters':'product/clearFilters',
       'productsFetch':'product/fetchData',
     }),
     async doSearch(){
       if(this.$route.path != '/') this.$router.push('/');      
-      await this.addFilter({'popular':0});
-      await this.addFilter({'category':false});
+      await this.clearFilters();
       await this.addFilter({'search':this.search});
       await this.productsFetch();
     }
