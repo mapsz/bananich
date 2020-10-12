@@ -44,7 +44,7 @@ Route::get('/mail', function(){
   //   // $m->to('mapss@inbox.lv','to');
   //   // $m->to('jurijsgergelaba@yandex.ru','to');
   //   $m->from('no-reply@bananich.ru');
-  //   $m->subject('Ваш Бананыч заказ получен!');
+  //   $m->subject('Новая акция недели от Бананыча');
   // });
 
   // Mail::send('mail.open', ['user' => $user->toarray()], function($m){
