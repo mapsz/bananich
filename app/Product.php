@@ -565,6 +565,8 @@ class Product extends Model
     //Order By
     if("SORT" == "SORT"){
 
+      $products = $products->orderBy('sort', 'DESC');
+
       if(isset($request['sort'])){
         if($request['sort'] == 'sortCheap'){
           $products = $products->orderBy('price', 'ASC');
@@ -683,7 +685,7 @@ class Product extends Model
       dd(
         microtime(true) - $timer, 
         DB::getQueryLog(),
-        $products
+        $products->toArray()['data']
       );
     }
 
@@ -815,6 +817,7 @@ class Product extends Model
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
       'fats'                  => 'numeric',
+      'sort'                  => 'numeric',
       'сountry'               => 'max:50',
       'composition'           => 'max:65000',
       'benefit'               => 'max:65000',
@@ -842,6 +845,7 @@ class Product extends Model
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
       'fats'                  => 'numeric',
+      'sort'                  => 'numeric',
       'сountry'               => 'max:50',
       'composition'           => 'max:65000',
       'benefit'               => 'max:65000',
@@ -883,6 +887,7 @@ class Product extends Model
         case 'name':
         case 'price':
         case 'unit':
+        case 'sort':
           $insert['product'][$key] = $value;
           break;
         case 'unit_view':
