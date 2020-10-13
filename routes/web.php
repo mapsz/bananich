@@ -135,8 +135,15 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
   //Driver
   Route::group(['middleware' => ['auth', 'can:driver_panel']], function (){
+
+    //Delivery    
+    Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
+    Route::put('/put/delivery', 'DeliveryController@put');      
+    Route::delete('/delivery', 'DeliveryController@delete');
+
     Route::prefix('driver')->group(function (){
 
+      //Logistic    
       Route::get('/logistic/keys', 'LogisticController@getDriverLogisticKeys');
 
       //Vue
@@ -791,10 +798,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     Route::get('/login/as/user', 'UserController@loginAsUser');  
     Route::post('/user/to/driver', 'UserController@toDriver');  
 
-    //Delivery    
-    Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
-    Route::put('/put/delivery', 'DeliveryController@put');      
-    Route::delete('/delivery', 'DeliveryController@delete');
+
     //Pay
     Route::get('/json/pay/methods', 'PayController@getMethods');
     //Return Item
