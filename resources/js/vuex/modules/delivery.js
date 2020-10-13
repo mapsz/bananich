@@ -50,6 +50,7 @@ let delivery = {
     },    
     async deleteDelivery({dispatch},id){
       let r = await ax.fetch('/delivery/',{id},'delete');
+      ax.fetch('/order/update/available', {id:id});
       dispatch('order/fetchOne');
     },
     async putDelivery(){

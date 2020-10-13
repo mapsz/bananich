@@ -155,8 +155,11 @@ methods:{
       },
       'put'
     );
-    if(!r) return;
-    this.fetchOrder(this.id);
+
+    if(!r) return;    
+    ax.fetch('/order/update/available', {id:this.id});
+
+    location.reload();
   }
 },
 }

@@ -83,7 +83,7 @@ class OrderController extends Controller
         
     Product::updateAvailable($items->toArray());
 
-    return;
+    return response()->json(1);
 
   }
 

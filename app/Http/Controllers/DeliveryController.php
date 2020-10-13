@@ -89,10 +89,7 @@ class DeliveryController extends Controller
               'user_id' => $userId,
             ]
           );
-
-
-          //Update Available
-          Product::updateAvailable($item['product_id']);          
+        
         }
       }
 
@@ -108,6 +105,7 @@ class DeliveryController extends Controller
         );
       }
       
+      //Registred deals
       if($order->customer_id){
 
         //Set bonuses
