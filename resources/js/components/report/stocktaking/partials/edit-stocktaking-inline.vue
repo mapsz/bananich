@@ -63,7 +63,7 @@ export default {
       this.edit = true;
       this.getProductCount(this.product.id);
     },
-    async getProductInCars(){
+    async getProductInCars(id){
       let params = {
         model:'item',
         itemStatus:300,
@@ -80,7 +80,7 @@ export default {
       if(!r) return;
       this.currentQuantity = r.summary;
 
-      this.getProductInCars();
+      this.getProductInCars(id);
     },  
     async save(){
       let r = await this.jugeAx('/stocktaking',{product_id:this.product.id,quantity:this.quantity},'put');
