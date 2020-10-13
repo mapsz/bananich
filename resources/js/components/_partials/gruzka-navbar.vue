@@ -5,7 +5,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
+    <ul v-if="isAdmin" class="navbar-nav">
       <li v-for='(link,i) in links' :key='i' :class="current == link.link ? 'active' : ''" class="nav-item">
         <!-- <router-link class="nav-link" :to="link.link">{{link.caption}}</router-link> -->
         <a class="nav-link" :href="link.link">{{link.caption}}</a>
@@ -15,7 +15,7 @@
     <div v-if="user" class="w-100 d-flex" style="justify-content:flex-end">
       <!-- Profile -->
       <div class="align-self-center mx-2">
-        <!-- <span>{{user.name}}</span> -->
+        <span>{{user.name}}</span>
       </div>
       <!-- Logout -->
       <div>
@@ -34,6 +34,23 @@ export default {
     adminPrefix:'/admin',
     links:[],
   }},
+  computed:{
+    isAdmin:function(){
+      if(this.user == undefined || this.user.roles == undefined) return null;
+      if(this.user.roles[0] == undefined) return false;
+
+      let isRole = false;
+
+      $.each(this.user.roles, (k, role) => {
+        if(role.name == 'admin'){
+          isRole = true;
+          return true;
+        } 
+      });
+
+      return isRole;
+    }
+  },
   mounted(){
     this.links = [
       {
@@ -69,8 +86,8 @@ export default {
         caption:"Учёт",
       },
       {
-        link: this.adminPrefix+"/deliveries",
-        caption:"Выдача",
+        link: "/driver",
+        caption:"Водитель",
       },
       {
         link: this.adminPrefix+"/bonuses",

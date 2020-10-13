@@ -14,6 +14,8 @@
         <user-main-photo class="mb-3 border p-2" />
         <!-- Login as -->
         <user-login-as class="mb-3 border p-2" />
+        <!-- Driver -->
+        <user-driver class="mb-3 border p-2" />
       </div>
     </div>
   </div>

@@ -89,10 +89,10 @@ let routes = [];
   let driverPrefix = '/driver';
 
   //driver
-  import driver from './components/driver/driver.vue';
-  routes.push(
-    {path: driverPrefix,    component:driver},
-  );
+  // import driver from './components/driver/driver.vue';
+  // routes.push(
+  //   {path: driverPrefix,    component:driver},
+  // );
 
   //Delivery
   import deliveries from './components/driver/delivery/deliveries.vue';
@@ -100,6 +100,7 @@ let routes = [];
   routes.push(
     {path: driverPrefix+'/delivery/:id',component: delivery},
     {path: driverPrefix+'/deliveries',component: deliveries},
+    {path: driverPrefix+'',component: deliveries},
   );  
 
 //ADMIN

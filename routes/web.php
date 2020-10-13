@@ -134,9 +134,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
 
   //Driver
-  Route::group(['middleware' => ['auth', 'can:driver']], function (){
-
-    //Admin panel
+  Route::group(['middleware' => ['auth', 'can:driver_panel']], function (){
     Route::prefix('driver')->group(function (){
 
       Route::get('/logistic/keys', 'LogisticController@getDriverLogisticKeys');
@@ -146,14 +144,12 @@ Route::group(['middleware' => ['HttpsRR']], function () {
           return view('admin');
       })->where('vue_capture', '[\/\w\.-]*');    
     });
-
-
   });
 
 
 
   //Admin
-  Route::group(['middleware' => ['auth', 'can:admin panel']], function (){
+  Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
 
     Route::get('/admin/test', function(){
       echo 'Здесь происходит, что-то очень важное 🎩🎩';
@@ -789,8 +785,11 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
     });
 
+    // Route::get('/logistic/keys', 'LogisticController@getDriverLogisticKeys');
+
     //User    
     Route::get('/login/as/user', 'UserController@loginAsUser');  
+    Route::post('/user/to/driver', 'UserController@toDriver');  
 
     //Delivery    
     Route::get('/json/deliveries', 'DeliveryController@jsonGet');  

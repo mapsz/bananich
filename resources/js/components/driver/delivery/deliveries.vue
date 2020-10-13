@@ -2,31 +2,28 @@
 <div>
   <!-- Menu -->
   <gruzka-navbar></gruzka-navbar>
-
-
-  
-
+  <driver-navbar></driver-navbar>
     
-    <div class="container-fluid" ref="orderList">
+  <div class="container-fluid" ref="orderList">
 
-      <h2>Выдача</h2>  
-      <!-- By id -->
-      <form @submit.prevent="goById()" class="input-group mb-3" style="width: 140px;">    
-        <input v-model="byId" type="number" class="form-control">
-        <div class="input-group-append">
-          <button @click.prevent="goById()" class="btn btn-outline-primary px-1" type="button">По ID</button>
-        </div>     
-      </form> 
+    <h2>Выдача</h2>  
+    <!-- By id -->
+    <form @submit.prevent="goById()" class="input-group mb-3" style="width: 140px;">    
+      <input v-model="byId" type="number" class="form-control">
+      <div class="input-group-append">
+        <button @click.prevent="goById()" class="btn btn-outline-primary px-1" type="button">По ID</button>
+      </div>     
+    </form> 
 
-      <!-- Title -->
-      <h4>Логистика</h4>  
+    <!-- Title -->
+    <h4>Логистика</h4>  
 
-      <!-- Filter -->
-      <juge-date-filter :model="'logistic'"/>
+    <!-- Filter -->
+    <juge-date-filter :model="'logistic'"/>
 
-      <!-- List -->
-      <juge-list v-if="driverKeys" class="mt-3" :data="'logistic'" :keys="driverKeys"/>
-    </div>
+    <!-- List -->
+    <juge-list v-if="driverKeys" class="mt-3" :data="'logistic'" :keys="driverKeys"/>
+  </div>
 
 
 </div>

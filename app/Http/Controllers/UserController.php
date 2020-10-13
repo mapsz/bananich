@@ -187,9 +187,15 @@ class UserController extends Controller
     return redirect('/profile');
   }
 
-
   public function jsonGet(Request $request){
     // dd($request['userIds'],array_unique($request['userIds']));
     return response()->json(User::whereIn('id',array_unique($request['userIds']))->get());
+  }
+
+  public function toDriver(Request $request){
+
+    User::toDriver($request->user_id);
+
+    return response()->json(1);
   }
 }

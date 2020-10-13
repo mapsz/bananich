@@ -5,9 +5,13 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
+
+
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class User extends Authenticatable
 {
@@ -56,59 +60,7 @@ class User extends Authenticatable
       'caption' => 'Телефон',
     ]
 
-];
-  
-  public function jugeGetKeys()   {return $this->keys;}
-  public function jugeGetInputs()   {return $this->inputs;}
-  public static function jugeGet($request){
-
-    //Make query
-    $query = new User;
-
-    //Parse if doesnt exist
-    if(isset($request['id']) && $request['id'] > 0){
-      $exists = $query->where('id', $request['id'])->exists();
-      if(!$exists){
-        Parse::user($request['id']);
-      }
-    }
-
-    //With
-    do{
-      //Comment
-      $query = $query->with('comment');
-      //Referal
-      $query = $query->with('referal');
-      //Addresses
-      $query = $query->with('addresses');
-      //Permissions
-      $query = $query->with('permissions');
-    }while(0);    
-
-    //Where Single id
-    if(isset($request['id']) && $request['id'] > 0){
-      $query = $query->where('id', $request['id']);
-    }
-
-    //Get
-    $users = $query->get();
-
-    //Images
-    foreach ($users as $user) {
-      $user->images = self::getImages($user->id);          
-    }
-    //Main_Images
-    foreach ($users as $user) {
-      $user->mainImage = self::getMainImage($user->id);    
-    } 
-
-    //To single id
-    if(isset($request['id']) && $request['id'] > 0){
-      $users = $users[0];
-    }    
-
-    return $users;
-  }
+  ];
 
   public static function getImages($id){
 
@@ -125,7 +77,7 @@ class User extends Authenticatable
     return $rFiles;
 
   }  
-  
+
   public static function getMainImage($id){
 
     $xpath = '/users/images/main';
@@ -145,6 +97,64 @@ class User extends Authenticatable
     return $image;
 
   }
+
+  public static function toDriver($id){
+    $role = Role::where(['name' => 'driver'])->first();
+    $user = User::find($id);
+    $user->assignRole($role);
+    return true;
+  }
+  
+  public function jugeGetKeys()   {return $this->keys;}
+  public function jugeGetInputs()   {return $this->inputs;}
+  public static function jugeGet($request){
+
+    //Make query
+    $query = new User;
+
+    //With
+    if("WITH" == "WITH"){
+      //Comment
+      $query = $query->with('comment');
+      //Referal
+      $query = $query->with('referal');
+      //Addresses
+      $query = $query->with('addresses');
+    }
+
+    //Where
+    if("WHERE" == "WHERE"){
+      //Id
+      if(isset($request['id']) && $request['id'] > 0){
+        $query = $query->where('id', $request['id']);
+      }
+    }
+
+    //Get
+    $users = $query->get();
+
+    //After Query
+    if("AfterQuery" == "AfterQuery"){
+      //Loop
+      foreach ($users as $user) {
+        //Images
+        $user->images = self::getImages($user->id);    
+        //Main_Images
+        $user->mainImage = self::getMainImage($user->id);          
+        //Get roles
+        $user->getRoleNames();
+      }
+    }
+
+    //To single id
+    if(isset($request['id']) && $request['id'] > 0){
+      $users = $users[0];
+    }    
+
+
+    return $users;
+  }
+
 
 
   public function comment(){

@@ -1,7 +1,7 @@
 <template>
 <div>
   <h5>Авторизоваться</h5>
-  <a :href="'/login/as/user?id='+user.id">{{user.name}}</a>
+  <a :href="'/login/as/user?id='+user.id">{{user.name}} ↘️</a>
 </div>
 </template>
 
