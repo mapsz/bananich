@@ -115,7 +115,7 @@ class Report extends Model
       $report = $report[0];
     }
 
-// dd($report[0]);
+    // dd($report[0]);
 
     return $report;
 

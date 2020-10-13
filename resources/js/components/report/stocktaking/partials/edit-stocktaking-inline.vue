@@ -23,7 +23,9 @@
           <div class="col-6">
             <h5>{{product.name}}</h5>
             <a :href="'/admin/product/' + product.id" target="_blank">Редактировать продукт </a>
-            <p class="mt-3">Всего на складе: <b>{{currentQuantity}}</b></p>
+            <p class="mt-3">Всего: <b>{{currentQuantity}}</b></p>
+            <p class="mt-3">На складе: {{currentQuantity - currentCarQuantity}}</p>
+            <p class="mt-3">Погружено: {{currentCarQuantity}}</p>
           </div>
         </div>
         <!-- input -->
@@ -50,6 +52,7 @@ export default {
     edit:false,
     product:this.data,
     currentQuantity:0,
+    currentCarQuantity:0,
     quantity:null,
   }},
   async mounted(){    
@@ -60,10 +63,24 @@ export default {
       this.edit = true;
       this.getProductCount(this.product.id);
     },
+    async getProductInCars(){
+      let params = {
+        model:'item',
+        itemStatus:300,
+        status:[200,300,400,500],
+        deliveryDate:{from:moment().subtract(6,'d').format('Y-M-DD'),to:moment().format('Y-M-DD')},
+        productId:id
+      };
+      let r = await this.jugeAx('/juge',params);
+      if(!r) return;
+      this.currentCarQuantity = r.summary;
+    },
     async getProductCount(id){
       let r = await this.jugeAx('/json/report',{id:id});
       if(!r) return;
       this.currentQuantity = r.summary;
+
+      this.getProductInCars();
     },  
     async save(){
       let r = await this.jugeAx('/stocktaking',{product_id:this.product.id,quantity:this.quantity},'put');
