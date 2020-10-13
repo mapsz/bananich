@@ -25,7 +25,7 @@
             <a :href="'/admin/product/' + product.id" target="_blank">Редактировать продукт </a>
             <p class="mt-3">Всего: <b>{{currentQuantity}}</b></p>
             <p class="mt-3">На складе: {{currentQuantity - currentCarQuantity}}</p>
-            <p class="mt-3">Погружено: {{currentCarQuantity}}</p>
+            <p class="mt-3">Погружено: {{currentCarQuantity}} <span style="color:gray">({{currentCarOrders}})</span></p>
           </div>
         </div>
         <!-- input -->
@@ -53,6 +53,7 @@ export default {
     product:this.data,
     currentQuantity:0,
     currentCarQuantity:0,
+    currentCarOrders:'',
     quantity:null,
   }},
   async mounted(){    
@@ -74,6 +75,7 @@ export default {
       let r = await this.jugeAx('/juge',params);
       if(!r) return;
       this.currentCarQuantity = r.summ;
+      this.currentCarOrders = r.orders;
     },
     async getProductCount(id){
       let r = await this.jugeAx('/json/report',{id:id});
