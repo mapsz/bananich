@@ -49,7 +49,7 @@ let delivery = {
       dispatch('order/fetchOne');
     },    
     async deleteDelivery({dispatch},id){
-      let r = await ax.fetch('/delivery/',{id},'delete');
+      let r = await ax.fetch('/delivery',{id},'delete');
       ax.fetch('/order/update/available', {id:id});
       dispatch('order/fetchOne');
     },
