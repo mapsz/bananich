@@ -141,6 +141,13 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     Route::put('/put/delivery', 'DeliveryController@put');      
     Route::delete('/delivery', 'DeliveryController@delete');
 
+
+    //Pay
+    Route::get('/json/pay/methods', 'PayController@getMethods');
+    //Return Item
+    Route::put('/return/item', 'ReturnItemController@put');      
+    Route::delete('/return/item', 'ReturnItemController@delete');        
+
     Route::prefix('driver')->group(function (){
 
       //Logistic    
@@ -798,12 +805,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     Route::get('/login/as/user', 'UserController@loginAsUser');  
     Route::post('/user/to/driver', 'UserController@toDriver');  
 
-
-    //Pay
-    Route::get('/json/pay/methods', 'PayController@getMethods');
-    //Return Item
-    Route::put('/return/item', 'ReturnItemController@put');      
-    Route::delete('/return/item', 'ReturnItemController@delete');     
+ 
 
     //Gruzka
     Route::put('/gruzka/confirm', 'GruzkaController@confirm');
