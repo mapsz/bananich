@@ -837,7 +837,7 @@ class Product extends Model
     Validator::make($request['data'], [
       'name'                  => 'unique:products|max:50',
       'price'                 => 'numeric',
-      'unit'                  => 'required|numeric',
+      'unit'                  => 'numeric',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
