@@ -28,7 +28,7 @@ export default {
     },
     pre_price:function(){
       if(this.cart.pre_price == undefined) return 0;
-      else this.cart.pre_price;
+      else return this.cart.pre_price;
     }
   },
   mounted(){
