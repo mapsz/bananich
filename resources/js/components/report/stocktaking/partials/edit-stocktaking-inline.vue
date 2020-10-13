@@ -73,7 +73,7 @@ export default {
       };
       let r = await this.jugeAx('/juge',params);
       if(!r) return;
-      this.currentCarQuantity = r.summary;
+      this.currentCarQuantity = r.summ;
     },
     async getProductCount(id){
       let r = await this.jugeAx('/json/report',{id:id});
