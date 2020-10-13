@@ -24,7 +24,7 @@
                 <!-- Contact details -->
                 <div style="padding: 10px 0px;display: flex;flex-direction: column;">
                   <div style="display: flex;justify-content: flex-end;">{{order.name}}</div>
-                  <div style="display: flex;justify-content: flex-end;">{{order.address}}</div>
+                  <div style="display: flex;justify-content: flex-end;">{{order.address}} {{order.appartPorch}}</div>
                   <div style="display: flex;justify-content: flex-end;">{{order.phone}}</div>
                   <div style="display: flex;justify-content: flex-end;">{{order.delivery_date}}</div>
                 </div>
