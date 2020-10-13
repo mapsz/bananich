@@ -11,9 +11,8 @@ product.actions.put = async ({commit},data)=>{
 
   //Catch errors
   if(ax.lastResponse.status == 422){
-    // console.log(ax.lastResponse.data.errors);
     commit('mErrors',ax.lastResponse.data.errors);
-    return;
+    return false;
   }
 
   return r;
@@ -24,11 +23,14 @@ product.actions.post = async ({commit},data)=>{
   commit('mErrors',false);
 
   let r = await ax.fetch('/product',{data},'post');  
-  // dispatch('fetchOne',state.id);
 
+  //Catch errors  
+  if(ax.lastResponse.status == 422){
+    commit('mErrors',ax.lastResponse.data.errors);;
+    return false;
+  }
 
-
-  // console.log(ax);
+  return true;
   
 };
 

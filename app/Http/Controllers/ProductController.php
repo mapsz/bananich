@@ -31,6 +31,7 @@ class ProductController extends Controller
 
   public function post(Request $request){
 
+
     Product::doValidatePost($request);
 
     Product::post($request->data['id'], $request['data']);

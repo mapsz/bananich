@@ -810,8 +810,7 @@ class Product extends Model
     Validator::make($request['data'], [
       'name'                  => 'required|unique:products|max:50',
       'price'                 => 'required|numeric',
-      'unit'                  => 'max:50',
-      'unit_sys'              => 'numeric',
+      'unit'                  => 'required|numeric',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
@@ -824,7 +823,7 @@ class Product extends Model
       'no_sugar'              => 'boolean',
       'no_heat'               => 'boolean',
       'no_egg'                => 'boolean',
-      'no_milk'                => 'boolean',
+      'no_milk'               => 'boolean',
       'low_glycemic'          => 'boolean',
       'eco'                   => 'boolean',
       'gruzka_priority'       => 'numeric',
@@ -838,8 +837,7 @@ class Product extends Model
     Validator::make($request['data'], [
       'name'                  => 'unique:products|max:50',
       'price'                 => 'numeric',
-      'unit'                  => 'max:50',
-      'unit_sys'              => 'numeric',
+      'unit'                  => 'required|numeric',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',

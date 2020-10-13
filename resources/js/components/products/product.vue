@@ -75,11 +75,13 @@ export default {
     async submit(inputs){
       if(this.id > 0){
         inputs.id = this.id;
-        this.post(inputs);
-        location.reload();
+        let r = await this.post(inputs);
+        if(r){
+          location.reload();
+        } 
       }else{
         let $id = await this.put(inputs);
-        location.href = '/admin/product/'+$id;
+        if($id) location.href = '/admin/product/'+$id;        
       }
     }
   },
