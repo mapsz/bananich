@@ -131,6 +131,9 @@ class DeliveryController extends Controller
   }
 
   public function delete(Request $request){
+
+    dd($request);
+
     //Data
     $orderId = $request->id;
 
