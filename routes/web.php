@@ -60,6 +60,9 @@ Route::get('/mail', function(){
 });
 
 
+//Logistic
+Route::get('/logistic/daily', function(){return App\Logistic::daily();});
+
 // Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
 Route::group(['middleware' => ['HttpsRR']], function () {
 
