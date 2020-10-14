@@ -23,8 +23,8 @@ class Logistic extends Model
     ['key'    => 'address','label' => 'адрес'],     
     ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
     ['key'    => 'date', 'label' => 'дата'],     
-    ['key'    => 'driver.name', 'label' => 'водила'],
-    ['key'    => 'driver_id', 'label' => 'водила id'],
+    ['key'    => 'driver.name', 'label' => 'водила','type' => 'link', 'link' => '/admin/user/{driver_id}'],
+    ['key'    => 'driver_id', 'label' => 'водила id','type' => 'link', 'link' => '/admin/user/{driver_id}'],
     [
       'key'    => 'edit-driver', 'label' => 'замена водилы',
       'type' => 'custom',
