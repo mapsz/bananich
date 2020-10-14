@@ -7,7 +7,7 @@
     <b-modal :id="'logistic-edit-driver-modal-'+data.id" @show="getDrivers()" title="Замена водителя" hide-footer>
       <div class="row">
         <!-- Change Driver -->
-        <div class="col-7">
+        <div class="col-5">
           <!-- Prev Driver -->
           <div class="mb-2">
             Дата: {{data.date}} 
@@ -36,13 +36,13 @@
 
         </div>
         <!-- Drivers List -->
-        <div class="col-5">
+        <div class="col-7">
           <div>Список Водителей:</div> 
           <b-button v-if="!drivers" @click="getDrivers()" class="ml-2 mt-3" size="sm" variant="info">загрузить</b-button>
 
           <ul class="mt-2" v-if="drivers">
             <li v-for='(driver,i) in drivers' :key='i' > 
-              <b>{{driver.id}}</b> {{driver.name}}
+              <b @click="toChange = driver.id">{{driver.id}}</b> {{driver.name}}
             </li>
           </ul>
         </div>
