@@ -681,6 +681,7 @@ class Product extends Model
       $products = $products[0];
     }
 
+    //Test
     if(isset($request['test'])){
       dd(
         microtime(true) - $timer, 

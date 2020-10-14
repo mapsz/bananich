@@ -44,6 +44,18 @@ class Logistic extends Model
     ],
   ];
 
+  public static function daily(){
+
+    if(DB::table('logistics')->where('date',now()->format('yy-m-d'))->exists()) return 3;
+
+    self::getFromMaxopra();
+
+    self::saveFromRaw();
+
+    return true;
+
+  }
+
 
   public static function saveFromRaw(){
 
