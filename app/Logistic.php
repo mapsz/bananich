@@ -25,6 +25,11 @@ class Logistic extends Model
     ['key'    => 'date', 'label' => 'дата'],     
     ['key'    => 'driver.name', 'label' => 'водила'],
     ['key'    => 'driver_id', 'label' => 'водила id'],
+    [
+      'key'    => 'edit-driver', 'label' => 'замена водилы',
+      'type' => 'custom',
+      'component' => 'logistic-edit-driver',
+    ],
   ];
 
   public $driverKeys = [

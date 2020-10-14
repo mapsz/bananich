@@ -198,4 +198,8 @@ class UserController extends Controller
 
     return response()->json(1);
   }
+
+  public function getDrivers(Request $request){
+    return response()->json(User::role('driver')->get());
+  }
 }

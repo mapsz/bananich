@@ -3,17 +3,20 @@
   <gruzka-navbar></gruzka-navbar>
   <order-navbar></order-navbar>
   
-  <div class="container-fluid">
+
+
+  
+  <div class="container-fluid" ref="orderList">
 
     <!-- Title -->
     <h1>Логистика</h1>  
 
     <!-- List -->
-    <div class="container-fluid" ref="orderList">
-      <juge-list :data="'logistic'" />
-    </div>
+    <juge-date-filter :model="'logistic'"></juge-date-filter>
+    <juge-list :data="'logistic'" />
 
   </div>
+
   
 </div>
 </template>
