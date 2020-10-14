@@ -4,12 +4,18 @@
   
     <b-button v-b-modal="'logistic-edit-driver-modal-'+data.id" size="sm">✏️🚚</b-button>
 
-    <b-modal :id="'logistic-edit-driver-modal-'+data.id" title="Замена водителя" hide-footer>
+    <b-modal :id="'logistic-edit-driver-modal-'+data.id" @show="getDrivers()" title="Замена водителя" hide-footer>
       <div class="row">
         <!-- Change Driver -->
         <div class="col-7">
           <!-- Prev Driver -->
-          <p class="mb-2">date: {{data.date}} name: {{data.driver}} id: <b>{{data.driver_id}}</b> </p>
+          <div class="mb-2">
+            Дата: {{data.date}} 
+            <div>
+              <b>{{data.driver_id}}</b> 
+              <span v-if="data.driver">{{data.driver.name}}</span>  
+            </div>
+          </div>
 
           <!-- Text -->
           <div class="mb-2">⬇️ Заменить на ⬇️</div> 
@@ -57,6 +63,7 @@ data(){return{
 }},
 methods:{
   async getDrivers(){
+    if(this.drivers) return;
     this.drivers = await ax.fetch('/json/drivers');
   },
   async changeDriver(){
