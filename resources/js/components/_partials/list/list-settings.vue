@@ -9,13 +9,17 @@
   />
 
   <b-modal :id="'list-settings-modal-'+model" title="Настройки таблицы" ok-only>
+
+    <!-- <b-form-checkbox  class="m-3" switch size="lg" style="cursor: pointer;">Мобильная версия</b-form-checkbox> -->
+
     <draggable 
       :list="keys"
       @end="save()"
+      handle=".handle"
     >
-      <div v-for="(k, i) in keys" :key="i">
-        <div class="d-flex m-2 p-2 border" style="cursor: move; align-items: center;">
-          <span class="mr-3" style="cursor: move;">📌</span>
+      <div v-for="(k, i) in keys" :key="i" class="">
+        <div class="d-flex m-2 p-2 border" style="align-items: center;">
+          <span class="mr-3 handle" style="cursor: move;">📌</span>
           <b-form-checkbox v-model="keys[i].active" @change="save()" switch size="lg" style="cursor: pointer;">
             {{k.label != undefined ? k.label : k.key}}
           </b-form-checkbox>

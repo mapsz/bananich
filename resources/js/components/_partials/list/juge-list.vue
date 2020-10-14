@@ -18,11 +18,13 @@
   </div>
 
   <!-- List -->
+  <!-- :stacked="'md'" -->
   <b-table      
     :head-variant="'dark'" 
     :items="cData"
     :fields="cActiveKeys"   
-    striped hover small bordered :stacked="'md'"
+    striped hover small bordered responsive
+    
   >
    <!-- @sort-changed="sort" -->
     <!-- no-local-sorting -->
