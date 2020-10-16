@@ -25,6 +25,7 @@ export default {
     doId(){
       //Set vuex
       if(this.model != undefined){
+        this.$store.dispatch(this.model+'/clearFilters');
         this.$store.dispatch(this.model+'/addFilter',{id:this.id});
       }
       //Emit

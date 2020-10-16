@@ -143,7 +143,7 @@ export default {
       return Math.round($v);
     },
     r3($v){
-      return Math.round($v * 1000) / 1000;
+      return Math.round($v * 10000) / 10000;
     }
   },
 }

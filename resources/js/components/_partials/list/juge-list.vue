@@ -1,18 +1,27 @@
 <template>
 <div>
 
-  <!-- Total / Paginator / Settings -->
-  <div class="d-flex mb-2" style="align-items: center;">
-    <!-- Total -->
-    <div v-if="total > 3 && cData.length > 3">
-      <span>Всего: {{total}}</span>
+
+  <!-- Total / Search / Paginator / Settings -->
+  <div class="pre-table-wrapper my-2" style=""> 
+    <!-- Search -->
+    <div class="pre-table-box box-search" style="">
+      <div class="d-flex">
+        <juge-search-filter class="mx-2" :model="cDataModelSingle" />
+        <juge-id-filter class="mr-2" :model="cDataModelSingle" />
+      </div>
     </div>  
     <!-- Paginator -->
-    <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
-      <paginator :pages="cPages" @change="fetch()"/>
+    <div class="pre-table-box box-paginator" style="">
+      <paginator :pages="cPaginator" @change="fetch"/>
     </div>
+    <!-- Total -->
+    <div class="pre-table-box box-total" v-if="total > 3 && cData.length > 3">
+      <span class="mr-2">Всего: {{total}}</span>
+      <span v-if="cPages && cPages.per_page != undefined" style="color:gray">На странице: {{cPages.per_page}}</span>
+    </div>   
     <!-- List settings -->
-    <div style="margin-left: auto; flex:1;">
+    <div class="pre-table-box box-settings" style="">
       <list-settings v-if="cKeysModelSingle" :model="cKeysModelSingle" :p-keys="cKeys"></list-settings>
     </div>
   </div>
@@ -80,13 +89,13 @@
   </b-table>
 
   <!-- Modal -->
-    <b-modal :id="listModal.id" :title="listModal.title" ok-only>
-      <ul>
-        <li v-for='(row,i) in listModal.content' :key='i'>
-          {{row[listModal.show]}}
-        </li>
-      </ul>
-    </b-modal>
+  <b-modal :id="listModal.id" :title="listModal.title" ok-only>
+    <ul>
+      <li v-for='(row,i) in listModal.content' :key='i'>
+        {{row[listModal.show]}}
+      </li>
+    </ul>
+  </b-modal>
 
   <!-- Total / Paginator-->
   <div class="d-flex mb-2" style="align-items: center;">
@@ -96,7 +105,7 @@
     </div>  
     <!-- Paginator -->
     <div class="mr-2" style="margin-left: auto;flex: 555;display: flex;justify-content: flex-end;">
-      <paginator :pages="cPages" @change="fetch()"/>
+      <paginator :pages="cPaginator" @change="fetch"/>
     </div>
   </div>
 
@@ -106,13 +115,13 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-props: ['data','keys','disable-auto-fetch'],
+props: ['data','keys','disable-auto-fetch','pages'],
 data(){return{
   listModal: {id:'list-modal',title:'',content:'',show:''},
 }},
 computed:{
   cListModal(){return this.listModal},
-  cKeys:function(){    
+  cKeys:function(){
     let model = false;
     if(this.keys != undefined){
       //Direct keys
@@ -152,7 +161,7 @@ computed:{
     });
     return keys;
   },
-  cData:function(){    
+  cData:function(){
     let model = this.cDataModel;
     //Data from model
     if(model.s != undefined){
@@ -178,6 +187,14 @@ computed:{
     ) {
       return this.$store.getters[this.cDataModel.s+'/getPages'];
     }
+
+    return false;
+  },
+  cPaginator:function(){
+    if(this.cPages) return this.cPages;
+
+    if(this.pages) return this.pages;
+
     return false;
   },
   total(){
@@ -235,6 +252,7 @@ async mounted(){
       this.fetch();
     }    
   }  
+
 },
 methods:{
   //Model
@@ -277,4 +295,64 @@ methods:{
 </script>
 
 <style scoped>
+
+.pre-table-wrapper{
+  display: grid;
+}
+.pre-table-box{
+  display: flex;
+  align-items: center;
+}
+.box-search{
+  justify-content: center;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+}
+.box-paginator{
+  margin: 10px 0;
+  justify-content: center;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+}
+.box-total{
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 3;
+}
+.box-settings{
+  justify-content: flex-end;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+}
+
+@media (min-width: 992px){
+  .box-total{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+  }
+  .box-paginator{
+    margin: 0;
+    justify-content: center;
+    grid-column-start: 4;
+    grid-column-end: 7;
+    grid-row-start: 1;
+  }
+  .box-search{
+    justify-content: center;
+    grid-column-start: 7;
+    grid-column-end: 11;
+    grid-row-start: 1;
+  }
+  .box-settings{
+    justify-content: flex-end;
+    grid-column-start: 11;
+    grid-column-end: 12;
+    grid-row-start: 1;
+  }
+}
+
 </style>

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
+use App\JugeCRUD;
 
 
 use Spatie\Permission\Traits\HasRoles;
@@ -131,7 +132,7 @@ class User extends Authenticatable
     }
 
     //Get
-    $users = $query->get();
+    $users = JugeCRUD::get($query,$request);
 
     //After Query
     if("AfterQuery" == "AfterQuery"){

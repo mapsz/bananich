@@ -452,7 +452,7 @@ class Order extends Model
     }
 
 
-    //Paggina
+    //Pagginate limit
     if(isset($request['limit']) && $request['limit']){
       $limit = $request['limit'];
     }else{
@@ -460,7 +460,7 @@ class Order extends Model
     }
 
     //Get
-    if(isset($request['no_pages'])){
+    if(!isset($request['page'])){
       $orders = $query->get();
     }else{
       $orders = $query->paginate($limit);

@@ -94,6 +94,9 @@ Vue.toasted.register(
 });
 window.terror= function(){Vue.toasted.global.terror();};
 
+//Paginate
+import Paginate from 'vuejs-paginate'
+Vue.component('paginate', Paginate)
 
 //Cropperjs
 import 'cropperjs/dist/cropper.css';

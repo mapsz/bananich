@@ -280,7 +280,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
 
       //Delivery days
-      Route::post('/product/delivery/days', 'ProductController@editDeliveryDays');
+      Route::post('/product/delivery/limits', 'ProductController@editDeliveryLimits');
 
       //Main photo
       Route::post('/product/main/photo', 'ProductController@editMainPhoto');

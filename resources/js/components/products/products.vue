@@ -17,14 +17,10 @@
         <button @click="noImage()" class="btn-secondary btn">Без главного фото</button>
         <button @click="noDescription()" class="btn-secondary btn">Без описание</button>
       </div>
-    </div>
-
-    <!-- Filter -->
-    <search-filter class="my-2" :model="'product'" />
-   
+    </div>  
 
     <!-- List -->
-    <juge-list :data="'product'"></juge-list>
+    <juge-list :data="'product'" :pages="true"></juge-list>
     
   </div>
 </div>

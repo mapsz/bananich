@@ -579,15 +579,7 @@ class Product extends Model
     }
 
     //Get
-    if(isset($_GET['page'])){
-      //Paginate
-      if(isset($_GET['paginate'])) $paginate = $_GET['paginate'];
-      else $paginate = 20;
-
-      $products = $products->paginate($paginate);
-    }else{
-      $products = $products->get();
-    }
+    $products = JugeCRUD::get($products,$request);
     
     //After query work
     if("afterQuery" == "afterQuery"){

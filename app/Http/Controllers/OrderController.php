@@ -34,11 +34,11 @@ class OrderController extends Controller
     $cart = Cart::getCart(['presentProduct' => true]);
 
     //Get products
-    $ids = [];
+    $productIds = [];
     foreach ($cart['items'] as $key => $item) {
-      array_push($ids,$item['product_id']);
+      array_push($productIds,$item['product_id']);
     }
-    $availableProductDays = ProductMeta::whereIn('product_id',$ids)->where('name', '=', 'deliveryDays')->get();
+    $availableProductDays = ProductMeta::whereIn('product_id',$productIds)->where('name', '=', 'deliveryDays')->get();
 
     //Remove available days 
     $daysLoop = $days;
@@ -59,6 +59,26 @@ class OrderController extends Controller
           break;
         }
       }
+    }
+
+
+    //Before delivery Time
+    $beforeDeliveryTimes = ProductMeta::whereIn('product_id',$productIds)->where('name', '=', 'deliveryTime')->get();
+    $maxBeforeDeliveryTime = 0;
+    foreach ($beforeDeliveryTimes as $key => $time) {
+      if($maxBeforeDeliveryTime < $time->value) $maxBeforeDeliveryTime = $time->value;
+    }
+
+    //Remove available days 
+    $daysLoop = $days;
+    foreach ($daysLoop as $i => $day) {
+      $dayC = Carbon::createFromFormat('Y-m-d h:i',$day['date'].' 00:00');
+      $maxC = now()->add($maxBeforeDeliveryTime,'hour');
+
+      if(($dayC->timestamp - $maxC->timestamp) < 0){
+        unset($days[$i]);
+      }
+
     }
 
     //Return formate

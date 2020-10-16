@@ -61,23 +61,38 @@ class ProductController extends Controller
 
   }
 
-  public function editDeliveryDays(Request $request){
+  public function editDeliveryLimits(Request $request){
 
-    //Delete old meta
-    ProductMeta::where('name','deliveryDays')->where('product_id',$request->productId)->delete();
+    //Delivery Days
+    if(isset($request->days)){
+      //Delete old meta
+      ProductMeta::where('name','deliveryDays')->where('product_id',$request->productId)->delete();
+      //Make new if not all
+      if(count($request->days) > 0 && count($request->days) < 7){
+        //Formate days
+        $days = json_encode($request->days);      
+        //Save
+        $meta = new ProductMeta;
+        $meta->product_id   = $request->productId;
+        $meta->name         = 'deliveryDays';
+        $meta->value        = $days;
+        $meta->save();
+      }
+    }
 
-    //Make new if not all
-    if(count($request->days) > 0 && count($request->days) < 7){
-
-      //Formate days
-      $days = json_encode($request->days);
-      
-      //Save
-      $meta = new ProductMeta;
-      $meta->product_id   = $request->productId;
-      $meta->name         = 'deliveryDays';
-      $meta->value        = $days;
-      $meta->save();
+    //Delivery Time
+    if(isset($request->time)){
+      //Delete old meta
+      ProductMeta::where('name','deliveryTime')->where('product_id',$request->productId)->delete();
+      //Make new if not all
+      if($request->time > 0){     
+        //Save
+        $meta = new ProductMeta;
+        $meta->product_id   = $request->productId;
+        $meta->name         = 'deliveryTime';
+        $meta->value        = $request->time;
+        $meta->save();
+      }
 
     }
 

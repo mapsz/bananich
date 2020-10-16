@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->char('unit',50)->nullable();
             $table->float('unit_sys')->default(1)->nullable();
+            $table->integer('sort')->default(0);
             $table->decimal('price', 8, 2)->nullable();
             $table->integer('gruzka_priority')->default(0);
             $table->timestamps();

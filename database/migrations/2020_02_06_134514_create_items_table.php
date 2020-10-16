@@ -19,7 +19,7 @@ class CreateItemsTable extends Migration
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->char('name', 100);
             $table->integer('quantity')->unsigned();
-            $table->float('quantity_result')->unsigned()->nullable();
+            $table->decimal('quantity_result', 8, 4)->unsigned()->nullable();
             $table->char('gram',50)->default(1);
             $table->float('gram_sys')->default(1);
             $table->decimal('price', 8, 2)->nullable();

@@ -14,7 +14,7 @@
     </div>
     <div class="row m-3 mb-2 order-menu justify-content-between">
       <order-delivery-time-filter :model="'order'" />
-      <search-filter  :model="'order'" />
+      <juge-search-filter  :model="'order'" />
     </div>
 
     <!-- List -->

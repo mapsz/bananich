@@ -22,26 +22,45 @@
 export default {
   props: ['pages'],
   data(){return{
-    page:0,
+    page:false,
   }},
   watch: {
     pages: {
-      handler: function (val, oldVal) {
-        this.page = this.pages.current_page != undefined ? this.pages.current_page : 0;
+      handler: function (newVal, oldVal) {
+        this.setPage();
       },
       deep: true
-    },
-    page: function(val, oldVal){
-      //Add query string
-      let query = Object.assign({}, this.$route.query);
-      if(query.page != undefined && query.page == val) return;
-      query.page = val;
-      this.$router.push({ query });
     }
   },
+  mounted(){
+    this.setPage();
+  },
   methods:{
+    setPage(){
+      let val = false;
+      if(this.pages != undefined && this.pages.current_page != undefined){
+        val = this.pages.current_page;
+      }
+
+      if(!val && this.pages) val = true;
+
+      this.page = val;
+
+      if(this.page) this.setQueryString(val);
+
+    },
+    setQueryString(val){
+      let query = Object.assign({}, this.$route.query);
+      if(query.page != undefined && query.page == val) return;
+      if(query.page != undefined && val === true) return;
+      query.page = val;
+
+      this.$router.push({ query });
+      return;
+    },
     change(page){
-      this.$emit('change');
+      this.setQueryString(page);
+      this.$emit('change',page);
     }
   },
 }

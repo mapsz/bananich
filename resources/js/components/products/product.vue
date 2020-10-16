@@ -12,6 +12,8 @@
         <juge-form :inputs="inputs" :errors="errors" @submit="submit"></juge-form>
       </div>
       <div class="col-12 col-lg-4" v-if="id">
+        <!-- Delivery Limits -->
+        <product-delivery-limits class="mb-3 border p-2" />
         <!-- Discount -->
         <product-prices-edit class="mb-3 border p-2" />
         <!-- Published -->
@@ -28,8 +30,6 @@
         <product-termobox class="mb-3 border p-2" />
         <!-- Categories -->
         <product-categories class="mb-3 border p-2" />
-        <!-- Delivery Days -->
-        <product-delivery-days class="mb-3 border p-2" />
       </div>
     </div>
   </div>
