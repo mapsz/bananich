@@ -184,6 +184,26 @@ class Bonus extends Model
       //Get Left
       $currentCount = Bonus::left($userId);
 
+      //Get actual bonus adds
+      $bonusAdds = (
+        Bonus::where('user_id',$userId)
+          ->with('addBonus')
+          ->whereHas('addBonus', function ($q) {
+            $q->where('left', '>', 0);
+          })
+          ->get()
+      );
+
+      //Correct actual bonus adds
+      $toRemove = $quantity;
+      foreach ($bonusAdds as $key => $bonus) {        
+        $bonus->addBonus->left -= $toRemove;
+        $toRemove = $bonus->addBonus->left - ($bonus->addBonus->left*2);
+        if($bonus->addBonus->left < 0) $bonus->addBonus->left = 0;
+        $bonus->addBonus->save();     
+        if($toRemove < 1) break;            
+      }
+
       // Get action user
       $user = Auth::user();
       $user ? $actionUserId = $user->id : $actionUserId = null;
