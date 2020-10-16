@@ -168,58 +168,8 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
 
     //TEST
-    Route::get('/admin/test/sfdsfdsf', function(){
-      echo 'Здесь происходит, что-то очень важное 🎩🎩';
-      
-      $users = DB::table('bonuses')->select('user_id')->groupBy('user_id')->pluck('user_id');
-      
-      
-
-      foreach ($users as $key => $userId) {
-        dump('user - '. $userId);
-        $userBonuses = App\Bonus::where('user_id',$userId)->with('addBonus')->orderBy('id')->get();
-        //Search removes
-        foreach ($userBonuses as $key => $bonus) {
-          if(!$bonus->addBonus){
-            $quantity = $bonus->quantity;
-
-            dump('PLUS == id: '. $bonus->id . ' q: ' . $bonus->quantity);
-            //Bonus adds
-            foreach ($userBonuses as $key => $bonus) {
-              if($bonus->addBonus && $bonus->addBonus->left > 0){
-                dump('MINUS == id: '. $bonus->id . ' q: ' . $quantity);
-                $bonus->addBonus->left -= $quantity;
-                $quantity = $bonus->addBonus->left - ($bonus->addBonus->left*2);
-                if($bonus->addBonus->left < 0) $bonus->addBonus->left = 0;     
-                
-                dump('LEFT '.$bonus->addBonus->left);
-              }
-              if($quantity < 1) break;
-              
-            }
-          }        
-        }
-
-        foreach ($userBonuses as $key => $bonus) {
-          if($bonus->addBonus){
-            $bonus->addBonus->save();
-
-          }
-        }
-
-        dump('----');
-      }
-
-
-      dd(11);
-    });
-
     Route::get('/admin/test', function(){
       echo 'Здесь происходит, что-то очень важное 🎩🎩';
-
-      dump(App\Bonus::left(1039));
-
-      App\Bonus::remove(1039, 100, 1);
     });
 
     //Logistic
@@ -523,7 +473,51 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 });
 
 
+// Route::get('/admin/test/sfdsfdsf', function(){
+//   echo 'Здесь происходит, что-то очень важное 🎩🎩';
+  
+//   $users = DB::table('bonuses')->select('user_id')->groupBy('user_id')->pluck('user_id');
+  
+  
 
+//   foreach ($users as $key => $userId) {
+//     dump('user - '. $userId);
+//     $userBonuses = App\Bonus::where('user_id',$userId)->with('addBonus')->orderBy('id')->get();
+//     //Search removes
+//     foreach ($userBonuses as $key => $bonus) {
+//       if(!$bonus->addBonus){
+//         $quantity = $bonus->quantity;
+
+//         dump('PLUS == id: '. $bonus->id . ' q: ' . $bonus->quantity);
+//         //Bonus adds
+//         foreach ($userBonuses as $key => $bonus) {
+//           if($bonus->addBonus && $bonus->addBonus->left > 0){
+//             dump('MINUS == id: '. $bonus->id . ' q: ' . $quantity);
+//             $bonus->addBonus->left -= $quantity;
+//             $quantity = $bonus->addBonus->left - ($bonus->addBonus->left*2);
+//             if($bonus->addBonus->left < 0) $bonus->addBonus->left = 0;     
+            
+//             dump('LEFT '.$bonus->addBonus->left);
+//           }
+//           if($quantity < 1) break;
+          
+//         }
+//       }        
+//     }
+
+//     foreach ($userBonuses as $key => $bonus) {
+//       if($bonus->addBonus){
+//         $bonus->addBonus->save();
+
+//       }
+//     }
+
+//     dump('----');
+//   }
+
+
+//   dd(11);
+// });
 
     // //VEsi
     // Route::get('make/vesi', function(){
