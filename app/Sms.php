@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\SmsSend;
+use App\Bonus;
+use Carbon\Carbon;
 
 class Sms extends Model
 {
@@ -19,6 +21,32 @@ class Sms extends Model
     ['key'    => 'created_at','label' => 'дата'],
   ];
 
+  //Bonus Notification
+  public static function bonusNotification(){
+    $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1]);
+
+    //Get soon die
+    $soonDie = [];
+    foreach ($bonuses as $key => $bonus) {
+      if((Carbon::parse($bonus->addBonus->die)->timestamp - now()->timestamp) < 86400){
+        array_push($soonDie, $bonus);
+      }
+    }
+
+    foreach ($soonDie as $key => $bonus) {
+      $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. У вас ".
+        Carbon::parse($bonus->addBonus->die)->format('j.m в G:i')
+        . " сгорит {$bonus->addBonus->left} бонусов. Шлю напоминалку, чтобы успели их потратить)";
+      $to = $bonus->user->phone;
+
+      if(Sms::where('body',$body)->where('to',$to)->exists()) continue;
+
+      self::putSmsToSend(['body'=>$body,'to'=>$to]);
+
+    }
+
+    
+  }
 
   //Put sms send
   public static function putSmsToSend($data){
