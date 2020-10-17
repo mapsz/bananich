@@ -195,8 +195,10 @@ export default {
       //Soon die
       let soonBonus = bonusAdds[0];
       $.each(bonusAdds, ( k, v ) => {
-        if(moment(v.add_bonus.die).unix() - moment(soonBonus.add_bonus.die).unix()  < 0){
-          soonBonus = v;
+        if(v.add_bonus.left > 0){
+          if(moment(v.add_bonus.die).unix() - moment(soonBonus.add_bonus.die).unix()  < 0){
+            soonBonus = v;
+          }
         }
       });
 
