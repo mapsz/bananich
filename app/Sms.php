@@ -34,6 +34,7 @@ class Sms extends Model
     }
 
     foreach ($soonDie as $key => $bonus) {
+      if(!isset($bonus->user)) continue;
       $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. У вас ".
         Carbon::parse($bonus->addBonus->die)->format('j.m в G:i')
         . " сгорит {$bonus->addBonus->left} бонусов. Шлю напоминалку, чтобы успели их потратить)";
