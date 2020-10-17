@@ -19,6 +19,11 @@
       <div>{{user.email}}</div>
       <div>{{user.phone}}</div>
     </div>
+    <!-- Bonus -->
+    <div class="mx-3">
+      <div>Доступно бонусов</div>
+      <div> <b>{{user.bonus}}</b> </div>
+    </div>
     <!-- Comments -->
     <!-- <div class="mx-3">
       <user-comments :user-id="user.id" />
@@ -37,6 +42,9 @@ export default {
 data(){return{
   user:false,
 }},
+mounted(){
+  this.$store.dispatch('user/addFilter',{'with_bonus':1});    
+},
 methods:{
   choose(row){
     this.user = row;

@@ -14,7 +14,7 @@
             <h2 class="title-h2">Бонусы</h2>
           </div>
 
-          <div class="content">            
+          <div class="content">
             <div v-show="currentBonus" class="bonuse-block row">
               <!-- Current -->
               <div class="bonuse-num col-12 col-md-6" style="  margin-right: 0px; display: flex;flex-direction: column;">
@@ -43,7 +43,7 @@
             </div>
 
             <!-- History -->
-            <ul class="bonuse-list">              
+            <ul class="bonuse-list">
               <li v-if="bonuses.length > 0" class="bonuse-item"  :class="showHistory ? 'active' : ''">
                 <a @click.prevent="showHistory = !showHistory" class="bonuse-item-btn" href="#!">История</a>
                 <div v-if="showHistory" class="story">
@@ -249,9 +249,7 @@ export default {
     .rule-item {
       height: inherit !important;
       padding: 10px  !important;
-    }
-
-     
+    }     
   }
 
   @media (max-width: 767px){   

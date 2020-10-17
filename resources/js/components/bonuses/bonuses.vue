@@ -7,9 +7,6 @@
 
     <h1>Бонусы</h1>
 
-    <!-- Add -->
-    <!-- <add-bonus></add-bonus> -->
-
     <!-- User -->
     <bonus-user @choose="choose"/>
 
@@ -97,6 +94,7 @@ export default {
         }
       }
 
+      this.user.bonus -= data.type == 2 ? data.count : -(data.count);
       this.choose(this.user);
       this.bonusMove = false;
     },

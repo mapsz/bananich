@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
 use App\JugeCRUD;
+use App\bonus;
 
 
 use Spatie\Permission\Traits\HasRoles;
@@ -168,6 +169,10 @@ class User extends Authenticatable
         $user->mainImage = self::getMainImage($user->id);          
         //Get roles
         $user->getRoleNames();
+        //Bonus
+        if(isset($request['with_bonus'])){
+          $user['bonus'] = Bonus::left($user->id);
+        }
       }
     }
 
