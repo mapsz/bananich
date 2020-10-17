@@ -16,7 +16,7 @@ class CreateNotFoundsTable extends Migration
         Schema::create('not_founds', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->text('cooment');
+            $table->text('comment');
             $table->timestamps();
         });
     }

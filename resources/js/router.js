@@ -112,6 +112,12 @@ let routes = [];
     {path: adminPrefix+'/deliveries',component: deliveries},
   );  
 
+  //Not Found
+  import notFound from './components/not-found/not-founds.vue';
+  routes.push(
+    {path: adminPrefix+'/not/founds',component: notFound},
+  );  
+
   //categories
   import categories from './components/categories/categories.vue';
   import category   from './components/categories/category.vue';

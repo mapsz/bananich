@@ -105,6 +105,10 @@ export default {
         link: this.adminPrefix+"/coupons",
         caption:"Купоны",
       },
+      {
+        link: this.adminPrefix+"/not/founds",
+        caption:"неНайдено",
+      },
     ];
 
     this.auth();
