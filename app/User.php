@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
 use App\JugeCRUD;
-use App\bonus;
+use App\Bonus;
 
 
 use Spatie\Permission\Traits\HasRoles;
