@@ -18,7 +18,7 @@ class NotFoundController extends Controller
 
         $NotFound = new NotFound;
         $NotFound->user_id = $user;
-        $NotFound->cooment = $request->comment;
+        $NotFound->comment = $request->comment;
         
 
         return response()->json($NotFound->save());
