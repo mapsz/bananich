@@ -6,10 +6,20 @@
     <!-- List -->
     <div v-for='(comment,i) in comments' :key='i' >      
       <div style="display: flex;justify-content: space-between;  font-size: 14pt;">
+        <!-- Commentator -->
         <span>{{comment.commentator.name}} (id:{{comment.commentator.id}})</span>
         <span>
+          <!-- Date -->
           {{comment.created_at}}
-          <span v-if="isAdmin || comment.commentator.id == auth.id" @click="deleteComment(comment.id)" style="cursor:pointer">❌</span>  
+          <!-- Delete -->
+          <span 
+            v-if="isAdmin || comment.commentator.id == auth.id"             
+            v-b-modal="'delete-customer-comment-'+comment.id"
+            style="cursor:pointer" 
+          >❌</span>
+          <b-modal :id="'delete-customer-comment-'+comment.id" title="Удалить?" @ok="deleteComment(comment.id)">
+            <p class="my-4">{{comment.comment}}</p>
+          </b-modal>
         </span>
       </div>   
       <div>{{comment.comment}}</div>
