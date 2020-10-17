@@ -15,12 +15,21 @@ class BonusController extends Controller
     Validator::make($request->all(), [
       'id'        => ['required', 'numeric', 'exists:users'],
       'count'     => ['required', 'numeric', 'min:1'],
+      'type'      => ['required', 'in:1,2'],
       'dieDays'   => ['numeric', 'min:1'],
     ])->validate();
 
     $comment = isset($request->comment) ? $request->comment : null;
-    $dieDays = isset($request->dieDays) ? $request->dieDays : false;    
+    $dieDays = isset($request->dieDays) ? $request->dieDays : false;   
+    
+    if($request->type == 1){
+      return response()->json(Bonus::add($request->id, $request->count, 1, null, $comment, $dieDays));
+    }
+    
+    if($request->type == 2){
+      return response()->json(Bonus::remove($request->id, $request->count, 1, $comment));
+    }
 
-    return response()->json(Bonus::add($request->id, $request->count, 1, null, $comment, $dieDays));
+    return false;
   }
 }

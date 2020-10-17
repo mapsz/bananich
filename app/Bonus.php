@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\BonusAdd;
 use App\BonusRemove;
+use App\BonusComment;
 
 class Bonus extends Model
 {
@@ -20,6 +21,7 @@ class Bonus extends Model
     ['key'    => 'action_user.name','label' => 'исполнитель'],
     ['key'    => 'created_at','label' => 'дата'],
     ['key'    => 'comment.comment','label' => 'коммент'],
+    ['key'    => 'add_bonus.die','label' => 'Сгорят'],
   ];
   protected $inputs = [
     [
@@ -63,9 +65,21 @@ class Bonus extends Model
       $user = Auth::user();
       $userId = $user->id;
 
+      if(isset($request['user']) && $user->isAdmin()){
+        $query = $query->where('user_id', $request['user']);
+      }
+
       if(!isset($request['all_users'])){
-        $query = $query->whereHas('user', function($q)use($userId){
-          $q->where('id', '=', $userId);
+        if(!isset($request['user'])){
+          $query = $query->whereHas('user', function($q)use($userId){
+            $q->where('id', '=', $userId);
+          });
+        }
+      }
+
+      if(isset($request['soonDie'])){
+        $query = $query->whereHas('addBonus', function ($q) {
+          $q->where('left', '>', '0');
         });
       }
     }
@@ -75,7 +89,7 @@ class Bonus extends Model
     $query = $query->orderBy('created_at', 'DESC');
 
     //Bonus
-    $bonus = $query->get();
+    $bonus = JugeCRUD::get($query,$request);
 
     
 
@@ -121,6 +135,15 @@ class Bonus extends Model
       $bonusAdd->die = $dieDate;
       $bonusAdd->left = $quantity;
       $bonusAdd->save();
+
+      //Put Bonus Comment
+      if($comment){
+        $BonusComment = new BonusComment;
+        $BonusComment->bonus_id         = $bonus->id;
+        $BonusComment->comment          = $comment;
+        $BonusComment->save();
+      }      
+
 
       //Attach order
       if($order) $bonus->order()->attach($order);      
@@ -216,6 +239,15 @@ class Bonus extends Model
       $bonus->quantity = $quantity;
       $bonus->left = $currentCount - $quantity;
       $bonus->save();
+
+      
+      //Put Bonus Comment
+      if($comment){
+        $BonusComment = new BonusComment;
+        $BonusComment->bonus_id  = $bonus->id;
+        $BonusComment->comment   = $comment;
+        $BonusComment->save();
+      }      
 
       //Store to DB
       DB::commit();    

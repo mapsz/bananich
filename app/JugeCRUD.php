@@ -21,6 +21,11 @@ class JugeCRUD extends Model
       $data = $query->paginate($limit);
     }  
 
+    if(isset($request['test'])){
+      dd($data->toArray());
+      dd($data);
+    }
+
     return $data;
   }
 }

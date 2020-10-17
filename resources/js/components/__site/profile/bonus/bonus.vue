@@ -14,14 +14,18 @@
             <h2 class="title-h2">Бонусы</h2>
           </div>
 
-          <div class="content">
-
-            
+          <div class="content">            
             <div v-show="currentBonus" class="bonuse-block row">
               <!-- Current -->
               <div class="bonuse-num col-12 col-md-6" style="  margin-right: 0px; display: flex;flex-direction: column;">
                 <span class="bonuse-num-now-a">
-                  <span class="bonuse-num-now">{{lastBonus.quantity != undefined ? lastBonus.quantity : 0}}</span> /  <span class="bonuse-num-target">{{currentBonus}}</span>
+                  <span class="bonuse-num-now">
+                    {{currentBonus}}
+                  </span> 
+                   
+                  <span class="bonuse-num-target">                    
+                    / {{soonDie.quantity != undefined ? soonDie.quantity : 0}}
+                  </span>
                 </span>
                 <div class="bonuse-num-text">сгорят через</div>
               </div>
@@ -32,26 +36,39 @@
                     <div style="width:100%; position: relative; z-index: 2;">
                       <canvas id="bonus-chart"></canvas>
                     </div> 
-                    <div class="bonuse-progres-text" style="z-index:1">{{lastBonus.die_days}}<span>дней</span></div>   
+                    <div class="bonuse-progres-text" style="z-index:1">{{soonDie.die_days}}<span>дней</span></div>   
                   </div>
                 </div>
               </div>
             </div>
 
-            <ul class="bonuse-list">
-              <!-- History -->
+            <!-- History -->
+            <ul class="bonuse-list">              
               <li v-if="bonuses.length > 0" class="bonuse-item"  :class="showHistory ? 'active' : ''">
                 <a @click.prevent="showHistory = !showHistory" class="bonuse-item-btn" href="#!">История</a>
                 <div v-if="showHistory" class="story">
 
                   <div v-for='(bonus,i) in bonuses' :key='i' class="story-item">
                     <div class="d-md-flex justify-content-center">
+                      <!-- Date -->
                       <div class="story-date">{{moment(bonus.created_at).lang('ru').format('lll')}}</div>
-                      <div class="story-track">
+                      <!-- Type -->
+                      <div class="story-track" style="margin-right: 10px;">
                         {{bonus.bonus_type_id == 1 ? 'Админ' : ''}}
+                        {{bonus.bonus_type_id == 2 ? 'Покупка' : ''}}
+                        {{bonus.bonus_type_id == 3 ? 'Сгорание' : ''}}
+                        {{bonus.bonus_type_id == 4 ? 'Резервация' : ''}}
+                      </div>
+                      <!-- comment -->
+                      <div v-if="bonus.comment" class="story-comment" style="font-weight: 300;">
+                        {{bonus.comment.comment}}
                       </div>
                     </div>
-                    <div class="story-bonuse">{{bonus.quantity}} Б</div>
+                    <div class="story-bonuse">
+                      <span v-if="bonus.add_bonus">+{{bonus.quantity}}</span>
+                      <span v-else>-{{bonus.quantity}}</span>  
+                      Б
+                    </div>
                   </div>
 
                 </div>
@@ -164,10 +181,28 @@ export default {
     currentBonus: function(){
       return (this.bonuses != undefined && this.bonuses[0] != undefined) ? this.bonuses[0].left : 0;
     },
-    lastBonus: function(){
-      if(this.bonuses[this.bonuses.length-1] == undefined) return false;
+    soonDie: function(){
+      if(this.bonuses[0] == undefined) return false;
 
-      let bonus = this.bonuses[this.bonuses.length-1];
+      //Get bonus adds
+      let bonusAdds = [];
+      $.each(this.bonuses, ( k, v ) => {
+        if(v.add_bonus) bonusAdds.push(v);
+      });
+
+      if(bonusAdds[0] == undefined) return false;
+
+      //Soon die
+      let soonBonus = bonusAdds[0];
+      $.each(bonusAdds, ( k, v ) => {
+        if(moment(v.add_bonus.die).unix() - moment(soonBonus.add_bonus.die).unix()  < 0){
+          soonBonus = v;
+        }
+      });
+
+      console.log(soonBonus);
+
+      let bonus = soonBonus;
       bonus.die_days = moment(bonus.add_bonus.die).diff(moment(),'d');
 
       return bonus;
@@ -188,7 +223,7 @@ export default {
               ],
               datasets: [{
                 borderWidth:3,
-                data: [this.currentBonus, this.lastBonus.quantity],
+                data: [this.currentBonus, this.soonDie.quantity],
                 label: 'БЖУ',
                 backgroundColor: [
                   '#fbe214',

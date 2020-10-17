@@ -63,6 +63,14 @@ class User extends Authenticatable
 
   ];
 
+  public function isAdmin(){
+    $roles = $this->getRoleNames();
+    foreach ($roles as $key => $role) {
+      if($role == 'admin') return true;
+    }
+    return false;
+  }
+
   public static function getImages($id){
 
     $path = public_path() . '/users/images/source';
@@ -125,10 +133,26 @@ class User extends Authenticatable
 
     //Where
     if("WHERE" == "WHERE"){
+
       //Id
       if(isset($request['id']) && $request['id'] > 0){
         $query = $query->where('id', $request['id']);
       }
+
+      //Search
+      if(isset($request['search']) && $request['search'] != ""){
+        $search = $request['search'];
+        $query = $query->where(function($q)use($search) {
+          $q->where('id', 'LIKE', "%{$search}%")
+          ->orWhere('name', 'LIKE', "%{$search}%")
+          ->orWhere('phone', 'LIKE', "%{$search}%")
+          ->orWhere('email', 'LIKE', "%{$search}%")
+          ->orWhere('surname', 'LIKE', "%{$search}%")
+          ;
+        });
+      }
+
+
     }
 
     //Get
@@ -151,7 +175,6 @@ class User extends Authenticatable
     if(isset($request['id']) && $request['id'] > 0){
       $users = $users[0];
     }    
-
 
     return $users;
   }
