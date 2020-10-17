@@ -89,7 +89,7 @@
       class="btn btn-sm btn-outline-info"
       :disabled="(toConfirm.email == undefined || toConfirm.email.length == 0)"      
       :style="(toConfirm.email == undefined || toConfirm.email.length) == 0 ? 'cursor: no-drop;' : ''"
-      :href="(toConfirm.email != undefined && toConfirm.email.length > 0) ? '/confirm/'+toConfirm.email[0] : '#'"
+      :href="(toConfirm.email != undefined && toConfirm.email.length > 0) ? '/admin/confirm/'+toConfirm.email[0] : '#'"
     >
       Следующий 📧
       <span v-if="toConfirm.email != undefined" class="badge badge-primary">{{toConfirm.email.length}}</span>
@@ -99,7 +99,7 @@
       class="btn btn-sm btn-outline-info"
       :disabled="(toConfirm.phone == undefined || toConfirm.phone.length == 0)"
       :style="(toConfirm.phone == undefined || toConfirm.phone.length) == 0 ? 'cursor: no-drop;' : ''"
-      :href="(toConfirm.phone != undefined && toConfirm.phone.length > 0) ? '/confirm/'+toConfirm.phone[0] : '#'"
+      :href="(toConfirm.phone != undefined && toConfirm.phone.length > 0) ? '/admin/confirm/'+toConfirm.phone[0] : '#'"
     >
       Следующий ☎️
       <span v-if="toConfirm.phone != undefined" class="badge badge-primary">{{toConfirm.phone.length}}</span>
