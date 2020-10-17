@@ -9,7 +9,7 @@
     <div><b><a :href='"/admin/user/"+id'>{{id}}</a> </b></div>
   </div>
   <!-- Info -->
-  <div v-if="!edit">
+  <div>
     <span v-if="id == 0">(Гость)</span>
     <span v-else> 
       <div>{{user.name}} <span v-if="user.surname">{{user.surname}}</span></div>
@@ -54,10 +54,6 @@ mounted(){
 },
 methods:{
   ...mapActions({getUser:'user/fetchOne',postComment:'user/postComment'}),
-  doEdit(){
-    console.log(222);
-    
-  }
 },
 }
 </script>

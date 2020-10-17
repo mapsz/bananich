@@ -2,6 +2,7 @@ class jugeMoreAxios{
 
   constructor() {
     this.lastResponse = {};
+    this.lastQuery = {};
   }
 
   async get(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
@@ -10,6 +11,7 @@ class jugeMoreAxios{
   async delete(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
 
   async fetch(url,params = {},method = 'get',loader = true){
+      this.lastQuery = {url,params,method};
       //Start loading
       let l; if(loader){l = load.start();}
       //Axios
@@ -47,6 +49,7 @@ class jugeMoreAxios{
           r.r != 1 &&
           url != '/file/upload'
         ){
+          console.log(url);
           this.error(r.r);
           return false;
         }

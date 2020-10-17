@@ -177,6 +177,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
       echo 'Здесь происходит, что-то очень важное 🎩🎩';
     });
 
+    //Confirm
+    Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
+
     //Logistic
     Route::middleware([])->group(function (){
       Route::post('/logistic/change/driver', 'LogisticController@changeDriver');
@@ -405,8 +408,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
  
 
-    //     //Confirm
-    //     Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
+
 
 
     //     //Statistics
