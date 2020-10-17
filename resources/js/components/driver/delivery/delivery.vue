@@ -26,7 +26,9 @@
             <div v-if="order.comment">Комментарий клиент: {{order.comment}}</div>          
             <div v-if="order.comment_our">Комментарий бананыч: {{order.comment_our}}</div>
             <div>{{order.created_at}}</div>
-          </div>
+          </div>                  
+          <!-- Comments -->
+          <user-comments :user-id="order.customer_id" class="my-2" />
         </div>
       </div>
 

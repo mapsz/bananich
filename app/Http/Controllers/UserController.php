@@ -14,6 +14,20 @@ use App\FileUpload;
 
 class UserController extends Controller
 {
+
+  public function comments(Request $request){
+    
+    //validation
+    Validator::make($request->all(), [
+      'user_id' => ['required', 'exists:users,id'],
+    ])->validate();  
+
+    $comments = UserComment::with('commentator')->where('user_id',$request->user_id)->get();
+
+    return response()->json($comments);
+
+  }
+
   public function getAuthUser(){
     $auth = Auth::user();
     if(!$auth)
@@ -99,25 +113,20 @@ class UserController extends Controller
 
   }
 
-  public function postComment(Request $request){
+  public function addComment(Request $request){
+
 
     Validator::make($request->all(), [
-      'id' => ['required', 'exists:users'],
+      'user_id' => ['required', 'exists:users,id'],
       'comment' => ['required', 'string', 'max:255'],
     ])->validate();  
 
     
     try {      
       DB::beginTransaction();
-
-      //Check exists
-      $comment = UserComment::where('user_id',$request->id);
-      if($comment->exists()){
-        $comment->delete();
-      }
-
+ 
       //Create
-      UserComment::create(['user_id' => $request->id, 'comment' => $request->comment]);      
+      UserComment::create(['user_id' => $request->user_id, 'comment' => $request->comment,'commentator_id' => Auth::User()->id]);      
       
       //Store to DB
       DB::commit();    
@@ -127,6 +136,11 @@ class UserController extends Controller
       return response(['code' => 'uc1','text' => 'add user comment error'], 512)->header('Content-Type', 'text/plain');
     }
 
+    return response()->json(1);
+  }
+
+  public function deleteComment(Request $request){
+    UserComment::find($request->id)->delete();
     return response()->json(1);
   }
 

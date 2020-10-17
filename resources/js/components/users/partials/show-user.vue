@@ -2,15 +2,7 @@
 <div>
   <!-- Head -->
   <span class="d-flex justify-content-between">          
-    <h5>Клиент</h5>      
-    <font-awesome-icon 
-      v-if="id > 0"
-      @click="edit = !edit"
-      class="mr-3" 
-      icon="edit" 
-      color="#ff8d00"
-      style="cursor:pointer"
-    />
+    <h5>Клиент</h5>     
   </span>
   <!-- ID -->
   <div v-if="id > 0">
@@ -34,21 +26,8 @@
       </div>
     </span>
   </div>
-  <!-- Edit -->
-  <div v-if="edit">
-    <b-form-group
-      class="mb-0"
-      label="Комментарий о клиенте"
-      label-for="client-comment"
-    >
-      <!-- Comment -->
-      <b-form-textarea
-        id="client-comment"
-        v-model="comment"
-      ></b-form-textarea>
-      <b-button @click="postComment({id,comment});edit=false;" class="mt-2" type="submit" variant="success">Сохранить</b-button>
-    </b-form-group>
-  </div>
+  <!-- Comments -->
+  <user-comments :user-id="user.id" class="my-2" />
 </div>
 </template>
 
@@ -57,7 +36,6 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
 props: ['id'],
 data(){return{
-  edit:false,
   comment:"",
 }},
 computed:{

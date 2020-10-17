@@ -12,6 +12,8 @@
       <div class="col-12 col-lg-4" v-if="id">        
         <!-- Main Photo -->
         <user-main-photo class="mb-3 border p-2" />
+        <!-- Comments -->
+        <user-comments :user-id="user.id" class="mb-3 border p-2" />
         <!-- Login as -->
         <user-login-as class="mb-3 border p-2" />
         <!-- Driver -->

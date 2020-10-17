@@ -139,6 +139,11 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   //Driver
   Route::group(['middleware' => ['auth', 'can:driver_panel']], function (){
 
+    //User
+    Route::get('/user/comments', 'UserController@comments');
+    Route::put('/add/comment', 'UserController@addComment');
+    Route::delete('/delete/comment', 'UserController@deleteComment');
+
     //Delivery    
     Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
     Route::put('/put/delivery', 'DeliveryController@put');      
