@@ -11,7 +11,7 @@ class SmsController extends Controller
 {
   public static function toSend(){
 
-    if(now()->hour > 20 || now()->hour < 10) return response()->json(0);
+    if(now()->hour > 21 || now()->hour < 10) return response()->json(0);
 
 
     $toSend = SmsSend::with('sms')
@@ -79,6 +79,8 @@ class SmsController extends Controller
     // );
     $data = json_decode($request->list);
 
+    // dd($data);
+
     if(!isset($data->Messages)) return false;
     if(!isset($data->Messages->Message)) return false;
 
@@ -86,7 +88,7 @@ class SmsController extends Controller
     $messages = [];
     $reports = [];
     foreach ($data->Messages->Message as $key => $message) {
-      if($message->SmsType === '1'){
+      if($message->SmsType === '1' || $message->SmsType === '2'){
         if(DB::table('sms')->where('from',$message->Phone)->where('body',$message->Content)->where('created_at',$message->Date)->exists()) continue;
         $add = [
           'from' => $message->Phone,
@@ -100,8 +102,8 @@ class SmsController extends Controller
       }
     }
 
-    dump($messages);
-    dump($reports);
+    // dump($messages);
+    // dump($reports);
 
     DB::table('sms')->insert($messages);
 
