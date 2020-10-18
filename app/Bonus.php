@@ -207,7 +207,7 @@ class Bonus extends Model
       DB::beginTransaction();
 
       //Get Left
-      $currentCount = Bonus::left($userId);
+      $currentCount = Bonus::left($userId,false);
 
       //Get actual bonus adds
       $bonusAdds = (
@@ -261,7 +261,8 @@ class Bonus extends Model
 
   }
 
-  public static function left($userId){
+  public static function left($userId,$killExpired = true){
+    if($killExpired) Bonus::killExpired();
     $bonus = Bonus::where('user_id',$userId)->latest()->first();
     ($bonus == null || $bonus->count() == 0) ? $currentCount = 0 : $currentCount = $bonus->left;
     return $currentCount;
