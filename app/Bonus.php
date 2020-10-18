@@ -45,6 +45,8 @@ class Bonus extends Model
   ];
 
   public static function getWithOptions($request = null){
+
+    self::killExpired();
     
     //Query
     $query = new Bonus;
@@ -102,7 +104,7 @@ class Bonus extends Model
     //Decode type
     if($type == 'buy') $type = 2;
 
-    try {
+    try{
       //Start DB
       DB::beginTransaction();
 
@@ -260,11 +262,31 @@ class Bonus extends Model
   }
 
   public static function left($userId){
+    self::killExpired();
     $bonus = Bonus::where('user_id',$userId)->latest()->first();
     ($bonus == null || $bonus->count() == 0) ? $currentCount = 0 : $currentCount = $bonus->left;
     return $currentCount;
   }
 
+  public static function killExpired(){
+    //Get expired
+    $expired = BonusAdd::with('bonus')->where('left','>',0)->where('die','<',now())->get();
+    if($expired->count() < 1) return false;
+
+
+    try {      
+      //Remove bonus
+      foreach ($expired as $key => $bonus) {
+        self::remove($bonus->bonus->user_id, $bonus->left, 3);        
+        $bonus->left = 0;
+        $bonus->save();
+      }
+    } catch (Exception $e){
+      return false;
+    }    
+    
+    return true;
+  }
 
 
   //JugeCRUD  
