@@ -262,7 +262,6 @@ class Bonus extends Model
   }
 
   public static function left($userId){
-    self::killExpired();
     $bonus = Bonus::where('user_id',$userId)->latest()->first();
     ($bonus == null || $bonus->count() == 0) ? $currentCount = 0 : $currentCount = $bonus->left;
     return $currentCount;
