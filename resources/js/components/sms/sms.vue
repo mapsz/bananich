@@ -24,9 +24,11 @@
 
     </div>
 
+    <button @click="inputSms()" class="my-3 btn btn-primary">Input</button>
+
     <!-- List -->
     <div class="list-sms">
-      <juge-list :data="'sms'"></juge-list>
+      <juge-list :data="'sms'" :pages="true"></juge-list>
     </div>
 
   </div>
@@ -60,6 +62,9 @@ data(){return{
   ]  
 }},
 methods:{
+  inputSms(){
+    this.$store.dispatch('sms/addFilter',{input:1});
+  },
   sendSms(sms){
     let r = ax.fetch('/sms/add/send' , sms, 'put');
 

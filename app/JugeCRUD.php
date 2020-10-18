@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JugeCRUD extends Model
 {
-  public static function get($query,$request){
+  public static function get($query,$request = []){
     //Pagginate limit
     if(isset($request['limit']) && $request['limit']){
       $limit = $request['limit'];

@@ -12,6 +12,7 @@ class Sms extends Model
 {
   //Keys
   protected $keys = [
+    ['key'    => 'from','label' => 'от'],
     ['key'    => 'to','label' => 'Номер'],
     ['key'    => 'count','label' => 'количество'],
     ['key'    => 'body','label' => 'текст'],
@@ -83,9 +84,9 @@ class Sms extends Model
 
   //JugeCRUD
   public function jugeGetKeys()       {return $this->keys;}
-  public static function jugeGet(/*$request*/) {
-    $sms = new Sms;
-    $sms = $sms
+  public static function jugeGet($request) {
+    $query = new Sms;
+    $query = $query
                 ->join(DB::Raw('(
                       SELECT `to`, COUNT(`to`) as count,MAX(`created_at`) AS created_at
                       FROM `sms`
@@ -97,8 +98,16 @@ class Sms extends Model
                     $join->on('lsms.created_at','=', 'sms.created_at');
                 })
                 ->with('send')
-                ->orderBy('sms.created_at','DESC')
-                ->get();
+                ->orderBy('sms.created_at','DESC');
+
+    if(isset($request['input'])){
+      $query = new Sms;
+      $query = $query->doesntHave('send');
+    }
+
+
+    $sms = JugeCRUD::get($query,$request);
+                
 
 
     return $sms;
