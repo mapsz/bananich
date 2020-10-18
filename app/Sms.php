@@ -103,6 +103,7 @@ class Sms extends Model
     if(isset($request['input'])){
       $query = new Sms;
       $query = $query->doesntHave('send');
+      $query = $query->orderBy('created_at','DESC');
     }
 
 
