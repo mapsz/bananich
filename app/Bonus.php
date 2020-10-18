@@ -235,7 +235,7 @@ class Bonus extends Model
       
       //Put Bonus
       $bonus = new Bonus;      
-      $bonus->action_user_id = $actionUserId;
+      $bonus->action_user_id = $type == 3 ? null : $actionUserId;
       $bonus->user_id = $userId;
       $bonus->bonus_type_id = $type;
       $bonus->quantity = $quantity;
@@ -261,8 +261,8 @@ class Bonus extends Model
 
   }
 
-  public static function left($userId,$killExpired = true){
-    if($killExpired) Bonus::killExpired();
+  public static function left($userId,$killExpired = true){    
+    if($killExpired){Bonus::killExpired();} 
     $bonus = Bonus::where('user_id',$userId)->latest()->first();
     ($bonus == null || $bonus->count() == 0) ? $currentCount = 0 : $currentCount = $bonus->left;
     return $currentCount;
@@ -273,9 +273,8 @@ class Bonus extends Model
     $expired = BonusAdd::with('bonus')->where('left','>',0)->where('die','<',now())->get();
     if($expired->count() < 1) return false;
 
-
+    //Remove bonus
     try {      
-      //Remove bonus
       foreach ($expired as $key => $bonus) {
         Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
         $bonus->left = 0;
