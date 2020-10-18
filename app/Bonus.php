@@ -277,7 +277,7 @@ class Bonus extends Model
     try {      
       //Remove bonus
       foreach ($expired as $key => $bonus) {
-        self::remove($bonus->bonus->user_id, $bonus->left, 3);        
+        Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
         $bonus->left = 0;
         $bonus->save();
       }
