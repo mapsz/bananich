@@ -61,10 +61,10 @@ Route::get('/mail', function(){
 
 
 //Logistic
-Route::get('/logistic/daily', function(){return App\Logistic::daily();});
+Route::get('/logistic/daily', function(){echo App\Logistic::daily();});
 
 //bonus
-Route::get('/bonus/die/sms', function(){return App\Sms::bonusNotification();});
+Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 
 
 

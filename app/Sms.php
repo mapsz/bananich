@@ -47,8 +47,7 @@ class Sms extends Model
 
     }
 
-    return true;
-
+    
   }
 
   //Put sms send
