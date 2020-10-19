@@ -29,7 +29,7 @@ class Sms extends Model
     //Get soon die
     $soonDie = [];
     foreach ($bonuses as $key => $bonus) {
-      if((Carbon::parse($bonus->addBonus->die)->timestamp - now()->timestamp) < 86400){
+      if((Carbon::parse($bonus->addBonus->die)->timestamp - now()->timestamp) < 259200){
         array_push($soonDie, $bonus);
       }
     }
@@ -47,7 +47,8 @@ class Sms extends Model
 
     }
 
-    
+    return true;
+
   }
 
   //Put sms send
