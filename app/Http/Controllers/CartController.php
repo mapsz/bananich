@@ -12,7 +12,6 @@ class CartController extends Controller
     
     //Get cart
     $cart = Cart::getCart();
-
     //Return
     return response()->json($cart);
 
