@@ -109,8 +109,7 @@ export default {
       $.each(this.order.items, (k, v) => {
         //No status
         if(v.statuses[0] == undefined){
-          return false;
-          
+          return false;          
         }
         //Not "Нет на складе" and "Погруже"
         if(v.statuses[0].id != 300 && v.statuses[0].id != 200){

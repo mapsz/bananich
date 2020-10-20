@@ -109,6 +109,8 @@ let routes = [];
   routes.push(
     {path: '/gruzka/:id',    component: gruzka},
     {path: '/gruzka',        component: gruzkas},
+    {path: '/admin/gruzkas',        component: gruzkas},
+    {path: '/admin/gruzkas',        component: gruzkas},
   );
 
 //ADMIN
