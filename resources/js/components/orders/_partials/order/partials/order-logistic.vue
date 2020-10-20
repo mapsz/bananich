@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="logistics">
     <div v-for='(logistic,i) in logistics' :key='i'>
       <div>id: {{logistic.id}}</div>
       <div>адрес: {{logistic.address}}</div>
       <div>дата: {{logistic.date}}</div>
       <div>план. время приб.: {{logistic.plan_arrival_time}}</div>
       <br>
-      <div class="row">
+      <div v-if="logistic.driver" class="row">
         <div class="col-6">
           <div>Водила: <a :href="'/admin/user/'+logistic.driver_id">{{logistic.driver_id}}</a> </div>
           <div>имя:{{logistic.driver.name != undefined? logistic.driver.name : ''}}</div>
@@ -28,7 +28,7 @@ export default {
   computed:{
     ...mapGetters({order:'order/getOne'}),
     logistics:function(){
-      if(this.order == undefined || this.order.logistics == undefined || this.order.logistics[0] == undefined) return [];
+      if(this.order == undefined || this.order.logistics == undefined || this.order.logistics[0] == undefined) return false;
 
       return this.order.logistics;
     }

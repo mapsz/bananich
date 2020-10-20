@@ -212,8 +212,17 @@ class UserController extends Controller
 
     return response()->json(1);
   }
+  public function toСollector (Request $request){
+
+    User::toСollector ($request->user_id);
+
+    return response()->json(1);
+  }
 
   public function getDrivers(Request $request){
     return response()->json(User::role('driver')->get());
+  }
+  public function geСollector(Request $request){
+    return response()->json(User::role('collector')->get());
   }
 }

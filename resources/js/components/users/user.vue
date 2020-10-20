@@ -18,6 +18,8 @@
         <user-login-as class="mb-3 border p-2" />
         <!-- Driver -->
         <user-driver class="mb-3 border p-2" />
+        <!-- Сollector -->
+        <user-collector class="mb-3 border p-2" />
       </div>
     </div>
   </div>

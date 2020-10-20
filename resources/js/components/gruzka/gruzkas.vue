@@ -130,7 +130,7 @@
 
           </td>
           <td>      
-            <router-link  :to="'/admin/gruzka/order/'+order.id">
+            <router-link  :to="'/gruzka/order/'+order.id">
               <button class="btn btn-primary m-3">
                 <font-awesome-icon icon="box-open" /> 
               </button>
@@ -149,7 +149,7 @@
 
           </td>
           <td>      
-            <router-link  :to="'/admin/gruzka/'+order.id">
+            <router-link  :to="'/gruzka/'+order.id">
               <button class="btn btn-primary m-3">
                 <font-awesome-icon icon="box-open" /> 
               </button>
@@ -225,7 +225,7 @@ export default {
       this.orders = r;        
     },
     goById(){
-      this.$router.push('/admin/gruzka/'+this.byId);
+      this.$router.push('/gruzka/'+this.byId);
     }
   }  
 }

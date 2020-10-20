@@ -12,7 +12,16 @@
       <!-- Info -->
       <div class="supplier-info supplier-col col-4 m-2 p-2">
         <h4>Информация</h4>
-        {{data}}
+
+        <div>Название: {{data.name}}</div>
+        <div>Адрес: {{data.address}}</div>
+        <div>Комментарий: {{data.comment}}</div>
+        <br>
+        <div>Контакное лицо</div>
+        <div>Имя: {{data.contact_name}}</div>
+        <div>Номер телефона: {{data.contact_phone}}</div>
+        <div>Дополнительно: {{data.contact_more}}</div>
+        
       </div>
 
       <!-- Products -->
@@ -35,8 +44,8 @@
               <button @click="doEditId(product.id)" class="btn btn-sm btn-outline-success">ok</button>
             </span>
 
-            {{product.supplier_product_id}}
-            {{product.name}}
+            <a :href="'/admin/product/'+product.id">{{product.name}}</a>
+            
 
             <button @click="removeProduct(product.id)" class="btn btn-sm btn-outline-danger mx-2 float-right">x</button>
             <button @click="editIdShow=product.id" class="btn btn-sm btn-outline-primary float-right">id</button>

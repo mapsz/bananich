@@ -92,7 +92,14 @@ Vue.toasted.register(
   type : 'error',
   position:'bottom-center',
 });
-window.terror= function(){Vue.toasted.global.terror();};
+Vue.toasted.register(
+  'tsuccess', 
+  'Success!', {
+  type : 'success',
+  position:'bottom-center',
+});
+window.terror = function(){Vue.toasted.global.terror();};
+window.tsuccess = function(){Vue.toasted.global.tsuccess();};
 
 //Paginate
 import Paginate from 'vuejs-paginate'

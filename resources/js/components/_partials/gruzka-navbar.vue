@@ -58,7 +58,7 @@ export default {
         caption:"Заказы",
       },
       {
-        link: this.adminPrefix+"/gruzkas",
+        link: "/gruzka",
         caption:"Gruzka",
       },
       {

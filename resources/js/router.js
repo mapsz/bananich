@@ -103,6 +103,14 @@ let routes = [];
     {path: driverPrefix+'',component: deliveries},
   );  
 
+  //Gruzka
+  import gruzka from './components/gruzka/gruzka.vue';
+  import gruzkas from './components/gruzka/gruzkas.vue';
+  routes.push(
+    {path: '/gruzka/:id',    component: gruzka},
+    {path: '/gruzka',        component: gruzkas},
+  );
+
 //ADMIN
   let adminPrefix = '/admin';
 
@@ -206,13 +214,6 @@ let routes = [];
     {path: adminPrefix+'/bonuses',    component:bonuses},
   );
 
-  //Gruzka
-  import gruzka from './components/gruzka/gruzka.vue';
-  import gruzkas from './components/gruzka/gruzkas.vue';
-  routes.push(
-    {path: adminPrefix+'/gruzka/:id',    component: gruzka},
-    {path: adminPrefix+'/gruzkas',       component: gruzkas},
-  );
 
   //Confirms
   import confirms from './components/confirm/confirms.vue';

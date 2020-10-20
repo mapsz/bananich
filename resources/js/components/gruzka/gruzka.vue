@@ -81,12 +81,52 @@ export default {
       orderId:0,
       order:{items:[]},
       currentItem:-1,
-      done:false,
       containers:[],
     }
   },  
   computed:{
-    items: function(){return this.order.items;}
+    items: function(){return this.order.items;},
+    done: function(){
+      //Check no items
+      if(this.order.items.length < 1){
+        return false;
+      } 
+
+      //Check not touched items
+      let noTouchItems = false;
+      $.each(this.order.items, ( key, v ) => {
+        if(v.statuses[0] == undefined || v.statuses[0].id == 100){
+          noTouchItems = true;
+          return true;
+        }
+      });
+      if(noTouchItems){
+        return false;
+      }
+
+      //Check item statuses
+      let done = 2;
+      $.each(this.order.items, (k, v) => {
+        //No status
+        if(v.statuses[0] == undefined){
+          return false;
+          
+        }
+        //Not "Нет на складе" and "Погруже"
+        if(v.statuses[0].id != 300 && v.statuses[0].id != 200){
+          return false;                   
+        }
+        if(v.statuses[0].id == 200){
+          done = 3;
+        }
+
+      });      
+
+      // false = не готов
+      // 2 = готово
+      // 3 = требует догрузки
+      return done;
+    }
   },
   async mounted(){
     //Get order from route
@@ -169,57 +209,7 @@ export default {
     },
 
     async checkDone(){
-      //Check no items
-      if(this.order.items.length < 1){
-        this.done = false;
-        return;
-      } 
-
-      //Check not touched items
-      let noTouchItems = false;
-      await $.each(this.order.items, ( key, v ) => {
-        if(v.statuses[0] == undefined || v.statuses[0].id == 100){
-          noTouchItems = true;
-          return true;
-        }
-      });
-      if(noTouchItems){
-        this.done = false;
-        return false;
-      }
-
-      //Get order items
-      let orders = await this.getOrder();
-      if(! orders){
-        this.done = false;
-        return;        
-      }
-
-      //Check item statuses
-      let done = 2;
-      await $.each(this.order.items, (k, v) => {
-        //No status
-        if(v.statuses[0] == undefined){
-          done = false;
-          return;
-        }
-        //Not "Нет на складе" and "Погруже"
-        if(v.statuses[0].id != 300 && v.statuses[0].id != 200){
-          done = false;
-          return;          
-        }
-        if(v.statuses[0].id == 200){
-          done = 3;
-        }
-
-      });
-      this.done = done;
-      
-
-      // false = не готов
-      // 2 = готово
-      // 3 = требует догрузки
-      return;
+      //
     },
     async finish(status){
       let r = await this.jugeAx('/gruzka/done', {data:{orderId:this.orderId,statusId:status}},'put');
@@ -231,7 +221,7 @@ export default {
 
       if(r == 1){
         this.orderId = 0;
-        window.location.href = '/admin/gruzkas'
+        window.location.href = '/gruzka'
       }
     }
   }

@@ -114,6 +114,13 @@ class User extends Authenticatable
     $user->assignRole($role);
     return true;
   }
+
+  public static function toСollector($id){
+    $role = Role::where(['name' => 'collector'])->first();
+    $user = User::find($id);
+    $user->assignRole($role);
+    return true;
+  }
   
   public function jugeGetKeys()   {return $this->keys;}
   public function jugeGetInputs()   {return $this->inputs;}

@@ -230,6 +230,34 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   Route::put('/not/found', 'NotFoundController@put'); 
 
 
+  //Gruzka
+  Route::group(['middleware' => ['auth', 'can:gruzka_panel']], function (){
+
+    //Gruzka
+    Route::middleware([])->group(function (){
+      Route::put('/gruzka/confirm', 'GruzkaController@confirm');
+      Route::put('/gruzka/noitem', 'GruzkaController@noItem');
+      Route::put('/gruzka/done', 'GruzkaController@done');
+    });
+
+    //Gruzka
+    Route::middleware([])->group(function (){  
+      Route::get('/json/orders', 'OrderController@jsonGet');
+      //Order Status
+      Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
+      Route::put('/order/status', 'OrderStatusController@putStatus');  
+    });
+
+    Route::prefix('gruzka')->group(function (){
+
+      //Vue
+      Route::get('/{vue_capture?}', function () {
+          return view('admin');
+      })->where('vue_capture', '[\/\w\.-]*');    
+    });
+
+  });
+
   //Driver
   Route::group(['middleware' => ['auth', 'can:driver_panel']], function (){
 
@@ -262,7 +290,6 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     });
   });
 
-
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
 
@@ -288,15 +315,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     Route::middleware([])->group(function (){
       Route::get('/login/as/user', 'UserController@loginAsUser');  
       Route::post('/user/to/driver', 'UserController@toDriver');  
+      Route::post('/user/to/collector', 'UserController@toСollector');  
       Route::get('/json/drivers', 'UserController@getDrivers'); 
     }); 
-
-    //Gruzka
-    Route::middleware([])->group(function (){
-      Route::put('/gruzka/confirm', 'GruzkaController@confirm');
-      Route::put('/gruzka/noitem', 'GruzkaController@noItem');
-      Route::put('/gruzka/done', 'GruzkaController@done');
-    });
 
     //Items
     Route::middleware([])->group(function (){
@@ -359,13 +380,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     //Order
     Route::middleware([])->group(function (){
       //Order
-      Route::get('/json/orders', 'OrderController@jsonGet');
       Route::post('/order', 'OrderController@post');
       Route::put('/order/item', 'OrderController@addItem');
 
-      //Order Status
-      Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
-      Route::put('/order/status', 'OrderStatusController@putStatus');  
     });
 
     //Product
@@ -377,8 +394,6 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
       //Product Published
       Route::post('/product/publish', 'ProductController@publish');
-
-
 
       //Delivery days
       Route::post('/product/delivery/limits', 'ProductController@editDeliveryLimits');
