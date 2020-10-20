@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\JugeCRUD;
 
 class Page extends Model
 {
@@ -13,17 +14,30 @@ class Page extends Model
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/page/{id}'],
     ['key'    => 'link','label' => 'Ссылка'],
-    ['key'    => 'menu','label' => 'Меню'],
+    ['key'    => 'menu_title','label' => 'Меню'],
+    ['key'    => 'sort','label' => 'Сортировка'],
   ];
   protected $inputs = [
     [
       'name' => 'text',
       'caption' => 'Контент',
-      'type' => 'textEditor'
+      'type' => 'textEditor',
+      'required' => true
     ],
     [
       'name' => 'link',
       'caption' => 'Ссылка',
+      'required' => true
+    ], 
+    [
+      'name' => 'menu_title',
+      'caption' => 'Заголовок меню',
+      'required' => true
+    ],  
+    [
+      'name' => 'sort',
+      'caption' => 'Сортировка',
+      'type' => 'number'
     ],  
   ];
 
@@ -32,16 +46,31 @@ class Page extends Model
   public function jugeGetKeys()     {return $this->keys;} 
   public function jugeGet($request) {
 
+
+    $query = new Page;
+
     if(isset($request['id'])){
-      return Page::find($request['id']);
+      $query = $query->where('id', $request['id']);
     }
 
-    return Page::get();
+    $query = $query->with('Menu');
+    $query = $query->orderBy('sort','DESC');
+
+    //Get
+    $pages = JugeCRUD::get($query,$request);
+
+    //Single
+    if(isset($request['id'])){
+      $pages = $pages[0];
+    }
+
+    return $pages;
+
   }
 
 
   //Relations
   public function Menu(){
-    return $this->belongsTo('App\Menu');
+    return $this->belongsToMany('App\Menu','pages_menus');
   }  
 }

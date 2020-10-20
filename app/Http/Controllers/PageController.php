@@ -9,6 +9,7 @@ use App\Page;
 class PageController extends Controller
 {
   public function post(Request $request){
+
     $data = $request->all();
     $id = $data['id'];
     unset($data['id']);
@@ -20,22 +21,31 @@ class PageController extends Controller
 
     //Validate
     Validator::make($request->all(), [
-      'text'  => 'required',
-      'link'    => 'required|max:255',      
+      'menu_title'    => 'required',
+      'link'          => 'required|max:255',      
+      'sort'          => 'number',      
     ])->validate();  
     
     $page = new Page;
-    $page->text = $request->text;
-    $page->link = $request->link;
+    $page->menu_title   = $request->menu_title;
+    $page->text         = $request->text;
+    $page->link         = $request->link;
+    $page->sort         = isset($request->sort) ? $request->sort : 0;
     $page->save();
 
-    return response()->json(1);
+    return response()->json($page->id);
 
   }
+
   public function attach(Request $request){
     return response()->json(
-      Page::where('id', $request->pageId)->update(['menu_id' => $request->menuId])
-    );
-    
+      Page::find($request->pageId)->Menu()->attach($request->menuId)
+    );    
+  }
+
+  public function detach(Request $request){
+    return response()->json(
+      Page::find($request->pageId)->Menu()->detach($request->menuId)
+    );    
   }
 }

@@ -23,8 +23,8 @@ export default {
       'fetchInputs':'page/fetchInputs',
     }),
     async submit(data){
-      await ax.fetch('/page',data,'put');
-      location.href = '/admin/pages';
+      let id = await ax.fetch('/page',data,'put');
+      location.href = '/admin/page/'+id;
     }
   },
 }

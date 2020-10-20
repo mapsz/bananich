@@ -12,18 +12,12 @@ class Menu extends Model
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/menu/{id}'],
     ['key'    => 'name','label' => 'Наименование'],
-    ['key'    => 'sort','label' => 'сортировка'],
   ];
   protected $inputs = [
     [
       'name' => 'name',
       'caption' => 'Наименование',
     ],
-    [
-      'name' => 'sort',
-      'caption' => 'Сортировка',
-      'type' => 'number',
-    ],  
   ];
 
 
@@ -35,14 +29,9 @@ class Menu extends Model
   public function jugeGet($request) {
     return Menu::with('pages')->get();
   }    
-
-  public function types()
-  {
-    return $this->belongsToMany('App\MenuType');
-  }
   
   public function pages()
   {
-    return $this->hasMany('App\Page');
+    return $this->belongsToMany('App\Page','pages_menus');
   }
 }

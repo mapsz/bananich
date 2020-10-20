@@ -1,9 +1,9 @@
 <template>
 <div>
   <gruzka-navbar></gruzka-navbar>  
-  <pages-navbar></pages-navbar>  
+  <!-- <pages-navbar></pages-navbar>   -->
 
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-lg-8">   
         <juge-form :inputs="inputs" :errors="errors" @submit="submit"></juge-form>
@@ -15,12 +15,22 @@
         <div>
           <span v-for='(menu,i) in menus' :key='i' style="display:block">
             <span 
-              v-if="!menu.pages.find(x => x.id = id)"
+              v-if="!menu.pages.find(x => x.id == id)"
               @click="attach(menu.id)" 
               style="cursor:pointer">
               🔗
-            </span>   
-            {{menu.name}} 
+            </span>
+            <span
+              v-else
+              @click="detach(menu.id)" 
+              style="cursor:pointer">       
+              ❌  
+            </span>
+            <span
+              :class="'text-' +  (!menu.pages.find(x => x.id == id) ? 'danger' : 'success')"
+            >
+              {{menu.name}} 
+            </span>            
           </span>
         </div>
       </div>
@@ -46,13 +56,14 @@ export default {
         menus:'menu/get',
       }),    
   },
-  async mounted(){    
-    //Get
-    this.id = this.$route.params.id;
-
-    this.fetchPage(this.id);
-    this.fetchInputs();
+  async mounted(){
+    //Get menus
     this.fetchMenus();
+    
+    //Get page
+    this.id = this.$route.params.id;
+    await this.fetchPage(this.id);
+    this.fetchInputs();
   },
   methods:{
     ...mapActions({
@@ -67,7 +78,11 @@ export default {
     },
     async attach(id){
       let r = await ax.fetch('/page/menu/attach',{pageId:this.id,menuId:id},'post');  
-      location.reload();
+      this.fetchMenus();
+    },
+    async detach(id){
+      let r = await ax.fetch('/page/menu/detach',{pageId:this.id,menuId:id},'post');  
+      this.fetchMenus();
     }
   },
 }

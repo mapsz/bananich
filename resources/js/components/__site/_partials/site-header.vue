@@ -6,7 +6,7 @@
     <div class="header-nav">
         <div class="container header-nav-wrap-sad">
           <nav class="navbar-sad">
-            <menu-component :menus="menus"></menu-component>
+            <menu-component :menus="menus" :position="'top'"></menu-component>
           </nav>
           <div class="phone header-phone"><a :href="'tel:'+settings.phone_number">📞{{settings.phone_number}}</a></div>
       </div>
@@ -69,7 +69,7 @@ export default {
   computed:{    
     isMobile:function(){return window.screen.width <= 768;},
     ...mapGetters({
-      menus:'menu/get',
+      menus:'page/get',
       cart:'cart/getCart',
       settings:'settings/beautyGet',
       getCurrentFilters:'product/getFilters'
@@ -92,7 +92,7 @@ export default {
     
   methods:{
     ...mapActions({
-      'getMenu':'menu/fetchData',
+      'getMenu':'page/fetchData',
       'getCart':'cart/fetch',
       'getUser':'user/fetch',
       'getOtherSettings':'settings/fetch',

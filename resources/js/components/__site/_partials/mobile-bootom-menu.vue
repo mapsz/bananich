@@ -18,7 +18,7 @@
                 <h4 >Меню</h4>
               </div>
             </div>
-            <menu-component :columns="1" :menus="menus"></menu-component>
+            <menu-component :columns="1" :menus="menus" :position="'mobile'"></menu-component>
           </div>
         </div>
 
@@ -119,7 +119,7 @@ export default {
   computed:{
     ...mapGetters({
       user:'user/get',
-      menus:'menu/get',
+      menus:'page/get',
       cart:'cart/getCart',
       settings:'settings/beautyGet',
       getCurrentFilters:'product/getFilters'

@@ -2012,16 +2012,105 @@ class Mailing extends Model
           "email" => "nadellli@icloud.com",
           "name" => "Надежда",
         ),
-      );
-      
-      
+      );      
+
+      if(1){
+
+        $products = [
+          [
+            'id' => 14541,
+            'name' => "Хурма Ромашка",
+            'unit' => "500 грамм",
+            'price' => 75,
+            'discount' => 40
+          ],
+          [
+            'id' => 14540,
+            'name' => "Хурма Королек",
+            'unit' => "500 грамм",
+            'price' => 60,
+            'discount' => 40
+          ],
+          [
+            'id' => 1713,
+            'name' => "Киви",
+            'unit' => "500 грамм",
+            'price' => 120,
+            'discount' => 50
+          ],
+          [
+            'id' => 1683,
+            'name' => "Яблоки Голден",
+            'unit' => "500 грамм",
+            'price' => 70,
+            'discount' => 40
+          ],
+          [
+            'id' => 2844,
+            'name' => "Яблоки Антоновка",
+            'unit' => "500 грамм",
+            'price' => 85,
+            'discount' => 40
+          ],
+          [
+            'id' => 5279,
+            'name' => "Сельдерей",
+            'unit' => "500 грамм",
+            'price' => 80,
+            'discount' => 50
+          ],
+          [
+            'id' => 1709,
+            'name' => "Грейпфрут",
+            'unit' => "500 грамм",
+            'price' => 90,
+            'discount' => 50
+          ],
+          [
+            'id' => 14563,
+            'name' => "	Хлеб ржаной",
+            'unit' => "100 грамм",
+            'price' => 30,
+            'discount' => 15
+          ],
+          [
+            'id' => 14565,
+            'name' => "Хлеб пшеничный",
+            'unit' => "100 грамм",
+            'price' => 30,
+            'discount' => 15
+          ],
+          [
+            'id' => 14567,
+            'name' => "Хлеб десертный",
+            'unit' => "100 грамм",
+            'price' => 30,
+            'discount' => 15
+          ],
+        ];
+    
+        $fProducts = [];
+        $i = 0;
+        $j = 0;
+        $fProducts[$j] = [];
+        foreach ($products as $product) {    
+          if($i > 2){
+            $i = 0;
+            $j++;    
+            $fProducts[$j] = [];  
+          }    
+          array_push($fProducts[$j],$product);
+          $i++;
+        }
+        $products =  $fProducts;
+      }      
 
       foreach ($users as $key => $user) {  
         $email = $user['email'];
-        Mail::send('mail.rasilka', ['user' => $user], function($m)use($email){
+        Mail::send('mail.rasilka', ['user' => $user,'products' => $products], function($m)use($email){
           $m->to($email,'to');
           $m->from('no-reply@bananich.ru');
-          $m->subject('Новая акция недели от Бананыча!)');
+          $m->subject('Дегустационный сет от Бананыча');
         });
         dump(count($users) - $key . ' - ' . $user['name'] . ' - ' . $user['email']);
         

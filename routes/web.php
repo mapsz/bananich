@@ -34,9 +34,100 @@ Route::get('/mail', function(){
 
   // dump(  $order->toarray());
 
-  // $user = App\User::find(751);
+  $user = App\User::find(751);
 
-  // dd($user);
+
+  if(1){
+
+    $products = [
+      [
+        'id' => 14541,
+        'name' => "Хурма Ромашка",
+        'unit' => "500 грамм",
+        'price' => 75,
+        'discount' => 40
+      ],
+      [
+        'id' => 14540,
+        'name' => "Хурма Королек",
+        'unit' => "500 грамм",
+        'price' => 60,
+        'discount' => 40
+      ],
+      [
+        'id' => 1713,
+        'name' => "Киви",
+        'unit' => "500 грамм",
+        'price' => 120,
+        'discount' => 50
+      ],
+      [
+        'id' => 1683,
+        'name' => "Яблоки Голден",
+        'unit' => "500 грамм",
+        'price' => 70,
+        'discount' => 40
+      ],
+      [
+        'id' => 2844,
+        'name' => "Яблоки Антоновка",
+        'unit' => "500 грамм",
+        'price' => 85,
+        'discount' => 40
+      ],
+      [
+        'id' => 5279,
+        'name' => "Сельдерей",
+        'unit' => "500 грамм",
+        'price' => 80,
+        'discount' => 50
+      ],
+      [
+        'id' => 1709,
+        'name' => "Грейпфрут",
+        'unit' => "500 грамм",
+        'price' => 90,
+        'discount' => 50
+      ],
+      [
+        'id' => 14563,
+        'name' => "	Хлеб ржаной",
+        'unit' => "100 грамм",
+        'price' => 30,
+        'discount' => 15
+      ],
+      [
+        'id' => 14565,
+        'name' => "Хлеб пшеничный",
+        'unit' => "100 грамм",
+        'price' => 30,
+        'discount' => 15
+      ],
+      [
+        'id' => 14567,
+        'name' => "Хлеб десертный",
+        'unit' => "100 грамм",
+        'price' => 30,
+        'discount' => 15
+      ],
+    ];
+
+    $fProducts = [];
+    $i = 0;
+    $j = 0;
+    $fProducts[$j] = [];
+    foreach ($products as $product) {    
+      if($i > 2){
+        $i = 0;
+        $j++;    
+        $fProducts[$j] = [];  
+      }    
+      array_push($fProducts[$j],$product);
+      $i++;
+    }
+    $products =  $fProducts;
+  }
+
 
 
   // Mail::send('mail.rasilka', ['user' => $user->toarray()], function($m){
@@ -47,16 +138,16 @@ Route::get('/mail', function(){
   //   $m->subject('Новая акция недели от Бананыча');
   // });
 
-  // Mail::send('mail.open', ['user' => $user->toarray()], function($m){
+  // Mail::send('mail.rasilka', ['user' => $user->toarray(),'products' => $products], function($m){
   //   $m->to('aslanovadaria@yandex.ru','to');
   //   // $m->to('mapss@inbox.lv','to');
   //   // $m->to('jurijsgergelaba@yandex.ru','to');
   //   $m->from('no-reply@bananich.ru');
-  //   $m->subject('Бананыч вернулся! И у нас много новостей)');
+  //   $m->subject('Дегустационный сет от Бананыча');
   // });
 
 
-  // return view('mail.rasilka', ['user' => $user->toarray()]);
+  return view('mail.rasilka', ['user' => $user->toarray(),'products' => $products]);
 });
 
 
@@ -65,8 +156,6 @@ Route::get('/logistic/daily', function(){echo App\Logistic::daily();});
 
 //bonus
 Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
-
-
 
 // Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
 Route::group(['middleware' => ['HttpsRR']], function () {
@@ -222,6 +311,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
       Route::put('/page', 'PageController@put');
       Route::post('/page', 'PageController@post');
       Route::post('/page/menu/attach', 'PageController@attach');
+      Route::post('/page/menu/detach', 'PageController@detach');
       Route::put('/menu', 'MenuController@put');
     });
 
@@ -483,6 +573,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
 
 });
+
+
+
 
 
 // Route::get('/admin/test/sfdsfdsf', function(){

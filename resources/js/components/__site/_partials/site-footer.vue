@@ -15,7 +15,7 @@
           </div>
           <div class="col-lg-8">
             <div>
-              <menu-component :columns="3" :menus="menus"></menu-component>
+              <menu-component :columns="3" :menus="menus" :position="'footer'"></menu-component>
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default {
 
   computed:{
     ...mapGetters({
-      menus:'menu/get',
+      menus:'page/get',
       settings:'settings/beautyGet',
     }),    
   },   
