@@ -2,6 +2,7 @@
 /tests
 /storage/filepond-temp
 /storage/logs
+/bootstrap/cache/config.php
 /public/products
 /public/categories
 /public/.htaccess
