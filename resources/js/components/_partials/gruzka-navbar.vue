@@ -109,6 +109,10 @@ export default {
         link: this.adminPrefix+"/not/founds",
         caption:"неНайдено",
       },
+      {
+        link: this.adminPrefix+"/sms",
+        caption:"смс",
+      },
     ];
 
     this.auth();
