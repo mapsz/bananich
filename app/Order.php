@@ -133,7 +133,7 @@ class Order extends Model
     $maxDate = now()->add($futurDays,'days');
     
     $filters = [
-      // 'status' => [200,300,350,400,500,600,700,800,850,900],
+      'status' => [1,200,300,350,400,500,600,700,800,850,900],
       'deliveryDate' => json_encode(['from' => $minDate, 'to' => $maxDate]),
       'limit' => 9999,
     ];
