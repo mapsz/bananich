@@ -138,7 +138,8 @@ class Order extends Model
       'limit' => 9999,
     ];
 
-    $orders = Order::withStatus()->where('delivery_date', '>=', $minDate)->where('delivery_date', '<=', $maxDate)->get();
+    // $orders = Order::withStatus()->where('delivery_date', '>=', $minDate)->where('delivery_date', '<=', $maxDate)->get();
+    $orders = Order::getWithOptions($filters);
 
     return $orders;
 
