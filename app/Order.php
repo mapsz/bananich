@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Item;
 use App\Bonus;
 use Carbon\Carbon;
@@ -192,12 +193,21 @@ class Order extends Model
 
       //Put items
       foreach($cart['items'] as $item){
+        
+        //double order bug
+        if(array_key_exists('name',$item)){
+          $name = $item['name'];
+        }else{
+          $name = '???';
+          Log::info('double order bug:');
+          Log::info($item);
+        }
 
         //Save item
         $putItem = new Item;
         $putItem->order_id    = $orderId;
         $putItem->product_id  = $item['product_id'];
-        $putItem->name        = $item['name'];
+        $putItem->name        = $name;
         $putItem->quantity    = $item['count'];        
         $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
         $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : $putItem->gram_sys;
@@ -246,6 +256,10 @@ class Order extends Model
 
       //Container
       if($cart['container']){
+        //Edit order
+        $order->container = 1;
+        if(!$order->save()) return false;    
+
         //Save item
         $putItem = new Item;
         $putItem->order_id    = $orderId;
@@ -262,7 +276,6 @@ class Order extends Model
       }
       
     }
-
 
     //To other
     if($data['toOther']){
@@ -344,6 +357,9 @@ class Order extends Model
         $query = $query->with('logistics');    
         $query = $query->with('logistics.driver');    
       }
+
+      //To other
+      $query = $query->with('toOther');
 
       //Pay method
       $query = $query->with('pays.method');
@@ -507,15 +523,15 @@ class Order extends Model
           ($order->porch !=  "" ? ("п. " . $order->porch) : "")
         );
 
-        //Pay method
-        if("paymethod"){
+        //Pays
+        if("pays"){
           $pay_methods = [];
           foreach ($order->pays as $pay) {
             if(isset($pay->method)){
               array_push($pay_methods,$pay->method->name);
             }        
           }
-          $order['pay_method'] = $pay_methods;  
+          $order['pays'] = $pay_methods;  
         }
 
         //Termobox
@@ -779,6 +795,9 @@ class Order extends Model
   }  
   public function logistics(){
     return $this->hasMany('App\Logistic');
+  }
+  public function toOther(){
+    return $this->hasOne('App\OrderToOther');
   }
 
   //JugeCRUD  

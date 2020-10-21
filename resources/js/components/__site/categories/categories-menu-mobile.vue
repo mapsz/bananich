@@ -3,7 +3,7 @@
   <ul  class="sitebar-wrap">
     
     <!-- Discounts -->
-    <li class="sitebar-category">
+    <li v-if="!parent" class="sitebar-category">
       <a
         class="sitebar-link"
         @click.prevent="setDiscounts()"

@@ -46,4 +46,22 @@ class Setting extends Model
 
   }
 
+  public function byName($name){
+    // Get from DB
+    $phone = Setting::where('name','phone_number')->first();
+
+    //Get default
+    if($phone == null){
+      $settings = $this->settings;
+      if(array_key_exists($name,$settings)){
+        $phone = $settings[$name];
+      }else{
+        $phone = false;
+      }
+    }
+
+    return $phone;
+
+  }
+
 }

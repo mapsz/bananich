@@ -111,85 +111,106 @@ class OrderController extends Controller
     
     //Get data
     $data = $request->all();
+    $data = $data['data'];
+
+    // dd($data);
 
     //Get Cart
     $cart = Cart::getCart(['presentProduct' => true]);
     $settings = new Setting(); $settings = $settings->getList(1);
-    
-    //Validate Cart
-    $cartValidate = [
-      'items'           => ['bail','min:1'],
-      'pre_price'      => ['bail','required','numeric','max:200000', 'min:'.$cart['min_summ']],
-    ];
-    $cartMessages = [
-      'required'               => 'ошибка!',
-      'pre_price.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
-      'pre_price.min'         => 'Минимальная сумма заказа ' . $cart['min_summ'] . 'р',
-      'items.min'              => 'Корзина пуста!'
-    ];
-    Validator::make($cart, $cartValidate, $cartMessages)->validate();
 
     //Validate
-    $validate = [
-      'aggreOffer'          => ['required','accepted'],
-      'aggrePersonal'       => ['required','accepted'],
-      'name'                => ['required', 'string', 'max:190'],
-      'email'               => ['required', 'string', 'email', 'max:190'],
-      'phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
-      'addressApart'        => ['max:20' ],
-      'addressNumber'       => ['max:20' ],
-      'addressPorch'        => ['max:20' ],
-      'addressStreet'       => ['required', 'string', 'max:170' ],
-      'deliveryDate'        => ['required'],
-      'deliveryTime'        => ['required'],
-      'payMethod'           => ['required'],
-      'confirm'             => ['required'],
-      'comment'             => ['max:1000'],
-    ];   
-    //Toother
-    if(isset($data['toOther']) && $data['toOther']){
-      $validate['toOtherName'] = ['required', 'string', 'max:190'];
-      $validate['toOtherPhone'] = ['required', 'regex:/^8(\d){10}?$/'];
-      $validate['toOtherComment'] = ['string', 'max:1000'];
-    }     
-    $messages = [
-      'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
-      'aggrePersonal.accepted'      => 'Необходимо согласие на обработку персональных данных',
-      'toOtherComment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
-      'toOtherPhone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
-      'toOtherPhone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
-      'toOtherName.max'              => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
-      'comment.max'              => 'Количество символов в поле "Комментарий" не должно превышать :max',
-      'confirm.required'              => 'Необходимо выбрать способ подтверждение заказа',
-      'payMethod.required'            => 'Необходимо выбрать способ оплаты',
-      'container.required'            => 'Необходимо выбрать упаковку',
-      'deliveryTime.required'        => 'Необходимо выбрать время доставки',
-      'deliveryDate.required'        => 'Необходимо выбрать дату доставки',
-      'addressStreet.required'        => 'Необходимо заполнить поле "Адрес"',
-      'addressStreet.max'        => 'Количество символов в поле "Адрес" не должно превышать :max',
-      'addressPorch.max'        => 'Количество символов в поле "Этаж" не должно превышать :max',
-      'addressNumber.max'        => 'Количество символов в поле "Дом" не должно превышать :max',
-      'addressApart.max'        => 'Количество символов в поле "Квартира" не должно превышать :max',
-      'phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
-      'phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
-      'email.required'   => 'Необходимо заполнить поле "e-mail"',
-      'email.max'        => 'Количество символов в поле "Имя" не должно превышать :max',
-      'name.required'    => 'Необходимо заполнить поле "Имя"',
-      'name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
-    ];
-    Validator::make($request->data, $validate,$messages)->validate();
-    
-    //Check items available
-    $available = Product::checkCartAvailable($cart);
+    if('validate' == 'validate'){
 
-    if ($available['r'] == false){
-      $text = $available['leftUnit'] == 0 ? 
-        'ууупс... кажется, вы не успели и "'.$available['name'].'" только что раскупили😞' :
-        'ууупс... кажется, вы не успели и "'.$available['name'].'" почти весь раскупили😞 На складе осталось всего '.$available['leftUnit'].' штук'
-      ;
-      Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
+      //Validate Cart
+      if('cart' == 'cart'){
+        $cartValidate = [
+          'items'           => ['bail','min:1'],
+          'pre_price'      => ['bail','required','numeric','max:200000', 'min:'.$cart['min_summ']],
+        ];
+        $cartMessages = [
+          'required'               => 'ошибка!',
+          'pre_price.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
+          'pre_price.min'         => 'Минимальная сумма заказа ' . $cart['min_summ'] . 'р',
+          'items.min'              => 'Корзина пуста!'
+        ];
+        Validator::make($cart, $cartValidate, $cartMessages)->validate();
+      }
+
+      //Validate order
+      if('order' == 'order'){
+
+        //Validate
+        $validate = [
+          'aggreOffer'          => ['required','accepted'],
+          'aggrePersonal'       => ['required','accepted'],
+          'name'                => ['required', 'string', 'max:190'],
+          'email'               => ['required', 'string', 'email', 'max:190'],
+          'phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
+          'addressApart'        => ['max:20' ],
+          'addressNumber'       => ['max:20' ],
+          'addressPorch'        => ['max:20' ],
+          'addressStreet'       => ['required', 'string', 'max:170' ],
+          'deliveryDate'        => ['required'],
+          'deliveryTime'        => ['required'],
+          'payMethod'           => ['required'],
+          'confirm'             => ['required'],
+          'comment'             => ['max:1000'],
+        ];  
+
+        //ToOther Validate
+        if(isset($data['toOther']) && $data['toOther']){
+          $validate['toOtherName'] = ['required', 'string', 'max:190'];
+          $validate['toOtherPhone'] = ['required', 'regex:/^8(\d){10}?$/'];
+          $validate['toOtherComment'] = ['string', 'max:1000'];
+        }   
+
+        $messages = [
+          'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
+          'aggrePersonal.accepted'      => 'Необходимо согласие на обработку персональных данных',
+          'toOtherComment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
+          'toOtherPhone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
+          'toOtherPhone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+          'toOtherName.max'              => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
+          'comment.max'              => 'Количество символов в поле "Комментарий" не должно превышать :max',
+          'confirm.required'              => 'Необходимо выбрать способ подтверждение заказа',
+          'payMethod.required'            => 'Необходимо выбрать способ оплаты',
+          'container.required'            => 'Необходимо выбрать упаковку',
+          'deliveryTime.required'        => 'Необходимо выбрать время доставки',
+          'deliveryDate.required'        => 'Необходимо выбрать дату доставки',
+          'addressStreet.required'        => 'Необходимо заполнить поле "Адрес"',
+          'addressStreet.max'        => 'Количество символов в поле "Адрес" не должно превышать :max',
+          'addressPorch.max'        => 'Количество символов в поле "Этаж" не должно превышать :max',
+          'addressNumber.max'        => 'Количество символов в поле "Дом" не должно превышать :max',
+          'addressApart.max'        => 'Количество символов в поле "Квартира" не должно превышать :max',
+          'phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
+          'phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+          'email.required'   => 'Необходимо заполнить поле "e-mail"',
+          'email.max'        => 'Количество символов в поле "Имя" не должно превышать :max',
+          'name.required'    => 'Необходимо заполнить поле "Имя"',
+          'name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
+        ];
+
+        Validator::make($data, $validate,$messages)->validate();
+      }
+
+      //Validate available
+      if('available' == 'available'){
+        //Check items available
+        $available = Product::checkCartAvailable($cart);
+
+        if ($available['r'] == false){
+          $text = $available['leftUnit'] == 0 ? 
+            'ууупс... кажется, вы не успели и "'.$available['name'].'" только что раскупили😞' :
+            'ууупс... кажется, вы не успели и "'.$available['name'].'" почти весь раскупили😞 На складе осталось всего '.$available['leftUnit'].' штук'
+          ;
+          Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
+        }
+      }
     }
-    
+      
+
+    //do order
     try {
       DB::beginTransaction();
 

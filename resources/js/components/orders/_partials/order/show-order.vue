@@ -25,19 +25,46 @@
         </span>
         <!-- Data -->
         <div v-if="!editDetails">
-          <div>{{order.name}} {{order.phone}} {{order.email}}</div>
+          <!-- To Other warning -->
+          <div v-if="order.to_other" class="text-danger"><b>🐞🐞Заказ для другого человека:</b><hr></div>
+
+          <!-- Details -->
           <div>
-            {{order.address}}
-            <span v-if="order.appart">кв. {{order.appart}}</span>  
-            <span v-if="order.porch">пд. {{order.porch}}</span>  
+            <div class="text-info"><b>Заказ</b></div>
+            <div>
+              {{order.address}} {{order.appartPorch}}
+            </div>
+            <div>{{moment(order.delivery_date).locale("ru").format('D.M.YY')}}</div>
+            <div>{{delivery_time}}</div>
+            <div>{{payMethod}}</div>
+            <div>{{order.confirm == 1 ? 'Потверждение по телефону' : 'Потверждение по почте'}}</div>
+            <div v-if="order.comment">Комментарий клиент: {{order.comment}}</div>          
+            <div v-if="order.comment_our">Комментарий бананыч: {{order.comment_our}}</div>
+            <div>{{order.created_at}}</div>
           </div>
-          <div>{{order.delivery_date}}</div>
-          <div>{{delivery_time}}</div>
-          <div>{{order.confirm == 1 ? 'Потверждение по телефону' : 'Потверждение по почте'}}</div>
-          <div v-if="order.comment">Комментарий клиент: {{order.comment}}</div>          
-          <div v-if="order.comment_our">Комментарий бананыч: {{order.comment_our}}</div>
-          <div>{{order.created_at}}</div>
+
+          <!-- Contact -->
+          <div>
+            <hr>
+            <div class="text-info"><b>Заказчик</b></div>
+            <div>{{order.name}}</div>
+            <div>{{order.phone}}</div>
+            <div>{{order.email}}</div>
+          </div>
+
+          <!-- To Other -->
+          <div v-if="order.to_other" >
+            <hr>            
+            <div class="text-info"><b>Другой человек</b></div>    
+            <div>{{order.to_other.name}}</div>
+            <div>{{order.to_other.phone}}</div>
+            <div>Комментарий: {{order.to_other.comment}}</div>            
+          </div>
         </div>
+
+
+    
+
         <!-- Edit data -->
         <div v-if="editDetails">
           <form id="order-details">
@@ -213,12 +240,22 @@ export default {
     itemAdd:false,
     itemsShow:'',
     justAdded:false,
+    moment:moment,
   }},
   computed:{
     ...mapGetters({order:'order/getOne'}),
     delivery_time:function(){
       if(this.order.delivery_time_from == undefined || this.order.delivery_time_from == undefined) return "";
       return this.order.delivery_time_from.slice(0,2)+ ' - ' +this.order.delivery_time_to.slice(0,2)
+    },
+    payMethod:function(){
+      if(this.order == undefined || this.order.pay_method == undefined) return "";
+
+      if(this.order.pay_method == 'cart') return 'Картой курьеру';
+      if(this.order.pay_method == 'cash') return 'Наличные';
+      if(this.order.pay_method == 'transfer') return 'По банковским реквизитам';
+
+      return this.order.pay_method;
     },
   },
   async mounted(){
@@ -322,9 +359,6 @@ export default {
 }
 
 
-.order-details div{
-  padding-bottom:10px;
-}
 .order-container{
   padding:5px;
 }

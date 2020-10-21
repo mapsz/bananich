@@ -27,16 +27,16 @@ Route::get('/test', function(){
   // App\Logistic::getFromRaw();
 });
 
-Route::get('/mail', function(){
+Route::get('/mail/{id}', function($id){
 
 
-  // $order = App\Order::getWithOptions(['id'=>14408]);
+  $order = App\Order::getWithOptions(['id'=>$id]);
 
   // dump(  $order->toarray());
 
-  $user = App\User::find(751);
+  //$user = App\User::find(751);
 
-
+  //products
   if(1){
 
     $products = [
@@ -128,8 +128,6 @@ Route::get('/mail', function(){
     $products =  $fProducts;
   }
 
-
-
   // Mail::send('mail.rasilka', ['user' => $user->toarray()], function($m){
   //   // $m->to('aslanovadaria@yandex.ru','to');
   //   // $m->to('mapss@inbox.lv','to');
@@ -147,7 +145,8 @@ Route::get('/mail', function(){
   // });
 
 
-  return view('mail.rasilka', ['user' => $user->toarray(),'products' => $products]);
+  return view('mail.mailOrder', ['order' => $order->toarray()]);
+  // return view('mail.rasilka', ['user' => $user->toarray(),'products' => $products]);
 });
 
 

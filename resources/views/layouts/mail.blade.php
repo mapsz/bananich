@@ -76,19 +76,20 @@
         border: 1px #fbd610 solid;
         border-top: 0px;  
         padding: 10px;"
-      >
-
+      >        
         <table>
           <tbody>
-            <tr>              
+            <tr>
+              {{-- Logo --}}
               <td width="80" height="80" 
                 style="
-                  background: url('https://bananich.ru/mail/logo.jpg');
+                  background: url('https://bananich.ru/mail/logo.png');
                   background-repeat: no-repeat;    
                   background-position: center;
                 "
-              >
-              <td width="400">
+              ></td>
+              {{-- Text --}}
+              <td width="250">
                 <p>
                   <b>
                     Пишите или звоните, <br>
@@ -97,25 +98,29 @@
                 </p>
                 <p>
                   Ваш Бананыч
-                </p>
-
+                </p>              
               </td>
-              <td>                
+              <td width="150">
+                <?php $s = new App\Setting; $numner = $s->byName('phone_number'); ?>
+                @if($numner) <span>📞 <a href="#" style="color:black"><b>{{$numner}}</b></a></span> @endif                
+              </td>
+              {{-- Socs / Link --}}
+              <td>
                 <table>
                   <tr>
-                    <td width="30" height="20">
-                      <a width="46" height="80" href="https://instagram.com/bananich.ru" target="_blank" >
-                        <table><tr><td width="35" height="20" style="
-                            background: url('http://bananich.ru/mail/insta.jpg');
+                    <td width="30" height="25">
+                      <a width="46" height="25" href="https://instagram.com/bananich.ru" target="_blank" >
+                        <table><tr><td width="35" height="25" style="
+                            background: url('http://bananich.ru/mail/insta.png');
                             background-repeat: no-repeat;        
                         ">                          
                         </td></tr></table>                      
                       </a>
                     </td>
                     <td>
-                      <a width="20" height="20" href="https://vk.com/bananichru" target="_blank" >
-                        <table><tr><td width="35" height="20" style="
-                            background: url('http://bananich.ru/mail/vk.jpg');
+                      <a width="20" height="25" href="https://vk.com/bananichru" target="_blank" >
+                        <table><tr><td width="35" height="25" style="
+                            background: url('http://bananich.ru/mail/vk.png');
                             background-repeat: no-repeat;        
                         ">                          
                         </td></tr></table>                      
@@ -128,31 +133,9 @@
                     </td>
                   </tr>
                 </table>
-
-
-
-                  {{-- <!-- Socs -->
-                  <div style="">
-                    <a width="80" height="80" href="https://instagram.com/bananich.ru" target="_blank" >
-                    <div width="80" height="80" 
-                      style="
-                        background: url('https://bananich.ru/image/logo.svg');
-                        background-repeat: round;        
-                    ">
-
-                    </div>
-                    </a>
-                    <a href="https://vk.com/bananichru" target="_blank">
-                      <img src="http://bananich.ru/image/vk.svg" alt="">
-                    </a>
-                  </div>
-                  <a href="https://bananich.ru" style="color:black">bananich.ru</a> --}}
-                  
-                {{-- </span> --}}
-
               </td>
-
             </tr>
+            {{-- Unsubscribe --}}
             <tr >
               <td colspan="3" width="600" align="center">
                 <a href="https://bananich.ru/unsubscribe" style="color:black">Отписаться</a>
@@ -160,8 +143,5 @@
             </tr>
           </tbody>
         </table>
-
-
       </div>
-
     </div>
