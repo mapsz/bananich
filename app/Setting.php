@@ -58,6 +58,8 @@ class Setting extends Model
       }else{
         $phone = false;
       }
+    }else{
+      $phone = $phone->value;
     }
 
     return $phone;
