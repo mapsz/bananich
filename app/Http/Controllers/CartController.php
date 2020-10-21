@@ -23,6 +23,7 @@ class CartController extends Controller
 
     $neededCart = Cart::where('id', $request->id)->where('session_id', $request->session_id)->where('user_id', $request->user_id)->first();
 
+    if(!$neededCart) return response()->json(false);
     if(!$neededCart->exists) return response()->json(false);
 
     $neededCart->session_id = $currentCart['session_id'];
