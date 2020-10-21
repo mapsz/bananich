@@ -468,6 +468,13 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
     );
 
     public static $prefixesPsr0 = array (
+        'R' => 
+        array (
+            'Rap2hpoutre\\LaravelLogViewer\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src',
+            ),
+        ),
         'M' => 
         array (
             'Mockery' => 
@@ -499,6 +506,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\BonusComment' => __DIR__ . '/../..' . '/app/BonusComment.php',
         'App\\BonusRemove' => __DIR__ . '/../..' . '/app/BonusRemove.php',
         'App\\Cart' => __DIR__ . '/../..' . '/app/Cart.php',
+        'App\\CartContainer' => __DIR__ . '/../..' . '/app/CartContainer.php',
         'App\\CartItem' => __DIR__ . '/../..' . '/app/CartItem.php',
         'App\\CartPresent' => __DIR__ . '/../..' . '/app/CartPresent.php',
         'App\\Category' => __DIR__ . '/../..' . '/app/Category.php',
@@ -590,12 +598,14 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\Listeners\\cancelBonus' => __DIR__ . '/../..' . '/app/Listeners/cancelBonus.php',
         'App\\Listeners\\removeBonus' => __DIR__ . '/../..' . '/app/Listeners/removeBonus.php',
         'App\\Logistic' => __DIR__ . '/../..' . '/app/Logistic.php',
+        'App\\Mailing' => __DIR__ . '/../..' . '/app/Mailing.php',
         'App\\Menu' => __DIR__ . '/../..' . '/app/Menu.php',
         'App\\MenuType' => __DIR__ . '/../..' . '/app/MenuType.php',
         'App\\NotFound' => __DIR__ . '/../..' . '/app/NotFound.php',
         'App\\Notifications\\BananichResetPasswordNotification' => __DIR__ . '/../..' . '/app/Notifications/BananichResetPasswordNotification.php',
         'App\\Order' => __DIR__ . '/../..' . '/app/Order.php',
         'App\\OrderStatus' => __DIR__ . '/../..' . '/app/OrderStatus.php',
+        'App\\OrderToOther' => __DIR__ . '/../..' . '/app/OrderToOther.php',
         'App\\Page' => __DIR__ . '/../..' . '/app/Page.php',
         'App\\Parse' => __DIR__ . '/../..' . '/app/Parse.php',
         'App\\Pay' => __DIR__ . '/../..' . '/app/Pay.php',
@@ -618,6 +628,7 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'App\\Session' => __DIR__ . '/../..' . '/app/Session.php',
         'App\\Setting' => __DIR__ . '/../..' . '/app/Setting.php',
         'App\\Sms' => __DIR__ . '/../..' . '/app/Sms.php',
+        'App\\SmsReport' => __DIR__ . '/../..' . '/app/SmsReport.php',
         'App\\SmsSend' => __DIR__ . '/../..' . '/app/SmsSend.php',
         'App\\Statistic' => __DIR__ . '/../..' . '/app/Statistic.php',
         'App\\StatusUser' => __DIR__ . '/../..' . '/app/StatusUser.php',
@@ -4060,6 +4071,12 @@ class ComposerStaticInita63cf10d3fbc4b5c4bfc2dce1b9d8a22
         'Ramsey\\Uuid\\UuidFactory' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactory.php',
         'Ramsey\\Uuid\\UuidFactoryInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidFactoryInterface.php',
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
+        'Rap2hpoutre\\LaravelLogViewer\\BaseController' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/controllers/LogViewerController.php',
+        'Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewer' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/LaravelLogViewer.php',
+        'Rap2hpoutre\\LaravelLogViewer\\LaravelLogViewerServiceProvider' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/LaravelLogViewerServiceProvider.php',
+        'Rap2hpoutre\\LaravelLogViewer\\Level' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/Level.php',
+        'Rap2hpoutre\\LaravelLogViewer\\LogViewerController' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/controllers/LogViewerController.php',
+        'Rap2hpoutre\\LaravelLogViewer\\Pattern' => __DIR__ . '/..' . '/rap2hpoutre/laravel-log-viewer/src/Rap2hpoutre/LaravelLogViewer/Pattern.php',
         'SebastianBergmann\\CodeCoverage\\CodeCoverage' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/CodeCoverage.php',
         'SebastianBergmann\\CodeCoverage\\CoveredCodeNotExecutedException' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Exception/CoveredCodeNotExecutedException.php',
         'SebastianBergmann\\CodeCoverage\\Driver\\Driver' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Driver/Driver.php',

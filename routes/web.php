@@ -292,6 +292,8 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
 
+    Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
     //TEST
     Route::get('/admin/test', function(){
       echo 'Здесь происходит, что-то очень важное 🎩🎩';
