@@ -270,19 +270,19 @@ class Bonus extends Model
 
   public static function killExpired(){
     //Get expired
-    $expired = BonusAdd::with('bonus')->where('left','>',0)->where('die','<',now())->get();
-    if($expired->count() < 1) return false;
+    // $expired = BonusAdd::with('bonus')->where('left','>',0)->where('die','<',now())->get();
+    // if($expired->count() < 1) return false;
 
-    //Remove bonus
-    try {      
-      foreach ($expired as $key => $bonus) {
-        Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
-        $bonus->left = 0;
-        $bonus->save();
-      }
-    } catch (Exception $e){
-      return false;
-    }    
+    // //Remove bonus
+    // try {      
+    //   foreach ($expired as $key => $bonus) {
+    //     Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
+    //     $bonus->left = 0;
+    //     $bonus->save();
+    //   }
+    // } catch (Exception $e){
+    //   return false;
+    // }    
     
     return true;
   }

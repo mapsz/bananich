@@ -4,15 +4,16 @@
         position: relative;
         width:100%;
         margin: auto
-    '>      
+      '
+    >      
       <!-- Header -->
       <div style="
-        width: 600px;
-        height: 160px;
-        margin: auto;
-        background: #FBD610;
-      ">
-
+          width: 600px;
+          height: 160px;
+          margin: auto;
+          background: #FBD610;
+        "
+      >
         <table>
           <tbody>
             <tr>
@@ -41,7 +42,6 @@
             </tr>
           </tbody>
         </table>
-
       </div>
       
       <!-- Content -->
@@ -56,12 +56,13 @@
         font-family: Arial;
       '>
         <div style="
-          margin: 10px;
-          padding: 20px 0px;
-          border: 1px solid #828282;
-          border-left: 0px;
-          border-right: 0px;
-        ">
+            margin: 10px;
+            padding: 20px 0px;
+            border: 1px solid #828282;
+            border-left: 0px;
+            border-right: 0px;
+          "
+        >
 
           @yield('content')
 
@@ -70,12 +71,13 @@
 
       <!-- Footer -->
       <div style="
-        box-sizing: border-box;
-        width: 600px;
-        margin: auto;
-        border: 1px #fbd610 solid;
-        border-top: 0px;  
-        padding: 10px;"
+          box-sizing: border-box;
+          width: 600px;
+          margin: auto;
+          border: 1px #fbd610 solid;
+          border-top: 0px;  
+          padding: 10px;
+        "
       >        
         <table>
           <tbody>

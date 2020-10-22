@@ -40,7 +40,7 @@
       :required="input.required != undefined && input.required ? true : false"
     ></textarea>
 
-    
+    <!-- Editor -->
     <vue-editor v-else-if="input.type == 'textEditor'"
 
       v-model="value" 

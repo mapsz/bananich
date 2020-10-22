@@ -116,6 +116,15 @@ let routes = [];
 //ADMIN
   let adminPrefix = '/admin';
 
+  
+  //Mailing
+  import mailings from './components/mailings/mailings.vue';
+  import mailingAdd from './components/mailings/mailing-add.vue';
+  routes.push(
+    {path: adminPrefix+'/mailing/add',component: mailingAdd},
+    {path: adminPrefix+'/mailings',component: mailings},
+  );
+
   //Delivery
   routes.push(
     {path: adminPrefix+'/delivery/:id',component: delivery},

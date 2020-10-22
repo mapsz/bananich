@@ -11,7 +11,7 @@ class SmsController extends Controller
 {
   public static function toSend(){
 
-    if(now()->hour > 21 || now()->hour < 10) return response()->json(0);
+    if(now()->hour > 20 || now()->hour < 10) return response()->json(0);
 
 
     $toSend = SmsSend::with('sms')
