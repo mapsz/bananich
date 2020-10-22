@@ -79,7 +79,8 @@
 
             <!-- Not found -->
             <div v-if="!isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
-              <product-not-found></product-not-found>                
+              <product-not-found v-if="!isMobile" />   
+              <a v-else href="/"><button class="btn-yellow btn-thick">Перейти в каталог магазина</button></a>
             </div>             
 
           </div>
