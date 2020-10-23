@@ -66,8 +66,12 @@ class Bonus extends Model
     }
 
     if('where'=='where'){
-      $user = Auth::user();
-      $userId = $user->id;
+      if(!isset($request['nousernolive'])){ //@@@ защиту?
+        $user = Auth::user();
+        $userId = $user->id;
+      }else{
+        $userId = false;
+      }
 
       if(isset($request['user']) && $user->isAdmin()){
         $query = $query->where('user_id', $request['user']);

@@ -24,7 +24,7 @@ class Sms extends Model
 
   //Bonus Notification
   public static function bonusNotification(){
-    $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1]);
+    $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1,'nousernolive' => 1]);
 
     //Get soon die
     $soonDie = [];
