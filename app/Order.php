@@ -735,7 +735,7 @@ class Order extends Model
     //Single order by id
     if(isset($request['id']) && $request['id']){
       $orders = $orders[0];      
-    }    
+    }
 
     //Test
     if(isset($request['test'])){
@@ -744,6 +744,17 @@ class Order extends Model
         $orders->toArray(),
         $orders
       );
+    }
+    
+    //Customers
+    if(isset($request['get_customers'])){
+      $customers = [];
+      foreach ($orders as $key => $order) {
+        if($order->customer_id == 0) continue;
+        array_push($customers,$order->customer_id);
+      }
+
+      return $customers;
     }
 
     return $orders;

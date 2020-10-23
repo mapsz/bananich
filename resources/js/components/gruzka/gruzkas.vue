@@ -3,6 +3,7 @@
   <div>
     <!-- Navbar -->
     <gruzka-navbar></gruzka-navbar>
+    <collector-navbar />
 
     <!-- Title -->
     <h1 class="mx-2">Gruzka</h1>

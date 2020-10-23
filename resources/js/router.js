@@ -101,24 +101,6 @@ let routes = [];
   //   {path: driverPrefix,    component:driver},
   // );
 
-  //Delivery
-  import deliveries from './components/driver/delivery/deliveries.vue';
-  import delivery from './components/driver/delivery/delivery.vue';
-  routes.push(
-    {path: driverPrefix+'/delivery/:id',component: delivery},
-    {path: driverPrefix+'/deliveries',component: deliveries},
-    {path: driverPrefix+'',component: deliveries},
-  );  
-
-  //Gruzka
-  import gruzka from './components/gruzka/gruzka.vue';
-  import gruzkas from './components/gruzka/gruzkas.vue';
-  routes.push(
-    {path: '/gruzka/:id',    component: gruzka},
-    {path: '/gruzka',        component: gruzkas},
-    {path: '/admin/gruzkas',        component: gruzkas},
-    {path: '/admin/gruzkas',        component: gruzkas},
-  );
 
 //ADMIN
   let adminPrefix = '/admin';
@@ -283,6 +265,7 @@ let routes = [];
   import strews from './components/strews/strews.vue';
   routes.push(
     {path: adminPrefix+'/strews',component: strews},
+    {path: '/gruzka/strews',component: strews},
   );
 
   //Statistics  
@@ -325,6 +308,29 @@ let routes = [];
   routes.push(
     {path: adminPrefix+'/report/stocktaking',component: stocktaking},
   );
+
+
+  //Delivery
+  import deliveries from './components/driver/delivery/deliveries.vue';
+  import delivery from './components/driver/delivery/delivery.vue';
+  routes.push(
+    {path: driverPrefix+'/delivery/:id',component: delivery},
+    {path: driverPrefix+'/deliveries',component: deliveries},
+    {path: driverPrefix+'',component: deliveries},
+  );  
+
+  //Gruzka
+  import gruzka from './components/gruzka/gruzka.vue';
+  import gruzkas from './components/gruzka/gruzkas.vue';
+  routes.push(
+    {path: '/gruzka/:id',    component: gruzka},
+    {path: '/gruzka',        component: gruzkas},
+    {path: '/admin/gruzkas',        component: gruzkas},
+    {path: '/admin/gruzkas',        component: gruzkas},
+  );
+
+  ///^^ Admin
+
 
   //404
   import site404 from './components/__site/404/v-404.vue';

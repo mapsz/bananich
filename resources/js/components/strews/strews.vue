@@ -1,7 +1,7 @@
 <template>
 <div>
   <gruzka-navbar></gruzka-navbar>  
-  <product-navbar></product-navbar>
+  <collector-navbar />
   <div class="container-fluid">
     <!-- Filters -->
     <div class="row m-3 mb-2 order-menu justify-content-between">

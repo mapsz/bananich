@@ -29,8 +29,7 @@ class Item extends Model
             "deliveryDate" => json_encode(['from' => now()->subDays(10)->format('Y-m-d'), 'to' => false]),
             'status' => ["300","350","400","500","600","700","800","850","900"],
           ];
-        }
-    
+        }    
 
         //Orders
         if('Orders'){
@@ -240,7 +239,8 @@ class Item extends Model
 
         }
     
-        if('products'){
+        //Products
+        if('products' && !is_array($items)){
 
           $ids = $items->pluck('product_id')->toArray();
 
@@ -256,7 +256,6 @@ class Item extends Model
 
 
         }
-
 
         //After work
         $out = [];
