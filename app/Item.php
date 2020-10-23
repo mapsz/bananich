@@ -239,7 +239,10 @@ class Item extends Model
 
         }
     
+
+        
         //Products
+        $out = $items;
         if('products' && !is_array($items) && isset($request['categories'])){
 
           $ids = $items->pluck('product_id')->toArray();
@@ -253,20 +256,20 @@ class Item extends Model
           }
 
           $products = Product::jugeGet($productFilters);
-
-
-        }
-
-        //After work
-        $out = [];
-        foreach ($items as $i => $item) {
-          foreach ($products as $j => $product) {
-            if($item->product_id == $product->id){
-              array_push($out,$item);
+          
+          //After work
+          $out = [];
+          foreach ($items as $i => $item) {
+            foreach ($products as $j => $product) {
+              if($item->product_id == $product->id){
+                array_push($out,$item);
+              }
             }
-
           }
+
         }
+
+
 
 
         if(isset($request['test']) || $test){
