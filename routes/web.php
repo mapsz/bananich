@@ -77,66 +77,70 @@ Route::group(['middleware' => ['HttpsRR']], function () {
       //
   });
 
-  //Order
-  Route::put('/order/put', 'OrderController@put');
-  Route::any('/order/update/available', 'OrderController@updateAvailable');
 
-  //Cart
-  Route::get('/json/cart', 'CartController@get');
-  Route::post('/cart/edit/item', 'CartController@editItem');
-  Route::post('/cart/session', 'CartController@changeSession');
-  Route::delete('/cart/remove/item', 'CartController@removeItem'); 
-  Route::delete('/cart/reset', 'CartController@resetItems');
-  Route::post('/cart/container', 'CartController@editContainer');
-  Route::delete('/cart/container', 'CartController@removeContainer');
+  //All
+  Route::group(['middleware' => []], function (){
+    //Order
+    Route::put('/order/put', 'OrderController@put');
+    Route::any('/order/update/available', 'OrderController@updateAvailable');
 
-  //Coupon
-  Route::any('/coupon/cart', 'CouponController@cartAttach');
+    //Cart
+    Route::get('/json/cart', 'CartController@get');
+    Route::post('/cart/edit/item', 'CartController@editItem');
+    Route::post('/cart/session', 'CartController@changeSession');
+    Route::delete('/cart/remove/item', 'CartController@removeItem'); 
+    Route::delete('/cart/reset', 'CartController@resetItems');
+    Route::post('/cart/container', 'CartController@editContainer');
+    Route::delete('/cart/container', 'CartController@removeContainer');
 
-  //Session
-  Route::get('/json/session', 'SessionController@get');
+    //Coupon
+    Route::any('/coupon/cart', 'CouponController@cartAttach');
 
-  //Categories
-  Route::get('/json/categories', 'CategoryController@getAll');
+    //Session
+    Route::get('/json/session', 'SessionController@get');
 
-  //Interview
-  Route::get('/interview/{id}', function($id){
-      return view('interview',['id' => $id]);
+    //Categories
+    Route::get('/json/categories', 'CategoryController@getAll');
+
+    //Interview
+    Route::get('/interview/{id}', function($id){
+        return view('interview',['id' => $id]);
+    });
+    Route::put('/put/interviews', 'InterviewController@put');
+
+    //SMS
+    Route::get('/sms/to/send', 'SmsController@toSend');
+    Route::get('/sms/send/confirm', 'SmsController@sendConfirm');
+    Route::put('/sms/add/send', 'SmsController@sendAdd');
+    Route::any('/sms/add/input', 'SmsController@smsAddInput');
+
+    //Errors
+    Route::put('/error', 'ErrorController@put');
+
+    //Auth
+    Auth::routes();
+
+    //User
+    Route::get('/auth/user', 'UserController@getAuthUser');
+    Route::post('/user', 'UserController@post');
+    Route::post('/user/address', 'UserController@postAddress');
+    Route::post('/user/main/photo', 'UserController@editMainPhoto');
+
+    //Present
+    Route::get('/present/settings', 'PresentController@getSettings'); 
+    Route::get('/product/present', 'PresentController@getProduct'); 
+    Route::put('/present/cart', 'PresentController@addPresentToCart'); 
+
+    //Settings
+    Route::get('/json/settings', 'SettingController@get'); 
+
+    //Order Limits
+    Route::get('/order/available/days', 'OrderController@getAvailableDays');
+
+    //Not found
+    Route::put('/not/found', 'NotFoundController@put'); 
+
   });
-  Route::put('/put/interviews', 'InterviewController@put');
-
-  //SMS
-  Route::get('/sms/to/send', 'SmsController@toSend');
-  Route::get('/sms/send/confirm', 'SmsController@sendConfirm');
-  Route::put('/sms/add/send', 'SmsController@sendAdd');
-  Route::any('/sms/add/input', 'SmsController@smsAddInput');
-
-  //Errors
-  Route::put('/error', 'ErrorController@put');
-
-  //Auth
-  Auth::routes();
-
-  //User
-  Route::get('/auth/user', 'UserController@getAuthUser');
-  Route::post('/user', 'UserController@post');
-  Route::post('/user/address', 'UserController@postAddress');
-  Route::post('/user/main/photo', 'UserController@editMainPhoto');
-
-  //Present
-  Route::get('/present/settings', 'PresentController@getSettings'); 
-  Route::get('/product/present', 'PresentController@getProduct'); 
-  Route::put('/present/cart', 'PresentController@addPresentToCart'); 
-
-  //Settings
-  Route::get('/json/settings', 'SettingController@get'); 
-
-  //Order Limits
-  Route::get('/order/available/days', 'OrderController@getAvailableDays');
-
-  //Not found
-  Route::put('/not/found', 'NotFoundController@put'); 
-
 
   //Gruzka
   Route::group(['middleware' => ['auth', 'can:gruzka_panel']], function (){
@@ -202,6 +206,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
   Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
 
     Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+    //Email
+    Route::put('/admin/email', 'EmailController@put');
 
     //TEST
     Route::get('/admin/test', function(){

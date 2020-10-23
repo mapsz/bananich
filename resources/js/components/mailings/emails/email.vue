@@ -8,11 +8,20 @@
       <div id="bar">
         <h1>Vue Email Editor (Demo)</h1>
  
-        <button v-on:click="saveDesign">Save Design</button>
-        <button v-on:click="exportHtml">Export HTML</button>
+        <button v-on:click="saveDesign" class="btn btn-success">Сохранить</button>
+        <!-- <button v-on:click="exportHtml">Export HTML</button> -->
       </div>
+
+      <div class="my-3"></div>
  
-      <EmailEditor class="email-editor-container" :minHeight="'600px'" locale="ru" ref="emailEditor" v-on:load="editorLoaded" />
+      <EmailEditor 
+        v-if="design"
+        class="email-editor-container" 
+        :minHeight="'600px'" 
+        locale="ru" 
+        ref="emailEditor" 
+        v-on:load="editorLoaded" 
+      />
     </div>
 
 
@@ -22,14 +31,14 @@
 
 <script>
 import { EmailEditor } from 'vue-email-editor'
+import {mapGetters, mapActions} from 'vuex';
 export default {
   components: {EmailEditor},
   data(){return{
     value:'',
-  }},
-  methods: {
-      editorLoaded() {
-        let text = {
+    id:false,
+    design:false,
+    defaultDesign:{
           "counters": {
             "u_column": 3,
             "u_row": 3,
@@ -254,9 +263,35 @@ export default {
             }
           },
           "schemaVersion": 5
-        };
+        },
+  }},
+  computed:{
+    ...mapGetters({email:'email/getOne',errors:'product/getErrors'}),    
+  },
+  async mounted(){
+        
+    //Get
+    if(this.$route.params.id > 0){
+      this.id = this.$route.params.id;
+    }
 
-        this.$refs.emailEditor.editor.loadDesign(text);
+    if(!this.id){
+      this.design = this.defaultDesign;
+    }
+
+    //Fetch product
+    if(this.id){
+      await this.fetch(this.id);
+    }
+    
+    this.design = JSON.parse(this.email.design);
+  },
+  methods: {
+      ...mapActions({
+        'fetch':'email/fetchOne',
+      }),
+      editorLoaded() {
+        this.$refs.emailEditor.editor.loadDesign(this.design);
         // this.$refs.emailEditor.editor.loadDesign();
       },
       saveDesign() {

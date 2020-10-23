@@ -28,13 +28,14 @@ let menu = new jugeVuex('menu');
 let coupon = new jugeVuex('coupon');
 let logistic = new jugeVuex('logistic');
 let notFound = new jugeVuex('notFound');
+let email = new jugeVuex('email');
 // let user = new jugeVuex('user');
 
 let store = {  
   modules:{
     order,delivery,confirm,report,product,item,supplier,stocktaking,
     purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,
-    settings,category,orderLimits,page,menu,coupon,logistic,notFound
+    settings,category,orderLimits,page,menu,coupon,logistic,notFound,email
   }
 };
 

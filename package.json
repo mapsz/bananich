@@ -40,6 +40,7 @@
         "laravel-mix-bundle-analyzer": "^1.0.5",
         "moment": "^2.29.1",
         "vue-2-breadcrumbs": "^0.7.9",
+        "vue-carousel": "^0.18.0",
         "vue-click-outside": "^1.1.0",
         "vue-email-editor": "^0.7.2",
         "vue-filepond": "^6.0.3",

@@ -117,12 +117,21 @@ let routes = [];
   let adminPrefix = '/admin';
 
   
+  // //Mailing
+  // import mailing from './components/mailings/mailing.vue';
+  // routes.push(
+  //   {path: adminPrefix+'/mailing/:id',component: mailing},
+  //   {path: adminPrefix+'/mailing',component: mailing},
+  //   {path: adminPrefix+'/mailings',component: mailings},
+  // );
+
   //Mailing
-  import mailings from './components/mailings/mailings.vue';
-  import mailingAdd from './components/mailings/mailing-add.vue';
+  import emails from './components/mailings/emails/emails.vue';
+  import email from './components/mailings/emails/email.vue';
   routes.push(
-    {path: adminPrefix+'/mailing/add',component: mailingAdd},
-    {path: adminPrefix+'/mailings',component: mailings},
+    {path: adminPrefix+'/email/:id',component: email},
+    {path: adminPrefix+'/email',component: email},
+    {path: adminPrefix+'/emails',component: emails},
   );
 
   //Delivery

@@ -113,6 +113,10 @@ export default {
         link: this.adminPrefix+"/sms",
         caption:"смс",
       },
+      {
+        link: this.adminPrefix+"/emails",
+        caption:"emails",
+      },
     ];
 
     this.auth();
