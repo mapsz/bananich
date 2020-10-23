@@ -1018,7 +1018,7 @@ class Product extends Model
 
 
   //JugeCRUD
-  public function jugeGet($request) {return $this->getWithOptions($request);}
+  public static function jugeGet($request) {return self::getWithOptions($request);}
   public function jugeGetKeys()     {return $this->keys;}    
   public function jugeGetInputs()   {return $this->inputs;}    
 

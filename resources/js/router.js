@@ -2,6 +2,13 @@ let routes = [];
 
 //__site
 
+
+  //Interview
+  // import interview from './components/interview/interview.vue';
+  // routes.push(
+  //   {path: '/interview',    component:interview},
+  // );
+
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';
   routes.push(

@@ -20,7 +20,13 @@
     </div>  
 
     <!-- List -->
-    <juge-list :data="'product'" :pages="true"></juge-list>
+    <div>
+      <div class="d-flex" style="justify-content: flex-end;">
+        <product-category-filter :model="'product'"/>
+      </div>      
+      <juge-list :data="'product'" :pages="true"></juge-list>
+    </div>
+    
     
   </div>
 </div>

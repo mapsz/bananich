@@ -88,15 +88,17 @@ data(){return{
 
 methods:{
   async putAnswer(){
+    if(this.answer != ""){
       let r = await this.jugeAx('/put/interviews',
-      {
-        question:this.current,
-        answer:this.answer,
-        user_id:this.user,
-      },
-      'put'
-    );
-    if(!r) return;
+        {
+          question:this.current,
+          answer:this.answer,
+          user_id:this.user,
+        },
+        'put'
+      );
+      if(!r) return;
+    }
     
     this.current++;
     this.answer = "";
