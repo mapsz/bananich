@@ -279,7 +279,7 @@ class Bonus extends Model
     try {      
       foreach ($expired as $key => $bonus) {
         if($bonus->bonus == null){
-          Log::info('bonus add have no bonus id-'. $bonus->id);
+          Log::info('bonus add have no bonus id-'. $bonus->bonus_id);
           continue;
         }
         Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
