@@ -240,7 +240,7 @@ class Item extends Model
         }
     
         //Products
-        if('products' && !is_array($items)){
+        if('products' && !is_array($items) && isset($request['categories'])){
 
           $ids = $items->pluck('product_id')->toArray();
 
