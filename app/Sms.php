@@ -22,6 +22,36 @@ class Sms extends Model
     ['key'    => 'created_at','label' => 'дата'],
   ];
 
+  //Interwiev
+  public static function ordersIntreview(){
+
+
+    $customers = Order::getWithOptions([
+      'deliveryDate'    => json_encode(['from' => "2020-10-17", 'to' => "2020-10-24"]),
+      'status'          => [1],
+      'get_customers'   => 1,
+    ]);
+
+    $users = User::whereIn('id',$customers)->get();
+
+    $sms = [];
+    foreach ($users as $key => $user) {
+      $body = (
+        "{$user->name}, добрый день! Вы недавно делали заказ на Бананыче. " .
+        "Мы очень стараемся контролировать качество нашего сервиса, " .
+        "и будем очень вам благодарны, если у вас найдется пара минут пройти небольшой опрос о том, все ли вас устроило, " . 
+        "а с нас за приятный презент в конце опроса) Ссылка на него вот тут: " . "https://bananich.ru/interview/{$user->id}" . 
+        " Заранее большое вам спасибо!"
+      );
+      $to = $user->phone;
+
+      array_push($sms,['body' => $body, 'to' => $to]);
+    }
+
+
+    dd($sms);
+  }
+
   //Bonus Notification
   public static function bonusNotification(){
     $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1,'nousernolive' => 1]);

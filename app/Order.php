@@ -751,6 +751,7 @@ class Order extends Model
       $customers = [];
       foreach ($orders as $key => $order) {
         if($order->customer_id == 0) continue;
+        if(in_array($order->customer_id,$customers)) continue;
         array_push($customers,$order->customer_id);
       }
 
