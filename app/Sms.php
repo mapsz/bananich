@@ -45,7 +45,9 @@ class Sms extends Model
       );
       $to = $user->phone;
 
-      array_push($sms,['body' => $body, 'to' => $to]);
+
+      self::putSmsToSend( ['body' => $body, 'to' => $to]);
+      array_push($sms,    ['body' => $body, 'to' => $to]);
     }
 
 
