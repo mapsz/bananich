@@ -42,7 +42,7 @@ Route::get('/mail/{id}', function($id){
   // dump($html);
 
 
-  Mail::send('mail.test', ['user' => $user->toarray(),'html' => $html], function($m){
+  Mail::send('mail.customEmail', ['user' => $user->toarray(),'html' => $html], function($m){
     // $m->to('aslanovadaria@yandex.ru','to');
     // $m->to('mapss@inbox.lv','to');
     $m->to('jurijsgergelaba@yandex.ru','to');
