@@ -41,7 +41,7 @@ class Email extends Model
 
         // dd($product);
         $productHtml_start = "".
-          "<div style='width:160px;display: inline-block;margin:10px'>".
+          "<div style='width:160px;display: inline-block;margin:15px 7px'>".
             "<div><img width='160' height='160' src='https://bananich.ru/{$product->mainImage}' alt=''></div>".            
         "";
 
@@ -89,6 +89,17 @@ class Email extends Model
       // dd($html);
     }
 
+
+    //Name
+    if('name'){
+      if($user){
+        $name = is_array($user) ? $user['name'] : $user->name;
+        //Replace names
+        $html = str_replace('&lt;:name:&gt;',$name,$html);
+      }
+    }
+
+
     return $html;
 
   }
@@ -113,7 +124,40 @@ class Email extends Model
       //Html
       if('html'){
         $design = json_decode($email->design);
-        $html = $design->body->rows[1]->columns[0]->contents[0]->values->text;
+
+        //Get rows
+        $html = '';
+        for ($i=1; $i < count($design->body->rows)-1; $i++) {           
+          for ($j=0; $j < count($design->body->rows[$i]->columns); $j++) { 
+            for ($k=0; $k < count($design->body->rows[$i]->columns[$j]->contents); $k++) {
+              //Row           
+              $row = $design->body->rows[$i]->columns[$j]->contents[$k];
+
+              //Get style
+              if('style'){
+                $style = "style='".(
+                  "margin:".$row->values->containerPadding.
+                  "'"
+                );
+              }
+
+              //Types
+              if('types'){
+                $add = "";
+                if($row->type == "text"){                
+                  $add = "<div $style>" . $row->values->text . '</div>';
+                };
+                if($row->type == "divider"){ 
+                  $add = "<hr $style>";
+                };
+              }
+
+              //Add
+              $html .= $add;
+            }
+          }
+        }
+        
         $email['html'] = $html;
       }
     }

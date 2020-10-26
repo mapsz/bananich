@@ -27,7 +27,7 @@
                   color: #000000;
                 ">
                   <div align="left">
-                    <span><b>Бананыч.</b></span><br>
+                    <span><b>Бананыч</b></span><br>
                     <span>Доставка полезного</span>  
                   </div>
                 </span>
