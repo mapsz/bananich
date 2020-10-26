@@ -58,12 +58,6 @@ class Email extends Model
             "<span style='font-size: medium;color: rgb(255, 92, 0);'><b> {$product->final_price}</b></span>".
         "";
 
-        $productHtml_3 = "".
-            ($product->price != $product->final_price) ? 
-            "<span style='font-size: medium;text-decoration: line-through;'>{$product->price}</span>" : "" .
-            "<span style='font-size: medium;color: rgb(255, 92, 0);'><b> {$product->final_price}</b></span>".
-        "";
-
         $productHtml_4 = "".
           "<div align='center'>
             <a href='https://bananich.ru/product/{$product->id}' style='text-decoration: none;'>
