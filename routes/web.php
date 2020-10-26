@@ -34,10 +34,10 @@ Route::get('/mail/{id}', function($id){
 
   // dump(  $order->toarray());
 
-  // $user = App\User::find(751);
-  // $email = App\Email::jugeGet(['id'=>10]);
+  $user = App\User::find(751);
+  $email = App\Email::jugeGet(['id'=>10]);
 
-  // $html = App\Email::customTags($email->html,$user);
+  $html = App\Email::customTags($email->html,$user);
 
   // dump($html);
 
