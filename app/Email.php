@@ -51,8 +51,10 @@ class Email extends Model
         "";
 
         $productHtml_3 = "".
-            ($product->price != $product->final_price) ? 
-            ("<span style='font-size: medium;text-decoration: line-through;'>{$product->price}</span>") : ("") .
+            (
+              ($product->price != $product->final_price) ? 
+              "<span style='font-size: medium;text-decoration: line-through;'>{$product->price}</span>" : "" 
+            ) .
             "<span style='font-size: medium;color: rgb(255, 92, 0);'><b> {$product->final_price}</b></span>".
         "";
 
