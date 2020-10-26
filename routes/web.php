@@ -39,7 +39,7 @@ Route::get('/mail/{id}', function($id){
 
   $html = App\Email::customTags($email->html);
 
-  dump($html);
+  // dump($html);
 
 
   // Mail::send('mail.test', ['user' => $user->toarray()], function($m){
