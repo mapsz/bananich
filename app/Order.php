@@ -198,8 +198,10 @@ class Order extends Model
         //double order bug
         if(array_key_exists('name',$item)){
           $name = $item['name'];
+          $price = $item['price'];
         }else{
           $name = '???';
+          $price = '???';
           Log::info('double order bug:');
           Log::info($item);
         }
@@ -212,7 +214,7 @@ class Order extends Model
         $putItem->quantity    = $item['count'];        
         $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
         $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : $putItem->gram_sys;
-        $putItem->price       = $item['price'];
+        $putItem->price       = $price;
         if(!$putItem->save()) return false;
 
         //Save status

@@ -41,7 +41,7 @@ class Checkout extends Model
     }
 
     //Get Products
-    $products = Product::getWithOptions(['ids' => $productIds]);
+    $products = Product::getWithOptions(['ids' => $productIds, 'get_all' => 1]);
 
     //Items data
     $cart->final_summ = 0;
@@ -133,9 +133,7 @@ class Checkout extends Model
           DB::table('cart_presents')->where('cart_id',$cart['id'])->where('product_id',$present['product_id'])->delete();
           $cart['presents'] = [];
           continue;          
-        } 
-
-        
+        }         
         
         //Get present setting
         $settings = Setting::where('name','present_'.$present->type)->first();

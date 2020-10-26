@@ -35,6 +35,11 @@ Route::get('/mail/{id}', function($id){
   // dump(  $order->toarray());
 
   $user = App\User::find(751);
+  $email = App\Email::jugeGet(['id'=>10]);
+
+  $html = App\Email::customTags($email->html);
+
+  dump($html);
 
 
   // Mail::send('mail.test', ['user' => $user->toarray()], function($m){
@@ -45,17 +50,17 @@ Route::get('/mail/{id}', function($id){
   //   $m->subject('Новая акция недели от Бананыча');
   // });
 
-  // Mail::send('mail.rasilka', ['user' => $user->toarray(),'products' => $products], function($m){
-  //   $m->to('aslanovadaria@yandex.ru','to');
+  // Mail::send('mail.customEmail', ['user' => $user->toarray(),'email' => $email], function($m){
+  //   // $m->to('aslanovadaria@yandex.ru','to');
   //   // $m->to('mapss@inbox.lv','to');
-  //   // $m->to('jurijsgergelaba@yandex.ru','to');
+  //   $m->to('jurijsgergelaba@yandex.ru','to');
   //   $m->from('no-reply@bananich.ru');
   //   $m->subject('Дегустационный сет от Бананыча');
   // });
 
 
-  return view('mail.test');
-  // return view('mail.rasilka', ['user' => $user->toarray(),'products' => $products]);
+  // return view('mail.test');
+  return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
 });
 
 

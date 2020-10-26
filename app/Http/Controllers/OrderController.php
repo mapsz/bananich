@@ -113,10 +113,9 @@ class OrderController extends Controller
     $data = $request->all();
     $data = $data['data'];
 
-    // dd($data);
-
     //Get Cart
     $cart = Cart::getCart(['presentProduct' => true]);
+
     $settings = new Setting(); $settings = $settings->getList(1);
 
     //Validate
