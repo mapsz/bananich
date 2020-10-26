@@ -4080,20 +4080,20 @@ class Mailing extends Model
         ),
       );
 
-      $users = [];
+      // $users = [];
       
-      $users = array(
-        array(
-          "id" => 4,
-          "email" => "aslanovadaria@yandex.ru",
-          "name" => "Дарья",
-        ),
-        array(
-          "id" => 6,
-          "email" => "mapss@inbox.lv",
-          "name" => "jura",
-        ),
-      );      
+      // $users = array(
+      //   array(
+      //     "id" => 4,
+      //     "email" => "aslanovadaria@yandex.ru",
+      //     "name" => "Дарья",
+      //   ),
+      //   array(
+      //     "id" => 6,
+      //     "email" => "mapss@inbox.lv",
+      //     "name" => "jura",
+      //   ),
+      // );      
 
       $email = Email::jugeGet(['id'=>10]);
       $html = $email->html;
