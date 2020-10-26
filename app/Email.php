@@ -46,7 +46,7 @@ class Email extends Model
         "";
 
         $productHtml_2 = "".
-            "<div style='font-size: medium;'><b>{$product->name}</b></div>".
+            "<div style='font-size: medium; height: 40px;'><b>{$product->name}</b></div>".
             "<div style='font-size: medium;'>{$product->unit_view}</div>".
         "";
 
