@@ -42,7 +42,7 @@ Route::get('/mail/{id}', function($id){
   // dump($html);
 
 
-  Mail::send('mail.test', ['user' => $user->toarray()], function($m){
+  Mail::send('mail.test', ['user' => $user->toarray(),'html' => $html], function($m){
     // $m->to('aslanovadaria@yandex.ru','to');
     // $m->to('mapss@inbox.lv','to');
     $m->to('jurijsgergelaba@yandex.ru','to');
@@ -50,7 +50,7 @@ Route::get('/mail/{id}', function($id){
     $m->subject('Новая акция недели от Бананыча');
   });
 
-  Mail::send('mail.customEmail', ['user' => $user->toarray(),'email' => $email], function($m){
+  Mail::send('mail.customEmail', ['user' => $user->toarray(),'html' => $html], function($m){
     $m->to('aslanovadaria@yandex.ru','to');
     // $m->to('mapss@inbox.lv','to');
     // $m->to('jurijsgergelaba@yandex.ru','to');
