@@ -1,16 +1,21 @@
 <template>
-<div class="input-group input-group-sm" style="width: auto;">
-  <div class="input-group-prepend">
-    <label class="input-group-text" for="time-input">Статус заказа</label>
+<div>
+  <div class="input-group input-group-sm" style="width: auto;">
+    <div class="input-group-prepend" style="height: 35px;">
+      <label class="input-group-text" for="time-input">Статус заказа</label>
+    </div>
+    <v-select 
+      class="order-status-select"
+      v-model="selected" 
+      :label="'name'" 
+      :reduce="statuses => statuses.id" 
+      :options="statuses"
+      multiple 
+    />
+    <button @click="bobaBuild()" class="btn btn-outline-secondary btn-sm">
+      BOBA 🚗
+    </button>
   </div>
-  <v-select 
-    class="order-status-select"
-    v-model="selected" 
-    :label="'name'" 
-    :reduce="statuses => statuses.id" 
-    :options="statuses"
-    multiple 
-  />
 </div>
 </template>
 
@@ -61,7 +66,11 @@ export default {
     async getOrderStatuses(){
       let r = await ax.fetch('/json/order/statuses');
       if(r) this.statuses = r;
-    },    
+    }, 
+    async bobaBuild(){
+      this.selected = [300,400,500,600,700];
+    }
+
   }
 
 }
