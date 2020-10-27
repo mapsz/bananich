@@ -1,5 +1,5 @@
 <template>
-<div class="cart-info">
+<div class="cart-info" :class="halloween?'halloween':''">
   <div class="cart-info-header">
     Информация о покупке
   </div>
@@ -65,6 +65,7 @@
 import {mapGetters} from 'vuex';
 export default {
   data(){return{  
+    halloween:halloween,
     dropDiscount:false,
   }},
   computed:{
@@ -73,6 +74,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
+  .cart-info{
+    background-image: url(/halloween/kot.png);
+    background-size: 35px;
+    background-repeat: no-repeat;
+    background-position: bottom 0px right 20px;
+  }
 </style>

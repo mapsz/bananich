@@ -1,6 +1,6 @@
 <template>
-<div>
-  <header class="header" style="z-index: 100;">
+<div :class="halloween?'halloween':''">
+  <header class="header" style="z-index: 100;" :class="halloween?'halloween':''">
 
     <!-- navbar-sad -->
     <div class="header-nav">
@@ -22,7 +22,7 @@
       <div class="container header-bar-wrap">
 
         <!-- Logo -->
-        <a href="/"><img class="logo" src="/image/logo.svg" alt="logo" style="height: 65px;width: 65px;padding:5px"></a>
+        <a href="/"><div class="logo"></div> </a>
         
         <!-- Presents -->
         <present-bar :cart="cart" :settings="presentSettings"/>
@@ -63,6 +63,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    halloween:halloween,
     presentSettings:{},
     position:0,
   }},
@@ -147,7 +148,7 @@ export default {
 
 @media (min-width: 767px){
   .logo {
-    height: 90px !important;
+    height: 80px !important;
     /* width: 90px !important; */
     margin-left: 35px  !important;
   }
@@ -159,10 +160,42 @@ export default {
     position:fixed !important;
     top:0 !important;
   }
-
-
-
-
 }
 
+.header-bar-wrap {
+  padding: 5px;
+}
+
+/* Logo */
+.logo{
+  height: 60px;
+  width: 60px;
+  margin: 5px;
+  margin-left: 0px;
+  background-image: url('/image/logo.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 768px){
+  .logo{
+    width: 45px !important;
+  }
+}
+
+
+/* Halloween */
+.halloween .logo{
+  background-image: url('/halloween/logo_halloween_mini.png') !important;
+}
+
+@media screen and (min-width: 768px){
+  .halloween .header-bar{
+    background-image: url(/halloween/ghost.png);
+    background-size: 50px;
+    background-repeat: no-repeat;
+    background-position: top 10px right 50px;
+  }
+}
 </style>

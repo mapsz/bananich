@@ -1,5 +1,5 @@
 <template>
-  <div  class="sitebar sitebar-cat">
+  <div  class="sitebar sitebar-cat" :class="halloween?'halloween':''">
     <div class="sitebar-title">Разделы</div>
     <ul  class="sitebar-wrap">
       <!-- Discounts -->
@@ -65,6 +65,9 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  data(){return{    
+    halloween:halloween,
+  }},
   computed:{
     isMobile:function(){return window.screen.width <= 768;},
     ...mapGetters({
@@ -161,6 +164,27 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.halloween .sitebar-cat{
+  background-image: url(/halloween/pautina_2.png);
+  background-size: 150px;
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+
+@media screen and (max-width: 768px){
+
+  .halloween .home{
+    background-image: url('/halloween/mish.png');
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: top right;
+  }
+
+  .halloween .home, .halloween .product-list-wrapper{
+    background-size: 50px !important;
+  }
+}
 
 </style>

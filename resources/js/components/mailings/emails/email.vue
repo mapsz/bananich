@@ -4,25 +4,26 @@
   <div class="container-fluid">
     <!-- <h1>Добавить рассылку</h1> -->
 
-    <div class="container">
-      <div id="bar">
-        <h1>Vue Email Editor (Demo)</h1>
- 
+    <div class="row">
+      <div class="col-8">
+        <!-- Save -->
         <button v-on:click="saveDesign" class="btn btn-success">Сохранить</button>
-        <!-- <button v-on:click="exportHtml">Export HTML</button> -->
+
+        <!-- Edit -->
+        <EmailEditor 
+          v-if="design"
+          class="email-editor-container" 
+          :minHeight="'600px'" 
+          locale="ru" 
+          ref="emailEditor" 
+          v-on:load="editorLoaded" 
+        />
       </div>
 
-      <div class="my-3"></div>
- 
-      <EmailEditor 
-        v-if="design"
-        class="email-editor-container" 
-        :minHeight="'600px'" 
-        locale="ru" 
-        ref="emailEditor" 
-        v-on:load="editorLoaded" 
-      />
+      <div class="col-4"></div>
     </div>
+
+
 
 
   </div>

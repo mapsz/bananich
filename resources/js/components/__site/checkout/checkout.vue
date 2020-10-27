@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="halloween?'halloween':''">
     <site-header/>
 
     <main class="cart-page">
@@ -12,8 +12,8 @@
           </ol>
         </nav>
 
-          <div class="d-flex mt-4 mt-sm-0">
-            <a href="#!" class="arrow-back"><img src="image/arrow.svg" alt="arrow"></a>
+          <div class="d-flex mt-4 mt-sm-0 title-page-wrapper">
+            <a href="/cart" class="arrow-back"><img src="image/arrow.svg" alt="arrow"></a>
             <h1 class="title-page">Оформление заказа</h1>
           </div>
 
@@ -54,7 +54,8 @@
 <script>
 import {mapGetters,mapActions} from 'vuex';
 export default {
-  data(){return{
+  data(){return{    
+    halloween:halloween,
     data:{},
     errors:[],
   }},
@@ -111,4 +112,18 @@ export default {
     margin-bottom: 0px;
     padding-bottom: 0px;
   }
+
+  .title-page{
+    margin-bottom: 20px !important;
+  }
+
+  .halloween .title-page-wrapper{
+    background-image: 
+      url('/halloween/tikva_listochik.png')
+    ;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right 20px;
+  }
+
 </style>

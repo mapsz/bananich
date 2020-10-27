@@ -94,6 +94,8 @@ Vue.directive('click-outside', {
   },
 });
 
+window.halloween = true;
+
 
 // console.log(ClickOutside);
 

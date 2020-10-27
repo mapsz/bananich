@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="halloween?'halloween':''">
 
     <site-header />
     
@@ -7,12 +7,12 @@
     <a name="catalogue"></a>
     <main class="home">
       <div class="container">
-        <!-- Breadcrumbs -->
-        <nav v-if="$route.path != '/'" aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Каталог</a></li>
-            <li v-if="parentCategory.id > 0" class="breadcrumb-item"><a :href="'/category/'+parentCategory.id">{{parentCategory.name}}</a></li>
-            <li v-if="currentCategory.id > 0" class="breadcrumb-item active">{{currentCategory.name}}</li>
+        <!-- breadcrumb-sads -->
+        <nav v-if="$route.path != '/'" aria-label="breadcrumb-sad">
+          <ol class="breadcrumb-sad">
+            <li class="breadcrumb-sad-item"><a href="/">Каталог</a></li>
+            <li v-if="parentCategory.id > 0" class="breadcrumb-sad-item"><a :href="'/category/'+parentCategory.id">{{parentCategory.name}}</a></li>
+            <li v-if="currentCategory.id > 0" class="breadcrumb-sad-item active">{{currentCategory.name}}</li>
           </ol>
         </nav>
 
@@ -41,7 +41,7 @@
             <categories-menu v-scroll="handleScroll" />
           </div>
 
-          <div  class="col-12 col-lg-8 d-sm-block" :class="currentCategory.id === false ? 'd-none' : ''">
+          <div  class="col-12 col-lg-8 d-sm-block product-list-wrapper" :class="currentCategory.id === false ? 'd-none' : ''">
             
             <div class="title-wrap title-page">
               <h2 class="title-h2">{{active.name}}</h2>
@@ -103,6 +103,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    halloween:halloween,
     busy:false,
     categoriesActive:false,
     showUp:false,
@@ -186,6 +187,37 @@ export default {
 </script>
 
 <style scoped>
+
+.home .title-h1 {
+  margin-top: 20px !important; 
+  margin-bottom: 20px !important; 
+}
+
+.breadcrumb-sad-item a{
+  color:black !important; 
+  text-decoration: underline !important; 
+}
+
+.halloween .product-list-wrapper{
+  background-image: url(/halloween/tikva_ulibka.png);
+  background-size: 100px;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+@media screen and (max-width: 768px){
+
+  .halloween .home{
+    background-image: url('/halloween/mish.png');
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: top right;
+  }
+
+  .halloween .home, .halloween .product-list-wrapper{
+    background-size: 50px !important;
+  }
+}
 
 
 </style>

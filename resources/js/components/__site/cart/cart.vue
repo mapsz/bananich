@@ -1,6 +1,5 @@
 <template>
-
-  <div>
+  <div :class="halloween?'halloween':''">
 
     <site-header></site-header>
 
@@ -13,7 +12,7 @@
           </ol>
         </nav>
 
-        <div class="mt-4 mt-sm-0">
+        <div class="mt-4 mt-sm-0 title-page-wrapper">
           <h1 class="title-page">Корзина</h1>
         </div>
 
@@ -86,7 +85,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    //
+    halloween:halloween,
   }},
   computed:{
     ...mapGetters({
@@ -146,6 +145,11 @@ export default {
 </script>
 
 <style scoped>
+
+  .cart-sitebar {
+    margin-bottom: 20px !important;
+  }
+
   .active {
       color: inherit !important;
       text-decoration: inherit !important;
@@ -168,5 +172,28 @@ export default {
       padding: 0 20px;
   }
 
+  .halloween .title-page-wrapper{
+    background-image: 
+      url('/halloween/konfeta.png'),
+      url('/halloween/wljapa.png')
+    ;
+    background-size: contain, contain;
+    background-repeat: no-repeat,no-repeat;
+    background-position: bottom right, bottom center;
+  }
+
+  .halloween .content-page{
+    background-image: url(/halloween/kotel.png);
+    background-size: 75px;
+    background-repeat: no-repeat;
+    background-position: bottom 0px left 20px;
+  }
+
+  @media screen and (max-width: 768px){
+
+    .halloween .content-page{
+      background-size: 25px !important;
+    }
+  }
 
 </style>

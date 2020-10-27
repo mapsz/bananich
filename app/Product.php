@@ -322,24 +322,42 @@ class Product extends Model
 
       //Summary
       if(isset($request['with_summary'])){
+        //Last Stocktaking
+        $lastStocktaking = (
+          DB::table('goods')
+          ->selectRaw('product_id,MAX(created_at) AS date')
+          ->where('quantity',0)
+          ->where('action',1)
+          ->groupBy('product_id')
+        );
+        
+        //Goods
         $goods = (
-          Goods::
-            selectRaw('goods.product_id, SUM(quantity) as summary')
-            ->join(
-              DB::raw('
-                (
-                  SELECT product_id,MAX(created_at) AS lastStocktaking FROM goods
-                  WHERE quantity = 0
-                  AND action = 1
-                  GROUP BY product_id
-                ) md
-              '),
-              'md.product_id', '=', 'goods.product_id'
-            ) 
-            ->whereRaw('goods.created_at >= md.lastStocktaking')
-            ->GroupBy('product_id')
-        );    
-        $products = $products->leftJoin(DB::raw('('.$goods->toSql().') goods'),'products.id', '=', 'goods.product_id');
+          DB::table('goods')
+          ->selectRaw('goods.product_id, SUM(quantity) as summary')
+          ->joinSub($lastStocktaking, 'last_stocktaking', function ($join) {
+            $join->on('last_stocktaking.product_id', '=', 'goods.product_id');
+          })
+          ->whereRaw('goods.created_at >= last_stocktaking.date')
+          ->groupBy('goods.product_id')
+        );
+
+        //Id
+        if(isset($request['id'])){
+          $lastStocktaking  = $lastStocktaking->where('product_id',$request['id']);
+          $goods            = $goods->where('goods.product_id',$request['id']);
+        }
+
+        //Ids
+        if(isset($request['ids']) && is_array($request['ids'])){
+          $lastStocktaking  = $lastStocktaking->whereIn('product_id',$request['ids']);
+          $goods            = $goods->whereIn('goods.product_id',$request['ids']);
+        }        
+
+        //Join
+        $products = $products->leftJoinSub($goods, 'summ', function ($join) {
+          $join->on('products.id', '=', 'summ.product_id');
+        });        
       }
 
       //Metas
