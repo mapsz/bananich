@@ -224,3 +224,37 @@ class User extends Authenticatable
 // ON gg.customer_id = u.id
 // WHERE c > 1
 // AND c < 999
+
+
+
+// SELECT 
+// 	u.id,
+// 	gg.`c`AS `orders`,
+//  	u.email,
+//   	u.`name`,
+// 	u.`phone`
+//  FROM (
+// 	SELECT COUNT('customer_id') AS `c`, customer_id FROM (
+// 	SELECT * FROM (
+// 		select t.order_id, t.order_status_id, r.MaxDate 
+// 		FROM 
+// 		( 
+// 		SELECT order_id, MAX(created_at) as MaxDate 
+// 		FROM order_order_status 
+// 		GROUP BY order_id 
+// 		) r 
+// 		INNER JOIN order_order_status t 
+// 		ON t.order_id = r.order_id 
+// 		AND t.created_at = r.MaxDate 
+// 	) `status`
+// 	INNER JOIN `orders` o
+// 	ON o.id = `status`.order_id
+// 	WHERE order_status_id = 1
+// ) o
+// 	WHERE delivery_date > '2020-09-10'
+// 	GROUP BY customer_id
+// ) AS gg
+// INNER JOIN users u
+// ON gg.customer_id = u.id
+// WHERE c > 1
+// AND c < 999
