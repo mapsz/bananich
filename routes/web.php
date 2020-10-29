@@ -14,6 +14,8 @@
 Route::get('/test', function(){
   echo 'Здесь происходит, что-то очень важное 🎩';
 
+  // App\Kkt::test();
+
     
 
   // foreach ($smss as $key => $sms) {

@@ -422,6 +422,12 @@ class Order extends Model
         });
       }
 
+      //User id
+      if(isset($request['customer_id'])){
+        $query = $query->where('customer_id', '=', $request['customer_id']);
+      }
+      
+
       //Delivery Time
       if(isset($request['deliveryTime'])){
         $deliveryTime = json_decode($request['deliveryTime']);
