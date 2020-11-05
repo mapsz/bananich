@@ -86,7 +86,79 @@ class Email extends Model
 
       }
 
-      // dd($html);
+    }
+
+
+    // Categories
+    if('categories'){
+      //Find products
+      $matches = [];
+      $pattern = '/&lt;:category_[0-9]+:&gt;/';
+      preg_match_all($pattern, $html, $matches,PREG_OFFSET_CAPTURE);
+      $matches = $matches[0];
+
+      //Get ids
+      $categoryIds = [];      
+      foreach ($matches as $key => $match) {
+        $categoryMatch = 0;
+        preg_match('/[0-9]+/',$match[0],$categoryMatch);        
+        array_push($categoryIds,$categoryMatch[0]);
+      }
+
+      //Get products
+      $categories = Category::jugeGet(['ids' => $categoryIds]);
+
+      //Insert products
+      foreach ($categories as $k => $category) {
+
+        // dd($product);
+        $productHtml_start = "".
+          "<div style='width:160px;display: inline-block;margin:15px 7px'>".
+            "<div><img width='160' height='160' src='https://bananich.ru/{$category->mainImage}' alt=''></div>".            
+        "";
+
+        $productHtml_2 = "".
+            "<div align='center' style='
+              display:flex; 
+              justify-content:center; 
+              align-items:center; 
+              padding-top:10px; 
+              font-size: medium; 
+              line-height: 1.2; 
+              height: 55px;
+            '><b>{$category->name}</b></div>".
+        "";
+
+        $productHtml_3 = "";
+
+        $productHtml_4 = "".
+          "<div align='center'>
+            <a href='https://bananich.ru/category/{$category->id}' style='text-decoration: none;'>
+              <p align='center' style='
+                width: 120px;
+                margin: auto;
+                margin-top: 20px;
+                background-color: #fbe214;
+                padding: 15px;
+                border-radius: 30px;
+                color:black;
+              '>
+                Заказать
+              </p>                
+            </a>
+          </div>".
+        "";
+
+        $productHtml_end = "".
+          "</div>".
+        "";     
+        
+        $productHtml = $productHtml_start.$productHtml_2.$productHtml_3.$productHtml_4.$productHtml_end;
+
+        $html = str_replace($matches[$k][0],$productHtml,$html);
+
+      }
+
     }
 
 

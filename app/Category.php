@@ -93,6 +93,9 @@ class Category extends Model
 
     //Where
     do{
+      if(isset($request['ids']) && is_array($request['ids'])){
+        $query = $query->whereIn('id',$request['ids']);
+      }
       if(isset($request['id'])){
         $query = $query->where('id', $request['id']);
       }
