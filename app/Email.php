@@ -207,21 +207,39 @@ class Email extends Model
 
               //Get style
               if('style'){
-                $style = "style='".(
-                  "margin:".$row->values->containerPadding.
+                $containerStyle = "style='".(
+                  ((isset($row->values->containerPadding) && $row->type != "divider") ? ("padding:".$row->values->containerPadding.";") : ('')) .
+                  (isset($row->values->textAlign) ? ("text-align:".$row->values->textAlign.";") : ('')) .
+                  (isset($row->values->lineHeight) ? ("line-height:".$row->values->lineHeight.";") : ('')) .
+                  (isset($row->values->color) ? ("color:".$row->values->color.";") : ('')) .                                                    
                   "'"
                 );
+                $elementStyle = "style='".(
+                  ($row->type == "button" ? ("text-decoration: none;") : ('') ) .
+                  (isset($row->values->padding) ? ("padding:".$row->values->padding.";") : ('')) .
+                  (isset($row->values->borderRadius) ? ("border-radius:".$row->values->borderRadius.";") : ('')) .
+                  (isset($row->values->calculatedWidth) ? ("width:".$row->values->calculatedWidth."px;") : ('')) .
+                  (isset($row->values->calculatedHeight) ? ("height:".$row->values->calculatedHeight."px;") : ('')) .
+                  ( (isset($row->values->buttonColors) && isset($row->values->buttonColors->color)) ? ("color:".$row->values->buttonColors->color.";") : ('') ) .
+                  ( (isset($row->values->buttonColors) && isset($row->values->buttonColors->backgroundColor)) ? ("background-color:".$row->values->buttonColors->backgroundColor.";") : ('') ) .            
+                  "'"
+                );
+
               }
+
 
               //Types
               if('types'){
                 $add = "";
                 if($row->type == "text"){                
-                  $add = "<div $style>" . $row->values->text . '</div>';
+                  $add = "<div $containerStyle>" . $row->values->text . '</div>';
                 };
                 if($row->type == "divider"){ 
-                  $add = "<hr $style>";
+                  $add = "<hr $containerStyle>";
                 };
+                if($row->type == "button"){ 
+                  $add = "<div $containerStyle ><a $elementStyle href='{$row->values->href->values->href}'>" . $row->values->text . '</a></div>';
+                }
               }
 
               //Add
