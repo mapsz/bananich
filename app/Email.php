@@ -161,7 +161,7 @@ class Email extends Model
                 border-radius: 30px;
                 color:black;
               '>
-                Заказать
+                Посмотреть
               </p>                
             </a>
           </div>".
