@@ -42,12 +42,12 @@
         <!-- Inputs -->
         <div class="mb-3 form-inline">
           <div class="form-group">
-            <label for="email-name" style="width:100px">Email: </label>
-            <input type="text" name="email-name" id="email-name" class="form-control" placeholder="" style="width:250px">
+            <label for="email-email" style="width:100px">Email: </label>
+            <input v-model="testEmailAddress" type="text" name="email-email" id="email-email" class="form-control" placeholder="" style="width:250px">
           </div>
         </div> 
         <!-- Button -->
-        <button v-on:click="testEmail" style="margin-left:100px" class="btn btn-info">Отправить тест email</button>       
+        <button v-on:click="testMail" style="margin-left:100px" class="btn btn-info">Отправить тест email</button>       
       </div>
     </div>
 
@@ -101,6 +101,7 @@ export default {
     value:'',
     subject:'',
     name:'',
+    testEmailAddress:'',
     id:false,
     design:false,
     defaultDesign:{
@@ -416,8 +417,18 @@ export default {
           }
         )
       },
-      testEmail(){
-        console.log('test email');
+      async testMail(){
+        //Refresh Errors
+        this.errors = [];
+        //Fetch
+        let r = await ax.fetch('/admin/test/mail',{email:this.testEmailAddress, id:this.id},'put');    
+ 
+        //Catch errors
+        if(!r){if(ax.lastResponse.status != undefined){if(ax.lastResponse.status == 422){this.showErrors(ax.lastResponse.data.errors)}}return;};
+        
+        //Success
+        Vue.toasted.show("send 📩",{type:'success',position:'bottom-right'});               
+        
       },
       async showErrors(errors){
         $.each(errors,function( i, errorz ) {
@@ -425,7 +436,7 @@ export default {
             Vue.toasted.show(error,{type:'error',position:'bottom-right'});
           });
         });
-      }
+      },
   }
 
 }

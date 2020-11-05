@@ -1015,6 +1015,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     //Email
     Route::put('/admin/email', 'EmailController@put');
     Route::post('/admin/email', 'EmailController@post');
+    Route::put('/admin/test/mail', 'EmailController@testMail');
 
     //TEST
     Route::get('/admin/test', function(){

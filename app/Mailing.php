@@ -10,6 +10,31 @@ use App\Email;
 
 class Mailing extends Model
 {
+
+  public static function send($id,$users){
+    //Get email
+    $email = Email::jugeGet(['id'=>$id]);
+
+    foreach ($users as $key => $user) {
+      //Add tags
+      $toSendHtml = Email::customTags($email->html,$user);
+      //Send attrs
+      $send = [];
+      $send['email'] = $user['email'];
+      $send['subject'] = $email->subject;
+      Mail::send('mail.customEmail', ['html' => $toSendHtml], function($m)use($send){
+        $m->to($send['email'],'to');
+        $m->from('no-reply@bananich.ru');
+        $m->subject($send['subject']);
+      });
+      
+    }
+
+    return 1;
+    
+  }
+
+
     public static function open($id,$subject,$test = true){
       // $users = User::get();
 
