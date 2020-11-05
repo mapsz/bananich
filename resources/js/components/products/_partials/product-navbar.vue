@@ -41,6 +41,10 @@ export default {
         link: this.adminPrefix+"/presents",
         caption:"Подарки",
       },
+      {
+        link: this.adminPrefix+"/libras",
+        caption:"Весы",
+      },
     ];
   }
 }

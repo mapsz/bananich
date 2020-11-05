@@ -114,6 +114,12 @@ let routes = [];
   //   {path: adminPrefix+'/mailings',component: mailings},
   // );
 
+  //Libras
+  import libras from './components/libras/libras.vue';
+  routes.push(
+    {path: adminPrefix+'/libras',component: libras},
+  );
+
   //Mailing
   import emails from './components/mailings/emails/emails.vue';
   import email from './components/mailings/emails/email.vue';

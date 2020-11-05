@@ -76,7 +76,7 @@ export default {
 
 <style scoped>
 
-  .cart-info{
+  .halloween .cart-info{
     background-image: url(/halloween/kot.png);
     background-size: 35px;
     background-repeat: no-repeat;

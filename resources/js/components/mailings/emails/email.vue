@@ -2,30 +2,91 @@
 <div>
   <gruzka-navbar></gruzka-navbar>
   <div class="container-fluid">
-    <!-- <h1>Добавить рассылку</h1> -->
+
+    <!-- Title -->
+    <div class="d-flex mb-4">
+      <h1 class="mr-3">Email</h1>
+      <h1 class="mr-3" v-if="id">#{{id}}</h1>
+    </div>
+    <hr>
 
     <div class="row">
-      <div class="col-8">
-        <!-- Save -->
-        <button v-on:click="saveDesign" class="btn btn-success">Сохранить</button>
-
-        <!-- Edit -->
-        <EmailEditor 
-          v-if="design"
-          class="email-editor-container" 
-          :minHeight="'600px'" 
-          locale="ru" 
-          ref="emailEditor" 
-          v-on:load="editorLoaded" 
-        />
+      <!-- Inputs -->
+      <div class="col-6">
+        <!-- Inputs -->
+        <div>
+          <div class="mb-3 form-inline">
+            <div class="form-group">
+              <label for="email-name" style="width:170px">Название Рассылки: </label>
+              <input v-model="name" type="text" name="email-name" id="email-name" class="form-control" placeholder="" style="width:275px">
+            </div>
+          </div>
+          <div class="mb-3 form-inline">
+            <div class="form-group">
+              <label for="email-subject" style="width:170px">Тема письма: </label>
+              <input v-model="subject" type="text" name="email-subject" id="email-subject" class="form-control" placeholder="" style="width:275px">
+            </div>
+          </div>
+        </div>
+        <!-- Button -->
+        <div v-if="loaded">
+          <button v-on:click="saveDesign" style="margin-left:170px" class="btn btn-success">Сохранить</button>
+        </div>
       </div>
-
-      <div class="col-4"></div>
+      <!-- Test email -->
+      <div v-if="id" class="col-6">
+        <!-- Title -->
+        <div>
+          <h4>Тест письмо</h4>
+        </div>
+        <!-- Inputs -->
+        <div class="mb-3 form-inline">
+          <div class="form-group">
+            <label for="email-name" style="width:100px">Email: </label>
+            <input type="text" name="email-name" id="email-name" class="form-control" placeholder="" style="width:250px">
+          </div>
+        </div> 
+        <!-- Button -->
+        <button v-on:click="testEmail" style="margin-left:100px" class="btn btn-info">Отправить тест email</button>       
+      </div>
     </div>
 
+    <hr>
 
+    <div class="d-flex">
+      <!-- Edit -->
+      <div style="">
+        <h2>Edit</h2>
+        <!-- Loader -->
+        <div v-if="!loaded" class="my-5" style="display: flex; justify-content: center; width: 600px;">
+          <b-spinner label="Loading..." style="height: 400px; width: 400px;"></b-spinner>
+        </div>
 
+        <!-- Edit -->
+        <div v-show="loaded">
+          <EmailEditor 
+            v-if="design"
+            class="email-editor-container" 
+            :minHeight="'600px'" 
+            locale="ru" 
+            ref="emailEditor" 
+            v-on:load="editorLoaded" 
+          />
+        </div>
+        
+        <!-- Save -->
+        <div v-if="loaded">
+          <button v-on:click="saveDesign" class="btn btn-success">Сохранить</button>
+        </div>
+      </div>
 
+      <!-- Preview -->
+      <div v-if="id" class="ml-3" style="min-width:600px">
+        <h2>Preview</h2>
+        <iframe id="mail-preview" :src="'/mail/preview/'+id" frameborder="0" style="width: 700px; min-height: 2000px;"></iframe>
+      </div>
+
+    </div>
   </div>
 </div>
 </template>
@@ -36,7 +97,10 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
   components: {EmailEditor},
   data(){return{
+    loaded:false,
     value:'',
+    subject:'',
+    name:'',
     id:false,
     design:false,
     defaultDesign:{
@@ -264,13 +328,21 @@ export default {
             }
           },
           "schemaVersion": 5
-        },
+    },
   }},
   computed:{
-    ...mapGetters({email:'email/getOne',errors:'product/getErrors'}),    
+    ...mapGetters({email:'email/getOne'}),
+  },
+  watch: {
+    email: {
+      handler: function (val, oldVal) {
+        if(this.email.name != undefined && this.email.name) this.name = this.email.name;
+        if(this.email.subject != undefined && this.email.subject) this.subject = this.email.subject;
+      },
+      deep: true
+    },
   },
   async mounted(){
-        
     //Get
     if(this.$route.params.id > 0){
       this.id = this.$route.params.id;
@@ -286,26 +358,56 @@ export default {
     }
     
     this.design = JSON.parse(this.email.design);
+
+    //Iframe size
+    let iframe = document.getElementById("mail-preview");
+    iframe.onload = function(){
+      iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+    }
+
   },
   methods: {
       ...mapActions({
         'fetch':'email/fetchOne',
       }),
-      editorLoaded() {
+      async editorLoaded() {
         this.$refs.emailEditor.editor.loadDesign(this.design);
-        // this.$refs.emailEditor.editor.loadDesign();
+        this.loaded = true;
       },
-      saveDesign() {
+      async saveDesign() {
         this.$refs.emailEditor.editor.saveDesign(
           (design) => {
-            console.log('saveDesign', design);
-            // let d = JSON.stringify(design)
-            console.log(design);
-            // console.log(JSON.parse(d) );
-
-            ax.fetch('/admin/email',{id:false,name:'hi',design},'put')
+            if(this.id){
+              this.postEmail(design);
+            }else{
+              this.putEmail(design);
+            }            
           }
-        )
+        );
+      },
+      async putEmail(design){
+        //Refresh Errors
+        this.errors = [];
+        //Fetch
+        let r = await ax.fetch('/admin/email',{name:this.name, subject:this.subject, design},'put');
+        //Catch errors
+        if(!r){if(ax.lastResponse.status != undefined){if(ax.lastResponse.status == 422){this.showErrors(ax.lastResponse.data.errors)}}return;};
+        //Move to edit
+        location.href = "/admin/email/"+r;
+      },
+      async postEmail(design){
+        //Refresh Errors
+        this.errors = [];
+        //Fetch
+        let r = await ax.fetch('/admin/email',{name:this.name, subject:this.subject, design, id:this.id},'post');
+
+        //Catch errors
+        if(!r){if(ax.lastResponse.status != undefined){if(ax.lastResponse.status == 422){this.showErrors(ax.lastResponse.data.errors)}}return;};
+        
+        //Success
+        Vue.toasted.show("ага 🐪",{type:'success',position:'bottom-right'});
+        //Refresh iframe
+        var iframe = document.getElementById('mail-preview');iframe.src = iframe.src;        
       },
       exportHtml() {
         this.$refs.emailEditor.editor.exportHtml(
@@ -313,6 +415,16 @@ export default {
             console.log('exportHtml', data);
           }
         )
+      },
+      testEmail(){
+        console.log('test email');
+      },
+      async showErrors(errors){
+        $.each(errors,function( i, errorz ) {
+          $.each(errorz,function( j, error ) {
+            Vue.toasted.show(error,{type:'error',position:'bottom-right'});
+          });
+        });
       }
   }
 

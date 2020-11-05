@@ -32,8 +32,7 @@
     :head-variant="'dark'" 
     :items="cData"
     :fields="cActiveKeys"   
-    striped hover small bordered responsive
-    
+    striped hover small bordered responsive    
   >
    <!-- @sort-changed="sort" -->
     <!-- no-local-sorting -->
@@ -81,21 +80,20 @@
         {{ data.field}}<br>
         {{ data.value }}
       </span>      
+      <!-- Edits -->
+      <span v-else-if="data.value.type == 'edits'">
+        <!-- Edit -->
+        <span v-if="data.value.edit"><button @click="toEdit=data.item" class="btn btn-warning btn-sm" v-b-modal="'juge-list-edit'">✏️</button></span>
+        <!-- Delete -->        
+        <span v-if="data.value.delete"><button @click="toDelete=data.item" class="btn btn-danger btn-sm" v-b-modal="'juge-list-delete'">🗑️</button></span>  
+      </span>         
       <!-- Default -->
       <span v-else>
         {{ data.value }}
-      </span>
+      </span>  
     </template> 
-  </b-table>
 
-  <!-- Modal -->
-  <b-modal :id="listModal.id" :title="listModal.title" ok-only>
-    <ul>
-      <li v-for='(row,i) in listModal.content' :key='i'>
-        {{row[listModal.show]}}
-      </li>
-    </ul>
-  </b-modal>
+  </b-table>
 
   <!-- Total / Paginator-->
   <div class="d-flex mb-2" style="align-items: center;">
@@ -109,15 +107,43 @@
     </div>
   </div>
 
+  <!-- Modals -->
+  <template>
+    <!-- Edit Modal -->
+    <b-modal :id="'juge-list-edit'" :title="'Редакция ✏️'" ok-only>
+      <div>
+        edit
+      </div>
+    </b-modal>
+
+    <!-- Delete Modal -->
+    <b-modal :id="'juge-list-delete'" :title="'Подтвердить удаление 🗑️'" ok-only>
+      <div>
+        delete
+      </div>
+    </b-modal>
+    
+    <!-- List Modal -->
+    <b-modal :id="listModal.id" :title="listModal.title" ok-only>
+      <ul>
+        <li v-for='(row,i) in listModal.content' :key='i'>
+          {{row[listModal.show]}}
+        </li>
+      </ul>
+    </b-modal>
+  </template>
+
 </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-props: ['data','keys','disable-auto-fetch','pages'],
+props: ['data','keys','disable-auto-fetch','pages','edit','delete'],
 data(){return{
   listModal: {id:'list-modal',title:'',content:'',show:''},
+  toDelete: false,
+  toEdit: false,
 }},
 computed:{
   cListModal(){return this.listModal},
@@ -159,25 +185,42 @@ computed:{
       v.active = true;
       keys.push(v);
     });
+
+    //Edits
+    if(this.edit||this.delete){keys.push({'active':true,'key':'edits','active':true,'sortable':false});};
+
     return keys;
   },
   cData:function(){
     let model = this.cDataModel;
+    let r = [];
+
     //Data from model
     if(model.s != undefined){
       model = model.s;
       //Getter data  
       if(this.$store.getters[model+'/get'] != undefined) {
         //return
-        return this.$store.getters[model+'/get'];
+        r = this.$store.getters[model+'/get'];
       }  
     }
+
     //Data from prop
     if(typeof(this.data) == 'object'){
-      return JSON.parse(JSON.stringify(this.data));
+      r = JSON.parse(JSON.stringify(this.data));
     }
+
+    //Edits
+    if(this.edit||this.delete){      
+      let edits = {'type':'edits', 'edit':false, 'delete':false};
+      if(this.edit) {edits.edit = true;}
+      if(this.delete) {edits.delete = true;}
+      r.forEach(element => {element.edits = edits;})
+    }
+
+
     //No data
-    return [];
+    return r;
   },
   cPages:function(){
     if(
