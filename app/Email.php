@@ -37,7 +37,15 @@ class Email extends Model
       $producsts = Product::jugeGet(['ids' => $productsIds, 'get_all' => 1]);
 
       //Insert products
-      foreach ($producsts as $k => $product) {
+      foreach ($productsIds as $k => $id) {
+        //Get product
+        $product = false;
+        foreach ($producsts as $k => $p) {
+          if($c->id == $id){
+            $product = $c;
+            break;
+          }
+        }      
 
         // dd($product);
         $productHtml_start = "".
@@ -91,7 +99,7 @@ class Email extends Model
 
     // Categories
     if('categories'){
-      //Find products
+      //Find category
       $matches = [];
       $pattern = '/&lt;:category_[0-9]+:&gt;/';
       preg_match_all($pattern, $html, $matches,PREG_OFFSET_CAPTURE);
@@ -105,11 +113,21 @@ class Email extends Model
         array_push($categoryIds,$categoryMatch[0]);
       }
 
-      //Get products
+      //Get categories
       $categories = Category::jugeGet(['ids' => $categoryIds]);
 
-      //Insert products
-      foreach ($categories as $k => $category) {
+      //Insert category
+      foreach ($categoryIds as $k => $id) {
+
+        //Get category
+        $category = false;
+        foreach ($categories as $j => $c) {
+          if($c->id == $id){
+            $category = $c;
+            break;
+          }
+        }
+
 
         // dd($product);
         $productHtml_start = "".
