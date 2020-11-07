@@ -18,9 +18,17 @@ class Checkout extends Model
     $settings = new Setting;
     $settings = $settings->getList(1);
 
-    
-    //Get bonuses
+    //Get user
     $user = Auth::user();
+
+    //Is first order
+    $cart['firstOrder'] = true;
+    if($user){
+      $orders = User::where('id',$cart->user_id)->with('orders')->first()->orders;
+      $cart['firstOrder'] = (count($orders) > 0) ? false : true;
+    }
+
+    //Get bonuses
     $bonus = 0;
     $max_bonus_summ = 0;
     if($user){
@@ -93,11 +101,17 @@ class Checkout extends Model
     }   
     $cart->bonus = intval($cart->bonus);
   
+
+
     //Shipping      
-    $free_shipping = $settings['free_shipping'];
+    
     $price_shipping = $settings['shipping_price'];
-    $cart->shipping = ($cart->pre_price < $free_shipping) ? intval($price_shipping) : 0;
-  
+    $cart->shipping = (
+      $cart['firstOrder'] ? 
+      (($cart->pre_price < $settings['first_order_free_shipping']) ? intval($price_shipping) : 0) :
+      (($cart->pre_price < $settings['free_shipping']) ? intval($price_shipping) : 0)      
+    );
+
     //Final summ
     $cart->final_summ = $cart->pre_price;
     $cart->final_summ += $cart->shipping;
@@ -108,14 +122,7 @@ class Checkout extends Model
     if($cart->final_summ < 0) $cart->final_summ = 0;
 
     //Min summ
-    $cart->min_summ = $settings['first_order'];
-    if($cart->user_id > 0){
-      //Logged
-      $orders = User::where('id',$cart->user_id)->with('orders')->first()->orders;
-      if(count($orders) > 0){
-        $cart->min_summ = $settings['min_order'];
-      }
-    }
+    $cart->min_summ = $cart['firstOrder'] ? $settings['first_order_free_shipping'] : $settings['first_order'];
 
     //Cart to array
     $cart = $cart->toArray();

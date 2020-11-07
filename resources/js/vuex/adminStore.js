@@ -29,7 +29,7 @@ let coupon = new jugeVuex('coupon');
 let logistic = new jugeVuex('logistic');
 let notFound = new jugeVuex('notFound');
 let email = new jugeVuex('email');
-let libra = new jugeVuex('libra');
+let libra = new jugeVuex('libra',true,true);
 // let user = new jugeVuex('user');
 
 let store = {  

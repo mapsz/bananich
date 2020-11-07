@@ -44,7 +44,6 @@ export default {
     },
   },
   mounted(){
-
     //Set placeholder
     if(this.placeholder) this.fPlaceholder = this.placeholder;
 

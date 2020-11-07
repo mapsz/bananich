@@ -1,7 +1,6 @@
 <template>
 <div>
 
-
   <!-- Total / Search / Paginator / Settings -->
   <div class="pre-table-wrapper my-2" style=""> 
     <!-- Search -->
@@ -28,11 +27,12 @@
 
   <!-- List -->
   <!-- :stacked="'md'" -->
-  <b-table      
+  <b-table  
     :head-variant="'dark'" 
     :items="cData"
     :fields="cActiveKeys"   
     striped hover small bordered responsive    
+    ref="jugeListTable"
   >
    <!-- @sort-changed="sort" -->
     <!-- no-local-sorting -->
@@ -108,16 +108,14 @@
   </div>
 
   <!-- Modals -->
-  <template>
+  <template v-if="edit">
     <!-- Edit Modal -->
-    <b-modal :id="'juge-list-edit'" :title="'Редакция ✏️'" ok-only>
-      <div>
-        edit
-      </div>
+    <b-modal :id="'juge-list-edit'" :title="'Редактирование ✏️'" ok-only hide-footer>
+      <juge-list-edit :model="cKeysModelSingle" :row="toEdit" @editSuccess="$bvModal.hide('juge-list-edit');refreshTable()"/>
     </b-modal>
 
     <!-- Delete Modal -->
-    <b-modal :id="'juge-list-delete'" :title="'Подтвердить удаление 🗑️'" ok-only>
+    <b-modal :id="'juge-list-delete'" :title="'Подтвердить удаление 🗑️'" ok-only hide-footer>
       <div>
         delete
       </div>
@@ -195,6 +193,9 @@ computed:{
     let model = this.cDataModel;
     let r = [];
 
+    //Refresh table
+    this.refreshTable();
+
     //Data from model
     if(model.s != undefined){
       model = model.s;
@@ -217,7 +218,6 @@ computed:{
       if(this.delete) {edits.delete = true;}
       r.forEach(element => {element.edits = edits;})
     }
-
 
     //No data
     return r;
@@ -282,6 +282,15 @@ computed:{
     return false;    
   }
 },
+watch:{
+  cData: {
+    handler: function (val, oldVal) {
+      console.log(123123);
+      this.refreshTable();
+    },
+    deep: true
+  },
+},
 async mounted(){
   //Fetch  
   if(
@@ -298,6 +307,14 @@ async mounted(){
 
 },
 methods:{
+  refreshTable(){
+    if(
+      this.$refs.jugeListTable == undefined ||
+      this.$refs.jugeListTable.refresh == undefined
+    ) return false;
+
+    this.$refs.jugeListTable.refresh();
+  },
   //Model
   setMulti(model){
     return model[0] + model.substr(1) + 's';
@@ -332,70 +349,70 @@ methods:{
   },  
   success(){
     this.fetch();
-  }
+  },
 },
 }
 </script>
 
 <style scoped>
 
-.pre-table-wrapper{
-  display: grid;
-}
-.pre-table-box{
-  display: flex;
-  align-items: center;
-}
-.box-search{
-  justify-content: center;
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row-start: 1;
-}
-.box-paginator{
-  margin: 10px 0;
-  justify-content: center;
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row-start: 2;
-}
-.box-total{
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 3;
-}
-.box-settings{
-  justify-content: flex-end;
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 3;
-}
-
-@media (min-width: 992px){
-  .box-total{
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 1;
+  .pre-table-wrapper{
+    display: grid;
   }
-  .box-paginator{
-    margin: 0;
-    justify-content: center;
-    grid-column-start: 4;
-    grid-column-end: 7;
-    grid-row-start: 1;
+  .pre-table-box{
+    display: flex;
+    align-items: center;
   }
   .box-search{
     justify-content: center;
-    grid-column-start: 7;
-    grid-column-end: 11;
+    grid-column-start: 1;
+    grid-column-end: 3;
     grid-row-start: 1;
+  }
+  .box-paginator{
+    margin: 10px 0;
+    justify-content: center;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+  }
+  .box-total{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
   }
   .box-settings{
     justify-content: flex-end;
-    grid-column-start: 11;
-    grid-column-end: 12;
-    grid-row-start: 1;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
   }
-}
+
+  @media (min-width: 992px){
+    .box-total{
+      grid-column-start: 1;
+      grid-column-end: 4;
+      grid-row-start: 1;
+    }
+    .box-paginator{
+      margin: 0;
+      justify-content: center;
+      grid-column-start: 4;
+      grid-column-end: 7;
+      grid-row-start: 1;
+    }
+    .box-search{
+      justify-content: center;
+      grid-column-start: 7;
+      grid-column-end: 11;
+      grid-row-start: 1;
+    }
+    .box-settings{
+      justify-content: flex-end;
+      grid-column-start: 11;
+      grid-column-end: 12;
+      grid-row-start: 1;
+    }
+  }
 
 </style>

@@ -1,7 +1,9 @@
 class jugeVuex {
-  constructor(modelName) {
+  constructor(modelName, $edit = false, $delete = false) {
     //Params
     this.modelName = modelName;
+    this.$edit = $edit;
+    this.$delete = $delete;
 
     //Vuex
     this.namespaced = true;
@@ -25,6 +27,7 @@ class jugeVuex {
       inputs:null,
       //Other
       didFetch:false,
+      didInputsFetch:false,
       firstListFetch:false,
       errors:false,
     }
@@ -39,6 +42,7 @@ class jugeVuex {
       getFilters: (state) => {return state.filters;},
       isFirstListFetch: (state) => {return state.firstListFetch;},
       isFetched: (state) => {return state.didFetch;},
+      isInputsFetched: (state) => {return state.didInputsFetch;},
       isWaterfalling: (state) => {return state.waterfalling;},
       getWaterfall: (state) => {return state.waterfall;},
       getWaterfallId: (state) => {return state.waterfallId;},
@@ -63,9 +67,7 @@ class jugeVuex {
     }
     this.actions = {
       //SINGLE
-      async fetchOne({state,commit},id = false){  
-
-        
+      async fetchOne({state,commit},id = false){          
         if(id){
           commit('mId',id);
         }else{
@@ -83,6 +85,7 @@ class jugeVuex {
         //Inputs
         let model = state.keysModel;
         if(!model) model = modelName;
+        await commit('mDidInputsFetch',true);   
         let inputs = await ax.fetch('/juge/inputs',{'model':model});
         //Commit
         commit('mInputs',inputs);  
@@ -303,6 +306,48 @@ class jugeVuex {
       //Keys
       async setKeysModel({commit},model){
         commit('mKeysModel',model);  
+      },
+      //Edits
+      async doEdit({state,commit},data){
+        if(!$edit) return 'not allowed';
+
+        //Refresh errors
+        commit('mErrors',[]);
+
+        //Post
+        let row = await ax.fetch('/juge',{'model':modelName,data},'post');
+
+        //Fail
+        if(!row){
+          //Catch error
+          if(ax.lastResponse.status != undefined){if(ax.lastResponse.status == 422){commit('mErrors',ax.lastResponse.data.errors);}}
+          return false;
+        }
+
+        //Edit local
+        //Single
+        if(state.row.id != undefined && state.row.id == row.id){
+          console.log('single');
+        }
+        //Multi
+        if(state.rows.length > 0){
+          console.log('multi exists');
+          let i = state.rows.findIndex(x => x.id == row.id);
+          if(i > -1){
+            let edits = state.rows[i].edits;
+            row.edits = edits;
+            let rows = state.rows;
+            rows[i] = row;
+            commit('mRows',rows);
+          }
+        }
+        
+
+        return row;
+      },
+      async delete(){
+        if(!$delete) return 'not allowed';
+        console.log(111);
       }
     }   
     this.mutations = {
@@ -322,6 +367,7 @@ class jugeVuex {
       mWaterfalling: (state,d) => {return state.waterfalling = d;},
       mErrors: (state,d) => {return state.errors = d;},
       mDidFetch: (state,d) => {return state.didFetch = d;},
+      mDidInputsFetch: (state,d) => {return state.didInputsFetch = d;},
     }    
   }
 

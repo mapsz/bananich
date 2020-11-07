@@ -138,6 +138,9 @@ class OrderController extends Controller
 
       //Validate order
       if('order' == 'order'){
+        
+        //Set first order confirm
+        if($cart['firstOrder']) $data['confirm'] = 1;
 
         //Validate
         $validate = [
@@ -167,21 +170,21 @@ class OrderController extends Controller
         $messages = [
           'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
           'aggrePersonal.accepted'      => 'Необходимо согласие на обработку персональных данных',
-          'toOtherComment.max'              => 'Количество символов в поле "Текст получателю" не должно превышать :max',
-          'toOtherPhone.required'              => 'Необходимо заполнить поле "Телефон другого человека"',
-          'toOtherPhone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
-          'toOtherName.max'              => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
-          'comment.max'              => 'Количество символов в поле "Комментарий" не должно превышать :max',
-          'confirm.required'              => 'Необходимо выбрать способ подтверждение заказа',
-          'payMethod.required'            => 'Необходимо выбрать способ оплаты',
-          'container.required'            => 'Необходимо выбрать упаковку',
-          'deliveryTime.required'        => 'Необходимо выбрать время доставки',
-          'deliveryDate.required'        => 'Необходимо выбрать дату доставки',
-          'addressStreet.required'        => 'Необходимо заполнить поле "Адрес"',
-          'addressStreet.max'        => 'Количество символов в поле "Адрес" не должно превышать :max',
-          'addressPorch.max'        => 'Количество символов в поле "Этаж" не должно превышать :max',
-          'addressNumber.max'        => 'Количество символов в поле "Дом" не должно превышать :max',
-          'addressApart.max'        => 'Количество символов в поле "Квартира" не должно превышать :max',
+          'toOtherComment.max'          => 'Количество символов в поле "Текст получателю" не должно превышать :max',
+          'toOtherPhone.required'       => 'Необходимо заполнить поле "Телефон другого человека"',
+          'toOtherPhone.regex'          => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+          'toOtherName.max'             => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
+          'comment.max'                 => 'Количество символов в поле "Комментарий" не должно превышать :max',
+          'confirm.required'            => 'Необходимо выбрать способ подтверждение заказа',
+          'payMethod.required'          => 'Необходимо выбрать способ оплаты',
+          'container.required'          => 'Необходимо выбрать упаковку',
+          'deliveryTime.required'       => 'Необходимо выбрать время доставки',
+          'deliveryDate.required'       => 'Необходимо выбрать дату доставки',
+          'addressStreet.required'      => 'Необходимо заполнить поле "Адрес"',
+          'addressStreet.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
+          'addressPorch.max'            => 'Количество символов в поле "Этаж" не должно превышать :max',
+          'addressNumber.max'           => 'Количество символов в поле "Дом" не должно превышать :max',
+          'addressApart.max'            => 'Количество символов в поле "Квартира" не должно превышать :max',
           'phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
           'phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
           'email.required'   => 'Необходимо заполнить поле "e-mail"',
@@ -214,7 +217,7 @@ class OrderController extends Controller
       DB::beginTransaction();
 
       //Place order
-      $orderId = Order::placeOrder($request->data, $cart);
+      $orderId = Order::placeOrder($data, $cart);
 
       if(!$orderId) throw new Exception('order error');
 

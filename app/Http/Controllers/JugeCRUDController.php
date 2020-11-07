@@ -118,4 +118,29 @@ class JugeCRUDController extends Controller
     return response()->json($modelInputs);
 
   }
+
+  public function post(Request $request){
+    //No model
+    if(!isset($request['model']) && $request['model'] == ''){
+      return response(['code' => 'jugep1','text' => 'no model name'], 512)->header('Content-Type', 'text/plain');
+    }    
+
+    //No id
+    if(!isset($request['data']['id']) && $request['data']['id'] == '' && $request['data']['id'] == false){
+      return response(['code' => 'jugep2','text' => 'no id'], 512)->header('Content-Type', 'text/plain');
+    } 
+
+    //Get mode
+    $modelName = $request['model'];
+    $model = "App\\".ucfirst($modelName);
+    $model = new $model;
+
+    //Get model inputs
+    $post = false;
+    if(method_exists ( $model , 'jugePost' )){
+      $post = $model->jugePost($request->data);
+    }       
+    
+    return response()->json($post);
+  }
 }

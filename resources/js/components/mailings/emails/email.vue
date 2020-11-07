@@ -427,7 +427,7 @@ export default {
         if(!r){if(ax.lastResponse.status != undefined){if(ax.lastResponse.status == 422){this.showErrors(ax.lastResponse.data.errors)}}return;};
         
         //Success
-        Vue.toasted.show("send 📩",{type:'success',position:'bottom-right'});               
+        Vue.toasted.show("send 📩",{type:'success',position:'bottom-right'});
         
       },
       async showErrors(errors){
