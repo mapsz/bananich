@@ -78,6 +78,7 @@ let routes = [];
   routes.push(
     {path: '/category/:catId/product/:id',    component:siteProduct},
     {path: '/category/:parent_cat_id/category/:catId/product/:id',    component:siteProduct},
+    {path: '/discounts/product/:id',    component:siteProduct},
   );
 
   //Cart
