@@ -194,7 +194,7 @@ computed:{
     let r = [];
 
     //Refresh table
-    this.refreshTable();
+    // this.refreshTable();
 
     //Data from model
     if(model.s != undefined){
@@ -285,8 +285,8 @@ computed:{
 watch:{
   cData: {
     handler: function (val, oldVal) {
-      console.log(123123);
-      this.refreshTable();
+      // console.log(123123);
+      // this.refreshTable();
     },
     deep: true
   },
