@@ -244,7 +244,13 @@ class Item extends Model
         //Products
         $out = $items;
         $products = false;
-        if('products' && !is_array($items) && isset($request['categories'])){
+        if(
+          (!is_array($items)) && 
+          (
+            isset($request['categories']) ||
+            isset($request['suppliers'])
+          )
+        ){
 
 
           {//Request

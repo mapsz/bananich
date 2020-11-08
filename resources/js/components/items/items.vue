@@ -15,7 +15,7 @@
       <order-status-filter  :model="model" />
       <item-status-filter  :model="model" />
       <item-status-filter  :model="model" />
-      <suppliers-filter :model="model"></suppliers-filter>
+      <suppliers-filter :model="model" />
     </div>
 
     <!-- List -->
