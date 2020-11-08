@@ -14,6 +14,8 @@
       <order-delivery-time-filter :model="model" />
       <order-status-filter  :model="model" />
       <item-status-filter  :model="model" />
+      <item-status-filter  :model="model" />
+      <suppliers-filter :model="model"></suppliers-filter>
     </div>
 
     <!-- List -->

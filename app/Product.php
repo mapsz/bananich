@@ -397,6 +397,14 @@ class Product extends Model
         $products = $products->doesntHave('description');
       }
 
+      //Suppliers
+      if(isset($request['suppliers']) && is_array($request['suppliers'])){
+        $suppliers = $request['suppliers'];
+        $products = $products->whereHas('suppliers', function($q)use($suppliers){
+          $q->whereIn('suppliers.id',$suppliers);
+        });
+      }
+
       //Ids
       if(isset($request['ids']) && is_array($request['ids'])){
         $products = $products->whereIn('id',$request['ids']);

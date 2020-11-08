@@ -262,6 +262,11 @@ class Item extends Model
               $productRequest['categories'] = $request['categories'];
             }
 
+            //Suppliers filter
+            if(isset($request['suppliers']) && is_array($request['suppliers'])){
+              $productRequest['suppliers'] = $request['suppliers'];
+            }
+
           }
 
           //Get
