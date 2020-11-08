@@ -245,17 +245,26 @@ class Item extends Model
         $out = $items;
         if('products' && !is_array($items) && isset($request['categories'])){
 
-          $ids = $items->pluck('product_id')->toArray();
 
-          $productFilters = [
-            'ids' => $ids
-          ];
+          {//Request
+            $productRequest = [];
 
-          if(isset($request['categories'])){
-            $productFilters['categories'] = $request['categories'];
+            //Get all
+            $productRequest['get_all'] = true;                       
+
+            //Ids
+            $ids = $items->pluck('product_id')->toArray();
+            $productRequest['ids'] = $ids;
+                        
+            //Categories
+            if(isset($request['categories'])){
+              $productRequest['categories'] = $request['categories'];
+            }
+
           }
 
-          $products = Product::jugeGet($productFilters);
+          //Get
+          $products = Product::jugeGet($productRequest);
           
           //After work
           $out = [];
