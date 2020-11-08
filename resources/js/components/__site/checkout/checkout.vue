@@ -63,7 +63,11 @@ export default {
     ...mapGetters({cart:'cart/getCart',checkout:'checkout/get'}),
   },
   mounted(){
-    if(window.location.hostname != "bananich.loc") fbq('track', 'InitiateCheckout');
+    //Trackers
+    if(!localServer){
+      ym(54670840,'reachGoal','opencart');
+      fbq('track', 'InitiateCheckout');
+    } 
   },
   methods:{    
     ...mapActions({'clean':'checkout/clean'}),
@@ -84,8 +88,11 @@ export default {
       }
 
       if(r > 0){
-        // Pixel        
-        if(window.location.hostname != "bananich.loc") fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});        
+        //Trackers
+        if(!localServer){
+          ym(54670840,'reachGoal','ordered')
+          fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
+        } 
         this.clean();
         ax.fetch('/order/update/available', {id:r});
         location.href ='/order-thanks';

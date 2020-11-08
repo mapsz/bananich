@@ -125,6 +125,10 @@ export default {
     }
   },
   mounted(){
+    //Trackers
+    if(!localServer){
+      ym(54670840,'reachGoal','opencart');
+    } 
     // this.getSettings();
   },
   methods:{
