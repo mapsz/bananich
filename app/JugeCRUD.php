@@ -28,4 +28,24 @@ class JugeCRUD extends Model
 
     return $data;
   }
+
+  public static function setMetas($data){
+    foreach ($data as $row) {
+      //Metas
+      if(isset($row['metas'])){
+        foreach ($row['metas'] as $meta) {
+          $row[$meta->name] = $meta->value;
+        }
+        unset($row['metas']);
+      }
+      //Long Metas
+      if(isset($row['longMetas'])){
+        foreach ($row['longMetas'] as $row) {
+          $row[$meta->name] = $meta->value;
+        }
+        unset($row['longMetas']);
+      }
+    }
+    return $data;
+  }
 }

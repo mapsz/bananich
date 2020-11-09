@@ -25,9 +25,11 @@ class jugeVuex {
       keysModel:false,
       //Inputs
       inputs:null,
+      postInputs:null,
       //Other
       didFetch:false,
       didInputsFetch:false,
+      didPostInputsFetch:false,
       firstListFetch:false,
       errors:false,
     }
@@ -43,6 +45,7 @@ class jugeVuex {
       isFirstListFetch: (state) => {return state.firstListFetch;},
       isFetched: (state) => {return state.didFetch;},
       isInputsFetched: (state) => {return state.didInputsFetch;},
+      isPostInputsFetched: (state) => {return state.didPostInputsFetch;},
       isWaterfalling: (state) => {return state.waterfalling;},
       getWaterfall: (state) => {return state.waterfall;},
       getWaterfallId: (state) => {return state.waterfallId;},
@@ -57,6 +60,17 @@ class jugeVuex {
         });
         
         return state.inputs;
+      
+      },
+      getPostInputs: (state) => {
+        if(state.postInputs == null) return null;
+        state.postInputs.forEach(function (v, k) {
+          if(undefined != state.row[v.name]){      
+            state.postInputs[k].value = state.row[v.name];
+          }   
+        });
+        
+        return state.postInputs;
       
       },
       getParams:(state) => {
@@ -89,6 +103,15 @@ class jugeVuex {
         let inputs = await ax.fetch('/juge/inputs',{'model':model});
         //Commit
         commit('mInputs',inputs);  
+      },
+      async fetchPostInputs({commit,state}){
+        //Inputs
+        let model = state.keysModel;
+        if(!model) model = modelName;
+        await commit('mDidPostInputsFetch',true);   
+        let inputs = await ax.fetch('/juge/post/inputs',{'model':model});
+        //Commit
+        commit('mPostInputs',inputs);  
       },
       //MULTI
       //Fetch
@@ -357,6 +380,7 @@ class jugeVuex {
       mFilters: (state,d) => {return state.filters = d;},
       mKeys: (state,d) => {return state.keys = d;},
       mInputs: (state,d) => {return state.inputs = d;},
+      mPostInputs: (state,d) => {return state.postInputs = d;},
       mKeysModel: (state,d) => {return state.keysModel = d;},
       mRows: (state,d) => {return state.rows = d;},
       mRowsInfinite: (state,d) => {return state.rows = state.rows.concat(d);},
@@ -368,6 +392,7 @@ class jugeVuex {
       mErrors: (state,d) => {return state.errors = d;},
       mDidFetch: (state,d) => {return state.didFetch = d;},
       mDidInputsFetch: (state,d) => {return state.didInputsFetch = d;},
+      mDidPostInputsFetch: (state,d) => {return state.didPostInputsFetch = d;},
     }    
   }
 

@@ -11,40 +11,16 @@ use App\Cart;
 class CouponController extends Controller
 {
 
-  public function post(Request $request){
-    return response()->json(    
-      Coupon::where('id', $request->id)
-        ->update(['count' => $request->count])
-    );
-  }
   public function put(Request $request){
-    return response()->json(    
-      Coupon::create(
-        $request->all()
-      )
-    );
+    return response()->json(Coupon::jugePut($request->all()));
   }
 
   public function cartAttach(Request $request){
 
+    //Validate
+    if(!Coupon::validateAttach(false,false,$request->all())) return false;
 
-    $validate = [
-      'coupon'         => ['required','exists:coupons,code','not_exists'],
-    ];        
-    $messages = [
-      'coupon.required'            => 'Промокод не найден 🙈',
-      'coupon.exists'              => 'Промокод не найден 🙈',
-      'coupon.not_exists'          => 'Промокод закончился',
-    ];
-    Validator::extend('not_exists', function()use($request){
-      return DB::table('coupons')
-          ->where('code', '=', $request->coupon)
-          ->where('count', '=', 0)
-          ->count() < 1;
-    });
-    Validator::make($request->all(), $validate,$messages)->validate();
-
-    $cart = Cart::getCart();
+    //Get cart and coupon
     $coupon = Coupon::where('code',$request->coupon)->first();
 
     //Delete old

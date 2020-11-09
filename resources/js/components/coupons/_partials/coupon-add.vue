@@ -1,13 +1,18 @@
 <template>
-<div class="add">
-  <h3 class="d-inline-block">Добавить купон</h3>
+<div>
 
+  <button v-if="!addShow" @click="addShow=true" class="btn btn-success">Добавить</button>
 
-  <!-- Form -->
-  <div >
-    <juge-form :inputs="inputs" :errors="errors" @submit="put"></juge-form>
+  <div v-if="addShow">
+    <div class="add">
+      <div>
+        <h3 class="d-inline-block">Добавить купон</h3>
+        <button class="btn btn-danger"  @click="addShow=false" style="float: right;">X</button>
+      </div>
+      <juge-form :inputs="inputs" :errors="errors" @submit="put"></juge-form>
+    </div>
   </div>
-
+  
 </div>
 </template>
 
@@ -15,12 +20,12 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    //
+    errors:[],
+    addShow:false,
   }},
 computed:{
   ...mapGetters({
     inputs:   'coupon/getInputs',
-    errors:   'category/getErrors'
   }),    
 },
   mounted(){
@@ -31,8 +36,12 @@ computed:{
       'fetchInputs':'coupon/fetchInputs',
     }),
     async put(data){
-      let r = await ax.fetch('/coupon',data,'put');  
-      location.reload();      
+      this.errors = [];
+      let r = await ax.fetch('/coupon',data,'put');
+      //Catch errors
+      if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
+
+      location.reload();
     },    
   },
 }

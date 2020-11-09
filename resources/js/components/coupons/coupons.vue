@@ -9,7 +9,7 @@
       <coupon-add></coupon-add>
 
       <!-- List -->
-      <juge-list :data="'coupon'"></juge-list>
+      <juge-list :data="'coupon'" :edit="true" :delete="true" />
       
     </div>
 

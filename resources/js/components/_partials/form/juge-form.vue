@@ -1,5 +1,5 @@
 <template>
-<form class="juge-form" @submit.prevent="submit()">
+<form v-if="cid != undefined && cid > 0" class="juge-form" @submit.prevent="submit()">
    
   <template v-for="(input,i) in inputs">
 
@@ -13,7 +13,7 @@
       <span v-if="input.required != undefined && input.required" style="color:red">*</span>
       <!-- Label -->
       <label 
-        :for="input.multi == undefined || !input.multi ? input.name + '-input' : ''"          
+        :for="input.multi == undefined || !input.multi ? input.name + '-input-' + cid : ''"          
       >
         {{input.caption != undefined ? input.caption : input.name}}:
       </label>
@@ -23,6 +23,7 @@
     <template v-if="input.multi == undefined || input.multi == false">
       <juge-input 
         v-model="data[input.name]" 
+        :cid="cid"
         :input="input" 
         :key="i+'a'"
         :style="input.type == 'textEditor' ? 'grid-column: 1 / 4;' : ''"
@@ -48,13 +49,13 @@
             <span v-if="mInput.required != undefined && mInput.required" style="color:red">*</span>
             <!-- Label -->
             <label 
-              :for="mInput.multi == undefined || !mInput.multi ? mInput.name + '-input' : ''"          
+              :for="mInput.multi == undefined || !mInput.multi ? mInput.name + '-input-' + cid : ''"          
             >
               {{mInput.caption != "" ? mInput.caption+':' : ''}}
             </label>
           </div>       
           <!-- Input -->
-          <juge-input v-model="data[mInput.name]" :input="mInput"></juge-input>  
+          <juge-input v-model="data[mInput.name]" :input="mInput" :cid="cid"></juge-input>  
         </div>
       </div>
     </span>
@@ -81,7 +82,8 @@ export default {
     buttonCaption: function(){
       if(this.button == undefined) return "Сохранить";
       else return this.button;
-    }
+    },
+    cid(){return this._uid}
   },
   mounted(){
     //

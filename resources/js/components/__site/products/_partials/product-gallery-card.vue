@@ -95,6 +95,13 @@
         color: rgb(255, 92, 0);
         margin: 0 -10px;
       ">*Скидка на {{product.discount.quantity == 1 ? 'первую' : 'первыe'}} <b style="color: rgb(255, 92, 0)">{{product.discount.quantity}}</b> ед.</div>
+      <!-- Short info -->  
+      <div v-if="product.short_info && product.short_info != ''" style="
+        font-size: 9pt;
+        font-style: italic;
+        color: color: rgb(255 184 0);
+        margin: 0 -10px;
+      ">*{{product.short_info}}</div>
     </div>
   </div>  
 </template>

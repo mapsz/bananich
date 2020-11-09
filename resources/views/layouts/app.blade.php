@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @if (ENV('APP_URL') != 'http://bananich.loc/')
+    @if (ENV('APP_ENV') != 'local')
         <!-- Facebook Pixel Code -->
         <script>
         !function(f,b,e,v,n,t,s)
@@ -54,7 +54,7 @@
     <link rel="icon" href="img/favicon.png" type="image/x-icon">
 </head>
 <body>
-    @if (ENV('APP_URL') != 'http://bananich.loc/')
+    @if (ENV('APP_ENV') != 'local')
         <!-- Google Tag Manager (noscript) -->
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRKP3N3"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

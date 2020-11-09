@@ -41,8 +41,8 @@ class Email extends Model
         //Get product
         $product = false;
         foreach ($producsts as $k => $p) {
-          if($c->id == $id){
-            $product = $c;
+          if($p->id == $id){
+            $product = $p;
             break;
           }
         }      

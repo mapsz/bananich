@@ -1181,6 +1181,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
       Route::get('/juge', 'JugeCRUDController@get');
       Route::get('/juge/keys', 'JugeCRUDController@getKeys');
       Route::get('/juge/inputs', 'JugeCRUDController@getInputs');    
+      Route::get('/juge/post/inputs', 'JugeCRUDController@getPostInputs');    
       Route::post('/juge', 'JugeCRUDController@post');    
     });
 

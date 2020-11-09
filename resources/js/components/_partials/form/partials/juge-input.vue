@@ -1,8 +1,17 @@
 <template>  
   <span>
 
+    <!-- Locked -->
+    <div v-if="input.type == 'locked'">
+      {{value}}
+    </div> 
+
     <!-- Select -->
-    <select v-if="input.type == 'select'" v-model="value" class="juge-form-input">
+    <select v-else-if="input.type == 'select'" 
+      :id="input.name + '-input-' + cid"
+      v-model="value" 
+      class="juge-form-input"
+    >
       <option v-for='(item,x) in input.list' :key='x' :value="item.id">{{item.name}}</option>
     </select> 
 
@@ -25,7 +34,7 @@
     <b-form-checkbox v-else-if="input.type == 'checkbox'"      
       v-model="value" 
       :name="input.name"
-      :id="input.name + '-input'"
+      :id="input.name + '-input-' + cid"
       :required="input.required != undefined && input.required ? true : false"
       switch
     ></b-form-checkbox>
@@ -34,7 +43,7 @@
     <textarea v-else-if="input.type == 'textarea'" 
       v-model="value"
       :name="input.name"    
-      :id="input.name + '-input'"
+      :id="input.name + '-input-' + cid"
       cols="30" 
       rows="5"
       :required="input.required != undefined && input.required ? true : false"
@@ -42,14 +51,13 @@
 
     <!-- Editor -->
     <vue-editor v-else-if="input.type == 'textEditor'"
-
       v-model="value" 
     />
 
     <!-- Simple -->
     <input
       v-else
-      :id="input.name + '-input'"
+      :id="input.name + '-input-' + cid"
       v-model="value"
       :name="input.name"      
       :type="input.type == undefined ? 'text' : input.type" 
@@ -66,7 +74,7 @@
 import { VueEditor } from "vue2-editor";
 export default {
 components: { VueEditor },
-props: ['input'],
+props: ['input','cid'],
 model: {event: 'blur'},
 data(){return{  
   value:this.input.value,

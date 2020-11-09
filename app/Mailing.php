@@ -8835,8 +8835,6 @@ class Mailing extends Model
           "name" => "ПАВЕЛ",
         ),
       );
-      
-      
                   
       if($test){  
           $users = array(

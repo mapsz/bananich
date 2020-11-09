@@ -10,7 +10,7 @@
 
     <!-- Prices -->
     <div>
-    <a href="/report/purchase/prices"><button class="btn btn-warning">Цены</button></a>
+      <a href="/report/purchase/prices"><button class="btn btn-warning">Цены</button></a>
     </div>
     
     <!-- Actions -->
