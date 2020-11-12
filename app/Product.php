@@ -29,6 +29,7 @@ class Product extends Model
     ['key'    => 'description','label' => 'Описание'],
     ['key'    => 'сountry','label' => 'Страна'],
     ['key'    => 'gruzka_priority','label' => 'Приоретет погрузки'],
+    ['key'    => 'short_info','label' => 'Доп. инфа'],
     ['key'    => 'strews','label' => 'Сыпучка'],
 
     ['key'    => 'calories','label' => 'Калории'],
@@ -175,6 +176,14 @@ class Product extends Model
         'name' => 'strews',
         'caption' => 'Сыпучка',
         'type' => 'number'
+      ],  
+      [
+        'name' => 'short_info',
+        'caption' => 'Доп. инфа',
+      ],
+      [
+        'name' => 'shelf_life',
+        'caption' => 'Срок годности',
       ],  
 
   ];
@@ -849,6 +858,8 @@ class Product extends Model
       'low_glycemic'          => 'boolean',
       'eco'                   => 'boolean',
       'gruzka_priority'       => 'numeric',
+      'short_info'            => 'string|max:50',
+      'shelf_life'            => 'string|max:50',
       'strews'                => 'numeric'
     ])->validate();
 
@@ -876,6 +887,7 @@ class Product extends Model
       'low_glycemic'          => 'boolean',
       'eco'                   => 'boolean',
       'gruzka_priority'       => 'numeric',
+      'short_info'            => 'string|max:50',
       'strews'                => 'numeric'
     ])->validate();
 
@@ -925,6 +937,8 @@ class Product extends Model
         case  "low_glycemic": 
         case  "eco": 
         case  "gruzka_priority": 
+        case  "short_info": 
+        case  "shelf_life": 
         case  "strews": 
         case  "always_publish": 
         case  "bonus": 

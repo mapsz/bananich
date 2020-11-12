@@ -12,6 +12,9 @@
 // */
 
 //VEsi
+Route::get('/vesi', 'LibraController@list');
+
+
 Route::get('make/vesi', function(){
 
 
@@ -794,7 +797,7 @@ Route::get('make/vesi/odin', function(){
                   
       }
     }   
-    $content .= "\r\n";    
+    $content .= "\r\n";
   }
 
   Storage::disk('local')->put('up100.txt', mb_convert_encoding($content, "cp866"));
@@ -1007,6 +1010,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
     //Libaras
     Route::put('/admin/libra', 'LibraController@put');
+    Route::post('/admin/libra/sort', 'LibraController@sortByName');
 
     //Logs
     Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

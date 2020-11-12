@@ -41,4 +41,17 @@ class LibraController extends Controller
     return response()->json(1);
 
   }
+
+  public function sortByName(){    
+    return response()->json(Libra::sortButtonsByName());
+  }
+
+  public function list(){
+    $libra = Libra::jugeGet();
+    foreach ($libra as $key => $v) {
+      echo $v->button . ' - ' . $v->product->name;
+      echo "<br>";
+    }
+  }
+
 }

@@ -145,7 +145,32 @@ class Order extends Model
 
   }
 
+  private static function generateRandomId(){
+    
+    {//Make id
+      $date = now()->format('ymd');
+      $random = rand(1000,9999);
+      $id = $date . $random;
+    }
+
+    do{//Check exists
+      $exists = Order::where('id',$id)->exists();      
+      if($exists){
+        //Generate other
+        if($random == 9999) $random = 999;
+        $random++;
+        $id = $date . $random;
+      }
+    }while($exists);
+
+    return $id;
+
+  }
+
   public static function placeOrder($data, $cart){
+
+
+    self::generateRandomId();
 
     
     //Customer
@@ -162,8 +187,12 @@ class Order extends Model
       $bonus = $cart['bonus'];
       $shipping = $cart['shipping'];
 
+      //Random id
+      $randomId = self::generateRandomId();
+
       //Save order
       $order = new Order;
+      $order->id = $randomId;
       $order->customer_id = $customer_id;
       $order->date = now();
       $order->delivery_date = $data['deliveryDate'];

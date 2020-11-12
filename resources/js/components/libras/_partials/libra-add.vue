@@ -27,13 +27,13 @@ data(){return{
   product:false,
   errors:[],
   inputs:[
-    {
-      name:'libra',
-      caption:'Весы',
-      type:"select",
-      list:[{id:1,name:1+'(рыба)'},{id:2,name:2+'(сыпучка)'}],
-      required:true,
-    },
+    // {
+    //   name:'libra',
+    //   caption:'Весы',
+    //   type:"select",
+    //   list:[{id:1,name:1+'(рыба)'},{id:2,name:2+'(сыпучка)'}],
+    //   required:true,
+    // },
     {
       name:'button',
       caption:'Кнопка',
