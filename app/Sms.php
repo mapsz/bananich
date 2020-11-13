@@ -58,6 +58,8 @@ class Sms extends Model
   public static function bonusNotification(){
     $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1,'nousernolive' => 1]);
 
+
+
     //Get soon die
     $soonDie = [];
     foreach ($bonuses as $key => $bonus) {
@@ -65,6 +67,8 @@ class Sms extends Model
         array_push($soonDie, $bonus);
       }
     }
+
+    dump($soonDie);
 
     foreach ($soonDie as $key => $bonus) {
       if(!isset($bonus->user)) continue;
