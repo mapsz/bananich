@@ -82,7 +82,7 @@ class Sms extends Model
 
       if(Sms::where('body',$body)->where('to',$to)->exists()){
         dump('exists');
-        dump(Sms::where('body',$body)->where('to',$to)->first());
+        dump(Sms::where('body',$body)->where('to',$to)->first()->body);
         dump('---');
         continue;
       }
