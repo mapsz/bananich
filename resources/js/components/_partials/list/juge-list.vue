@@ -118,6 +118,8 @@
     <b-modal :id="'juge-list-delete'" :title="'Подтвердить удаление 🗑️'" ok-only hide-footer>
       <div>
         delete
+
+        {{toDelete}}
       </div>
     </b-modal>
     
@@ -350,6 +352,16 @@ methods:{
   success(){
     this.fetch();
   },
+
+  async doDelete(){
+
+    if(!this.toDelete || this.toDelete.id == undefined){
+      Vue.toasted.show("Error! 💥",{type:'error',position:'bottom-right'});
+      return;
+    }
+
+    let r = await this.$store.dispatch(this.model+'/doDelete',{id:this.toDelete.id});
+  }
 },
 }
 </script>

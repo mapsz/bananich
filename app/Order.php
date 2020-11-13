@@ -324,7 +324,6 @@ class Order extends Model
         //Attach coupon
         Order::find($orderId)->coupons()->attach($coupon->id,['discount' => $coupon->discount]);
       }
-      $coupon->count--;
       $coupon->save();
 
     }
