@@ -7,16 +7,21 @@
         <input v-model="coupon" type="text" placeholder="Ввести промокод" class="cart-promo-input">
         <button type="submit" class="cart-promo-btn">Применить</button>
       </form>
+      
+      <span v-for='(errorz,z) in errors' :key='z+"d"' class="juge-form-error">
+        <div v-for='(error,j) in errorz' :key='j' style="color:tomato">
+          {{error}}
+        </div>    
+      </span>
 
-      <span v-if="cart.coupon != undefined">Промокод: <b>{{cart.coupon.code}}</b></span>
+      <span v-if="cart.coupon != undefined">
+        Успешно применен промокод: <b>{{cart.coupon.code}}</b><br>
+        <span style="font-size:10pt;color:gray;">Если вы хотите вместо него применить другой промокод, просто введите его в поле выше</span>
+        
+      </span>
 
     </div>
 
-    <span v-for='(errorz,z) in errors' :key='z+"d"' class="juge-form-error">
-      <span v-for='(error,j) in errorz' :key='j'>
-        {{error}}
-      </span>    
-    </span>
 
   </div>
   
