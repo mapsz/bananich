@@ -77,8 +77,7 @@ export default {
       getCurrentFilters:'product/getFilters'
     }),
     currentCategories:function(){
-      
-
+      //
     }
   },
   watch: {
@@ -89,8 +88,6 @@ export default {
   async mounted(){
     await this.fetch();
     this.setRoute();
-
-
   },
   methods:{
     ...mapActions({
@@ -109,9 +106,8 @@ export default {
         this.addFilter({'category':category.id})  
         this.fetchProducts();
         
+        //Route
         let route = '/category/'+category.id;
-
-        // console.log(route);
         this.$router.push(route);
       }
     },

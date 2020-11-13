@@ -168,10 +168,6 @@ class Order extends Model
   }
 
   public static function placeOrder($data, $cart){
-
-
-    self::generateRandomId();
-
     
     //Customer
     if(Auth::user()){

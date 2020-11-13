@@ -599,16 +599,14 @@ class Product extends Model
 
     //Order By
     if("SORT" == "SORT"){
-
-      $products = $products->orderBy('sort', 'DESC');
-
       if(isset($request['sort'])){
         if($request['sort'] == 'sortCheap'){
           $products = $products->orderBy('price', 'ASC');
         }
         if($request['sort'] == 'sortExpensive'){
           $products = $products->orderBy('price', 'DESC');
-        }      
+        }
+        $products = $products->orderBy('sort', 'DESC');    
       }           
 
     }
@@ -639,7 +637,7 @@ class Product extends Model
       }
 
       //Metas
-      if(!isset($request['no_metas'])){        
+      if(!isset($request['no_metas'])){
         foreach ($products as $product) {
           //Metas
           foreach ($product['metas'] as $meta) {
@@ -697,8 +695,7 @@ class Product extends Model
           $product->available_unit = 0;
         }else{
           $product->available_unit = intval(floatval ($product->available) / floatval ($product->unit));
-        }
-        
+        }        
       }
 
     }
@@ -709,7 +706,7 @@ class Product extends Model
     }
 
     //Test
-    if(isset($request['test'])){
+    if(isset($request['testz'])){
       dd(
         microtime(true) - $timer, 
         DB::getQueryLog(),

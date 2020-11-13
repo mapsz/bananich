@@ -30,7 +30,7 @@
         <div style="flex:5">
           <div class="d-flex justify-content-between">            
             <b>{{item.name}}</b>
-            <span>Полка: {{item.gruzka_priority}}</span>  
+            <span v-if="item.gruzka_priority != undefined">Полка: {{item.gruzka_priority}}</span>  
           </div>
           <div class="d-flex justify-content-between">
             <span style="color:gray">x{{item.quantity}}</span>

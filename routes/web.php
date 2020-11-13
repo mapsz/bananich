@@ -868,8 +868,8 @@ Route::get('/logistic/daily', function(){echo App\Logistic::daily();});
 //bonus
 Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 
-// Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
-Route::group(['middleware' => ['HttpsRR']], function () {
+Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
+// Route::group(['middleware' => ['HttpsRR']], function () {
 
     
   Route::get('/home', function(){

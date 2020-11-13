@@ -19,7 +19,7 @@
       <span>За единицу: {{item.gram}}</span>  
     </div>
     <!-- Polka -->
-    <div class="row mt-3 justify-content-between">
+    <div class="row mt-3 justify-content-between" v-if="item.gruzka_priority != undefined">
       Полка: {{item.gruzka_priority}}
     </div>
     <!-- Comment -->

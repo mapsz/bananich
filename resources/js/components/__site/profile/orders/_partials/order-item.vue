@@ -2,70 +2,132 @@
   <div class="order-item">
 
     <!-- Date / ID / Status / Cart count / Cart summ-->
-    <div class="order-wrap ">
+    <div class="">
 
-      <!-- Date / ID -->
-      <div class="">
-        <!-- Date -->
-        <div class="order-name dropdown-sad-item" :class="showMore ? 'active' : ''">
-          <a href="#" @click.prevent="showMore = !showMore" class="dropdown-sad-btn">{{moment(order.created_at).locale("ru").format('MMMM D')}}</a>
-        </div> 
-        <!-- ID -->
-        <div class="order-track">{{order.id}}</div> <!-- Класс active или cancellation у родителя order-item меняет оформление -->
-      </div>   
-
-      <!-- Status / Cart count / Cart summ -->
-      <div class="order-right">
-        <!-- Status -->
-        <div class="order-status">
-          <!-- 
-            Класс active или cancellation у родителя order-item меняет оформление 
-          -->
+      <!-- ID / Status -->
+      <div class="d-flex justify-content-between w-100 mb-3 cancellation">
+        <div class="order-track">
+        <!-- <div> -->
+          {{order.id}}
+        </div>
+        
+        <div class="order-status m-0">
+        <!-- <div> -->
           {{order.status}}
         </div>
+      </div>
+
+      <!-- Delivery Date Time -->
+      <div v-if="order.logistics == undefined || order.logistics[0] == undefined" class="d-flex justify-content-between w-100 mb-3">
+        <div class="sad-order-value-text m-0" style="font-weight: 400;">Доставка:</div>
+        <div class="d-flex justify-content-end">
+          <div class="sad-order-value-text mr-3">{{moment(order.delivery_date).locale("ru").format('MMMM D')}}</div>
+          <div class="sad-order-value-text">
+            {{moment(order.delivery_time_from, 'HH:mm:ss').format('HH:mm')}} - 
+            {{moment(order.delivery_time_to, 'HH:mm:ss').format('HH:mm')}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Logistic -->
+      <div v-if="order.logistics != undefined && order.logistics[0] != undefined" class="order-courier m-0 p-4">
+        
+        <!-- Courier photo -->
+        <div v-if="order.logistics[0].driver" class="order-courier-ava" :style="`background-image: url('`+order.logistics[0].driver.mainPhoto+`');`"></div>
+
+        <div class="d-sm-flex">
+          <!-- Driver -->
+          <div v-if="order.logistics[0].driver" class="order-box-text mr-sm-3 mr-md-5 courier-align">
+            <span>Курьер</span> 
+            {{order.logistics[0].driver.name}} {{order.logistics[0].driver.surname}} 
+          </div> 
+
+          <!-- Delivery -->
+          <div class="order-box-text mt-2 courier-align"><span>Доставка</span>
+              <div class="mb-1">{{moment(order.delivery_date).locale("ru").format('MMMM D')}}</div>
+              <div>
+                с {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").subtract(40,'minutes').format('HH:mm')}}
+                до {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").add(40,'minutes').format('HH:mm')}}
+              </div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div v-if="order.logistics[0].driver" class="order-box">
+          <div class="order-box-text d-sm-block d-none">
+            <div class="courier-align">
+              <span>Телефон</span> 
+              <div>{{order.logistics[0].driver.phone}} </div> 
+            </div>
+          </div>
+          <a class="order-box-call d-sm-none" :href="'tel:'+order.logistics[0].driver.phone"><img src="/image/phone.svg" alt="Phone"></a>
+        </div>
+
+        <!-- <div class="order-box d-flex align-sm-items-center"> -->
+
+          <!-- <div v-if="order.logistics[0].driver" class="order-courier-ava" :style="`background-image: url('`+order.logistics[0].driver.mainPhoto+`');`"></div> -->
+
+          <!-- <div class="d-sm-flex align-items-center"> -->
+            
+            <!-- Driver -->
+            <!-- <div v-if="order.logistics[0].driver" class="order-box-text mr-sm-3 mr-md-5">
+              <span>Курьер</span> 
+              {{order.logistics[0].driver.name}} {{order.logistics[0].driver.surname}} 
+            </div> -->
+
+            <!-- Delivery -->
+            <!-- <div class="order-box-text mt-2"><span>Доставка</span>
+              <div>
+                <div class="mb-1">{{moment(order.delivery_date).locale("ru").format('MMMM D')}}</div>
+                <div>
+                  с {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").subtract(40,'minutes').format('HH:mm')}}
+                  до {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").add(40,'minutes').format('HH:mm')}}
+                </div>
+              </div>
+            </div> -->
+          <!-- </div> -->
+        <!-- </div> -->
+
+        <!-- <div v-if="order.logistics[0].driver" class="order-box">
+          <div class="order-box-text d-sm-block d-none"><span>Телефон</span> {{order.logistics[0].driver.phone}} </div>
+          <a class="order-box-call d-sm-none" :href="'tel:'+order.logistics[0].driver.phone"><img src="/image/phone.svg" alt="Phone"></a>
+        </div> -->
+
+      </div>    
+
+      <!-- Order date / Cart count / Cart summ -->
+      <div class="d-flex justify-content-between w-100 mt-3">
+
+        <!-- Order date -->
+        <div class="d-flex align-self-center">
+          <div class="sad-order-value-text dropdown-sad-item m-0" :class="showMore ? 'active' : ''">
+            <a href="#" @click.prevent="showMore = !showMore" class="dropdown-sad-btn">Подробней</a>
+            <!-- <a href="#" @click.prevent="showMore = !showMore" class="dropdown-sad-btn">{{moment(order.created_at).locale("ru").format('MMMM D')}}</a> -->
+          </div>          
+        </div>
+
         <!-- Cart count / Cart summ -->
-        <div class="d-flex">
+        <div class="d-flex justify-content-end">
           <!-- Cart count -->
           <div class="order-values">
             <div class="order-value-img"><img src="/image/order/card.svg" alt="Количестово"></div>
-            <div class="order-value-text">{{order.items.length}} шт</div>
+            <div class="sad-order-value-text">{{order.items.length}} шт</div>
           </div>
           <!-- Cart summ -->
           <div class="order-values">
             <div class="order-value-img"><img src="/image/order/money.svg" alt="Сумма"></div>
-            <div class="order-value-text">
+            <div class="sad-order-value-text">
               {{(order.total_result == undefined || !(order.total_result > 0)) ? order.total : order.total_result}} руб
             </div>
           </div>
         </div>
-      </div> 
+
+      </div>
+
     </div>
-    
-    <!-- Logistic -->
-    <div v-if="order.logistics != undefined && order.logistics[0] != undefined" class="order-courier">
-      <div class="order-box d-flex align-sm-items-center">
-        <div v-if="order.logistics[0].driver" class="order-courier-ava" :style="`background-image: url('`+order.logistics[0].driver.mainPhoto+`');`"></div>
-        <div class="d-sm-flex align-items-center">
-          <div v-if="order.logistics[0].driver" class="order-box-text mr-sm-3 mr-md-5">
-            <span>Курьер</span> 
-            {{order.logistics[0].driver.name}} {{order.logistics[0].driver.surname}} 
-          </div>
-          <div class="order-box-text mt-2"><span>Доставка</span>
-            с {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").subtract(40,'minutes').format('HH:mm')}}
-            до {{moment(order.logistics[0].plan_arrival_time,"HH:mm:ss").add(40,'minutes').format('HH:mm')}}
-            </div>
-        </div>
-      </div>
-
-      <div v-if="order.logistics[0].driver" class="order-box">
-        <div class="order-box-text d-sm-block d-none"><span>Телефон</span> {{order.logistics[0].driver.phone}} </div>
-        <a class="order-box-call d-sm-none" :href="'tel:'+order.logistics[0].driver.phone"><img src="/image/phone.svg" alt="Phone"></a>
-      </div>
-
-    </div>      
 
     <!-- Status history -->
-    <div v-if="showMore" class="order-status-tracker">
+    <div v-if="showMore" class="order-status-tracker p-0">
       <!-- 
         Строка работает по такому принципу: активному состоянию назначается класс is-active и выводится время, после того как статус меняется, is-active переходит к следующему состоянию, а текущее состояние получает класс is-achieved  
       -->
@@ -79,13 +141,12 @@
     </div>   
 
     <!-- Items / Checkout    -->
-    <div v-if="showMore" class="order-items-checkout">
+    <div v-if="showMore" class="order-items-checkout mt-3">
 
       <!-- Title -->
       <div class="order-items-checkout-title">О заказе</div>
 
       <!-- Item rows -->
-      <!-- <div v-for='(item,i) in [order.items[0]]' :key='i' class="row py-2 mx-2" style="border-bottom: 1px solid #bdbdbd;">  -->
       <div v-for='(item,i) in order.items' :key='i' class="row order-items-item py-2 mx-2"> 
 
         <!-- Name -->
@@ -188,6 +249,52 @@ computed:{
   }
 },
 }
+
+{
+
+      // <!-- Date / ID -->
+      // <div class="">
+      //   <!-- Date -->
+      //   <div class="order-name dropdown-sad-item" :class="showMore ? 'active' : ''">
+      //     <a href="#" @click.prevent="showMore = !showMore" class="dropdown-sad-btn">{{moment(order.created_at).locale("ru").format('MMMM D')}}</a>
+      //   </div> 
+      //   <!-- ID -->
+      //   <div class="order-track">{{order.id}}</div> <!-- Класс active или cancellation у родителя order-item меняет оформление -->
+      // </div>   
+
+      // <div class="row">
+      //   <div class="aaa">asd</div>
+      //   <div class="aaa">dsa</div>
+      //   <div class="aaa">zxc</div>
+      // </div>
+
+      // <!-- Status / Cart count / Cart summ -->
+      // <div class="order-right">
+      //   <!-- Status -->
+      //   <div class="order-status">
+      //     <!-- 
+      //       Класс active или cancellation у родителя order-item меняет оформление 
+      //     -->
+      //     {{order.status}}
+      //   </div>
+      //   <!-- Cart count / Cart summ -->
+      //   <div class="d-flex">
+      //     <!-- Cart count -->
+      //     <div class="order-values">
+      //       <div class="order-value-img"><img src="/image/order/card.svg" alt="Количестово"></div>
+      //       <div class="order-value-text">{{order.items.length}} шт</div>
+      //     </div>
+      //     <!-- Cart summ -->
+      //     <div class="order-values">
+      //       <div class="order-value-img"><img src="/image/order/money.svg" alt="Сумма"></div>
+      //       <div class="order-value-text">
+      //         {{(order.total_result == undefined || !(order.total_result > 0)) ? order.total : order.total_result}} руб
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div> 
+
+}
 </script>
 
 <style scoped>
@@ -215,4 +322,38 @@ computed:{
     /* text-align: center; */
   }
 
+  .order-track{
+    padding: 0px 15px !important;
+    font-weight: 700;
+    color:black;
+  }
+
+  .sad-order-value-text{
+    font-size: 16pt;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  @media (max-width: 768px){
+    .sad-order-value-text{
+      font-size: 10pt !important;
+      margin-left: 4px;
+    }
+    .dropdown-sad-btn:after {
+      right: -12px !important;
+    }
+    .dropdown-sad-btn{
+      font-size: 12pt !important;
+    }
+  }
+
+  .courier-align{
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+
 </style>
+

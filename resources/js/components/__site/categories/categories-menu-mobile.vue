@@ -91,7 +91,8 @@ export default {
       //Scroll
       $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top-200)}, 300);
       //Route
-      this.$router.push((this.$route.path == '/' ? '' : this.$route.path) + '/category/'+category.id);
+      let route = this.$route.path == '/' ? '' : this.$route.path;
+      this.$router.push(route+'/category/'+category.id);
     },
     setDiscounts(){
       if(!this.isMobile) return;

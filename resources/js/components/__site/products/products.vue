@@ -78,9 +78,9 @@
             </div>
 
             <!-- Not found -->
-            <div v-if="!isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
-              <product-not-found v-if="!isMobile" />   
-              <a v-else href="/"><button class="btn-yellow btn-thick">Перейти в каталог магазина</button></a>
+            <div v-if="!isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">              
+              <a href="/" v-if="isMobile && $route.path == '/discounts'"><button class="btn-yellow btn-thick">Перейти в каталог магазина</button></a>
+              <product-not-found v-else />   
             </div>   
                   
 
