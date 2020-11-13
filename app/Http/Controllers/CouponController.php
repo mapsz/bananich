@@ -23,6 +23,9 @@ class CouponController extends Controller
     //Get cart and coupon
     $coupon = Coupon::where('code',$request->coupon)->first();
 
+    //Cart
+    $cart = Cart::getCart();
+
     //Delete old
     DB::table('coupon_cart')->where('cart_id',$cart['id'])->delete();
 
