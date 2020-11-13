@@ -3,12 +3,12 @@
   <div>
     
     <div>
-      <form v-if="cart.coupon == undefined" class="cart-promo" @submit.prevent="add()">
+      <form  class="cart-promo" @submit.prevent="add()">
         <input v-model="coupon" type="text" placeholder="Ввести промокод" class="cart-promo-input">
         <button type="submit" class="cart-promo-btn">Применить</button>
       </form>
 
-      <span v-else>Промокод: <b>{{cart.coupon.code}}</b></span>
+      <span v-if="cart.coupon != undefined">Промокод: <b>{{cart.coupon.code}}</b></span>
 
     </div>
 
