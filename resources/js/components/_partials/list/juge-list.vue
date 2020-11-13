@@ -117,9 +117,8 @@
     <!-- Delete Modal -->
     <b-modal :id="'juge-list-delete'" :title="'Подтвердить удаление 🗑️'" ok-only hide-footer>
       <div>
-        delete
-
-        {{toDelete}}
+        ID: {{toDelete.id}}
+        <!-- <button class="btn btn-danger">Удалить</button> -->
       </div>
     </b-modal>
     

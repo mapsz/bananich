@@ -167,4 +167,30 @@ class JugeCRUDController extends Controller
     
     return response()->json($post);
   }
+
+  public function delete(Request $request){
+    //No model
+    if(!isset($request['model']) && $request['model'] == ''){
+      return response(['code' => 'jugep1','text' => 'no model name'], 512)->header('Content-Type', 'text/plain');
+    }    
+
+    //No id
+    if(!isset($request['data']['id']) && $request['data']['id'] == '' && $request['data']['id'] == false){
+      return response(['code' => 'jugep2','text' => 'no id'], 512)->header('Content-Type', 'text/plain');
+    } 
+
+    //Get mode
+    $modelName = $request['model'];
+    $model = "App\\".ucfirst($modelName);
+    $model = new $model;
+
+    //Get model inputs
+    $delete = false;
+    if(method_exists ( $model , 'jugeDelete' )){
+      $delete = $model->jugeDelete($request->data);
+    }       
+    
+    return response()->json($delete);
+
+  }
 }

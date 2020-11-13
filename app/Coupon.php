@@ -153,7 +153,7 @@ class Coupon extends Model
         {//Get orders with coupon
           $couponId = $attr['coupon']['id'];
           $order = !(
-            Order::where('customer_id', 6)
+            Order::where('customer_id', $attr['cart']['user_id'])
               ->whereHas('coupons', function($q)use($couponId){
                 $q->where('coupon_id',$couponId);
               })
@@ -175,7 +175,7 @@ class Coupon extends Model
         {//Get order
           $couponId = $attr['coupon']['id'];
           $order = !(
-            Order::where('customer_id', 6)->exists()
+            Order::where('customer_id', $attr['cart']['user_id'])->exists()
           );
         }
 
@@ -360,6 +360,41 @@ class Coupon extends Model
     
     return $coupon;
   
+  }
+  public static function jugeDelete($request){
+     {//Validate
+      Validator::make($request, 
+        [
+          'id'              => ['required','exists:coupons'],
+        ]  
+      )->validate();
+    }
+    
+    {//Edit
+      try {
+        DB::beginTransaction();
+
+        {//Coupon
+          if(count($data) > 0)
+            $coupon = Coupon::where('id',$request->id)->delete($data);
+        }
+        
+        {//Metas
+          foreach ($metas as $k => $v) {
+            $metas = CouponMeta::where('coupon_id',$request->id)->delete($data);
+          }          
+        }
+    
+        DB::commit();    
+      } catch (Exception $e) {          
+        // Rollback from DB
+        DB::rollback();
+        return response(['code' => 'co2','text' => 'coupon put error'], 512)->header('Content-Type', 'text/plain');
+      }
+    }
+
+    //Get    
+    return true;   
   }
 
   //Relations

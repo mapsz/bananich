@@ -1187,6 +1187,7 @@ Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
       Route::get('/juge/inputs', 'JugeCRUDController@getInputs');    
       Route::get('/juge/post/inputs', 'JugeCRUDController@getPostInputs');    
       Route::post('/juge', 'JugeCRUDController@post');    
+      Route::delete('/juge', 'JugeCRUDController@delete');    
     });
 
     //Admin panel
