@@ -113,8 +113,12 @@ class Coupon extends Model
         $coupon = $coupon->toArray();
       }
 
-      if(isset($coupon['min_summ']))
+      if(isset($coupon['min_summ'])){
         $coupon['min_summ'] = intval($coupon['min_summ']);
+      }else{
+        $coupon['min_summ'] = 0;
+      }
+        
     }
     
     //Cart      
