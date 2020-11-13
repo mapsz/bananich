@@ -12,6 +12,7 @@ class Sms extends Model
 {
   //Keys
   protected $keys = [
+    ['key'    => 'id'],
     ['key'    => 'from','label' => 'от'],
     ['key'    => 'to','label' => 'Номер'],
     ['key'    => 'count','label' => 'количество'],
