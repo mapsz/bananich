@@ -368,9 +368,42 @@ class jugeVuex {
 
         return row;
       },
-      async delete(){
-        if(!$delete) return 'not allowed';
-        console.log(111);
+      async doDelete(id){
+        if(!$delete) return 'not allowed';        
+        
+        //Refresh errors
+        commit('mErrors',[]);
+
+        //Delete
+        let row = await ax.fetch('/juge',{'model':modelName,id},'delete');
+
+        //Fail
+        if(!row){
+          //Catch error
+          if(ax.lastResponse.status != undefined){if(ax.lastResponse.status == 422){commit('mErrors',ax.lastResponse.data.errors);}}
+          return false;
+        }
+
+        //Edit local
+        //Single
+        // if(state.row.id != undefined && state.row.id == row.id){
+        //   console.log('single');
+        // }
+        //Multi
+        // if(state.rows.length > 0){
+        //   console.log('multi exists');
+        //   let i = state.rows.findIndex(x => x.id == row.id);
+        //   if(i > -1){
+        //     let edits = state.rows[i].edits;
+        //     row.edits = edits;
+        //     let rows = state.rows;
+        //     rows[i] = row;
+        //     commit('mRows',rows);
+        //   }
+        // }        
+
+        return row;
+
       }
     }   
     this.mutations = {

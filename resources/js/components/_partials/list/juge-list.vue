@@ -360,7 +360,7 @@ methods:{
       return;
     }
 
-    let r = await this.$store.dispatch(this.model+'/doDelete',{id:this.toDelete.id});
+    let r = await this.$store.dispatch(this.model+'/doDelete',id);
   }
 },
 }
