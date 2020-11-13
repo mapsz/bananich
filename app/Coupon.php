@@ -343,7 +343,7 @@ class Coupon extends Model
         
         {//Metas
           foreach ($metas as $k => $v) {
-            $metas = CouponMeta::where('coupon_id',$request['id'])->where('name',$k)->updateOrInsert(['value' => $v]);
+            $metas = CouponMeta::updateOrInsert(['coupon_id' => $request['id'], 'name' => $k],['value' => $v]);
           }          
         }
     
