@@ -40,6 +40,246 @@ class Mailing extends Model
 
       $users = array(
         array(
+          "id" => 818,
+          "email" => "got.julia@gmail.com",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 820,
+          "email" => "juliaeagle@mail.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 821,
+          "email" => "Lazalisa@inbox.ru",
+          "name" => "Irina",
+        ),
+        array(
+          "id" => 825,
+          "email" => "innostra@yandex.ru",
+          "name" => "Наталья",
+        ),
+        array(
+          "id" => 832,
+          "email" => "kseniabela9@gmail.com",
+          "name" => "Ксения",
+        ),
+        array(
+          "id" => 833,
+          "email" => "olgachmk@gmail.com",
+          "name" => "Ольга",
+        ),
+        array(
+          "id" => 834,
+          "email" => "nastyashpakova@gmail.com",
+          "name" => "Анастасия",
+        ),
+        array(
+          "id" => 836,
+          "email" => "bymad.x.x@gmail.com",
+          "name" => "Илья",
+        ),
+        array(
+          "id" => 837,
+          "email" => "smurf.mdp@gmail.com",
+          "name" => "Мария",
+        ),
+        array(
+          "id" => 838,
+          "email" => "johan.trumpeter@gmail.com",
+          "name" => "Маргарита",
+        ),
+        array(
+          "id" => 840,
+          "email" => "y.krainova@yandex.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 841,
+          "email" => "goldenpr.irina@gmail.com",
+          "name" => "Ирина",
+        ),
+        array(
+          "id" => 842,
+          "email" => "oksana_hi_hi@mail.ru",
+          "name" => "Оксана",
+        ),
+        array(
+          "id" => 843,
+          "email" => "vailayrin@gmail.com",
+          "name" => "Валерия",
+        ),
+        array(
+          "id" => 844,
+          "email" => "fainakras@yandex.ru",
+          "name" => "Фаина",
+        ),
+        array(
+          "id" => 847,
+          "email" => "leeana1@yandex.ru",
+          "name" => "Анастасия",
+        ),
+        array(
+          "id" => 850,
+          "email" => "inary@mail.ru",
+          "name" => "Анна",
+        ),
+        array(
+          "id" => 851,
+          "email" => "natalia_samorodova@mail.ru",
+          "name" => " Наталия",
+        ),
+        array(
+          "id" => 852,
+          "email" => "evgeniagv@gmail.com",
+          "name" => "Евгения",
+        ),
+        array(
+          "id" => 856,
+          "email" => "j.p.star@mail.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 858,
+          "email" => "299940@mail.ru",
+          "name" => "Иван",
+        ),
+        array(
+          "id" => 866,
+          "email" => "dashakruglova@gmail.com",
+          "name" => "Дарья",
+        ),
+        array(
+          "id" => 880,
+          "email" => "anyabrain@gmail.com",
+          "name" => "Анна",
+        ),
+        array(
+          "id" => 881,
+          "email" => "Inalife@mail.ru",
+          "name" => "Инга",
+        ),
+        array(
+          "id" => 882,
+          "email" => "alton_88@mail.ru",
+          "name" => "Ольга",
+        ),
+        array(
+          "id" => 884,
+          "email" => "a183052@mail.ru",
+          "name" => "Анна",
+        ),
+        array(
+          "id" => 887,
+          "email" => "oksikkori@gmail.com",
+          "name" => "Оксана",
+        ),
+        array(
+          "id" => 891,
+          "email" => "old-dog25@mail.ru",
+          "name" => "Ирина",
+        ),
+        array(
+          "id" => 894,
+          "email" => "ukkatta12@gmail.com",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 896,
+          "email" => "scherbakes@gmail.com",
+          "name" => "Екатерина",
+        ),
+        array(
+          "id" => 898,
+          "email" => "langer_spb@mail.ru",
+          "name" => "Вилена",
+        ),
+        array(
+          "id" => 899,
+          "email" => "caspereta@mail.ru",
+          "name" => "Екатерина",
+        ),
+        array(
+          "id" => 900,
+          "email" => "olechka.popova@gmail.com",
+          "name" => "Ольга",
+        ),
+        array(
+          "id" => 901,
+          "email" => "elkina.nata@mail.ru",
+          "name" => "Наталия",
+        ),
+        array(
+          "id" => 907,
+          "email" => "lidoirina@mail.ru",
+          "name" => "Ирина",
+        ),
+        array(
+          "id" => 922,
+          "email" => "Nadya-moon@mail.ru",
+          "name" => "Надя",
+        ),
+        array(
+          "id" => 924,
+          "email" => "dira76@mail.ru",
+          "name" => "Ирина",
+        ),
+        array(
+          "id" => 934,
+          "email" => "khubezhevam@gmail.com",
+          "name" => "Милана",
+        ),
+        array(
+          "id" => 945,
+          "email" => "phrocia@mail.ru",
+          "name" => "Ольга",
+        ),
+        array(
+          "id" => 946,
+          "email" => "ula1302@mail.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 949,
+          "email" => "avrora.ru84@mail.ru",
+          "name" => "Зульфия",
+        ),
+        array(
+          "id" => 952,
+          "email" => "siamka.f@gmail.com",
+          "name" => "Регина",
+        ),
+        array(
+          "id" => 968,
+          "email" => "tatyana_solodova@mail.ru",
+          "name" => "Татьяна",
+        ),
+        array(
+          "id" => 970,
+          "email" => "arrukavish28@gmail.com",
+          "name" => "Анастасия",
+        ),
+        array(
+          "id" => 976,
+          "email" => "nicolpny@gmail.com",
+          "name" => "Екатерина",
+        ),
+        array(
+          "id" => 980,
+          "email" => "jus1995@list.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 987,
+          "email" => "Lu_the_best@bk.ru",
+          "name" => "Любовь",
+        ),
+        array(
+          "id" => 996,
+          "email" => "shalamova_lena@mail.ru",
+          "name" => "Елена",
+        ),
+        array(
           "id" => 997,
           "email" => "el.ustimova@gmail.com",
           "name" => "Елена",
@@ -113,6 +353,11 @@ class Mailing extends Model
           "id" => 1039,
           "email" => "alisamonak@yandex.ru",
           "name" => "Алиса",
+        ),
+        array(
+          "id" => 1040,
+          "email" => "Shhh-h@list.ru",
+          "name" => "Александра",
         ),
         array(
           "id" => 1048,
@@ -353,6 +598,11 @@ class Mailing extends Model
           "id" => 1305,
           "email" => "asaevitch@gmail.com",
           "name" => "Анастасия",
+        ),
+        array(
+          "id" => 1308,
+          "email" => "Almaarot@mail.ru",
+          "name" => "Софья",
         ),
         array(
           "id" => 1310,
@@ -955,6 +1205,11 @@ class Mailing extends Model
           "name" => "Юлия",
         ),
         array(
+          "id" => 1895,
+          "email" => "j.prokoff@yandex.com",
+          "name" => "Евгения",
+        ),
+        array(
           "id" => 1896,
           "email" => "laisse@yandex.ru",
           "name" => "Анна",
@@ -1203,6 +1458,11 @@ class Mailing extends Model
           "id" => 2100,
           "email" => "stenap@mail.ru",
           "name" => "Светлана",
+        ),
+        array(
+          "id" => 2106,
+          "email" => "tverdokhleb94oks@mail.ru",
+          "name" => "Оксана",
         ),
         array(
           "id" => 2107,
@@ -6502,7 +6762,7 @@ class Mailing extends Model
         array(
           "id" => 3639,
           "email" => "mari_borisova@mail.ru",
-          "name" => "мария",
+          "name" => "Мария",
         ),
         array(
           "id" => 3643,
@@ -7850,6 +8110,11 @@ class Mailing extends Model
           "name" => "Саша",
         ),
         array(
+          "id" => 3995,
+          "email" => "dashulika710@rambler.ru",
+          "name" => "Дарья",
+        ),
+        array(
           "id" => 3996,
           "email" => "hvostova-ka@yandex.ru",
           "name" => "Ксения",
@@ -8525,6 +8790,11 @@ class Mailing extends Model
           "name" => "Ольга",
         ),
         array(
+          "id" => 4226,
+          "email" => "0c8@bk.ru",
+          "name" => "Иван",
+        ),
+        array(
           "id" => 4227,
           "email" => "samira-61@mail.ru",
           "name" => "Ирина",
@@ -8538,6 +8808,11 @@ class Mailing extends Model
           "id" => 4229,
           "email" => "mikheikinalubov@gmail.com",
           "name" => "Любовь",
+        ),
+        array(
+          "id" => 4231,
+          "email" => "melanholyk@gmail.com",
+          "name" => "Дарья",
         ),
         array(
           "id" => 4232,
@@ -8820,6 +9095,11 @@ class Mailing extends Model
           "name" => "Алексей",
         ),
         array(
+          "id" => 4312,
+          "email" => "taisgrigorieva480@gmail.com",
+          "name" => "Таисия",
+        ),
+        array(
           "id" => 4313,
           "email" => "blondiroussa@gmail.com",
           "name" => "Таня",
@@ -8834,7 +9114,134 @@ class Mailing extends Model
           "email" => "aimanptz@yandex.ru",
           "name" => "ПАВЕЛ",
         ),
+        array(
+          "id" => 4316,
+          "email" => "dzhuly@mail.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 4317,
+          "email" => "iramich@bk.ru",
+          "name" => "Ирина",
+        ),
+        array(
+          "id" => 4318,
+          "email" => "Ulik@live.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 4320,
+          "email" => "tatianaspbu@gmail.com",
+          "name" => "Татьяна",
+        ),
+        array(
+          "id" => 4321,
+          "email" => "annykulebiakina@gmail.com",
+          "name" => "Анна",
+        ),
+        array(
+          "id" => 4322,
+          "email" => "boi4a@bk.ru",
+          "name" => "Лидия",
+        ),
+        array(
+          "id" => 4324,
+          "email" => "variouskris91@mail.ru",
+          "name" => "Кристина",
+        ),
+        array(
+          "id" => 4325,
+          "email" => "mermaid_90@mail.ru",
+          "name" => "Ольга",
+        ),
+        array(
+          "id" => 4327,
+          "email" => "shubinaalexandra05@gmail.com",
+          "name" => "Александра",
+        ),
+        array(
+          "id" => 4329,
+          "email" => "yplat0n@ya.ru",
+          "name" => "Яна",
+        ),
+        array(
+          "id" => 4330,
+          "email" => "manshina1998@mail.ru",
+          "name" => "Ника",
+        ),
+        array(
+          "id" => 4331,
+          "email" => "placebo1000@gmail.com",
+          "name" => "Ирина",
+        ),
+        array(
+          "id" => 4334,
+          "email" => "Udalova.ev@yandex.ru",
+          "name" => "Екатерина",
+        ),
+        array(
+          "id" => 4336,
+          "email" => "kit_nastasya@mail.ru",
+          "name" => "Настасья",
+        ),
+        array(
+          "id" => 4340,
+          "email" => "bahtina.yulia@mail.ru",
+          "name" => "Юлия",
+        ),
+        array(
+          "id" => 4345,
+          "email" => "gera0910@mail.ru",
+          "name" => "Алла",
+        ),
+        array(
+          "id" => 4347,
+          "email" => "Darthlynx@yandex.ru",
+          "name" => "Anna",
+        ),
+        array(
+          "id" => 4351,
+          "email" => "lisvolavka@gmail.com",
+          "name" => "Елизавета",
+        ),
+        array(
+          "id" => 4352,
+          "email" => "kozhanova.luba@yandex.ru",
+          "name" => "Любовь",
+        ),
+        array(
+          "id" => 4353,
+          "email" => "olga.paramoshko@mail.ru",
+          "name" => "Ольга",
+        ),
+        array(
+          "id" => 4355,
+          "email" => "test@test122345.test",
+          "name" => "test",
+        ),
+        array(
+          "id" => 4356,
+          "email" => "evstkatya@yandex.ru",
+          "name" => "Екатерина",
+        ),
+        array(
+          "id" => 4357,
+          "email" => "mkipchatov@gmail.com",
+          "name" => "Михаил",
+        ),
+        array(
+          "id" => 4359,
+          "email" => "wooodward77@gmail.com",
+          "name" => "Илья",
+        ),
+        array(
+          "id" => 4361,
+          "email" => "v.kiryushkina@gmail.com",
+          "name" => "Валентина",
+        ),
       );
+      
+      
                   
       if($test){  
           $users = array(

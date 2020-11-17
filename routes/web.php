@@ -1011,6 +1011,11 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     //Libaras
     Route::put('/admin/libra', 'LibraController@put');
     Route::post('/admin/libra/sort', 'LibraController@sortByName');
+    Route::post('/admin/libra/update', 'LibraController@update');
+    Route::get('/admin/libra/logs', 'LibraController@getLogs');
+    Route::get('/admin/libra/last/product/update', 'LibraController@lastProductUpdate');
+    Route::get('/admin/libra/last/update', 'LibraController@lastLibraUpdate');
+    Route::get('/admin/libra/vesi/odin', function(){return Storage::download('\vesi\odin.txt');});
 
     //Logs
     Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

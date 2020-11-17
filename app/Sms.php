@@ -82,16 +82,16 @@ class Sms extends Model
       $to = $bonus->user->phone;
 
       if(Sms::where('body',$body)->where('to',$to)->exists()){
-        dump('exists');
-        dump(Sms::where('body',$body)->where('to',$to)->first()->body);
-        dump('---');
+        // dump('exists');
+        // dump(Sms::where('body',$body)->where('to',$to)->first()->body);
+        // dump('---');
         continue;
       }
 
       
-      dump('put');
-      dump($bonus);
-      dump('---');
+      // dump('put');
+      // dump($bonus);
+      // dump('---');
 
       self::putSmsToSend(['body'=>$body,'to'=>$to]);
 

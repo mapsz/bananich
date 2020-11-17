@@ -33,6 +33,8 @@ class Email extends Model
         array_push($productsIds,$productMatch[0]);
       }
 
+      
+
       //Get products
       $producsts = Product::jugeGet(['ids' => $productsIds, 'get_all' => 1]);
 
@@ -47,7 +49,9 @@ class Email extends Model
           }
         }      
 
-        // dd($product);
+        // dump($id);       
+
+
         $productHtml_start = "".
           "<div style='width:160px;display: inline-block;margin:15px 7px'>".
             "<div><img width='160' height='160' src='https://bananich.ru/{$product->mainImage}' alt=''></div>".            
@@ -90,7 +94,12 @@ class Email extends Model
         
         $productHtml = $productHtml_start.$productHtml_2.$productHtml_3.$productHtml_4.$productHtml_end;
 
-        $html = str_replace($matches[$k][0],$productHtml,$html);
+        // dump('&lt;:product_'.$id.':&gt;');
+        // dump($matches[$k][0]);
+
+        $html = str_replace('&lt;:product_'.$id.':&gt;',$productHtml,$html);
+
+        // dd($html);
 
       }
 

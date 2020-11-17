@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Libra;
@@ -52,6 +54,23 @@ class LibraController extends Controller
       echo $v->button . ' - ' . $v->product->name;
       echo "<br>";
     }
+  }
+
+  public function update(){
+    
+    return response()->json(Libra::updateLibras());
+  }
+
+  public function getLogs(){
+    return response()->json(DB::table("libra_logs")->orderBy('created_at', 'DESC')->limit(100)->get());
+  }
+
+  public function lastProductUpdate(){
+    return response()->json(Libra::orderBy('updated_at', 'DESC')->first()->updated_at->timestamp);
+  }
+
+  public function lastLibraUpdate(){
+    return response()->json(Storage::lastModified('/vesi/odin.txt'));
   }
 
 }

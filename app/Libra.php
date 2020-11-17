@@ -5,40 +5,40 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Products;
 
 class Libra extends Model
 {
-  // "Инжир"
-  // "Кофе Ваниль"
-  // "Кунжут черный"
-  // "Кунжут"
-  // "Курага"
-  // "Лен"
-  // "Маш"
-  // "Премиум смесь"Иммунитет 7 суперфудов""
-  // "Рис Басмати"
-  // "Семена тыквы н/о"
-  // "Тыква Премиум, с высоким содержанием белка"
-  // "Финики королевские"
-  // "Чечевица"
 
-//   "Кардамон молотый"
-// "Морковь сушеная"
-// "Мускатный орех молотый"
-// "Мята сушеная"
-// "Перец душистый горошек"
-// "Перец черный горошек"
-// "Петрушка сушеная"
-// "Томаты сушеные"
-// "Хмели-сунели"
-// "Ванилин"
-// "Желатин"
-// "Лимонная кислота"
-// "Чеснок гранулированный"
-
-
-
+  /*
+    // "Инжир"
+    // "Кофе Ваниль"
+    // "Кунжут черный"
+    // "Кунжут"
+    // "Курага"
+    // "Лен"
+    // "Маш"
+    // "Премиум смесь"Иммунитет 7 суперфудов""
+    // "Рис Басмати"
+    // "Семена тыквы н/о"
+    // "Тыква Премиум, с высоким содержанием белка"
+    // "Финики королевские"
+    // "Чечевица"
+    //   "Кардамон молотый"
+    // "Морковь сушеная"
+    // "Мускатный орех молотый"
+    // "Мята сушеная"
+    // "Перец душистый горошек"
+    // "Перец черный горошек"
+    // "Петрушка сушеная"
+    // "Томаты сушеные"
+    // "Хмели-сунели"
+    // "Ванилин"
+    // "Желатин"
+    // "Лимонная кислота"
+    // "Чеснок гранулированный"
+  */
 
   //Proporties
   protected $guarded = [];
@@ -74,6 +74,42 @@ class Libra extends Model
   ];
 
   //Methods
+  public static function updateLibras(){
+
+    //Clear doubles
+    self::clearDoubles();
+
+    //Sort libras
+    self::sortButtonsByName();
+
+    //Generate files
+    self::generateVesiOdinFile();
+    
+
+  }
+
+  public static function clearDoubles(){
+    $doubles = DB::select("
+      SELECT * FROM (
+        SELECT COUNT('product_id') AS `count`, product_id FROM libras
+        GROUP BY product_id
+      ) l
+      WHERE `count` > 1
+    ");
+
+    if(count($doubles) == 0) return true;
+
+    foreach ($doubles as $key => $double) {
+      $libra = Libra::where('product_id',$double->product_id)->first();
+      $libra->delete();
+    }
+
+    self::log('Doubles deleted', 'warning');
+
+    return true;
+    
+  }
+
   public static function generateFiles(){
 
     //Get produts ids
@@ -209,7 +245,7 @@ class Libra extends Model
           foreach ($AddProps as $k => $v) {
             $error .= $k+1 . ' - ' . $v . "\n";
           }
-          self::errorMessage($error);
+          self::log($error, 'danger');
           return false;
         }
 
@@ -222,13 +258,17 @@ class Libra extends Model
 
       }
 
-      $content .= "\r\n";
+      $content .= "\r\n";      
 
     }
 
-    Storage::disk('local')->put('up100.txt', mb_convert_encoding($content, "cp866"));
+    //Generate File
+    $result = Storage::disk('local')->put('\vesi\odin.txt', mb_convert_encoding($content, "cp866"));
 
-    dd($content);
+    //Log
+    if($result) self::log('"VesiOdin" file generated', 'info');
+
+    return $result;
   }
 
   private static function addAdditionalRow($pre, $value){
@@ -262,8 +302,9 @@ class Libra extends Model
 
   }
 
-  private static function errorMessage($message){
-    dd($message);
+  private static function log($message, $type = null){
+    //Put log
+    DB::table('libra_logs')->insert(['body' => $message,'type' => $type,'created_at' => now(),'updated_at' => now()]);
   }
 
   public static function sortButtonsByName(){
@@ -279,7 +320,11 @@ class Libra extends Model
     foreach ($sorted as $key => $v) {
       Libra::where('id',$v->id)->update(['button' => ++$button]);
     }
+
+    //Log
+    self::log('Sort by name', 'info');
     
+    //Return
     return true;
   }
 
@@ -324,7 +369,8 @@ class Libra extends Model
 
     //Return
     return $data;
-  }  
+  }
+
   public function jugePost($data){
     //Validate
     $validate = [
@@ -342,6 +388,7 @@ class Libra extends Model
     //Return
     return $update ? $libra : false;
   }
+  
   public function jugeGetKeys()     {return $this->keys;}    
   public function jugeGetInputs()   {return $this->inputs;}     
 

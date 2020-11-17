@@ -847,6 +847,6 @@ class Order extends Model
 
   //JugeCRUD  
   public function jugeGetKeys()     {return $this->keys;}  
-  public function jugeGet($request) {return $this->getWithOptions($request);}
+  public static function jugeGet($request) {return self::getWithOptions($request);}
 
 }

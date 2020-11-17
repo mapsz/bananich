@@ -28,6 +28,8 @@
         <product-termobox class="mb-3 border p-2" />
         <!-- Categories -->
         <product-categories class="mb-3 border p-2" />
+        <!-- Libra -->
+        <!-- <product-libra class="mb-3 border p-2" /> -->
         <!-- Delivery Limits -->
         <product-delivery-limits class="mb-3 border p-2" />
       </div>

@@ -605,9 +605,9 @@ class Product extends Model
         }
         if($request['sort'] == 'sortExpensive'){
           $products = $products->orderBy('price', 'DESC');
-        }
-        $products = $products->orderBy('sort', 'DESC');    
-      }           
+        } 
+      }                 
+      $products = $products->orderBy('sort', 'DESC');
 
     }
 

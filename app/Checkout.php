@@ -9,6 +9,7 @@ use App\Product;
 use App\ProductDiscount;
 use App\Setting;
 use App\Bonus;
+use App\Order;
 
 class Checkout extends Model
 {
@@ -24,7 +25,7 @@ class Checkout extends Model
     //Is first order
     $cart['firstOrder'] = true;
     if($user){
-      $orders = User::where('id',$cart->user_id)->with('orders')->first()->orders;
+      $orders = Order::jugeGet(['customer_id' => 4263, 'status' => [1], 'limit' => 1]);
       $cart['firstOrder'] = (count($orders) > 0) ? false : true;
     }
 
