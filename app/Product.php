@@ -965,6 +965,7 @@ class Product extends Model
 
       //Product
       foreach ($insert['product'] as $k => $v) $product->$k = $v;
+      $product->updated_at = now();
       $product->save();
 
       //Description
