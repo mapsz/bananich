@@ -149,7 +149,6 @@ class ProductController extends Controller
     return response()->json(1);    
   }
 
-
   public function getBase64PreloadedImages(Request $request){
 
     if(!isset($request['images'])){
@@ -170,4 +169,8 @@ class ProductController extends Controller
 
     return response()->json($base64);
   }
+
+  public function lastUpdate(){
+    return response()->json(Product::orderBy('updated_at', 'DESC')->first()->updated_at->timestamp);
+  }  
 }

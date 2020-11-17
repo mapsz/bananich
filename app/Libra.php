@@ -239,13 +239,17 @@ class Libra extends Model
         
         //Get errors
         if(count($AddProps) > 8){
+          
           $error = "Количество дополнительных строк не должно превышать 8!\n";
           $error = $v->product->name . "\n";
           $error .= "Дополнительные строки:\n";
+
           foreach ($AddProps as $k => $v) {
             $error .= $k+1 . ' - ' . $v . "\n";
           }
+
           self::log($error, 'danger');
+
           return false;
         }
 
@@ -376,7 +380,8 @@ class Libra extends Model
     $validate = [
       'id'              => ['exists:libras,id'],
       'product_id'      => ['exists:products,id'],
-      'libra'           => ['numeric'],
+      // 'libra'           => ['numeric'],
+
       'button'          => ['numeric','min:1','unique:libras,button']
     ];  
     Validator::make($data, $validate)->validate();

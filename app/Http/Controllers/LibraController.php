@@ -16,7 +16,7 @@ class LibraController extends Controller
     {//Validate
       $validate = [
         'product_id'      => ['required','exists:products,id'],
-        'libra'           => ['required','numeric'],
+        // 'libra'           => ['required','numeric'],
         'button'          => ['required','min:1'],
       ];  
       Validator::make($request->all(), $validate)->validate();
@@ -32,9 +32,9 @@ class LibraController extends Controller
       Validator::make(['button' => $button], $validate,$messages)->validate();
     }
     
-    {// Insert
+    {//Insert
       $libra = new Libra;
-      $libra->libra         = $request->libra;
+      $libra->libra         = 1;
       $libra->button        = $request->button;
       $libra->product_id    = $request->product_id;
       $libra->save();
@@ -46,7 +46,7 @@ class LibraController extends Controller
 
   }
 
-  public function sortByName(){    
+  public function sortByName(){
     return response()->json(Libra::sortButtonsByName());
   }
 

@@ -929,6 +929,9 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     Route::post('/user/address', 'UserController@postAddress');
     Route::post('/user/main/photo', 'UserController@editMainPhoto');
 
+    //Product
+    Route::get('/product/last/update', 'ProductController@lastUpdate'); 
+
     //Present
     Route::get('/present/settings', 'PresentController@getSettings'); 
     Route::get('/product/present', 'PresentController@getProduct'); 
