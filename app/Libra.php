@@ -266,7 +266,7 @@ class Libra extends Model
     $result = Storage::disk('local')->put('\vesi\odin.txt', mb_convert_encoding($content, "cp866"));
 
     //Log
-    if($result) self::log('"VesiOdin" file generated', 'info');
+    if($result) self::log('"VesiOdin" file generated', 'primary');
 
     return $result;
   }
