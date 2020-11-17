@@ -386,7 +386,13 @@ class Libra extends Model
     $update = $libra->update($data);
 
     //Return
-    return $update ? $libra : false;
+    if($update){
+      Libra::log('libra post', 'info');
+      return $libra;
+    }else{
+      return false;
+    }
+    
   }
   
   public function jugeGetKeys()     {return $this->keys;}    

@@ -40,6 +40,8 @@ class LibraController extends Controller
       $libra->save();
     }
 
+    Libra::log('libra put', 'info');
+
     return response()->json(1);
 
   }
