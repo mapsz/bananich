@@ -331,12 +331,14 @@ class Bonus extends Model
       if(!$customerParent) return false;
     }
     
+    dd($customerParent->toArray());
+
     {//Add bonus
       //Parent
       $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
-      Bonus::add($customerParent->id,   $bonusCount,    'referal',        $order->id, 'Приглашенный: '. $customer->phone,         14);
+      Bonus::add($customerParent->id,   $bonusCount,    'referal',        $order->id, 'Приглашенный: ' . $customer->phone,         14);
       //Child
-      Bonus::add($customer->id,         100,            'referal-child',  $order->id, 'Пригласивший: '. $customerParent->phone,   14);
+      Bonus::add($customer->id,         100,            'referal-child',  $order->id, 'Пригласивший: ' . $customerParent->phone,   14);
     }
 
     return true;
