@@ -324,17 +324,15 @@ class Bonus extends Model
     {//Get referal
       $referal = DB::table('user_referals')->where('user_id',$customer->id)->first();
       if(!$referal) return false;
+      if(!$referal->phone) return false;
     }
 
     
-    dump($referal);
-
     {//Get referal parent
       $customerParent = User::where('phone',$referal->phone)->first();
       if(!$customerParent) return false;
     }
     
-    dd($customerParent->toArray());
 
     {//Add bonus
       //Parent
