@@ -131,24 +131,27 @@ mounted(){
 methods:{
   ...mapActions({'fetchOrder':'order/fetchOne',deleteDelivery:'deleteDelivery',setOrderReturned:'order/setReturned',}),
   async setDelivered(){
-    //Validate Pays
-    this.errors = [];
-    if(!this.payMethod){
-      this.errors.push('Выберите метод оплаты!');
-      return;
-    }
-    if(this.payMethod == -3){
-      this.errors.push('Укажите суммы оплаты!');
-      return;      
-    }
-    if(this.payMethod.sum != undefined){
-      if(this.payMethod.sum != this.order.total_result){
-        this.errors.push('Суммы не совпадают!');
-        return
+    
+    {//Validate Pays
+      this.errors = [];
+      if(!this.payMethod){
+        this.errors.push('Выберите метод оплаты!');
+        return;
+      }
+      if(this.payMethod == -3){
+        this.errors.push('Укажите суммы оплаты!');
+        return;      
+      }
+      if(this.payMethod.sum != undefined){
+        if(this.payMethod.sum != this.order.total_result){
+          this.errors.push('Суммы не совпадают!');
+          return
+        }
       }
     }
 
-    let r = await this.jugeAx('/put/delivery',
+    //fetch
+    let r = await ax.fetch('/put/delivery',
       {
         orderId:this.id,
         items:this.order.items,
@@ -157,8 +160,10 @@ methods:{
       },
       'put'
     );
-
+    
     if(!r) return;    
+
+    //update available
     ax.fetch('/order/update/available', {id:this.id});
 
     location.reload();

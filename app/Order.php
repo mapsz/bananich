@@ -169,15 +169,15 @@ class Order extends Model
 
   public static function placeOrder($data, $cart){
     
-    //Customer
-    if(Auth::user()){
-      $customer_id = Auth::user()->id;
-    }else{
-      $customer_id = 0;
-    }
-   
-    //Order
-    if('Order' == 'Order'){
+    {//Customer
+      if(Auth::user()){
+        $customer_id = Auth::user()->id;
+      }else{
+        $customer_id = 0;
+      }
+    }   
+    
+    {//Order
 
       //Bonus
       $bonus = $cart['bonus'];
@@ -213,9 +213,8 @@ class Order extends Model
 
       $orderId = $order->id;
     }
-
-    //Items
-    if('Items' == 'Items'){
+    
+    {//Items
 
       //Put items
       foreach($cart['items'] as $item){
@@ -327,7 +326,6 @@ class Order extends Model
       $coupon->save();
 
     }
-
     
     //Delete Cart
     Cart::find($cart['id'])->delete();
@@ -335,10 +333,9 @@ class Order extends Model
     //Remove Bonuses
     if($bonus > 0){
       Bonus::remove($customer_id, $bonus, 2, $orderId);
-    }
-    
+    }    
 
-    return $orderId;
+    return $order;
 
   }
  

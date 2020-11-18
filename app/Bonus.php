@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\BonusAdd;
 use App\BonusRemove;
 use App\BonusComment;
+use App\User;
 
 class Bonus extends Model
 {
@@ -22,6 +23,7 @@ class Bonus extends Model
     ['key'    => 'user.name','label' => 'пользователь'],
     ['key'    => 'action_user.name','label' => 'исполнитель'],
     ['key'    => 'created_at','label' => 'дата'],
+    ['key'    => 'order.id','label' => 'заказ'],
     ['key'    => 'comment.comment','label' => 'коммент'],
     ['key'    => 'add_bonus.die','label' => 'Сгорят'],
   ];
@@ -53,19 +55,20 @@ class Bonus extends Model
     //Query
     $query = new Bonus;
 
-    if('with'=='with'){
+    {//With
       //Add type
       $query = $query->join('bonus_types', 'bonuses.bonus_type_id', '=', 'bonus_types.id');
       $query = $query->select('bonuses.*', 'bonus_types.name as bonus_type');
 
       //Add users
       $query = $query->with('user');
+      $query = $query->with('orders');
       $query = $query->with('action_user');
       $query = $query->with('addBonus');
       $query = $query->with('comment');
     }
 
-    if('where'=='where'){
+    {//Where
       if(!isset($request['nousernolive'])){ //@@@ защиту?
         $user = Auth::user();
         $userId = $user->id;
@@ -92,14 +95,21 @@ class Bonus extends Model
       }
     }
 
-
     //Sort
     $query = $query->orderBy('created_at', 'DESC');
 
     //Bonus
     $bonus = JugeCRUD::get($query,$request);
-
     
+    {//After query
+      foreach ($bonus as $v) {       
+        //Order
+        if(isset($v->orders[0])){          
+          $v->order = $v->orders[0];          
+        } 
+      }
+
+    }
 
 
     return $bonus;
@@ -109,6 +119,8 @@ class Bonus extends Model
 
     //Decode type
     if($type == 'buy') $type = 2;
+    if($type == 'referal') $type = 5;
+    if($type == 'referal-child') $type = 6;
 
     try{
       //Start DB
@@ -154,7 +166,7 @@ class Bonus extends Model
 
 
       //Attach order
-      if($order) $bonus->order()->attach($order);      
+      if($order) $bonus->orders()->attach($order);      
       
       //Store to DB
       DB::commit();    
@@ -297,6 +309,40 @@ class Bonus extends Model
     return true;
   }
 
+  public static function referalBonusAdd($order){
+    
+    {//Get customer
+      if(!isset($order->customer_id)) return false;
+      $customer = User::where('id',$order->customer_id)->first();
+      if(!$customer) return false;
+    }
+
+    {//Already got ref bonus
+      if(Bonus::where('user_id',$customer->id)->where('bonus_type_id',6)->exists()) return false;
+    }
+
+    {//Get referal
+      $referal = DB::table('user_referals')->where('user_id',$customer->id)->first();
+      if(!$referal) return false;
+    }
+
+    {//Get referal parent
+      $customerParent = User::where('phone',$referal->phone)->first();
+      if(!$customerParent) return false;
+    }
+    
+    {//Add bonus
+      //Parent
+      $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
+      Bonus::add($customerParent->id,   $bonusCount,    'referal',        $order->id, 'Приглашенный: '. $customer->phone,         14);
+      //Child
+      Bonus::add($customer->id,         100,            'referal-child',  $order->id, 'Пригласивший: '. $customerParent->phone,   14);
+    }
+
+    return true;
+
+  }
+
 
   //JugeCRUD  
   public function jugeGetKeys()     {return $this->keys;}  
@@ -304,7 +350,7 @@ class Bonus extends Model
   public function jugeGet($request) {return $this->getWithOptions($request);}
 
   //Relations
-  public function order(){
+  public function orders(){
     return $this->belongsToMany('App\Order');
   }
   public function user(){

@@ -28,97 +28,102 @@ class DeliveryController extends Controller
   }
 
   public function put(Request $request){
-
-    //Validate
-    Validator::make($request->all(), [
-      'comment'     => 'max:250',
-    ])->validate();
-      
-    //Data
-    $orderId  = $request->all()['orderId'];    
-    $items    = $request->all()['items'];
-    $userId   = Auth::user()->id;
-    $comment  = ""; if(isset($request->comment)) $comment = $request->comment;
+    
+    {//Validate
+      Validator::make(
+        $request->all(), 
+        [
+          'comment'     => 'max:250',
+        ]
+      )->validate();
+    }
+          
+    {//Data
+      $orderId  = $request->all()['orderId'];    
+      $items    = $request->all()['items'];
+      $userId   = Auth::user()->id;
+      $comment  = ""; if(isset($request->comment)) $comment = $request->comment;
+    }
 
     //Get Order
     $order = Order::getWithOptions(['id' => $orderId]);
 
-    // dd($order->statuses[0]->id);
+    //Check already done
     if($order->statuses[0]->id == 1) return response()->json(-1);
-          
-    //Set pays
-    do{
-      $pays = [];
-      if(is_array($request->payMethod)){
-        foreach ($request->payMethod as $k => $pay) {   
-          if($k == 'sum') continue;     
-          array_push($pays,['id' => $k,'value' => $pay]);
+              
+    {//Set pays
+      do{
+        $pays = [];
+        if(is_array($request->payMethod)){
+          foreach ($request->payMethod as $k => $pay) {   
+            if($k == 'sum') continue;     
+            array_push($pays,['id' => $k,'value' => $pay]);
+          }
+        }else{
+          array_push($pays,['id' => $request->payMethod,'value' => $request->sum]);
         }
-      }else{
-        array_push($pays,['id' => $request->payMethod,'value' => $request->sum]);
-      }
-    }while(0);
-
+      }while(0);
+    }
+    
     //Database
     try {
-      DB::beginTransaction();
-      
-      //Set status
-      $order->Statuses()->attach(1,['user_id' => Auth::user()->id]);
+      DB::beginTransaction();{
 
-      //Set Deliveries
-      foreach ($items as $item) {
-        if($item['quantity_result'] > 0){
+        //Bonuses
+        if($order->customer_id){
 
-          //Put Goods
-          $goods = Goods::create(
-            [
-              'product_id' => $item['product_id'],
-              'quantity' => $item['quantity_result'] - ($item['quantity_result'] * 2),
-              'user_id' => $userId,
-            ]
-          );
+          //referal
+          Bonus::referalBonusAdd($order);
 
-          //Put Deliveries
-          $delivery = Delivery::create(
-            [
-              'good_id' => $goods->id,
-              'item_id' => $item['id'],
-              'comment' => $comment,
-              'date'    => Carbon::now(),
-              'user_id' => $userId,
-            ]
-          );
-        
+          //order
+          $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
+          Bonus::add($order->customer_id,$bonusCount,'buy',$order->id);          
+
         }
-      }
+       
+        //Set status
+        $order->Statuses()->attach(1,['user_id' => Auth::user()->id]);      
 
-      //Set Pays
-      foreach ($pays as $pay) {
-        Pay::create(
-          [
-            'order_id'      => $orderId,
-            'pay_method_id' => $pay['id'],
-            'user_id'       => $userId,
-            'value'         => $pay['value'],
-          ]
-        );
-      }
-      
-      //Registred deals
-      if($order->customer_id){
+        //Set Deliveries
+        foreach ($items as $item) {
+          if($item['quantity_result'] > 0){
 
-        //Set bonuses
-        $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
-        Bonus::add($order->customer_id,$bonusCount,'buy',$order->id);
+            //Put Goods
+            $goods = Goods::create(
+              [
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity_result'] - ($item['quantity_result'] * 2),
+                'user_id' => $userId,
+              ]
+            );
 
-        //Send Interview
-        // Interview::sendInterview($order->customer_id,1);
+            //Put Deliveries
+            $delivery = Delivery::create(
+              [
+                'good_id' => $goods->id,
+                'item_id' => $item['id'],
+                'comment' => $comment,
+                'date'    => Carbon::now(),
+                'user_id' => $userId,
+              ]
+            );
+          
+          }
+        }
 
-      }
-      
-      //Store to DB
-      DB::commit();    
+        //Set Pays
+        foreach ($pays as $pay) {
+          Pay::create(
+            [
+              'order_id'      => $orderId,
+              'pay_method_id' => $pay['id'],
+              'user_id'       => $userId,
+              'value'         => $pay['value'],
+            ]
+          );
+        }
+              
+      }DB::commit();
     } catch (Exception $e) {
       // Rollback from DB
       DB::rollback();

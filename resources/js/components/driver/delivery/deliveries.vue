@@ -8,7 +8,7 @@
 
     <h2>Выдача</h2>  
     <!-- By id -->
-    <form @submit.prevent="goById()" class="input-group mb-3" style="width: 140px;">    
+    <form @submit.prevent="goById()" class="input-group mb-3" style="width: 280px;">    
       <input v-model="byId" type="number" class="form-control">
       <div class="input-group-append">
         <button @click.prevent="goById()" class="btn btn-outline-primary px-1" type="button">По ID</button>

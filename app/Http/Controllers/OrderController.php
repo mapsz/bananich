@@ -109,20 +109,19 @@ class OrderController extends Controller
 
   public function put(Request $request){
     
-    //Get data
-    $data = $request->all();
-    $data = $data['data'];
-
-    //Get Cart
-    $cart = Cart::getCart(['presentProduct' => true]);
-
-    $settings = new Setting(); $settings = $settings->getList(1);
-
-    //Validate
-    if('validate' == 'validate'){
-
-      //Validate Cart
-      if('cart' == 'cart'){
+    {//Data
+      //Get data
+      $data = $request->all();
+      $data = $data['data'];
+      //Get Cart
+      $cart = Cart::getCart(['presentProduct' => true]);
+      //Get Settings
+      $settings = new Setting(); $settings = $settings->getList(1);
+    }
+    
+    {//Validate
+      
+      {//Validate Cart
         $cartValidate = [
           'items'           => ['bail','min:1'],
           'pre_price'      => ['bail','required','numeric','max:200000', 'min:'.$cart['min_summ']],
@@ -135,9 +134,8 @@ class OrderController extends Controller
         ];
         Validator::make($cart, $cartValidate, $cartMessages)->validate();
       }
-
-      //Validate order
-      if('order' == 'order'){
+      
+      {//Validate order
         
         //Set first order confirm
         if($cart['firstOrder']) $data['confirm'] = 1;
@@ -195,9 +193,8 @@ class OrderController extends Controller
 
         Validator::make($data, $validate,$messages)->validate();
       }
-
-      //Validate available
-      if('available' == 'available'){
+      
+      {//Validate available
         //Check items available
         $available = Product::checkCartAvailable($cart);
 
@@ -211,40 +208,44 @@ class OrderController extends Controller
       }
     }
       
-
     //do order
     try {
-      DB::beginTransaction();
+      DB::beginTransaction();{
 
-      //Place order
-      $orderId = Order::placeOrder($data, $cart);
+        //Place order
+        $order = Order::placeOrder($data, $cart);
 
-      if(!$orderId) throw new Exception('order error');
+        //Check order success
+        if(!$order || !isset($order->id)) throw new Exception('order error');
 
-      //Mail
-      $order = Order::getWithOptions(['id'=>$orderId]);
-      $email = $order->email;
-      $data = ["email" => $email, "orderId" => $orderId];
+        {//Mail
+          //Set data
+          $orderId = $order->id;
+          $order = Order::getWithOptions(['id'=>$orderId]);        
+          $email = $order->email;
+          $data = ["email" => $email, "orderId" => $orderId];
 
-      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
-        $m->to($data['email'],'to');
-        $m->from('no-reply@bananich.ru');
-        $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
-      });
-      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
-        $m->to('bbananich@yandex.ru','to');
-        $m->from('no-reply@bananich.ru');
-        $m->subject('Бананыч заказ №'.$orderId.' получен!');
-      });
+          //Client send
+          $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
+            $m->to($data['email'],'to');
+            $m->from('no-reply@bananich.ru');
+            $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
+          });
+
+          //Dasha Send
+          $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
+            $m->to('bbananich@yandex.ru','to');
+            $m->from('no-reply@bananich.ru');
+            $m->subject('Бананыч заказ №'.$orderId.' получен!');
+          });
+        }
             
-      //Store to DB
-      DB::commit();    
+      }DB::commit();    
     } catch (Exception $e) {          
       // Rollback from DB
       DB::rollback();
       return response(['code' => 'wo1','text' => 'order error'], 512)->header('Content-Type', 'text/plain');
-    }
-    
+    }    
 
     return response()->json($orderId);
 

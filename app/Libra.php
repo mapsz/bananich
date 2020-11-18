@@ -218,7 +218,7 @@ class Libra extends Model
             $proteins = $v->product->proteins;
             $fats = $v->product->fats;
             //Add row
-            $rows = self::addAdditionalRow('БЖУ', "{$proteins}/{$fats}/{$carbohydrates}");
+            $rows = self::addAdditionalRow('БЖУ', "{$proteins}|{$fats}|{$carbohydrates}");
             $AddProps = array_merge($AddProps,$rows);
           }
         }
@@ -306,7 +306,7 @@ class Libra extends Model
 
   }
 
-  private static function log($message, $type = null){
+  public static function log($message, $type = null){
     //Put log
     DB::table('libra_logs')->insert(['body' => $message,'type' => $type,'created_at' => now(),'updated_at' => now()]);
   }

@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -73,12 +74,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-      return User::create([
-          'name' => $data['name'],
-          'surname' => $data['surname'],
-          'email' => $data['email'],
-          'phone' => $data['phone'],
-          'password' => Hash::make($data['password']),
+      //Put user
+      $user = User::create([
+        'name' => $data['name'],
+        'surname' => $data['surname'],
+        'email' => $data['email'],
+        'phone' => $data['phone'],
+        'password' => Hash::make($data['password']),
       ]);
+      
+      //Chech error
+      if(!$user) return $user;
+
+      //Put referal
+      if(isset($data['referral'])){
+        DB::table('user_referals')->insert(['user_id' => $user->id, 'phone' => $user->referral]);
+      }
+
+      return $user;
     }
 }

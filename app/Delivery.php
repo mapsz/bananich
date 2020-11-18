@@ -23,7 +23,7 @@ class Delivery extends Model
   }
 
   //JugeCRUD  
-  public function jugeGetKeys(){    
+  public function jugeGetKeys(){
     $arr = (new Order)->jugeGetKeys();
     array_push($arr, [
       "key" => "deliverier",

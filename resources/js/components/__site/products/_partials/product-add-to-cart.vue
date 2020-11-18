@@ -58,7 +58,7 @@ export default {
     }),
     async toCart(){
       //Chech out of stock
-      if(parseInt(this.count) > parseInt(this.product.available_unit) && this.product.always_publish == undefined){
+      if((parseInt(this.count) > parseInt(this.product.available_unit)) && (this.product.always_publish == undefined || this.product.always_publish == 0)){
         $('#cart-input-'+this.product.id).popover({content:'К сожалению на складе осталось всего '+this.product.available_unit+' единиц этого товара',placement:'top'})
         $('#cart-input-'+this.product.id).popover('show');
         this.count = this.product.available_unit;
@@ -67,8 +67,6 @@ export default {
 
       //Edit cart
       let r = await this.editItem({id:this.product.id,'count':this.count});
-
-      // console.log(r);
 
       //Pixel
       if(typeof fbq === 'function')
