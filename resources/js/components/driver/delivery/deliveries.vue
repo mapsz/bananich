@@ -56,9 +56,13 @@ export default {
 
       let count = 0;
       $.each(this.orders, function(k,v){
+        if(v.order == undefined) return;
+        if(v.order.statuses == undefined) return;
         if(v.order.statuses[0] == undefined) return;
         if(v.order.statuses[0].id == 1) count++;
       });
+
+      if(this.orders.length < 1) return -3;
 
       return this.orders.length - count;
     },
