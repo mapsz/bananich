@@ -44,6 +44,7 @@ class Logistic extends Model
       'type' => 'custom',
       'component' => 'driver-logistic-deliver',
     ],
+    ['key'    => 'driver.name', 'label' => 'водитель'],
     ['key'    => 'address','label' => 'адрес'],     
     ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
     ['key'    => 'date', 'label' => 'дата'],
@@ -219,6 +220,9 @@ class Logistic extends Model
         }      
       }
     }
+
+    //Sort
+    $query = $query->orderBy('plan_arrival_time');
 
     //Get
     $logistics = $query->get();

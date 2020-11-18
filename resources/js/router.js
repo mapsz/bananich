@@ -131,9 +131,12 @@ let routes = [];
   );
 
   //Delivery
+  import deliveries from './components/driver/delivery/deliveries.vue';
+  import delivery from './components/driver/delivery/delivery.vue';
   routes.push(
     {path: adminPrefix+'/delivery/:id',component: delivery},
     {path: adminPrefix+'/deliveries',component: deliveries},
+    {path: adminPrefix+'/deliveries/:drivers',component: deliveries},
   );  
 
   //Not Found
@@ -318,8 +321,6 @@ let routes = [];
 
 
   //Delivery
-  import deliveries from './components/driver/delivery/deliveries.vue';
-  import delivery from './components/driver/delivery/delivery.vue';
   routes.push(
     {path: driverPrefix+'/delivery/:id',component: delivery},
     {path: driverPrefix+'/deliveries',component: deliveries},

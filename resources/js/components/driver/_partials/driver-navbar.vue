@@ -16,33 +16,41 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    user:{},
     current:this.$route.path,
-    adminPrefix:'/admin',
-    links:[],
   }},
+  computed:{
+    ...mapGetters({user:'user/getAuth'}),
+    ...mapGetters({isAdmin:'user/isAdmin'}),
+    links(){
+      let links = [
+        {
+          link:"/driver/deliveries",
+          caption:"Выдача",
+        },
+      ];      
+      if(this.isAdmin){
+        let adminLinks = [
+          {
+            link:"/admin/deliveries/all",
+            caption:"Выдача все водители",
+          }
+        ];
+        links = adminLinks.concat(links);
+      }
+      return links;
+      
+    },
+
+  },
   mounted(){
-    this.links = [
-      {
-        link:"/driver/deliveries",
-        caption:"Выдача",
-      },
-      // {
-      //   link: this.adminPrefix+"/confirms",
-      //   caption:"Подтверждение",
-      // },
-      // {
-      //   link: this.adminPrefix+"/orders/limits",
-      //   caption:"Лимит заказов",
-      // },
-      // {
-      //   link: this.adminPrefix+"/orders/logistics",
-      //   caption:"Логистика",
-      // },
-    ];
-  }
+    //
+  },
+  methods:{    
+    ...mapActions({fetchAuth:'user/fetchAuth'}),
+  },
 }
 </script>
 

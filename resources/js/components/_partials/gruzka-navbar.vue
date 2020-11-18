@@ -27,31 +27,20 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    user:{},
+    // user:{},
     current:this.$route.path,
     adminPrefix:'/admin',
     links:[],
   }},
   computed:{
-    isAdmin:function(){
-      if(this.user == undefined || this.user.roles == undefined) return null;
-      if(this.user.roles[0] == undefined) return false;
-
-      let isRole = false;
-
-      $.each(this.user.roles, (k, role) => {
-        if(role.name == 'admin'){
-          isRole = true;
-          return true;
-        } 
-      });
-
-      return isRole;
-    }
+    ...mapGetters({user:'user/getAuth'}),
+    ...mapGetters({isAdmin:'user/isAdmin'}),
   },
-  mounted(){
+  mounted(){    
+    this.fetchAuth();
     this.links = [
       {
         link: this.adminPrefix+"/orders",
@@ -86,7 +75,7 @@ export default {
         caption:"Учёт",
       },
       {
-        link: "/driver",
+        link: "/admin/deliveries/all",
         caption:"Водитель",
       },
       {
@@ -118,22 +107,15 @@ export default {
         caption:"emails",
       },
     ];
-
-    this.auth();
   },
-  methods:{
-    async auth(){
-      let r = await this.jugeAx('/auth/user');
-      this.user = r;
-    },
+  methods:{    
+    ...mapActions({fetchAuth:'user/fetchAuth'}),
     async logout(){
       let r = await this.jugeAx('/logout',{},'post');
       let response = this.jugeAxResponse();
       if(response.status == 401){
         location.reload(); 
-      }
-      
-      
+      }  
     },
   },
 }

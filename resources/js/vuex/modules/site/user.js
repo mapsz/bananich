@@ -7,6 +7,21 @@ let siteUser = {
     get: (state) => {
       return state.user;
     },
+    isAdmin: (state) => {
+      if(state.user == undefined || state.user.roles == undefined) return null;
+      if(state.user.roles[0] == undefined) return false;
+
+      let isRoleAdmin = false;
+
+      $.each(state.user.roles, (k, role) => {
+        if(role.name == 'admin'){
+          isRoleAdmin = true;
+          return true;
+        } 
+      });
+
+      return isRoleAdmin;
+    },
   },
   actions:{
     async fetch({commit}){

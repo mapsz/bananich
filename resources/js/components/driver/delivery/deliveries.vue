@@ -64,8 +64,10 @@ export default {
     },
   },
   mounted(){
-    //Set filters
-    this.$store.dispatch('logistic/addFilter',{driver_build:1});
+    if(this.$route.params.drivers == undefined || this.$route.params.drivers != 'all'){
+      this.$store.dispatch('logistic/addFilter',{driver_build:1});
+    }
+    
     this.getDriverKeys();
   },
   methods:{
