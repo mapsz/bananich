@@ -20,7 +20,7 @@ class Bonus extends Model
     ['key'    => 'bonus_type','label' => 'тип'],
     ['key'    => 'quantity','label' => 'количество'],
     ['key'    => 'left','label' => 'осталось'],
-    ['key'    => 'user.name','label' => 'пользователь','type' => 'link', 'link' => '/admin/order/{user_id}'],
+    ['key'    => 'user.name','label' => 'пользователь','type' => 'link', 'link' => '/admin/user/{user_id}'],
     ['key'    => 'action_user.name','label' => 'исполнитель'],
     ['key'    => 'created_at','label' => 'дата'],
     ['key'    => 'order.id','label' => 'заказ'],
