@@ -25,7 +25,7 @@ class Checkout extends Model
     //Is first order
     $cart['firstOrder'] = true;
     if($user){
-      $orders = Order::jugeGet(['customer_id' => 4263, 'status' => [1], 'limit' => 1]);
+      $orders = Order::jugeGet(['customer_id' => $user->id, 'status' => [1], 'limit' => 1]);
       $cart['firstOrder'] = (count($orders) > 0) ? false : true;
     }
 
