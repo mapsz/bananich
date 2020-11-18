@@ -327,7 +327,7 @@ class Bonus extends Model
     }
 
     
-    dump($referal->toArray());
+    dump($referal);
 
     {//Get referal parent
       $customerParent = User::where('phone',$referal->phone)->first();
