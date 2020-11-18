@@ -88,7 +88,7 @@ class RegisterController extends Controller
 
       //Put referal
       if(isset($data['referral'])){
-        DB::table('user_referals')->insert(['user_id' => $user->id, 'phone' => $user->referral]);
+        DB::table('user_referals')->insert(['user_id' => $user->id, 'phone' => $data['referral']]);
       }
 
       return $user;
