@@ -21,6 +21,16 @@
     <!-- Filter -->
     <juge-date-filter :model="'logistic'"/>
 
+    <!-- Orders Left -->
+    <div style="font-size:16pt">
+      <!-- no orders -->
+      <span v-if="ordersLeft == -2" class="text-info">На указаную дату заказов не найдено</span>
+      <!-- left -->
+      <span v-if="ordersLeft > 0" class="text-warning">Заказов не оформлено: <b>{{ordersLeft}}</b></span>
+      <!-- Success -->
+      <span v-if="ordersLeft == 0" class="text-success"><b>Все заказы успешны!</b></span>
+    </div>
+
     <!-- List -->
     <juge-list v-if="driverKeys" class="mt-3" :data="'logistic'" :keys="driverKeys"/>
   </div>
@@ -30,6 +40,7 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
     driverKeys:false,
@@ -37,6 +48,21 @@ export default {
     loadData:false,
     byId:null,
   }},
+  computed:{
+    ...mapGetters({orders:'logistic/get',isFetched:'logistic/isFetched'}),
+    ordersLeft(){
+      if(!this.isFetched) return -1;
+      if(this.isFetched && this.orders.length == 0) return -2;
+
+      let count = 0;
+      $.each(this.orders, function(k,v){
+        if(v.order.statuses[0] == undefined) return;
+        if(v.order.statuses[0].id == 1) count++;
+      });
+
+      return this.orders.length - count;
+    },
+  },
   mounted(){
     //Set filters
     this.$store.dispatch('logistic/addFilter',{driver_build:1});

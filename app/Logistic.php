@@ -34,9 +34,6 @@ class Logistic extends Model
 
   public $driverKeys = [
     ['key'    => 'order_id','label' => 'заказ №'],
-    ['key'    => 'address','label' => 'адрес'],     
-    ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
-    ['key'    => 'date', 'label' => 'дата'],
     [
       'key'    => 'order-status', 'label' => 'статус заказа',
       'type' => 'custom',
@@ -47,6 +44,9 @@ class Logistic extends Model
       'type' => 'custom',
       'component' => 'driver-logistic-deliver',
     ],
+    ['key'    => 'address','label' => 'адрес'],     
+    ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
+    ['key'    => 'date', 'label' => 'дата'],
   ];
 
   public static function daily(){
