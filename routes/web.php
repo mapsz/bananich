@@ -1018,7 +1018,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
     Route::get('/admin/libra/logs', 'LibraController@getLogs');
     Route::get('/admin/libra/last/product/update', 'LibraController@lastProductUpdate');
     Route::get('/admin/libra/last/update', 'LibraController@lastLibraUpdate');
-    Route::get('/admin/libra/vesi/odin', function(){return Storage::download('\vesi\odin.txt');});
+    Route::get('/admin/libra/vesi/odin', function(){return Storage::download('/vesi/odin.txt');});
 
     //Logs
     Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
