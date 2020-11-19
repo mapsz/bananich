@@ -53,9 +53,13 @@
     </div>
     
     <!-- Action buttons -->
-    <div v-if="done && orderId" class="row mt-3 justify-content-center">
+    <div v-if="(done && orderId) && orderStatus != 1" class="row mt-3 justify-content-center">
       <button v-if="done == 2" class="btn btn-success" @click="finish(300)">Готово</button>
       <button v-if="done == 3" class="btn btn-warning" @click="finish(400)">Требует досборки</button>
+    </div>
+    <!-- Is success -->
+    <div v-if="orderStatus == 1" class="text-center text-success mt-3" style="font-size:16pt">
+      Заказ успешно доставлен
     </div>
   
   </div>
@@ -64,6 +68,7 @@
     v-if="currentItem >= 0" 
     :item="order.items[currentItem]"
     :container-list="containers"
+    :order="order"
     @prev="prevItem()"
     @next="nextItem()"
     @confirm="confirm"
@@ -85,6 +90,13 @@ export default {
     }
   },  
   computed:{
+    orderStatus (){
+      if(this.order == undefined) return false;
+      if(this.order.statuses == undefined) return false;
+      if(this.order.statuses[0] == undefined) return false;
+
+      return this.order.statuses[0].id;
+    },
     items: function(){return this.order.items;},
     done: function(){
       //Check no items
@@ -137,7 +149,7 @@ export default {
     }
 
     //Start gruzka
-    await this.startOrder();
+    // await this.startOrder();
 
     //Get Containers
     this.getContainers();
@@ -194,19 +206,16 @@ export default {
       this.currentItem++;
       l.hide();
     },
-
     async confirm(item){
       let i = await this.order.items.findIndex(x => x.id == item.id)
       this.order.items[i] = item;
       this.checkDone();
     },
-
     async noItem(item){
       let i = await this.order.items.findIndex(x => x.id == item.id)
       this.order.items[i] = item;
       this.checkDone();
     },
-
     async checkDone(){
       //
     },

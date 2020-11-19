@@ -31,7 +31,7 @@
     <div class="under-fixed-bottom"></div>
     <div class="fixed-bottom" style="">
       <!-- Summary -->
-      <div class="row m-0 justify-content-center">
+      <div v-if="orderStatus != 1" class="row m-0 justify-content-center">
         <span style="align-self: flex-end;">Всего:</span>        
         <span class="quantity-expect"><b>{{expect_quantity}} </b></span>
         <span  
@@ -43,11 +43,15 @@
             align-self: flex-end;        
           "
         >
-         🦜(Не больше!) 
+        🦜(Не больше!) 
         </span>
       </div>
+      <!-- Is success -->
+      <div v-if="orderStatus == 1" class="text-center text-success mt-3" style="font-size:16pt">
+        Заказ успешно доставлен
+      </div>
       <!-- Input Gram-->
-      <div class="form-group m-2">
+      <div v-if="orderStatus != 1" class="form-group m-2">
         <input 
           v-model="quantity"
           pattern="\d*"
@@ -90,7 +94,8 @@
         <!-- Buttons -->
         <div class="action-buttons mx-0 d-flex justify-content-between">
           <!-- No item -->
-          <button 
+          <button
+            v-if="orderStatus != 1"
             class="btn-main btn-no-item btn" 
             :class="
               item.statuses[0].id == 200 ? 'btn-danger' : 'btn-outline-danger'
@@ -108,7 +113,8 @@
             <font-awesome-icon icon="arrow-right" />
           </button>
           <!-- Confirm -->
-          <button 
+          <button
+            v-if="orderStatus != 1"
             class="btn-main btn-confirm btn" 
             :class="
               item.statuses[0].id == 300 ? 'btn-success' : 'btn-outline-success'
@@ -134,7 +140,7 @@
 
 <script>
   export default {
-    props: ['item','container-list'],
+    props: ['item','container-list','order'],
     data(){
       return {
         max_difference:2,
@@ -147,7 +153,16 @@
         containersQuantity:1,
         warningText: false,        
       }
-    },    
+    },
+    computed:{
+      orderStatus (){
+        if(this.order == undefined) return false;
+        if(this.order.statuses == undefined) return false;
+        if(this.order.statuses[0] == undefined) return false;
+
+        return this.order.statuses[0].id;
+      },
+    },
     watch:{
       item: {
         handler: function () {
@@ -240,6 +255,7 @@
         
         //Put Gruzka
         let r = await this.jugeAx('/gruzka/confirm',{
+          orderId:this.item.order_id,
           itemId:this.item.id,
           itemQuantity:quantity,
           containers:containers,

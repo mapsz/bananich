@@ -16,14 +16,16 @@ class GruzkaController extends Controller
 {
   public function confirm(Request $request){
 
-    //Get auth user id
-    $authId = Auth::user()->id;
-    //Item Id
-    $itemId = $request->itemId;
-    //Item Quantity
-    $itemQuantity = $request->itemQuantity;
-    //Containers
-    $containers = $request->containers;
+    {//Data
+      //Get auth user id
+      $authId = Auth::user()->id;
+      //Item Id
+      $itemId = $request->itemId;
+      //Item Quantity
+      $itemQuantity = $request->itemQuantity;
+      //Containers
+      $containers = $request->containers;
+    }
 
     //Formate containers
     foreach ($containers as $k => $v) {
@@ -38,37 +40,57 @@ class GruzkaController extends Controller
     $item = Item::find($itemId);
     if(!$item->first()) return response(['code' => 'g1','text' => 'no item'], 512)->header('Content-Type', 'text/plain');
 
+    {//set order status
+      $setOrderStatus = true;
+      $order = Order::jugeGet(['id' => $request->orderId]);
+      do{
+        //No statuses
+        if(!isset($order->statuses)) continue;
+        if(!isset($order->statuses[0])) continue;
+        //No user id match
+        if($order->statuses[0]->pivot->user_id != $authId) continue;
+        //No statuses match
+        if($order->statuses[0]->id != 500) continue;
+        //No enouth time
+        if(now()->diffInMinutes($order->statuses[0]->created_at) > 30) continue;
+
+        $setOrderStatus = false;
+
+      }while(0);
+    }
 
     //Add gruzka
     //Store Product
     try {
+      DB::beginTransaction();{     
 
-      //Start DB
-      DB::beginTransaction();
-
-      //Set status
-      $item->statuses()->attach(300,['user_id' => $authId]);
-
-      //Set quantity
-      $item->quantity_result = $itemQuantity;
-      if(!$item->save()) throw new Exception("Cant save item", 1);
-      
-      //Containers
-      //remove containers
-      if(Gruzka::removeContainers($itemId)) throw new Exception("Cant delete containers", 1);
-      foreach ($containers as $key => $v) {
-        $containerToDb =[];
-        $containerToDb = [
-          'user_id' => $authId,
-          'quantity' => $v['quantity']
-        ];        
-        if(!$item->containers()->attach($v['id'],$containerToDb)){
-          throw new Exception("Cant save container", 2);
+        //Set order status
+        if($setOrderStatus){
+          Order::find($order->id)->statuses()->attach(500,['user_id' => $authId]);
         }        
-      }
-     
-      //Store to DB
-      DB::commit();
+        
+        //Set status
+        $item->statuses()->attach(300,['user_id' => $authId]);
+
+        //Set quantity
+        $item->quantity_result = $itemQuantity;
+        if(!$item->save()) throw new Exception("Cant save item", 1);
+        
+        //Containers
+        //remove containers
+        if(Gruzka::removeContainers($itemId)) throw new Exception("Cant delete containers", 1);
+        foreach ($containers as $key => $v) {
+          $containerToDb =[];
+          $containerToDb = [
+            'user_id' => $authId,
+            'quantity' => $v['quantity']
+          ];        
+          if(!$item->containers()->attach($v['id'],$containerToDb)){
+            throw new Exception("Cant save container", 2);
+          }        
+        }
+      
+      }DB::commit();
     } catch (Exception $e) {      
       // Rollback from DB
       DB::rollback();
