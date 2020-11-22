@@ -24,7 +24,7 @@
                   </span> 
                    
                   <span class="bonuse-num-target">                    
-                    / {{soonDie.quantity != undefined ? soonDie.quantity : 0}}
+                    / {{soonDie.add_bonus != undefined ? soonDie.add_bonus.left : 0}}
                   </span>
                 </span>
                 <div class="bonuse-num-text">сгорят через</div>
