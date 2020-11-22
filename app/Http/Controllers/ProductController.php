@@ -144,16 +144,16 @@ class ProductController extends Controller
     Validator::make($request->all(), [
       'product_id'      => 'required|exists:products,id',
       //All
-      'pack'            => 'numeric',
-      'transport'       => 'numeric',
+      'pack'            => 'numeric|nullable',
+      'transport'       => 'numeric|nullable',
       //Banan
-      'price'           => 'numeric',
-      'discount_price'  => 'numeric',
-      'quantity'        => 'numeric',
-      'charge'          => 'numeric',
+      'price'           => 'numeric|nullable',
+      'discount_price'  => 'numeric|nullable',
+      'quantity'        => 'numeric|nullable',
+      'charge'          => 'numeric|nullable',
       //X
-      'price_x'         => 'numeric',
-      'charge_x'        => 'numeric'
+      'price_x'         => 'numeric|nullable',
+      'charge_x'        => 'numeric|nullable'
     ])->validate();
 
     

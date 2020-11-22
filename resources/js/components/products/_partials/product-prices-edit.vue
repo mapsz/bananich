@@ -133,12 +133,6 @@ methods:{
   postSettings(data){
     data.product_id = this.product.id;
 
-    // if(data.discount_price == undefined) data.discount_price = (this.product.discount != undefined ? this.product.discount.discount_price : null);
-    // if(data.quantity == undefined) data.quantity = (this.product.discount != undefined ? this.product.discount.quantity : null);
-
-    // data.quantity = data.quantity == "" ? 0 : data.quantity;
-    // data.discount_price = data.discount_price == "" ? 0 : data.discount_price;
-
     let r = ax.fetch('/product/discount/set', data , 'post');
 
     if(r) location.reload();

@@ -981,25 +981,46 @@ class Product extends Model
       
       //Meta
       foreach ($insert['meta'] as $k => $v){
-        
-        ProductMeta::where('product_id', $product->id)->where('name', $k)->delete();
-        $meta = new ProductMeta;
-        $meta->product_id = $product->id;
-        $meta->name = $k;
-        $meta->value = $v === true ? 1 : $v;
-        $meta->save();
 
+        {//Value
+          $v = $v === true ? 1 : $v;
+          $v = $v ==  null ? 0 : $v;
+          $v = $v ==  ""   ? 0 : $v;
+        }
+
+        //Delete
+        ProductMeta::where('product_id', $product->id)->where('name', $k)->delete();
+
+        //Put 
+        if($v){          
+          $meta = new ProductMeta;
+          $meta->product_id = $product->id;
+          $meta->name = $k;
+          $meta->value = $v;
+          $meta->save();
+        }
       }
       
       //Long Meta
       foreach ($insert['long_meta'] as $k => $v){
+
+        {//Value
+          $v = $v === true ? 1 : $v;
+          $v = $v ==  null ? 0 : $v;
+          $v = $v ==  ""   ? 0 : $v;
+        }
         
+        //Delete
         ProductLongMeta::where('product_id', $product->id)->where('name', $k)->delete();
-        $meta = new ProductLongMeta;
-        $meta->product_id = $product->id;
-        $meta->name = $k;
-        $meta->value = $v === true ? 1 : $v;
-        $meta->save();
+
+        //Put 
+        if($v){
+          $meta = new ProductLongMeta;
+          $meta->product_id = $product->id;
+          $meta->name = $k;
+          $meta->value = $v;
+          $meta->save();
+        }
 
       }
 
@@ -1044,12 +1065,28 @@ class Product extends Model
 
     $toData = [];
 
+    //data
     if(isset($data['quantity']))          $toData['quantity']         = $data['quantity'];
     if(isset($data['discount_price']))    $toData['discount_price']   = $data['discount_price'];
-
+    
+    //Update
     DB::table('product_discounts')->updateOrInsert(
       ['product_id'  => $id], $toData 
     );
+
+    {//Delete
+      //Check discount exists
+      foreach ($data as $key => $value) {
+        if($key == 'discount_price'){
+          $exists = true;
+          break;      
+        }
+      }      
+
+      if($exists && $data['discount_price'] == null){
+        ProductDiscount::where('product_id', $id)->delete();
+      }
+    }
 
     return 1;
   }  
