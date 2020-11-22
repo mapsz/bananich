@@ -225,7 +225,7 @@ export default {
               ],
               datasets: [{
                 borderWidth:3,
-                data: [this.currentBonus-this.soonDie.left, this.soonDie.left],
+                data: [this.currentBonus-this.soonDie.add_bonus.left, this.soonDie.add_bonus.left],
                 label: 'БЖУ',
                 backgroundColor: [
                   '#fbe214',
