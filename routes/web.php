@@ -1141,7 +1141,8 @@ Route::group(['middleware' => ['HttpsRR']], function () {
       Route::post('/config/post', 'ListConfigController@post');
 
       //Product discount
-      Route::post('/product/discount/set', 'ProductController@setDiscount');
+      Route::post('/product/discount/set', 'ProductController@postPrice');
+      // Route::post('/product/discount/set', 'ProductController@setDiscount');
       Route::delete('/product/discount/remove', 'ProductController@removeDiscount');
 
       //Discount

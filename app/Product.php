@@ -941,6 +941,11 @@ class Product extends Model
         case  "bonus": 
         case  "popular": 
         case  "termobox": 
+        case  "pack": 
+        case  "transport": 
+        case  "price_x": 
+        case  "charge_x": 
+        case  "charge": 
           $insert['meta'][$key] = $value;
           break;
         case "composition": 
@@ -1035,17 +1040,16 @@ class Product extends Model
     return '/products/images/product/' . $img->basename;
   }
 
-  public static function setDiscount($data){
-    //Delete old
-    self::deleteDiscount($data['product_id']);
+  public static function setDiscount($id, $data){
 
-    //Put new
-    $discount = new ProductDiscount;
-    $discount->product_id = $data['product_id'];
-    $discount->discount_price = $data['discount_price'];
-    $discount->quantity = isset($data['quantity']) ? $data['quantity'] : 0;
-    $discount->type = isset($data['type']) ? $data['quantity'] : 1;
-    $discount->save();
+    $toData = [];
+
+    if(isset($data['quantity']))          $toData['quantity']         = $data['quantity'];
+    if(isset($data['discount_price']))    $toData['discount_price']   = $data['discount_price'];
+
+    DB::table('product_discounts')->updateOrInsert(
+      ['product_id'  => $id], $toData 
+    );
 
     return 1;
   }  

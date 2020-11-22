@@ -136,6 +136,88 @@ class ProductController extends Controller
     return response()->json(1);
   }
 
+  public function postPrice(Request $request){    
+
+    // dd($request->all());
+    
+    //Validate
+    Validator::make($request->all(), [
+      'product_id'      => 'required|exists:products,id',
+      //All
+      'pack'            => 'numeric',
+      'transport'       => 'numeric',
+      //Banan
+      'price'           => 'numeric',
+      'discount_price'  => 'numeric',
+      'quantity'        => 'numeric',
+      'charge'          => 'numeric',
+      //X
+      'price_x'         => 'numeric',
+      'charge_x'        => 'numeric'
+    ])->validate();
+
+    
+    {//Sort data
+      $data = [];
+      $data["id"] = $request->product_id;
+
+      //Sort
+      foreach ($request->all() as $key => $value) {
+        switch ($key) {          
+          case 'price':
+          case 'pack':
+          case 'transport':
+          case 'charge':
+          case 'price_x':
+          case 'charge_x':
+            $data["data"][$key] = $value;
+            break;
+          case 'discount_price':
+          case 'quantity':
+            $data["discount"][$key] = $value;
+            break;
+        }
+      }
+
+      
+      // dd($data);
+
+      // (isset($data['meta']) && is_array($data['meta']) && (count($data['meta']) > 0))
+      
+      {//DB
+        try{
+          DB::beginTransaction();{
+            
+            {//Data
+              if((isset($data['data']) && is_array($data['data']) && (count($data['data']) > 0))){
+                Product::post($data["id"], $data["data"]);
+              }
+            }
+            
+            {//Discount
+              if((isset($data['discount']) && is_array($data['discount']) && (count($data['discount']) > 0))){
+                Product::setDiscount($data["id"], $data["discount"]);
+              }
+            }
+  
+          }DB::commit();    
+        } catch (Exception $e){
+          // Rollback from DB
+          DB::rollback();
+          return response(['code' => 'bo1','text' => 'Bonus add put error'], 512)->header('Content-Type', 'text/plain');
+        }
+      }
+
+      //Return
+      return response()->json(1);
+
+    }
+
+
+
+
+  }
+
   public function removeDiscount(Request $request){
 
     //Validate
