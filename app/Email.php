@@ -70,9 +70,11 @@ class Email extends Model
             "<span style='font-size: medium;color: rgb(255, 92, 0);'><b> {$product->final_price}</b></span>".
         "";
 
+        $productHtml_link = "?utm_source=mail2311&utm_medium=mail2311&utm_campaign=mail2311";
+
         $productHtml_4 = "".
           "<div align='center'>
-            <a href='https://bananich.ru/product/{$product->id}' style='text-decoration: none;'>
+            <a href='https://bananich.ru/product/{$product->id}{$productHtml_link}' style='text-decoration: none;'>
               <p align='center' style='
                 width: 120px;
                 margin: auto;

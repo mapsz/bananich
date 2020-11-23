@@ -1,5 +1,5 @@
 <template>
-<div class="row">  
+<div class="row w-100">  
   <!-- Activate/Deactivate     -->
   <div class="col-12 col-md-1 date-activate-deactivate mr-2 align-self-center mb-2 mb-md-0">
     <div class="d-flex justify-content-md-center">

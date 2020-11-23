@@ -10,12 +10,12 @@
   <!-- Filter -->
   <div class="row m-3 mb-2 order-menu justify-content-between">
     <juge-date-filter :model="model"></juge-date-filter>
-    <juge-id-filter :model="model" />
+    <!-- <juge-id-filter :model="model" /> -->
   </div>
   <div class="row m-3 mb-2 order-menu justify-content-between">
     <order-delivery-time-filter :model="model" />
     <order-status-filter  :model="model" />
-    <juge-search-filter  :model="model" />
+    <!-- <juge-search-filter  :model="model" /> -->
   </div>
 
   <!-- List -->
