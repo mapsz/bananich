@@ -146,6 +146,7 @@ class ProductController extends Controller
       //All
       'pack'            => 'numeric|nullable',
       'transport'       => 'numeric|nullable',
+      'supple_price'    => 'numeric|nullable',
       //Banan
       'price'           => 'numeric|nullable',
       'discount_price'  => 'numeric|nullable',
@@ -165,6 +166,7 @@ class ProductController extends Controller
       foreach ($request->all() as $key => $value) {
         switch ($key) {          
           case 'price':
+          case 'supply_price':
           case 'pack':
           case 'transport':
           case 'charge':

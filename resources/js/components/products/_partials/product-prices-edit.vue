@@ -26,6 +26,11 @@ data(){return{
   edit:0,
   inputsAll:[
     {
+      name:'supply_price',
+      caption:'закупка',
+      type:"text",
+    },
+    {
       name:'pack',
       caption:'Упаковка',
       type:"text",

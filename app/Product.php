@@ -942,6 +942,7 @@ class Product extends Model
         case  "popular": 
         case  "termobox": 
         case  "pack": 
+        case  "supply_price": 
         case  "transport": 
         case  "price_x": 
         case  "charge_x": 
