@@ -868,9 +868,14 @@ Route::get('/logistic/daily', function(){echo App\Logistic::daily();});
 //bonus
 Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 
-// Route::group(['middleware' => ['under-construction','HttpsRR']], function () {
-Route::group(['middleware' => ['HttpsRR']], function () {
 
+Route::domain('x.bananich.loc')->middleware(['HttpsRR','under-construction'])->group(function () {
+  Route::get('/', function(){
+    return redirect('/x');
+  });
+});
+
+Route::group(['middleware' => ['HttpsRR']], function () {
     
   Route::get('/home', function(){
     return redirect('/');
@@ -1327,6 +1332,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
 
 });
+// });
 
 
 

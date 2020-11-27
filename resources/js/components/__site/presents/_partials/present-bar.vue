@@ -1,6 +1,6 @@
 <template>
   <div class="scale">
-    <div class="scale-list">
+    <div class="scale-list" @click="redirect++">
 
       <!-- achived -->
       <div v-if="!(currentPresent == false || currentPresent == 'xl')" class="scale-line achived"
@@ -86,6 +86,14 @@
 <script>
 export default {
 props: ['cart','settings'],
+data(){return{
+  redirect:0,
+}},
+watch:{
+  redirect: function (val, oldVal) {
+    if(this.redirect > 5) location.href = (localServer ? 'https://x.bananich.loc' : 'https://x.bananich.ru');
+  },
+},
 mounted(){
   // fbq('track', 'AddPaymentInfo');
 },

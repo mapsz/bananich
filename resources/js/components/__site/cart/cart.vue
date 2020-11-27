@@ -31,29 +31,46 @@
             <!-- Sitebar -->
               <div class="cart-sitebar">
 
-                <delivery-block />
+                <template v-if="!isX">
+                  <!-- Shipping -->
+                  <delivery-block />
 
-                <div class="cart-bonuse">                  
-                  <present-block />
-                  <hr>
-                  <!-- Bonus -->
-                  <div v-if="user" class="mb-4">
-                    <bonus-cart-block></bonus-cart-block>
+                  <!-- Bonuses -->
+                  <div class="cart-bonuse">                  
+                    <present-block />
+                    <hr>
+                    <!-- Bonus -->
+                    <div v-if="user" class="mb-4">
+                      <bonus-cart-block></bonus-cart-block>
+                    </div>
+                    <!-- Coupons -->
+                    <cart-coupon />
                   </div>
-                  <!-- Coupons -->
-                  <cart-coupon />
-                </div>
+                </template>
+
+                <!-- Info -->
                 <buy-info />
 
-                <span v-if="cart.min_summ > cart.pre_price"
-                  style="    
-                    color: red;
-                    font-size: 14pt;
-                  "
-                >
-                  Минимальная сумма заказа {{cart.min_summ}}
-                </span>
-                <a v-else href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
+                <!-- To checkout -->
+                <template>                  
+                  <!-- X bananich -->
+                  <template v-if="isX">
+                    <a href="/checkout" class="btn btn-yellow btn-thick">Оформить коллективную закупку</a>
+                  </template>
+                  <!-- Normal bananich -->
+                  <template v-else>
+                    <!-- Min price -->
+                    <span v-if="cart.min_summ > cart.pre_price"
+                      style="    
+                        color: red;
+                        font-size: 14pt;
+                      "
+                    >
+                      Минимальная сумма заказа {{cart.min_summ}}
+                    </span>
+                    <a v-else href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
+                  </template>
+                </template>
                 
 
                 <div v-if="user && !(settings.min_order > cart.pre_price) && cart.pre_price > 0" class="cart-message">
@@ -61,7 +78,7 @@
                     <img src="image/icons/bonus.svg" alt="Bonus">
                   </div>
                   <div  class="cart-message-text">
-                    <span>За этот заказ вы получите {{Math.round((cart.final_summ - cart.shipping) / 10)}} бонусов! </span> 
+                    <span>За этот заказ вы получите {{bonusesToGet}} бонусов! </span> 
                     <div class="cart-message-date">
                       Успейте потратить за 21 день!
                       <!-- <div class="cart-message-time"><span>01.12.2020</span> I <span>18:10</span></div>
@@ -85,7 +102,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    halloween:halloween,
+    halloween:halloween,isX:isX,
   }},
   computed:{
     ...mapGetters({
@@ -95,6 +112,13 @@ export default {
     }),
     freeShipping: function(){
       return this.settings.free_shipping;     
+    },
+    bonusesToGet:function (){
+      if(
+        this.cart == undefined || this.cart.final_summ  == undefined || this.cart.shipping == undefined || 
+        this.settings == undefined || this.settings.bonus_multiplier== undefined 
+      ) return false;
+      return Math.round((this.cart.final_summ - this.cart.shipping) * parseFloat(this.settings.bonus_multiplier));
     }
   },
   watch: {

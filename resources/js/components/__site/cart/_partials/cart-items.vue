@@ -53,7 +53,7 @@
               <!-- Add to cart -->
               <span v-if="!item.present"><button><product-add-to-cart :product="products.find(x => x.id == item.product_id)"/></button></span>
               <!-- Bonus -->
-              <span v-if="!item.present" style="color:gray;font-size:10pt;">{{'+'+Math.round(item.final_price / 10)+'Б'}}</span>
+              <span v-if="!item.present" style="color:gray;font-size:10pt;">{{'+'+Math.round(item.final_price * parseFloat(settings.bonus_multiplier))+'Б'}}</span>
               <!-- Present -->
               <div v-else class="cart-bonuse-ico" style="align-self: center;width: 30px;"><a href="/presents"><img src="image/icons/gift.svg" alt="Present"></a></div>
               <!-- Price -->

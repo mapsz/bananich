@@ -1,6 +1,6 @@
 <template>
 <div :class="halloween?'halloween':''">
-  <header class="header" style="z-index: 100;" :class="halloween?'halloween':''">
+  <header class="header" style="z-index: 100;" :class="(halloween?'halloween':'') +' '+(isX?'bananich-x':'')">
 
     <!-- navbar-sad -->
     <div class="header-nav">
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Header -->
-    <div class="header-bar" v-scroll="handleScroll" 
+    <div class="header-bar" :class="isX?'bananich-x':''" v-scroll="handleScroll" 
       style="position:absolute; width:100%; background-color:white;"
       :style="
         isMobile ? '' : (position > 55 ? 'height: 80px;top:0; position:fixed;' : '')
@@ -25,7 +25,15 @@
         <a href="/"><div class="logo"></div> </a>
         
         <!-- Presents -->
-        <present-bar :cart="cart" :settings="presentSettings"/>
+        
+        <template v-if="isX">
+          bananichX <a :href="'https://' + (localServer ? 'bananich.loc' : 'bananich.ru')">bananich</a>
+        </template>
+        <template v-else>
+          <present-bar :cart="cart" :settings="presentSettings"/>
+        </template>
+
+        
         
         <!-- Search -->
         <div class="search">
@@ -63,7 +71,8 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    halloween:halloween,
+    localServer:localServer,
+    halloween:halloween,isX:isX,
     presentSettings:{},
     position:0,
   }},
@@ -197,5 +206,10 @@ export default {
     background-repeat: no-repeat;
     background-position: top 10px right 50px;
   }
+}
+
+
+.bananich-x{
+  background-color: #ffd2d2 !important;
 }
 </style>

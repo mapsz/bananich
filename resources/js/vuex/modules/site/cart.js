@@ -1,4 +1,7 @@
+import { isXMLDoc } from "jquery";
+
 let cart = {
+  
   namespaced: true,
 
   state: {  
@@ -12,7 +15,12 @@ let cart = {
   },
   actions:{
     async fetch({commit,dispatch}){
-      let r = await ax.fetch('/json/cart',{},'get',false);
+      //Set type
+      let type = false;
+      if(isX) type = 'x';
+
+      //fetch
+      let r = await ax.fetch('/json/cart',{type},'get',false);
 
       let localCart = false;
       if(localStorage.cart != undefined){
@@ -80,7 +88,11 @@ let cart = {
       return false;
     },
     async removeItem({dispatch},id){
-      let r = await ax.fetch('/cart/remove/item',{id},'delete');
+      //Set type
+      let type = false;
+      if(isX) type = 'x';
+      //Getch
+      let r = await ax.fetch('/cart/remove/item',{id,type},'delete');
       dispatch('fetch');
       return r;
     },    

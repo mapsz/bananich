@@ -16,6 +16,7 @@ use App\Bonus;
 use App\Interview;
 use App\Product;
 use App\User;
+use App\Setting;
 use Carbon\Carbon;
 use App\Events\OrderSuccess;
 use App\Events\OrderSuccessCancel;
@@ -43,6 +44,11 @@ class DeliveryController extends Controller
       $items    = $request->all()['items'];
       $userId   = Auth::user()->id;
       $comment  = ""; if(isset($request->comment)) $comment = $request->comment;
+    }
+
+    {//Get settings
+      $settings = new Setting;
+      $settings = $settings->getList(1);
     }
 
     //Get Order
@@ -75,8 +81,8 @@ class DeliveryController extends Controller
           //referal
           Bonus::referalBonusAdd($order);
 
-          //order
-          $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
+          //order          
+          $bonusCount = round(($order->total_result - $order->shipping) * floatval($settings['bonus_multiplier']), 0);
           Bonus::add($order->customer_id,$bonusCount,'buy',$order->id);          
 
         }

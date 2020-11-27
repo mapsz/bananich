@@ -16,6 +16,7 @@ class Setting extends Model
     'day_norm_fats'             => '60',
     'day_norm_proteins'         => '150',
     'day_norm_carbs'            => '230',
+    'bonus_multiplier'          => '0.1',
   ];
 
 

@@ -26,6 +26,15 @@ class Cart extends Model
       $cart = $cart->with('presents.product');
     }
     
+    {//Type
+      $type = 1;
+      if(isset($request['type'])){
+        if($request['type'] == 'x'){
+          $type = 2;
+        }
+      }
+      $cartz = $cart->where('type',$type);
+    }
 
     //User Loged in
     if($user){
@@ -47,6 +56,7 @@ class Cart extends Model
           $cart = new Cart();
           $cart->user_id = $user->id;
           $cart->session_id = $session;
+          $cart->type = $type;
           $cart->save();
         }
       }else{
@@ -60,6 +70,7 @@ class Cart extends Model
       if(!$cart){
         $cart = new Cart();
         $cart->session_id = $session;
+        $cart->type = $type;
         $cart->save();
       }  
     }
@@ -78,7 +89,10 @@ class Cart extends Model
   public static function editItem($productId,$count,$cart_id){
 
     //Remove if zero
-    if($count == 0) return self::removeItem($productId);
+    if($count == 0){
+      self::removeItem($productId,$cart_id);
+      return true;
+    } 
 
     //Attach
     //Get item
@@ -100,15 +114,18 @@ class Cart extends Model
     return true;
   }
 
-  public static function removeItem($productId){
+  public static function removeItem($productId, $cart_id = false){
 
-    //Get cart
-    $cart = self::getCart();
-
+    //Get cart id
+    if(!$cart_id){
+      $cart = self::getCart();
+      $cart_id = $cart['id'];
+    }
+    
     //Remove item
-    if(!CartItem::where('cart_id',$cart['id'])->where('product_id',$productId)->delete()) return false;
+    if(!CartItem::where('cart_id',$cart_id)->where('product_id',$productId)->delete()) return false;
 
-    return $cart;
+    return true;
   }
 
   public static function resetItems(){

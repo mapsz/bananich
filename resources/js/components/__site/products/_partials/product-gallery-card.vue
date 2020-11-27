@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog-item">
+  <div class="catalog-item" :class="isX?'bananich-x':''">
     <!-- Image -->
     <div>
       <div 
@@ -11,7 +11,7 @@
           style="position:absolute; width:100%; height:100%"          
         ></a>
         <!-- Bonus -->
-        <span v-if="product.bonus == 1" style="
+        <span v-if="!isX && (product.bonus == 1)" style="
           background-color: #fbe214;
           color: black;
           padding: 10px;
@@ -79,17 +79,25 @@
       <!-- Price/Cart -->
       <div class="catalog-item-cart">
         <!-- Price -->
-        <template>
-          <span v-if="product.discount" class="sale">
-            {{Number(product.discount.discount_price)}}р <span class="old">-{{Number(product.price)}}р</span>                        
-          </span>
-          <span v-else>{{Number(product.price)}}р</span>
+        <template>          
+          <!-- Normal bananich price -->
+          <template v-if="isX">
+            <span>{{Number(product.price_x)}}р</span>
+          </template>
+          <!-- X bananich price -->
+          <template v-else>            
+            <span v-if="product.discount" class="sale">
+              {{Number(product.discount.discount_price)}}р <span class="old">-{{Number(product.price)}}р</span>                        
+            </span>
+            <span v-else>{{Number(product.price)}}р</span>
+          </template>
         </template>
+
         <!-- To Cart -->
         <product-add-to-cart :product='product'/>
       </div>
       <!-- Discount annonce -->  
-      <div v-if="product.discount && product.discount.quantity >= 1" style="
+      <div v-if="!isX && (product.discount && product.discount.quantity >= 1)" style="
         font-size: 9pt;
         font-style: italic;
         color: rgb(255, 92, 0);
@@ -110,6 +118,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    isX:isX,
     count:0,
   }},
   props: ['product'],
@@ -147,5 +156,9 @@ export default {
   .catalog-item-img {
     height: 140px  !important;
   }
+}
+
+.bananich-x .catalog-item-text{
+  background-color: #ffeded;
 }
 </style>

@@ -14,11 +14,11 @@
         </div>    
       </span>
 
-      <span v-if="cart.coupon != undefined">
-        Успешно применен промокод: <b>{{cart.coupon.code}}</b><br>
-        <span style="font-size:10pt;color:gray;">Если вы хотите вместо него применить другой промокод, просто введите его в поле выше</span>
+      <div v-if="cart.coupon != undefined" class="m-2">
+        <div>Применен промокод: <span><b>{{cart.coupon.code}}</b></span></div>
+        <div style="font-size:10pt;color:gray;">Если вы хотите вместо него применить другой промокод, просто введите его в поле выше</div>
         
-      </span>
+      </div>
 
     </div>
 

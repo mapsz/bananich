@@ -9,9 +9,13 @@ use App\Cart;
 class CartController extends Controller
 {
   public function get(Request $request){
+
+    //Set type
+    $type = false;
+    if(isset($request->type)) $type = $request->type;
     
     //Get cart
-    $cart = Cart::getCart();
+    $cart = Cart::getCart(['type' => $type]);
     //Return
     return response()->json($cart);
 
@@ -58,8 +62,18 @@ class CartController extends Controller
       'id'  => 'required|exists:products',
     ])->validate();
 
+    //Set type
+    $type = false;
+    if(isset($request->type)) $type = $request->type;
+    
+    //Get cart
+    $cart = Cart::getCart(['type' => $type]);
+
     //Remove
-    $cart = Cart::removeItem($request->id);
+    Cart::removeItem($request->id, $cart['id']);
+    
+    //Get cart
+    $cart = Cart::getCart(['type' => $type]);
 
     //Return
     return response()->json($cart ? $cart : false);

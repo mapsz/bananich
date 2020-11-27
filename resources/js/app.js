@@ -95,7 +95,9 @@ Vue.directive('click-outside', {
 });
 
 window.halloween = false;
-window.localServer = (window.location.hostname == 'bananich.loc') ? true : false;
+window.localServer = (window.location.hostname.indexOf('bananich.loc') > -1) ? true : false;
+
+window.isX = window.location.href.indexOf('x.bananich.') > -1 ? true : false;
 
 const app = new Vue({
     el: '#app',

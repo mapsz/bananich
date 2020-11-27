@@ -317,6 +317,7 @@ class Product extends Model
       $request['ids'] = $ids;
     }
 
+    //Catalogue
     if(isset($request['catalogue'])){
       $request['no_long_metas'] = 1;
       $request['no_description'] = 1;
@@ -325,9 +326,8 @@ class Product extends Model
       
     //New Product
     $products = new Product();
-
-    //Withs
-    if("WITH" == "WITH"){
+    
+    {//Withs
 
       //Summary
       if(isset($request['with_summary'])){
@@ -393,9 +393,8 @@ class Product extends Model
       }
       
     }
-
-    //Wheres
-    if("WHERE" == "WHERE"){
+    
+    {//Wheres
       //Id
       if(isset($request['id'])){
         $products = $products->where('id', $request['id']);
@@ -596,9 +595,8 @@ class Product extends Model
       }
 
     }
-
-    //Order By
-    if("SORT" == "SORT"){
+    
+    {//Sort
       if(isset($request['sort'])){
         if($request['sort'] == 'sortCheap'){
           $products = $products->orderBy('price', 'ASC');
@@ -614,8 +612,8 @@ class Product extends Model
     //Get
     $products = JugeCRUD::get($products,$request);
     
-    //After query work
-    if("afterQuery" == "afterQuery"){
+    
+    {//After query work
 
       //Images
       if(!isset($request['no_images'])){
@@ -668,15 +666,23 @@ class Product extends Model
         }
       }
 
-      //Final price
-      foreach ($products as $product) {
-        $product->final_price = $product->price;
-        //Discount exist
-        if(isset($product->discount) && $product->discount){
-          $product->final_price = $product->discount->discount_price;
+      {//Price
+        foreach ($products as $product) {
+          {//Normal bananich
+            $product->final_price = $product->price;
+            //Discount exist
+            if(isset($product->discount) && $product->discount){
+              $product->final_price = $product->discount->discount_price;
+            }
+            $product->final_price = $product->final_price;
+          }
+          {//X bananich
+            $product->price_per_unit_x = isset($product->price_x) ? $product->price_x : $product->price;
+            $product->price_x          = $product->price_per_unit_x;
+            $product->final_price_x    = $product->price_per_unit_x;
+          }          
         }
 
-        $product->final_price = $product->final_price;
       }
       
       //Unit
