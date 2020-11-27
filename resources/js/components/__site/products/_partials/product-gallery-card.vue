@@ -42,36 +42,38 @@
       </div>
       <!-- БЖУ -->
       <div class="catalog-item-cal">
-        <!-- Cal -->
         <template v-if="product.calories != undefined">
-          <div class="catalog-item-cal-box">
-            <span class="title">ккал</span>
-            <span>{{product.calories}}</span>
-          </div>
-          <div class="catalog-item-cal-hr"></div>
-        </template>
-        <!-- Белки -->
-        <template v-if="product.proteins != undefined">
-          <div class="catalog-item-cal-box">
-            <span class="title">белки</span>
-            <span>{{product.proteins}}г</span>
-          </div>
-          <div class="catalog-item-cal-hr"></div>
-        </template>
-        <!-- Жиры -->
-        <template v-if="product.fats != undefined">
-          <div class="catalog-item-cal-box">
-            <span class="title">жиры</span>
-            <span>{{product.fats}}г</span>
-          </div>
-          <div class="catalog-item-cal-hr"></div>
-        </template>
-        <!-- Углеводы -->
-        <template v-if="product.carbohydrates != undefined">
-          <div class="catalog-item-cal-box">
-            <span class="title">углев.</span>
-            <span>{{product.carbohydrates}}г</span>
-          </div>
+          <!-- Cal -->
+          <template>
+            <div class="catalog-item-cal-box">
+              <span class="title">ккал</span>
+              <span>{{product.calories != undefined ? product.calories : 0}}</span>
+            </div>
+            <div class="catalog-item-cal-hr"></div>
+          </template>
+          <!-- Белки -->
+          <template v-if="product.proteins != undefined">
+            <div class="catalog-item-cal-box">
+              <span class="title">белки</span>
+              <span>{{product.proteins != undefined ? product.proteins : 0}}г</span>
+            </div>
+            <div class="catalog-item-cal-hr"></div>
+          </template>
+          <!-- Жиры -->
+          <template v-if="product.fats != undefined">
+            <div class="catalog-item-cal-box">
+              <span class="title">жиры</span>
+              <span>{{product.fats != undefined ? product.fats : 0}}г</span>
+            </div>
+            <div class="catalog-item-cal-hr"></div>
+          </template>
+          <!-- Углеводы -->
+          <template v-if="product.carbohydrates != undefined">
+            <div class="catalog-item-cal-box">
+              <span class="title">углев.</span>
+              <span>{{product.carbohydrates != undefined ? product.carbohydrates : 0}}г</span>
+            </div>
+          </template>
         </template>
       </div>
       <!-- Icons -->
