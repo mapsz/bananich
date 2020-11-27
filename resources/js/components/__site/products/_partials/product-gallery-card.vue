@@ -42,7 +42,7 @@
       </div>
       <!-- БЖУ -->
       <div class="catalog-item-cal">
-        <template v-if="product.calories != undefined">
+        <template v-if="product.calories != undefined && product.calories > 0">
           <!-- Cal -->
           <template>
             <div class="catalog-item-cal-box">
