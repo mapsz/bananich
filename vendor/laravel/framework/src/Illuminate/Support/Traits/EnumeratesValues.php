@@ -143,7 +143,7 @@ trait EnumeratesValues
      */
     public function dd(...$args)
     {
-        $this->dump(...$args);
+        call_user_func_array([$this, 'dump'], $args);
 
         exit(1);
     }

@@ -2,15 +2,16 @@
 
 namespace Spatie\Permission\Models;
 
+use Spatie\Permission\Guard;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
-use Spatie\Permission\Guard;
-use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model implements RoleContract
 {
@@ -24,11 +25,8 @@ class Role extends Model implements RoleContract
         $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         parent::__construct($attributes);
-    }
 
-    public function getTable()
-    {
-        return config('permission.table_names.roles', parent::getTable());
+        $this->setTable(config('permission.table_names.roles'));
     }
 
     public static function create(array $attributes = [])
@@ -58,7 +56,7 @@ class Role extends Model implements RoleContract
     /**
      * A role belongs to some users of the model associated with its guard.
      */
-    public function users(): BelongsToMany
+    public function users(): MorphToMany
     {
         return $this->morphedByMany(
             getModelForGuard($this->attributes['guard_name']),

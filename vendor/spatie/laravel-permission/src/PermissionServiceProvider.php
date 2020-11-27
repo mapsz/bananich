@@ -2,13 +2,13 @@
 
 namespace Spatie\Permission;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\Contracts\Role as RoleContract;
+use Spatie\Permission\Contracts\Permission as PermissionContract;
 
 class PermissionServiceProvider extends ServiceProvider
 {
@@ -57,7 +57,7 @@ class PermissionServiceProvider extends ServiceProvider
     {
         $config = $this->app->config['permission.models'];
 
-        if (! $config) {
+        if (! $config) { // for odd config merge issue in #1370
             return;
         }
 
