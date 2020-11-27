@@ -2,12 +2,18 @@ let routes = [];
 
 //__site
 
-
   //Interview
   // import interview from './components/interview/interview.vue';
   // routes.push(
   //   {path: '/interview',    component:interview},
   // );
+
+  //Shared Order
+  import sharedOrder from './components/__site/shared-order/shared-order.vue';
+  routes.push(
+    {path: '/shared/order',            component:sharedOrder},
+    {path: '/shared/order/:order_link',    component:sharedOrder},
+  );
 
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';

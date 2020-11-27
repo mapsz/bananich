@@ -47,6 +47,7 @@ class Checkout extends Model
       
       {//Container
         $container = false;
+        $cart->container = false;
         if(isset($cart->containers) && isset($cart->containers[0])){
           $container = $cart->containers[0]->toArray();
           array_push($productIds, $container['product_id']);          

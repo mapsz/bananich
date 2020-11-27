@@ -17,17 +17,17 @@ export default {
     }),    
     currentPage(){
       if(this.pages == undefined) return false;
+      if(this.pages.length < 1) return false;
       
       let curPage = false;
       $.each(this.pages , ( k, page ) => {
-        // console.log('/'+page.link);
-        // console.log(this.$route.path);
-        // console.log('---');
         if('/'+page.link == this.$route.path){
           curPage = page;
           return;
         }
       });
+
+      if(!curPage) location.href = "/404";
 
       return curPage;
     }

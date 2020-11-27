@@ -17,6 +17,7 @@
         "laravel/ui": "^1.2",
         "larsjanssen6/underconstruction": "^6.1",
         "mikemclin/laravel-wp-password": "^2.0",
+        "pragmarx/random": "^0.2.2",
         "rap2hpoutre/laravel-log-viewer": "^1.7",
         "sopamo/laravel-filepond": "^0.3.0",
         "spatie/laravel-permission": "^3.10",

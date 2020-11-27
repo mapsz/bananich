@@ -871,7 +871,7 @@ Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 
 Route::domain('x.bananich.loc')->middleware(['HttpsRR','under-construction'])->group(function () {
   Route::get('/', function(){
-    return redirect('/x');
+    return redirect('/catalogue');
   });
 });
 
@@ -888,6 +888,11 @@ Route::group(['middleware' => ['HttpsRR']], function () {
 
   //All
   Route::group(['middleware' => []], function (){
+
+    {//Shared Order
+      Route::put('/shared/order/open', 'SharedOrderController@open');
+    }
+
     //Order
     Route::put('/order/put', 'OrderController@put');
     Route::any('/order/update/available', 'OrderController@updateAvailable');

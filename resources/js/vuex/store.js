@@ -13,10 +13,11 @@ let order = new jugeVuex('order');
 let bonus = new jugeVuex('bonus');
 let menu = new jugeVuex('menu');
 let page = new jugeVuex('page');
+let sharedOrder = new jugeVuex('sharedOrder');
 
 let store = {  
   modules:{
-    cart,user,product,settings,category,favorite,order,checkout,bonus,presents,orderLimits,menu,page
+    cart,user,product,settings,category,favorite,order,checkout,bonus,presents,orderLimits,menu,page,sharedOrder
   }
 };
 

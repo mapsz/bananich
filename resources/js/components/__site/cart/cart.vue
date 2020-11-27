@@ -55,7 +55,7 @@
                 <template>                  
                   <!-- X bananich -->
                   <template v-if="isX">
-                    <a href="/checkout" class="btn btn-yellow btn-thick">Оформить коллективную закупку</a>
+                    <a href="/shared/order" class="btn btn-yellow btn-thick">Оформить коллективную закупку</a>
                   </template>
                   <!-- Normal bananich -->
                   <template v-else>
