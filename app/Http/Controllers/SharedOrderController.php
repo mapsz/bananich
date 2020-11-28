@@ -33,7 +33,7 @@ class SharedOrderController extends Controller
     $weights = [];
     $weights['overall'] = 0;
     foreach ($users as $key => $user) {
-      $cart = Cart::with('items')->where('user_id',$user->id)->latest('created_at')->first();
+      $cart = Cart::with('items')->where('user_id',$user->id)->where('type',2)->latest('created_at')->first();
       $cart = Checkout::addToCart($cart);
       $weights[$cart['user_id']] = 0;
       foreach ($cart['items'] as $item) {
