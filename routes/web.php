@@ -869,7 +869,7 @@ Route::get('/logistic/daily', function(){echo App\Logistic::daily();});
 Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 
 
-Route::domain('x.bananich.loc')->middleware(['HttpsRR','under-construction'])->group(function () {
+Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
   Route::get('/', function(){
     return redirect('/catalogue');
   });
