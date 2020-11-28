@@ -25,10 +25,11 @@ window.ax = new ax;
 import load from './juge/juge-loader.js';
 window.load = new load;
 
-
 //Moment
 import moment from 'moment';
 window.moment = moment;
+
+
 
 //Toasted
 window.terror= function(){console.log('error xzz')};
@@ -99,10 +100,19 @@ window.localServer = (window.location.hostname.indexOf('bananich.loc') > -1) ? t
 
 window.isX = window.location.href.indexOf('x.bananich.') > -1 ? true : false;
 
+
+import TelegramButton from "vue-share-buttons/src/components/TelegramButton";
+Vue.component('telegram-button', TelegramButton);
+import WhatsApp from "vue-share-buttons/src/components/WhatsAppButton";
+Vue.component('whatsapp-button', WhatsApp);
+import VkontakteButton from "vue-share-buttons/src/components/VkontakteButton";
+Vue.component('vkontakte-button', VkontakteButton);
+// Vue.component('twitter-button', TwitterButton);
+
 const app = new Vue({
     el: '#app',
     router: new VueRouter(routes),
-    store: new Vuex.Store(store),
+    store: new Vuex.Store(store),  
 });
 
  

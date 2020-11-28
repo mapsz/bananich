@@ -13,17 +13,21 @@ class Cart extends Model
 
   public static function getCart($request = []){
   
-    //Get user, session
-    $user = Auth::User();
-    $session = session()->getId();
+    
+    {//Get user, session
+      $user = Auth::User();
+      $session = session()->getId();
+    }
 
-    //Cart
-    $cart = Cart::with('items');
-    $cart = $cart->with('coupons');
-    $cart = $cart->with('presents');
-    $cart = $cart->with('containers');
-    if(isset($request['presentProduct'])){
-      $cart = $cart->with('presents.product');
+    
+    {//Cart
+      $cart = Cart::with('items');
+      $cart = $cart->with('coupons');
+      $cart = $cart->with('presents');
+      $cart = $cart->with('containers');
+      if(isset($request['presentProduct'])){
+        $cart = $cart->with('presents.product');
+      }
     }
     
     {//Type
@@ -74,9 +78,11 @@ class Cart extends Model
         $cart->save();
       }  
     }
-
-    if(isset($cart->coupons) && isset($cart->coupons[0])){
-      $cart->coupon = $cart->coupons[0];
+    
+    {//Coupon
+      if(isset($cart->coupons) && isset($cart->coupons[0])){
+        $cart->coupon = $cart->coupons[0];
+      }
     }
 
     //Checkout
@@ -172,7 +178,6 @@ class Cart extends Model
   public static function removeContainer($cart){
     return CartContainer::where('cart_id',$cart['id'])->delete();
   }
-
 
   //Relations
   public function items(){

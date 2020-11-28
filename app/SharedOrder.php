@@ -29,25 +29,33 @@ class SharedOrder extends Model
       $sOrder = new SharedOrder;
       $sOrder->owner_id = $user->id;
       $sOrder->link = $link;
-      $sOrder->save();
+      $sOrder->save();            
     }
+
+    //Attach owner    
+    $sOrder->users()->attach($user->id);
     
     return $sOrder;
   }
 
+  public static function join($link,$userId){
+    return SharedOrder::where('link',$link)->first()->users()->attach($userId);
+  }
 
   public static function jugeGet($request = []) {
     //Model
     $query = new self;
   
     {//With
-      //
+      $query = $query->with('users');
     }
   
     {//Where
-      
       if(isset($request['link'])){
         $query = $query->where('link',$request['link']);
+      }
+      if(isset($request['id'])){
+        $query = $query->where('id',$request['id']);
       }
     }
   
@@ -66,4 +74,10 @@ class SharedOrder extends Model
     //TODO@@@ check exist
     return (new \PragmaRX\Random\Random())->size(9)->get();
   }
+
+  //Relations
+  public function users(){
+    return $this->belongsToMany('App\User');
+  }
+  
 }

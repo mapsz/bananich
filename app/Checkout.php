@@ -101,6 +101,9 @@ class Checkout extends Model
               $item->final_price_x    = $item->price_x;
             }
           }
+          {//Weights
+            $item->weight = $item->unit * $item->count;
+          }
         }
       }
     }
