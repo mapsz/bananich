@@ -86,6 +86,7 @@ class Checkout extends Model
             $item->unit_view        = $product->unit_view;
             $item->unit_digit       = $product->unit_digit;
             $item->unit_name        = $product->unit_name;
+            $item->bonus            = isset($product->bonus) && $product->bonus ? true : false;
           }
           {//Price            
             {//Normal bananich
@@ -123,7 +124,7 @@ class Checkout extends Model
 
       //Get max bonus in cart
       $cart->max_bonus_summ = 0;
-      foreach ($cart->items as $key => $item) {        
+      foreach ($cart->items as $key => $item) {
         if($item->bonus){
           $cart->max_bonus_summ += $item->final_price;
         }  
@@ -132,6 +133,7 @@ class Checkout extends Model
       //Set bonus
       $cart->bonus = intval($cart->max_bonus_summ >= $bonus ? $bonus : $cart->max_bonus_summ);
     }
+
     
     {//Shipping
       $price_shipping = $settings['shipping_price'];
