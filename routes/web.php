@@ -875,7 +875,8 @@ Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->gr
   });
 });
 
-Route::group(['middleware' => ['HttpsRR']], function () {
+// Route::group(['middleware' => ['HttpsRR']], function () {
+Route::group(['middleware' => ['HttpsRR','under-construction']], function () {
     
   Route::get('/home', function(){
     return redirect('/');
@@ -895,7 +896,7 @@ Route::group(['middleware' => ['HttpsRR']], function () {
       Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
       
       {//Shared Order Pay
-        Route::put('/shared/order/open', 'SharedOrderPayController@pay');
+        Route::get('/shared/order/pays', 'SharedOrderPayController@pay');
       }
     }
 
