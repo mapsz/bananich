@@ -25,69 +25,12 @@ class OrderController extends Controller
     return response()->json(Order::getCalendarOrders());
   }
 
-  public function getAvailableDays(){
+  public function getAvailableDays(Request $request){
 
     //Get days
     $days = Order::getAvailableDays();
 
-    //Get Cart
-    $cart = Cart::getCart(['presentProduct' => true]);
-
-    //Get products
-    $productIds = [];
-    foreach ($cart['items'] as $key => $item) {
-      array_push($productIds,$item['product_id']);
-    }
-    $availableProductDays = ProductMeta::whereIn('product_id',$productIds)->where('name', '=', 'deliveryDays')->get();
-
-    //Remove available days 
-    $daysLoop = $days;
-    foreach ($daysLoop as $i => $day) {
-      $day['dateOfWeek'] = Carbon::createFromIsoFormat('YYYY-MM-DD',$day['date'])->isoFormat('d');
-      $day['dateOfWeek'] = $day['dateOfWeek'] == 0 ? 7 : $day['dateOfWeek'];
-      foreach ($availableProductDays as $j => $productDays) {
-        $pDays = json_decode($productDays->value);
-        $available = false;
-        foreach ($pDays as $k => $pDay) {
-          if($pDay == $day['dateOfWeek']){
-            $available = true;
-            break;
-          }
-        }
-        if(!$available){
-          unset($days[$i]);
-          break;
-        }
-      }
-    }
-
-
-    //Before delivery Time
-    $beforeDeliveryTimes = ProductMeta::whereIn('product_id',$productIds)->where('name', '=', 'deliveryTime')->get();
-    $maxBeforeDeliveryTime = 0;
-    foreach ($beforeDeliveryTimes as $key => $time) {
-      if($maxBeforeDeliveryTime < $time->value) $maxBeforeDeliveryTime = $time->value;
-    }
-
-    //Remove available days 
-    $daysLoop = $days;
-    foreach ($daysLoop as $i => $day) {
-      $dayC = Carbon::createFromFormat('Y-m-d h:i',$day['date'].' 00:00');
-      $maxC = now()->add($maxBeforeDeliveryTime,'hour');
-
-      if(($dayC->timestamp - $maxC->timestamp) < 0){
-        unset($days[$i]);
-      }
-
-    }
-
-    //Return formate
-    $rDate = [];
-    foreach ($days as $key => $day) {
-      array_push($rDate,$day);
-    }
-
-    return response()->json($rDate);
+    return response()->json($days);
 
   }
 
@@ -193,8 +136,45 @@ class OrderController extends Controller
 
         Validator::make($data, $validate,$messages)->validate();
       }
+
+      {//Validate available days
+        $availableDay     = false;
+        $availableTime    = false;
+        $days = Order::getAvailableDays();
+        
+        //Check availables
+        foreach ($days as $key => $day) {
+          //Check date
+          if($data['deliveryDate'] == $day['date']){
+            $availableDay = true;
+            //Check Time
+            foreach ($day['times'] as $time) {
+              if($time['time'] == $data['deliveryTime'] && $time['slots'] > 0){
+                $availableTime  = true;
+              }
+            }
+            break;
+          }
+        }
+
+        //Validate
+        Validator::make(
+          [//Data
+            'availableDay'  => $availableDay,
+            'availableTime' => $availableTime
+          ],
+          [//Validate
+            'availableDay'   => ['required','accepted'],
+            'availableTime'  => ['required','accepted']
+          ],
+          [//Message
+            'availableDay.accepted'    => 'Выберите дату',
+            'availableTime.accepted'   => 'Выберите время'
+          ]
+        )->validate();
+      }
       
-      {//Validate available
+      {//Validate available product
         //Check items available
         $available = Product::checkCartAvailable($cart);
 
@@ -206,46 +186,49 @@ class OrderController extends Controller
           Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
         }
       }
-    }
+
       
-    //do order
-    try {
-      DB::beginTransaction();{
-
-        //Place order
-        $order = Order::placeOrder($data, $cart);
-
-        //Check order success
-        if(!$order || !isset($order->id)) throw new Exception('order error');
-
-        {//Mail
-          //Set data
-          $orderId = $order->id;
-          $order = Order::getWithOptions(['id'=>$orderId]);        
-          $email = $order->email;
-          $data = ["email" => $email, "orderId" => $orderId];
-
-          //Client send
-          $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
-            $m->to($data['email'],'to');
-            $m->from('no-reply@bananich.ru');
-            $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
-          });
-
-          //Dasha Send
-          $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
-            $m->to('bbananich@yandex.ru','to');
-            $m->from('no-reply@bananich.ru');
-            $m->subject('Бананыч заказ №'.$orderId.' получен!');
-          });
-        }
-            
-      }DB::commit();    
-    } catch (Exception $e) {          
-      // Rollback from DB
-      DB::rollback();
-      return response(['code' => 'wo1','text' => 'order error'], 512)->header('Content-Type', 'text/plain');
-    }    
+    }
+          
+    {//do order
+      try {
+        DB::beginTransaction();{
+  
+          //Place order
+          $order = Order::placeOrder($data, $cart);
+  
+          //Check order success
+          if(!$order || !isset($order->id)) throw new Exception('order error');
+  
+          {//Mail
+            //Set data
+            $orderId = $order->id;
+            $order = Order::getWithOptions(['id'=>$orderId]);        
+            $email = $order->email;
+            $data = ["email" => $email, "orderId" => $orderId];
+  
+            //Client send
+            $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
+              $m->to($data['email'],'to');
+              $m->from('no-reply@bananich.ru');
+              $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
+            });
+  
+            //Dasha Send
+            $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
+              $m->to('bbananich@yandex.ru','to');
+              $m->from('no-reply@bananich.ru');
+              $m->subject('Бананыч заказ №'.$orderId.' получен!');
+            });
+          }
+              
+        }DB::commit();    
+      } catch (Exception $e) {
+        // Rollback from DB
+        DB::rollback();
+        return response(['code' => 'wo1','text' => 'order error'], 512)->header('Content-Type', 'text/plain');
+      }
+    }
 
     return response()->json($orderId);
 

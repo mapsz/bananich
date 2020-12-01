@@ -11,14 +11,12 @@ use App\Checkout;
 class Cart extends Model
 {
 
-  public static function getCart($request = []){
-  
+  public static function getCart($request = []){  
     
     {//Get user, session
       $user = Auth::User();
       $session = session()->getId();
     }
-
     
     {//Cart
       $cart = Cart::with('items');
@@ -37,48 +35,53 @@ class Cart extends Model
           $type = 2;
         }
       }
-      $cartz = $cart->where('type',$type);
+      $cart = $cart->where('type',$type);
     }
-
+  
     //User Loged in
-    if($user){
-      $cartz = $cart->where('session_id',$session)->first();
-      if(!$cartz){
-        //Get Cart
-        $cart = $cart->where('user_id',$user->id)->first();
-        //Cart exist
-        if($cart){
-          //Session not equal
-          if($cart->session_id != $session){
-            //Update session
+    {
+      if($user){
+        $cartz = clone $cart;
+        $cartz = $cartz->where('session_id',$session)->first();
+        if(!$cartz){
+          //Get Cart
+          $cart = $cart->where('user_id',$user->id)->first();
+          //Cart exist
+          if($cart){
+            //Session not equal
+            if($cart->session_id != $session){
+              //Update session
+              $cart->session_id = $session;
+              $cart->save();
+            }
+          }
+          //Create cart
+          else{
+            $cart = new Cart();
+            $cart->user_id = $user->id;
             $cart->session_id = $session;
+            $cart->type = $type;
             $cart->save();
           }
+        }else{
+          $cart = $cartz;
         }
-        //Create cart
-        else{
+      }
+      //User NOT Loged in
+      else{
+        $cart = $cart->where('session_id',$session)->where('type',$type)->where('user_id',0)->first();
+        //Cart Not exist
+        if(!$cart){
           $cart = new Cart();
-          $cart->user_id = $user->id;
           $cart->session_id = $session;
           $cart->type = $type;
           $cart->save();
-        }
-      }else{
-        $cart = $cartz;
+        }  
       }
+      
+
     }
-    //User NOT Loged in
-    else{
-      $cart = $cart->where('session_id',$session)->where('user_id',0)->first();
-      //Cart Not exist
-      if(!$cart){
-        $cart = new Cart();
-        $cart->session_id = $session;
-        $cart->type = $type;
-        $cart->save();
-      }  
-    }
-    
+
     {//Coupon
       if(isset($cart->coupons) && isset($cart->coupons[0])){
         $cart->coupon = $cart->coupons[0];

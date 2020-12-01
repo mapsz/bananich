@@ -61,6 +61,8 @@ class SharedOrder extends Model
   
     //Get
     $data = JugeCRUD::get($query,$request);
+
+    // dd($data);
   
     //Single
     if(isset($request['id'])){$data = $data[0];}
@@ -77,7 +79,7 @@ class SharedOrder extends Model
 
   //Relations
   public function users(){
-    return $this->belongsToMany('App\User');
+    return $this->belongsToMany('App\User','shared_order_user','shared_order_id','user_id');
   }
   
 }

@@ -90,7 +90,7 @@ class CartController extends Controller
 
   }
 
-  public function editContainer(Request $request){    
+  public function editContainer(Request $request){
     //Get cart
     $cart = Cart::getCart();
 
@@ -99,7 +99,7 @@ class CartController extends Controller
     return response()->json(Cart::getCart());
   }
 
-  public function removeContainer(Request $request){    
+  public function removeContainer(Request $request){
     //Get cart
     $cart = Cart::getCart();
 

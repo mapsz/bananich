@@ -41,10 +41,20 @@
           </div>
         </div>
 
+        <!-- Pays -->
+        <div class="mt-3">
+          <h4>Оплата</h4>
+          <div>К оплате: 600 </div>
+          <div>Оплачено: 0</div>
+        </div>
+
         <div v-if="sOrder" class="row mt-3">
           <!-- Details -->
           <div class="col-4">
             <h4>Детали заказа</h4>
+
+            <checkout-contact class="checkout-div " v-model="data.contacts" />
+
           </div>
           
           <!-- Users -->
@@ -86,6 +96,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
+  data:{},
   shareDescription:"Очень крутой текст!",
   weights:false,
 }},

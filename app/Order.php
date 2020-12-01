@@ -50,57 +50,123 @@ class Order extends Model
   ];  
 
   public static function getAvailableDays(){
+    
+    {//Get settings
+      $settings = self::getLimitSettings();
+      $endTime = 24 - $settings['order_limit_day_end_time'];
+    }
+    
+    {// From/to
+      $from = now()->add($endTime,'hour');
+      $to   = now()->add($endTime,'hour')->add($settings['order_limit_days_count'],'days');
+    }
+    
+    {//Get orders
+      $orders = self::withStatus()
+        ->where('delivery_date', '>=', $from)
+        ->where('delivery_date', '<=', $to)
+        ->get()->toArray();
+    }
 
-    //Get settings
-    $settings = self::getLimitSettings();
-    $endTime = 24 - $settings['order_limit_day_end_time'];
+    {//Days
+      $days = [];
+      $day = false;
+      while ($day != $to->isoFormat('YYYY-MM-DD')) {
+        $day = $from->add(1,'day')->isoFormat('YYYY-MM-DD');
 
-    $from = now()->add($endTime,'hour');
-    $to   = now()->add($endTime,'hour')->add($settings['order_limit_days_count'],'days');
+        $dayOrders = array_filter($orders, function($k)use($day) {
+          return $k['delivery_date'] == $day;
+        });
 
-    //Get orders$endTime
-    $orders = self::withStatus()
-      ->where('delivery_date', '>=', $from)
-      ->where('delivery_date', '<=', $to)
-      ->get()->toArray();
+        $dayOrders_11_15 = array_filter($dayOrders, function($k) {
+          return $k['delivery_time_from'] == '11:00:00' && $k['delivery_time_to'] == '15:00:00';
+        });
+        $dayOrders_11_23 = array_filter($dayOrders, function($k) {
+          return $k['delivery_time_from'] == '11:00:00' && $k['delivery_time_to'] == '23:00:00';
+        });
+        $dayOrders_15_19 = array_filter($dayOrders, function($k) {
+          return $k['delivery_time_from'] == '15:00:00' && $k['delivery_time_to'] == '19:00:00';
+        });
+        $dayOrders_19_23 = array_filter($dayOrders, function($k) {
+          return $k['delivery_time_from'] == '19:00:00' && $k['delivery_time_to'] == '23:00:00';
+        });
+          
+        array_push($days,[
+          'date' => $day,
+          'slots' => $settings['order_limit_total_orders'] - count($dayOrders),
+          'times' => [          
+            ['time' => ['from' => '11', 'to' => '23'] , 'slots' => $settings['order_limit_interval_11_23'] - count($dayOrders_11_23)],
+            ['time' => ['from' => '11', 'to' => '15'] , 'slots' => $settings['order_limit_interval_11_15'] - count($dayOrders_11_15)],
+            ['time' => ['from' => '15', 'to' => '19'] , 'slots' => $settings['order_limit_interval_15_19'] - count($dayOrders_15_19)],
+            ['time' => ['from' => '19', 'to' => '23'] , 'slots' => $settings['order_limit_interval_19_23'] - count($dayOrders_19_23)]
+          ]
+        ]);
+      } 
+    }
 
+    //Get Cart
+    $cart = Cart::getCart(['presentProduct' => true]);  
+    
+    {//Get products
+      $productIds = [];
+      foreach ($cart['items'] as $key => $item) {
+        array_push($productIds,$item['product_id']);
+      }
+      $availableProductDays = ProductMeta::whereIn('product_id',$productIds)->where('name', '=', 'deliveryDays')->get();
+    }
+    
+    {//Remove available days
+      $daysLoop = $days;
+      foreach ($daysLoop as $i => $day) {
+        $day['dateOfWeek'] = Carbon::createFromIsoFormat('YYYY-MM-DD',$day['date'])->isoFormat('d');
+        $day['dateOfWeek'] = $day['dateOfWeek'] == 0 ? 7 : $day['dateOfWeek'];
+        foreach ($availableProductDays as $j => $productDays) {
+          $pDays = json_decode($productDays->value);
+          $available = false;
+          foreach ($pDays as $k => $pDay) {
+            if($pDay == $day['dateOfWeek']){
+              $available = true;
+              break;
+            }
+          }
+          if(!$available){
+            unset($days[$i]);
+            break;
+          }
+        }
+      }
+    }
+    
+    {//Before delivery Time
+      $beforeDeliveryTimes = ProductMeta::whereIn('product_id',$productIds)->where('name', '=', 'deliveryTime')->get();
+      $maxBeforeDeliveryTime = 0;
+      foreach ($beforeDeliveryTimes as $key => $time) {
+        if($maxBeforeDeliveryTime < $time->value){
+          $maxBeforeDeliveryTime = $time->value;
+        }
+      }
+    }
+    
+    {//Remove available days 
+      $daysLoop = $days;
+      foreach ($daysLoop as $i => $day) {
+        $dayC = Carbon::createFromFormat('Y-m-d h:i',$day['date'].' 00:00');
+        $maxC = now()->add($maxBeforeDeliveryTime,'hour');
+  
+        if(($dayC->timestamp - $maxC->timestamp) < 0){
+          unset($days[$i]);
+        }
+      }
+    }
+    
+    {//Return format
+      $rDate = [];
+      foreach ($days as $key => $day) {
+        array_push($rDate,$day);
+      }
+    }
 
-    $days = [];
-    $day =false;
-    while ($day != $to->isoFormat('YYYY-MM-DD')) {
-      $day = $from->add(1,'day')->isoFormat('YYYY-MM-DD');
-
-      $dayOrders = array_filter($orders, function($k)use($day) {
-        return $k['delivery_date'] == $day;
-      });
-
-      $dayOrders_11_15 = array_filter($dayOrders, function($k) {
-        return $k['delivery_time_from'] == '11:00:00' && $k['delivery_time_to'] == '15:00:00';
-      });
-      $dayOrders_11_23 = array_filter($dayOrders, function($k) {
-        return $k['delivery_time_from'] == '11:00:00' && $k['delivery_time_to'] == '23:00:00';
-      });
-      $dayOrders_15_19 = array_filter($dayOrders, function($k) {
-        return $k['delivery_time_from'] == '15:00:00' && $k['delivery_time_to'] == '19:00:00';
-      });
-      $dayOrders_19_23 = array_filter($dayOrders, function($k) {
-        return $k['delivery_time_from'] == '19:00:00' && $k['delivery_time_to'] == '23:00:00';
-      });
-        
-      array_push($days,[
-        'date' => $day,
-        'slots' => $settings['order_limit_total_orders'] - count($dayOrders),
-        'times' => [          
-          ['time' => ['from' => '11', 'to' => '23'] , 'slots' => $settings['order_limit_interval_11_23'] - count($dayOrders_11_23)],
-          ['time' => ['from' => '11', 'to' => '15'] , 'slots' => $settings['order_limit_interval_11_15'] - count($dayOrders_11_15)],
-          ['time' => ['from' => '15', 'to' => '19'] , 'slots' => $settings['order_limit_interval_15_19'] - count($dayOrders_15_19)],
-          ['time' => ['from' => '19', 'to' => '23'] , 'slots' => $settings['order_limit_interval_19_23'] - count($dayOrders_19_23)]
-        ]
-      ]);
-
-    } 
-
-    return $days;
+    return $rDate;
 
   }
 
