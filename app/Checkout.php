@@ -62,7 +62,7 @@ class Checkout extends Model
           if($cart->container){          
             foreach ($products as $key => $product) {
               if($product->id == $cart->container['product_id']){
-                $cart->container = $product->toArray();
+                $cart->container = $product;
                 break;
               }
             }
