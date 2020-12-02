@@ -33,6 +33,13 @@ class Checkout extends Model
           $cart['firstOrder'] = (count($orders) > 0) ? false : true;
         }
       }
+
+      {//Container
+        $cart->container = false;
+        if(isset($cart->containers) && isset($cart->containers[0])){
+          $cart->container = $cart->containers[0]->toArray();
+        }
+      }      
             
       {// Products
         //Products ids
@@ -41,27 +48,29 @@ class Checkout extends Model
           array_push($productIds, $item->product_id);
         }
         
+        {//Container
+          if($cart->container){
+            array_push($productIds, $cart->container['product_id']);
+          }
+        }
+
+
         //Get Products
         $products = Product::getWithOptions(['ids' => $productIds, 'get_all' => 1]);
-      }
-      
-      {//Container
-        $container = false;
-        $cart->container = false;
-        if(isset($cart->containers) && isset($cart->containers[0])){
-          $container = $cart->containers[0]->toArray();
-          array_push($productIds, $container['product_id']);          
-          foreach ($products as $key => $product) {
-            if($product->id == $container['product_id']){
-              $container = $product;
-              break;
+
+        {//Container
+          if($cart->container){          
+            foreach ($products as $key => $product) {
+              if($product->id == $cart->container['product_id']){
+                $cart->container = $product->toArray();
+                break;
+              }
             }
           }
         }
-        if($container){
-          $cart->container = $container;
-        }
-      }         
+      }
+      
+       
       
       {//Coupons
         $coupon = 0;
@@ -147,6 +156,7 @@ class Checkout extends Model
       );
     }
     
+
     {//Final summ
       {//Normal bananich
         $cart->final_summ = 0;
@@ -154,12 +164,12 @@ class Checkout extends Model
         $cart->final_summ += $cart->shipping;
         $cart->final_summ -= $cart->bonus;
         $cart->final_summ -= $coupon;
-        $cart->final_summ += $container ? $container->price : 0;
+        $cart->final_summ += $cart->container ? $cart->container['price'] : 0;
       }
       {//X bananich
         $cart->final_summ_x = 0;
         $cart->final_summ_x += $cart->pre_price_x;
-        $cart->final_summ_x += $container ? $container->price : 0;
+        $cart->final_summ_x += $cart->container ? $cart->container['price'] : 0;
       }
       //Cant be less zero
       if($cart->final_summ    < 0) $cart->final_summ    = 0;

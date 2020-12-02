@@ -41,11 +41,18 @@
           </div>
         </div>
 
-        <!-- Pays -->
-        <div class="mt-3">
-          <h4>Оплата</h4>
-          <div>К оплате: 600 </div>
-          <div>Оплачено: 0</div>
+        <div v-if="sOrder" class="row mt-3">
+          <!-- Pay -->
+          <div class="col-4">
+            <h4>Оплата</h4>
+            <div>К оплате: 600 </div>
+            <div>Оплачено: 0</div>
+          </div>
+          <!-- Status -->
+          <div v-if="sOrder.status != undefined" class="col-4">
+            <h4>Статус</h4>
+            <div>{{sOrder.status.name}}</div>
+          </div>
         </div>
 
         <div v-if="sOrder" class="row mt-3">

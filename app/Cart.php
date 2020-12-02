@@ -37,16 +37,27 @@ class Cart extends Model
       }
       $cart = $cart->where('type',$type);
     }
-  
+
+    {//Sort by date
+      $cart = $cart->orderBy('created_at','DESC');
+    }
+    
+    //Clean settings
+    $cartClean = clone $cart;
+        
     //User Loged in
-    {
-      if($user){
-        $cartz = clone $cart;
-        $cartz = $cartz->where('session_id',$session)->first();
-        if(!$cartz){
+    if($user){
+      {//Get by session
+        $cart = $cartClean; 
+        $cart = $cart->where('session_id',$session)->first();
+      }
+
+      {//Get by user_id
+        if(!$cart){
+          $cart = $cartClean;          
           //Get Cart
           $cart = $cart->where('user_id',$user->id)->first();
-          //Cart exist
+          //Set session
           if($cart){
             //Session not equal
             if($cart->session_id != $session){
@@ -55,44 +66,58 @@ class Cart extends Model
               $cart->save();
             }
           }
-          //Create cart
-          else{
-            $cart = new Cart();
-            $cart->user_id = $user->id;
-            $cart->session_id = $session;
-            $cart->type = $type;
-            $cart->save();
-          }
-        }else{
-          $cart = $cartz;
         }
       }
-      //User NOT Loged in
-      else{
-        $cart = $cart->where('session_id',$session)->where('type',$type)->where('user_id',0)->first();
-        //Cart Not exist
+
+      {//Create cart
         if(!$cart){
           $cart = new Cart();
+          $cart->user_id = $user->id;
+          $cart->session_id = $session;
+          $cart->type = $type;
+          $cart->save();
+        }
+      }
+    }
+
+    //User NOT Loged in
+    else{
+      {//Get by session
+        $cart = $cartClean;
+        $cart = $cart->where('session_id',$session)->where('user_id',0)->first();
+      }
+
+      {//Create cart
+        if(!$cart){
+          $cart = new Cart();
+          $cart->user_id = 0;
           $cart->session_id = $session;
           $cart->type = $type;
           $cart->save();
         }  
       }
-      
-
     }
-
+    
     {//Coupon
       if(isset($cart->coupons) && isset($cart->coupons[0])){
         $cart->coupon = $cart->coupons[0];
       }
     }
 
+    //Clear
+    Cart::clearBadCarts($cart);
+
     //Checkout
     $cart = Checkout::addToCart($cart);
 
     return $cart;
   
+  }
+
+  public static function clearBadCarts($cart){
+    if($cart->user_id == 0) return;
+    $cart = Cart::where('user_id', $cart->user_id)->where('id','<>',$cart->id)->orderBy('created_at','DESC')->delete();
+    return;
   }
 
   public static function editItem($productId,$count,$cart_id){

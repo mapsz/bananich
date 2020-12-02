@@ -21,7 +21,7 @@ class CreateSharedOrderSharedOrderStatusTable extends Migration
             $table->timestamps();
         });
         Schema::table('shared_orders', function (Blueprint $table) {
-            $table->integer('status')->unsigned();
+            $table->integer('status_id')->default(100);
         });
     }
 

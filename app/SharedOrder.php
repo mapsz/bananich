@@ -48,6 +48,7 @@ class SharedOrder extends Model
   
     {//With
       $query = $query->with('users');
+      $query = $query->with('status');
     }
   
     {//Where
@@ -80,6 +81,9 @@ class SharedOrder extends Model
   //Relations
   public function users(){
     return $this->belongsToMany('App\User','shared_order_user','shared_order_id','user_id');
+  }  
+  public function status(){
+    return $this->belongsTo('App\SharedOrderStatus');
   }
   
 }

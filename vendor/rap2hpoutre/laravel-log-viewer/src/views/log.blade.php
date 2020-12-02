@@ -209,6 +209,17 @@
           Log file >50M, please download it.
         </div>
       @else
+        <!-- Top -->
+        <div>
+          @foreach($top as $key => $row)
+            <div style="font-size:10pt">
+              <b>{{$row['count']}}</b>
+              {{$row['body']}}
+              <hr>
+            </div>
+          @endforeach
+        </div>
+
         <table id="table-log" class="table table-striped" data-ordering-index="{{ $standardFormat ? 2 : 0 }}">
           <thead>
           <tr>
