@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -49,8 +50,11 @@ class Order extends Model
     ['key'    => 'termobox', 'label' => 'termobox'],
   ];  
 
-  public static function getAvailableDays(){
+  public static function getAvailableDays($type = 1){
     
+    //Get Cart
+    $cart = Cart::getCart(['type' => $type]);
+
     {//Get settings
       $settings = self::getLimitSettings();
       $endTime = 24 - $settings['order_limit_day_end_time'];
@@ -58,7 +62,14 @@ class Order extends Model
     
     {// From/to
       $from = now()->add($endTime,'hour');
-      $to   = now()->add($endTime,'hour')->add($settings['order_limit_days_count'],'days');
+
+      if($cart['type'] == 2){
+        $limit_days = $settings['x_max_open_days'];
+      }else{
+        $limit_days = $settings['order_limit_days_count'];
+      }
+
+      $to   = now()->add($endTime,'hour')->add($limit_days,'days');
     }
     
     {//Get orders
@@ -103,10 +114,7 @@ class Order extends Model
         ]);
       } 
     }
-
-    //Get Cart
-    $cart = Cart::getCart(['presentProduct' => true]);  
-    
+   
     {//Get products
       $productIds = [];
       foreach ($cart['items'] as $key => $item) {
@@ -166,7 +174,61 @@ class Order extends Model
       }
     }
 
+    Log::info('days - '. json_encode($rDate) . ' cart - ' . json_encode($cart) . ' user - '. $cart['user_id']);
+
     return $rDate;
+
+  }
+
+  public static function validateAvailableDays($_date, $_time, $type = false){
+
+    $availableDay     = false;
+    $availableTime    = false;
+    $days = Order::getAvailableDays($type);
+    
+    //Check availables
+    foreach ($days as $key => $day) {
+      //Check date
+      if($_date == $day['date']){
+        $availableDay = true;
+        //Check Time
+        foreach ($day['times'] as $time) {
+          if($time['time'] == $_time && $time['slots'] > 0){
+            $availableTime  = true;
+          }
+        }
+        break;
+      }
+    }
+
+    //Validate
+    Validator::make(
+      [//Data
+        'availableDay'  => $availableDay,
+        'availableTime' => $availableTime
+      ],
+      [//Validate
+        'availableDay'   => ['required','accepted'],
+        'availableTime'  => ['required','accepted']
+      ],
+      [//Message
+        'availableDay.accepted'    => 'Выберите дату',
+        'availableTime.accepted'   => 'Выберите время'
+      ]
+    )->validate();
+  }
+
+  public static function validateAvailableProducts($cart){
+    //Check items available
+    $available = Product::checkCartAvailable($cart);
+
+    if ($available['r'] == false){
+      $text = $available['leftUnit'] == 0 ? 
+        'ууупс... кажется, вы не успели и "'.$available['name'].'" только что раскупили😞' :
+        'ууупс... кажется, вы не успели и "'.$available['name'].'" почти весь раскупили😞 На складе осталось всего '.$available['leftUnit'].' штук'
+      ;
+      Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
+    }
 
   }
 
@@ -180,6 +242,7 @@ class Order extends Model
       'order_limit_total_orders',
       'order_limit_days_count',
       'order_limit_day_end_time',
+      'x_max_open_days',
     ])->get();
 
     $out = [];
@@ -394,7 +457,8 @@ class Order extends Model
     }
     
     //Delete Cart
-    Cart::find($cart['id'])->delete();
+    Cart::resetItems();
+    // Cart::find($cart['id'])->delete();
 
     //Remove Bonuses
     if($bonus > 0){

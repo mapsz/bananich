@@ -6,97 +6,71 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\CartItem;
+use App\JugeCRUD;
 use App\Checkout;
 
 class Cart extends Model
 {
 
-  public static function getCart($request = []){  
-    
+  public $guarded = [];
+
+  //Get actual cart
+  public static function getCart($request = []){
+
     {//Get user, session
       $user = Auth::User();
-      $session = session()->getId();
-    }
-    
-    {//Cart
-      $cart = Cart::with('items');
-      $cart = $cart->with('coupons');
-      $cart = $cart->with('presents');
-      $cart = $cart->with('containers');
-      if(isset($request['presentProduct'])){
-        $cart = $cart->with('presents.product');
-      }
-    }
-    
-    {//Type
-      $type = 1;
-      if(isset($request['type'])){
-        if($request['type'] == 'x'){
-          $type = 2;
-        }
-      }
-      $cart = $cart->where('type',$type);
-    }
-
-    {//Sort by date
-      $cart = $cart->orderBy('created_at','DESC');
-    }
-    
-    //Clean settings
-    $cartClean = clone $cart;
-        
-    //User Loged in
-    if($user){
-      {//Get by session
-        $cart = $cartClean; 
-        $cart = $cart->where('session_id',$session)->first();
-      }
-
-      {//Get by user_id
-        if(!$cart){
-          $cart = $cartClean;          
-          //Get Cart
-          $cart = $cart->where('user_id',$user->id)->first();
-          //Set session
-          if($cart){
-            //Session not equal
-            if($cart->session_id != $session){
-              //Update session
-              $cart->session_id = $session;
-              $cart->save();
-            }
-          }
-        }
-      }
-
-      {//Create cart
-        if(!$cart){
-          $cart = new Cart();
-          $cart->user_id = $user->id;
-          $cart->session_id = $session;
-          $cart->type = $type;
-          $cart->save();
+      $userId = $user ? $user->id : 0;
+      $session = session()->getId();      
+      {//Type
+        $request['type'] = 1;
+        if(isset($request['type'])){
+          if($request['type'] == 'x'){$request['type'] = 2;}
+          if($request['type'] == 2){$request['type'] = 2;}
         }
       }
     }
 
-    //User NOT Loged in
-    else{
-      {//Get by session
-        $cart = $cartClean;
-        $cart = $cart->where('session_id',$session)->where('user_id',0)->first();
-      }
+    {//Exists
+      //Session
+      $sessionExists = Cart::where('type',$request['type'])->where('session_id',$session)->exists();
+      //User
+      if($user) $userExists = Cart::where('type',$request['type'])->where('user_id',$user->id)->exists();
+      else $userExists = true;
+    }
 
-      {//Create cart
-        if(!$cart){
-          $cart = new Cart();
-          $cart->user_id = 0;
-          $cart->session_id = $session;
-          $cart->type = $type;
-          $cart->save();
-        }  
+    {//Set request
+      $request['single'] = 1;
+      //Session
+      if($sessionExists)  $request['session'] = $session;
+      //User
+      $request['user'] = 0;
+      if($userExists)     $request['user'] = $userId;
+    }
+    
+    {//Get Cart
+      $cart = false;
+      if($sessionExists || $userExists){
+        $cart = self::jugeGet($request);
       }
     }
+    
+    {//Clone Cart
+      if($cart && (!$sessionExists || !$userExists)){
+        $cart = self::cloneCart($cart,$user,$session);
+      }
+    }
+
+    {//Create Cart
+      if(!$cart){
+        $cart = self::jugePut([
+          'type' => $request['type'],
+          'session' => $session,
+          'user' => $userId,
+        ]);
+      }
+    }
+    
+    if(!$cart) return false;
     
     {//Coupon
       if(isset($cart->coupons) && isset($cart->coupons[0])){
@@ -104,20 +78,50 @@ class Cart extends Model
       }
     }
 
-    //Clear
-    Cart::clearBadCarts($cart);
-
     //Checkout
     $cart = Checkout::addToCart($cart);
 
-    return $cart;
+    return $cart;   
   
   }
 
-  public static function clearBadCarts($cart){
-    if($cart->user_id == 0) return;
-    $cart = Cart::where('user_id', $cart->user_id)->where('id','<>',$cart->id)->orderBy('created_at','DESC')->delete();
-    return;
+  public static function cloneCart($cart,$user,$session){
+
+    {//Clone Cart
+      try{
+        DB::beginTransaction();{
+
+          //Clone model
+          $cloneCart = $cart->replicate();
+
+          //Save
+          foreach ($cloneCart->getAttributes() as $key => $value) {
+            $cloneCart[$key] = $value;
+          }
+          $cloneCart['session_id'] = $session;
+          $cloneCart['user_id'] = $user ? $user->id : 0;
+          $cloneCart = Cart::create($cloneCart->getAttributes());
+
+          {//Relations
+            $relations = $cart->getRelations();
+            foreach ($relations as $relation) {
+              foreach ($relation as $row) {
+                $cloneRow = $row->replicate();
+                $cloneRow->cart_id = $cloneCart->id;
+                $cloneRow->save();
+              }            
+            }          
+          }      
+        }DB::commit();
+      } catch (Exception $e){
+        // Rollback from DB
+        DB::rollback();
+        return false;
+      } 
+    }
+
+    return self::jugeGet(['id' => $cloneCart->id]);
+
   }
 
   public static function editItem($productId,$count,$cart_id){
@@ -205,6 +209,71 @@ class Cart extends Model
 
   public static function removeContainer($cart){
     return CartContainer::where('cart_id',$cart['id'])->delete();
+  }
+
+  public static function jugeGet($request = []) {
+    //Model
+    $query = new self;
+  
+    {//With
+      $query = $query->with('items');
+      $query = $query->with('coupons');
+      $query = $query->with('presents');
+      $query = $query->with('presents.product');
+      $query = $query->with('containers');
+    }
+  
+    {//Where
+      {//Type
+        if(isset($request['type'])){
+          if($request['type'] == 'x'){$request['type'] = 2;}
+          $query = $query->where('type',$request['type']);
+        }        
+      }
+
+      //User
+      if(isset($request['user']) && $request['user'] > 0){
+        $query = $query->where('user_id',$request['user']);
+      }
+
+      //Session
+      if(isset($request['session']) && $request['session'] != ""){
+        $query = $query->where('session_id',$request['session']);
+      }     
+
+      //By id
+      if(isset($request['id']) && $request['id'] > 0){//TODO @@@ protect
+        $query = $query->where('id',$request['id']);
+      }
+    }
+  
+    {//Sort
+      $query = $query->orderBy('id','DESC');
+      $query = $query->orderBy('created_at','DESC');
+    }
+
+    //Get
+    $data = JugeCRUD::get($query,$request);
+  
+    //Single
+    if(isset($request['id'])){$data = $data[0];}
+    if(isset($request['single'])){$data = $data[0];}
+  
+    //Return
+    return $data;
+  }
+
+  public static function jugePut($request){
+
+    $cart = new Cart;
+
+    $cart->type = $request['type'];
+    $cart->session_id = $request['session'];
+    $cart->user_id = $request['user'];
+    $cart->save();
+
+    return $cart;
+
   }
 
   //Relations

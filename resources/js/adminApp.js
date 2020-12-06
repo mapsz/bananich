@@ -73,11 +73,13 @@ window.inputSpinner = require('bootstrap-touchspin');
 
 //Date picker
 import VueFlatPickr from 'vue-flatpickr-component';
+import {Russian} from 'flatpickr/dist/l10n/ru.js';
 import 'flatpickr/dist/flatpickr.css';
-Vue.use(VueFlatPickr);
 window.datePickerConfig = {
   dateFormat: 'd.m.Y',
+  locale: Russian,
 }
+Vue.use(VueFlatPickr);
 
 //Switch checkbox
 import { ToggleButton } from 'vue-js-toggle-button' 

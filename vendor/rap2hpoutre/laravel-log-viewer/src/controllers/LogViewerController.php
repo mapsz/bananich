@@ -84,16 +84,18 @@ class LogViewerController extends BaseController
         
         {//Top logs        
           $top = [];
-          foreach ($data['logs'] as $log) {
-            foreach ($top as $k => $row) {
-              if($row['body'] == $log['text']){
-                $top[$k]['count'] ++;
-                continue 2;
+          if(is_array($data['logs'])){
+            foreach ($data['logs'] as $log) {
+              foreach ($top as $k => $row) {
+                if($row['body'] == $log['text']){
+                  $top[$k]['count'] ++;
+                  continue 2;
+                }
               }
+              array_push($top,['count' => 1, 'body' => $log['text']]);
             }
-            array_push($top,['count' => 1, 'body' => $log['text']]);
+            usort($top, function($a, $b){return $b['count'] <=> $a['count'];});
           }
-          usort($top, function($a, $b){return $b['count'] <=> $a['count'];});
           $data['top'] = $top;
         }
 

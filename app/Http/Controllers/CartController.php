@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Cart;
 
 class CartController extends Controller
@@ -11,12 +12,31 @@ class CartController extends Controller
   public function get(Request $request){
 
     //Set type
-    $type = false;
+    $type = 1;
     if(isset($request->type)) $type = $request->type;
     
     //Get cart
     $cart = Cart::getCart(['type' => $type]);
     //Return
+    return response()->json($cart);
+
+  }
+
+  public function cartFromLocal(Request $request){
+
+    {//Get user, session
+      $user = Auth::User();
+      $userId = $user ? $user->id : 0;
+      $session = session()->getId();
+    }
+
+
+    $fromCart = Cart::jugeGet(['id' => $request->cart_id]);
+
+    Cart::cloneCart($fromCart,$user,$session);
+
+    $cart = Cart::getCart();
+
     return response()->json($cart);
 
   }
@@ -40,6 +60,7 @@ class CartController extends Controller
     $neededCart->user_id = $currentCart['user_id'];
 
     Cart::find($currentCart['id'])->delete();
+
 
     return response()->json($neededCart->save() ? Cart::getCart() : false);    
 

@@ -69,8 +69,12 @@ class Bonus extends Model
     }
 
     {//Where
-      if(!isset($request['nousernolive'])){ //@@@ защиту?
+      if(!isset($request['nousernolive'])){ //TODO@@@ защиту?
         $user = Auth::user();
+        if(!$user){
+          Log::info('no bonus user!');
+          return false;
+        }        
         $userId = $user->id;
       }else{
         $userId = false;

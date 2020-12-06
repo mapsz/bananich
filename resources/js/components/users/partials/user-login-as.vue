@@ -1,7 +1,7 @@
 <template>
 <div>
   <h5>Авторизоваться</h5>
-  <a :href="'/login/as/user?id='+user.id">{{user.name}} ↘️</a>
+  <a @click="login()" href="#">{{user.name}} ↘️</a>
 </div>
 </template>
 
@@ -10,6 +10,12 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
   computed:{
     ...mapGetters({user:'user/getOne'}),    
+  },
+  methods:{
+    async login(){
+      localStorage.cart = false;
+      window.location.href = '/login/as/user?id='+this.user.id;
+    }
   },
 }
 </script>

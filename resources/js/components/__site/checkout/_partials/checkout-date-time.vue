@@ -9,7 +9,7 @@
     </div>
     <!-- Delivery Time -->
     <div v-if="day" class="col-lg-6">
-      <div class="checkout-title">Время доставки</div>      
+      <div class="checkout-title">Время доставки</div>
       <checkout-input v-model="time" :name="'deliveryTime'" :type="'radio'" 
         :list="times" 
       />

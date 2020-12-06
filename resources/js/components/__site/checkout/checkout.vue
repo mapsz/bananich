@@ -27,7 +27,7 @@
 
               <checkout-toother class="checkout-div" v-model="data.toOther" />
 
-              <checkout-address class="checkout-div" v-model="data.address"/>
+              <checkout-address class="checkout-div"/>
 
               <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
 

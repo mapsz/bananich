@@ -26,8 +26,12 @@ let orderLimits = {
       let r = await ax.fetch('/order/limit/settings');
       commit('mSettings',r); 
     },
-    async fetchAvailableDays({commit}){
-      let r = await ax.fetch('/order/available/days');
+    async fetchAvailableDays({commit}){      
+      //Set type
+      let type = false;
+      if(isX) type = 'x';
+      //Fetch
+      let r = await ax.fetch('/order/available/days',{type});
       commit('mAvailableDays',r); 
     },
   },  

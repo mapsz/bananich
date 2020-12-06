@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Order;
 use App\OrderStatus;
@@ -27,8 +28,15 @@ class OrderController extends Controller
 
   public function getAvailableDays(Request $request){
 
+    //Type
+    $type = 1;
+    if(isset($request->type)){
+      $type = $request->type;
+    }
+    
     //Get days
-    $days = Order::getAvailableDays();
+    $days = Order::getAvailableDays($type);
+
 
     return response()->json($days);
 
@@ -138,55 +146,12 @@ class OrderController extends Controller
       }
 
       {//Validate available days
-        $availableDay     = false;
-        $availableTime    = false;
-        $days = Order::getAvailableDays();
-        
-        //Check availables
-        foreach ($days as $key => $day) {
-          //Check date
-          if($data['deliveryDate'] == $day['date']){
-            $availableDay = true;
-            //Check Time
-            foreach ($day['times'] as $time) {
-              if($time['time'] == $data['deliveryTime'] && $time['slots'] > 0){
-                $availableTime  = true;
-              }
-            }
-            break;
-          }
-        }
-
-        //Validate
-        Validator::make(
-          [//Data
-            'availableDay'  => $availableDay,
-            'availableTime' => $availableTime
-          ],
-          [//Validate
-            'availableDay'   => ['required','accepted'],
-            'availableTime'  => ['required','accepted']
-          ],
-          [//Message
-            'availableDay.accepted'    => 'Выберите дату',
-            'availableTime.accepted'   => 'Выберите время'
-          ]
-        )->validate();
+        Order::validateAvailableDays($data['deliveryDate'],$data['deliveryTime']);
       }
       
-      {//Validate available product
-        //Check items available
-        $available = Product::checkCartAvailable($cart);
-
-        if ($available['r'] == false){
-          $text = $available['leftUnit'] == 0 ? 
-            'ууупс... кажется, вы не успели и "'.$available['name'].'" только что раскупили😞' :
-            'ууупс... кажется, вы не успели и "'.$available['name'].'" почти весь раскупили😞 На складе осталось всего '.$available['leftUnit'].' штук'
-          ;
-          Validator::make(['r' => false], ['r' => ['required','accepted']],['r.accepted' => $text,])->validate();
-        }
+      {//Validate available product        
+        Order::validateAvailableProducts($cart);
       }
-
       
     }
           

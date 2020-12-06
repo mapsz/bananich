@@ -16,35 +16,55 @@ let cart = {
   actions:{
     async fetch({commit,dispatch}){
       //Set type
-      let type = false;
+      let type = 1;
       if(isX) type = 'x';
 
-      //fetch
-      let r = await ax.fetch('/json/cart',{type},'get',false);
+      //Get server Cart
+      let serverCart = await ax.fetch('/json/cart',{type},'get',false);
 
-      let localCart = false;
-      if(localStorage.cart != undefined){
+      //Get local Cart
+      let localCart = false;      
+      try {
         localCart = JSON.parse(localStorage.cart);
-      }      
+      }catch(e){}
 
+      //Set From Local
+      if(
+        localCart &&
+        (localCart.id != serverCart.id) && 
+        localCart.items != undefined &&
+        localCart.items.length > 0 &&
+        localCart.type == serverCart.type
+      ){
+        serverCart = await ax.fetch('/cart/from/local',{'cart_id':localCart.id},'put',false);
+      }
+
+      //Save cart
+      localStorage.cart = JSON.stringify(serverCart);
+      commit('mCart',serverCart); 
+
+      return;
 
       //Save to local
       if(
           localCart.items == undefined  || 
           localCart.items.length < 1    ||
-          r.items.length > 0
+          serverCart.items.length > 0
         ){
-        localStorage.cart = JSON.stringify(r);
-        commit('mCart',r); 
+        localStorage.cart = JSON.stringify(serverCart);
+        commit('mCart',serverCart); 
         return;
       } 
 
     
       //Set from local
-      if(localCart.items.length > 0){
-        
+      if(localCart.items.length > 0){        
 
-        let newCart = await ax.fetch('/cart/session',{'id':localCart.id,'session_id':localCart.session_id,'user_id':localCart.user_id},'post');
+        let newCart = await ax.fetch('/cart/session',{
+          'id':localCart.id,
+          'session_id':localCart.session_id,
+          'user_id':localCart.user_id
+        },'post');
 
         if(newCart){
           localStorage.cart = JSON.stringify(newCart);
@@ -65,22 +85,20 @@ let cart = {
       data.cart_id = state.cart.id;
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
       if(r){
-        //Find cart
-        let cart = JSON.parse(JSON.stringify(state.cart));
-        let index = cart.items.findIndex(x => x.product_id == data.id);
+        // //Find cart
+        // let cart = JSON.parse(JSON.stringify(state.cart));
+        // let index = cart.items.findIndex(x => x.product_id == data.id);
 
-        //Fetch if error
-        if(index == -1){
-          dispatch('fetch');
-          return;
-        }
+        // //Fetch if error
+        // if(index == -1){
+        //   dispatch('fetch');
+        //   return;
+        // }
 
-        //Set new count
-        cart.items[index].count = data.count;
+        // //Set new count
+        // cart.items[index].count = data.count;
 
         //Commit
-        localStorage.cart = JSON.stringify(r);
-        commit('mCart',cart); 
         dispatch('fetch');
 
         return true;

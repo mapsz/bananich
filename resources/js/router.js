@@ -10,8 +10,10 @@ let routes = [];
 
   //Shared Order
   import sharedOrder from './components/__site/shared-order/shared-order.vue';
+  import sharedOrderOpen from './components/__site/shared-order/open/shared-order-open.vue';
   routes.push(
-    {path: '/shared/order',            component:sharedOrder},
+    {path: '/shared/order',                component:sharedOrderOpen},
+    {path: '/shared/order/open',           component:sharedOrderOpen},
     {path: '/shared/order/:order_link',    component:sharedOrder},
   );
 

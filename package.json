@@ -55,6 +55,7 @@
         "vue-toasted": "^1.1.28",
         "vue2-editor": "^2.10.2",
         "vuedraggable": "^2.24.1",
+        "vuejs-datepicker": "^1.6.2",
         "vuejs-paginate": "^2.1.0",
         "vuex": "^3.5.1",
         "webpack-livereload-plugin": "^2.3.0"

@@ -29,8 +29,6 @@ window.load = new load;
 import moment from 'moment';
 window.moment = moment;
 
-
-
 //Toasted
 window.terror= function(){console.log('error xzz')};
 

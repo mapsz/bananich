@@ -5,13 +5,13 @@
     <div class="checkout-title">Адрес</div>
 
     <div class="form-group">
-      <checkout-input v-model="addressStreet" :name="'addressStreet'" :placeholder="'Улица'" />
+      <checkout-input v-model="data.addressStreet" :name="'addressStreet'" :placeholder="'Улица'" />
     </div>
 
     <div class="form-group d-flex form-group-multi">
-      <checkout-input v-model="addressNumber" :name="'addressNumber'" :placeholder="'Дом'" />
-      <checkout-input v-model="addressApart" :name="'addressApart'" :placeholder="'Квартира'" />
-      <checkout-input v-model="addressPorch" :name="'addressPorch'" :placeholder="'Подъезд'" />
+      <checkout-input v-model="data.addressNumber" :name="'addressNumber'" :placeholder="'Дом'" />
+      <checkout-input v-model="data.addressApart" :name="'addressApart'" :placeholder="'Квартира'" />
+      <checkout-input v-model="data.addressPorch" :name="'addressPorch'" :placeholder="'Подъезд'" />
     </div>
 
 
@@ -22,11 +22,14 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  model: {event: 'blur'},
   data(){return{
-    addressStreet:false,
-    addressNumber:false,
-    addressApart:false,
-    addressPorch:false,
+    data:{
+      addressStreet:false,
+      addressNumber:false,
+      addressApart:false,
+      addressPorch:false,
+    },
 
     loadUser:false,
   }},
@@ -34,8 +37,12 @@ export default {
     ...mapGetters({user:'user/get'}),
   },
   watch: {
-    addressStreet: function(){
-      this.loadUserAddress();      
+    data: {
+      deep: true,
+      handler(){
+        this.$emit('blur', this.data);
+        this.loadUserAddress();
+      }
     },
     user: function(){
       this.loadUserAddress();      
@@ -46,7 +53,8 @@ export default {
     loadUserAddress(){
       if(this.loadUser) return;
       if(!this.user) return;
-      if(this.user.addresses == undefined || this.user.addresses[0] == undefined) return;
+      if(this.user.addresses == undefined ) return;
+      if(this.user.addresses[0] == undefined) return;
 
       if(this.addressStreet === null){
         this.loadUser = true;
@@ -54,10 +62,10 @@ export default {
         this.set({name:'addressNumber', value:this.user.addresses[0].number});
         this.set({name:'addressApart', value:this.user.addresses[0].appart});
         this.set({name:'addressPorch', value:this.user.addresses[0].porch});
-        this.addressStreet = this.user.addresses[0].street;
-        this.addressNumber = this.user.addresses[0].number;
-        this.addressApart = this.user.addresses[0].appart;
-        this.addressPorch = this.user.addresses[0].porch;
+        this.data.addressStreet = this.user.addresses[0].street;
+        this.data.addressNumber = this.user.addresses[0].number;
+        this.data.addressApart = this.user.addresses[0].appart;
+        this.data.addressPorch = this.user.addresses[0].porch;
       }
     }
   },

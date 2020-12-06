@@ -26,6 +26,7 @@ class JugeCRUD extends Model
       dd($data);
     }
 
+
     return $data;
   }
 

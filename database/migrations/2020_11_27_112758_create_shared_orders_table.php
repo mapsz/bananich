@@ -15,8 +15,12 @@ class CreateSharedOrdersTable extends Migration
     {
         Schema::create('shared_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->date('delivery_date')->nullable();
+            $table->time('delivery_time_from')->nullable();
+            $table->time('delivery_time_to')->nullable();
             $table->char('link',9)->nullable();
             $table->bigInteger('owner_id')->unsigned();
+            $table->tinyInteger('member_count')->default(1);
             $table->timestamps();
         });
     }

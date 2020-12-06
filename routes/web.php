@@ -806,23 +806,22 @@ Route::get('/vesi', 'LibraController@list');
   });
 }
 
+use App\Cart;
 
 Route::get('/test', function(){
   echo 'Здесь происходит, что-то очень важное 🎩';
 
-  // App\Kkt::test();
+  //Get 
+  // $cart = Cart::with('items')->with('containers')->where('id', 13828)->first();
+  
+  
 
-    
+  // dd(Cart::getCart());
+ 
 
-  // foreach ($smss as $key => $sms) {
-  //   App\Sms::putSmsToSend([
-  //     'to' => $sms['to'],
-  //     'body' =>  "{$sms['name']}, здравствуйте! У Бананыча новая акция недели! 7 самых ходовых сезонных фруктов и овощей по себестоимости и отменного качества! Успейте заказать! https://bananich.ru/discounts"
-  //   ]);
-    // die;
-  // }
 
-  // App\Logistic::getFromRaw();
+  dd(10);
+  
 });
 
 Route::get('/mail/preview/{id}', function($id){
@@ -913,6 +912,7 @@ Route::group(['middleware' => ['HttpsRR'
     Route::delete('/cart/reset', 'CartController@resetItems');
     Route::post('/cart/container', 'CartController@editContainer');
     Route::delete('/cart/container', 'CartController@removeContainer');
+    Route::put('/cart/from/local', 'CartController@cartFromLocal');
 
     //Coupon
     Route::any('/coupon/cart', 'CouponController@cartAttach');
