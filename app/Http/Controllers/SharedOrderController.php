@@ -92,13 +92,13 @@ class SharedOrderController extends Controller
     $weights = [];
     $weights['overall'] = 0;
     foreach ($users as $key => $user) {
-      $cart = Cart::with('items')->where('user_id',$user->id)->where('type',2)->first();
-      $cart = Checkout::addToCart($cart);
 
-      // dd($cart);
-      $weights[$cart['user_id']] = 0;
+      $cart = Cart::jugeGet(['type' => 2, 'user' => $user->id, 'single' => 1]);
+      $cart = Checkout::addToCart($cart);
+      
+      $weights[$user->id] = 0;
       foreach ($cart['items'] as $item) {
-        $weights[$cart['user_id']] += $item['weight'];
+        $weights[$user->id] += $item['weight'];
         $weights['overall'] += $item['weight'];
       }
     }

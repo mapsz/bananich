@@ -110,6 +110,7 @@ class SharedOrder extends Model
       $query = $query->with('status');
       $query = $query->with('address');
       $query = $query->with('comment');
+      $query = $query->with('pays');
     }
   
     {//Where
@@ -143,9 +144,12 @@ class SharedOrder extends Model
   //Relations
   public function users(){
     return $this->belongsToMany('App\User','shared_order_user','shared_order_id','user_id');
-  }  
+  }
   public function status(){
     return $this->belongsTo('App\SharedOrderStatus');
+  }
+  public function pays(){
+    return $this->hasMany('App\SharedOrderPay');
   }
   public function statuses(){
     return $this->belongsToMany('App\SharedOrderStatus');

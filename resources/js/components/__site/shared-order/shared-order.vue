@@ -43,15 +43,25 @@
 
         <div v-if="sOrder" class="row mt-3">
           <!-- Pay -->
-          <div class="col-4">
+          <!-- <div class="col-4">
             <h4>Оплата</h4>
             <div>К оплате: 600 </div>
             <div>Оплачено: 0</div>
-          </div>
+          </div> -->
           <!-- Status -->
           <div v-if="sOrder.status != undefined" class="col-4">
             <h4>Статус</h4>
             <div>{{sOrder.status.name}}</div>
+          </div>
+          <!-- Pay -->
+          <div v-if="sOrder.status != undefined" class="col-4">
+            <h4>Оплата до</h4>
+            <div>{{payTill}}</div>
+          </div>
+          <!-- Close -->
+          <div v-if="sOrder.status != undefined" class="col-4">
+            <h4>Закрытие</h4>
+            <div>{{closeAt}}</div>
           </div>
         </div>
 
@@ -74,7 +84,8 @@
                 </span> 
                 <div v-if="weights">
                   Вес: {{weights[v.id]}}
-                </div>                
+                </div>                  
+                <button v-if="userIn && (sOrder.pays.findIndex(x => x.user_id == v.id) == -1)" @click="pay(v.id)" class="btn btn-info">Оплатить</button>              
                 <hr>
               </div>
             </div>
@@ -88,7 +99,7 @@
             <div v-if="weights">
               <div>Доступно: 25кг</div>
               <div>Использовано: {{weights.overall}}кг</div>
-              <div>не использовано: {{25 - weights.overall}}кг</div>
+              <!-- <div>не использовано: {{25 - weights.overall}}кг</div> -->
             </div>
           </div>
         </div>
@@ -138,6 +149,20 @@ computed:{
 
     return r;
 
+  },
+  payTill(){
+    let r = false;
+    if(!this.sOrder || this.sOrder.delivery_date == undefined) return false;
+    
+    return moment(this.sOrder.delivery_date).subtract(1, 'd').format('DD.MM.YYYY') + " 18:00";
+
+  },
+  closeAt(){
+    let r = false;
+    if(!this.sOrder || this.sOrder.delivery_date == undefined) return false;
+    
+    return moment(this.sOrder.delivery_date).subtract(1, 'd').format('DD.MM.YYYY') + " 21:00";
+
   }
 },
 async mounted() {
@@ -172,6 +197,13 @@ methods:{
     if(r){
       window.location.reload();
     }
+  },
+  async pay(userId){
+    let r = await ax.fetch('/shared/order/pay',{'order_id':this.sOrder.id, 'user_id':userId},'put');
+    if(r){
+      window.location.reload();
+    }
+
   },
   async getWeights(){
     let r = await ax.fetch('/shared/order/weights',{id:this.sOrder.id});

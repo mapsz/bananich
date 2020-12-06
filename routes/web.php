@@ -896,7 +896,8 @@ Route::group(['middleware' => ['HttpsRR'
       Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
       
       {//Shared Order Pay
-        Route::get('/shared/order/pays', 'SharedOrderPayController@pay');
+        // Route::get('/shared/order/pays', 'SharedOrderPayController@get');
+        Route::put('/shared/order/pay', 'SharedOrderPayController@pay');
       }
     }
 
