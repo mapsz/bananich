@@ -257,7 +257,7 @@ class Cart extends Model
   
     //Single
     if(isset($request['id'])){$data = $data[0];}
-    // if(isset($request['single'])){$data = $data[0];}
+    if(isset($request['single'])){$data = $data[0];}
   
     //Return
     return $data;
