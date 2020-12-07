@@ -43,65 +43,90 @@
 
         <div v-if="sOrder" class="row mt-3">
           <!-- Pay -->
-          <!-- <div class="col-4">
+          <div class="col-4">
             <h4>Оплата</h4>
-            <div>К оплате: 600 </div>
-            <div>Оплачено: 0</div>
-          </div> -->
+            <div>К оплате: {{sOrder.full_price}} </div>
+            <div>Оплачено: {{payed}}</div>
+          </div>
           <!-- Status -->
           <div v-if="sOrder.status != undefined" class="col-4">
             <h4>Статус</h4>
             <div>{{sOrder.status.name}}</div>
           </div>
-          <!-- Pay -->
-          <div v-if="sOrder.status != undefined" class="col-4">
-            <h4>Оплата до</h4>
-            <div>{{payTill}}</div>
-          </div>
-          <!-- Close -->
-          <div v-if="sOrder.status != undefined" class="col-4">
-            <h4>Закрытие</h4>
-            <div>{{closeAt}}</div>
+
+          <div class="col-4">
+            <!-- Pay -->
+            <div v-if="sOrder.status != undefined" >
+              <h5>Оплата до</h5>
+              <div>{{payTill}}</div>
+            </div>
+            <!-- Close -->
+            <div v-if="sOrder.status != undefined">
+              <h5>Закрытие</h5>
+              <div>{{closeAt}}</div>
+            </div>
           </div>
         </div>
 
         <div v-if="sOrder" class="row mt-3">
-          <!-- Details -->
-          <div class="col-4">
-            <h4>Детали заказа</h4>
 
-            <checkout-contact class="checkout-div " v-model="data.contacts" />
-
-          </div>
-          
-          <!-- Users -->
-          <div class="col-4">
-            <h4>Участники</h4>
-            <div>
-              <div v-for="(v, index) in users" :key="index">
-                <span :class="v.id == user.id  ? 'text-info' : ''">
-                  <span v-if="v.id == sOrder.owner_id">👑</span> {{v.name}} {{v.email}}
-                </span> 
-                <div v-if="weights">
-                  Вес: {{weights[v.id]}}
-                </div>                  
-                <button v-if="userIn && (sOrder.pays.findIndex(x => x.user_id == v.id) == -1)" @click="pay(v.id)" class="btn btn-info">Оплатить</button>              
-                <hr>
-              </div>
-            </div>
-
-            <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
-          </div>          
-          
           <!-- Weight -->
           <div class="col-4">
             <h4>Вес</h4>
             <div v-if="weights">
-              <div>Доступно: 25кг</div>
+              <div><b>Общий</b></div>
+              <div>Доступно: {{sOrder.full_weight}}кг</div>
               <div>Использовано: {{weights.overall}}кг</div>
+              <div><b>Мой</b></div>
+              <div>Доступно: {{sOrder.user_weight}}кг</div>
+              <div>Использовано: {{weights[user.id]}}кг</div>
               <!-- <div>не использовано: {{25 - weights.overall}}кг</div> -->
             </div>
           </div>
+
+          <!-- Details -->
+          <div class="col-4">
+            <h4>Детали заказа</h4>
+            <checkout-contact class="checkout-div " v-model="data.contacts" />
+          </div>
+          
+          <!-- Users -->
+          <div class="col-4">
+            <div v-if="sOrder && userIn">
+              <h4>Участники</h4>
+              <hr>
+              <div v-for="(n, i) in sOrder.member_count" :key="i">
+                <!-- Member -->
+                <div>
+                  <div v-if="users[i] != undefined">
+                    <span :class="users[i].id == user.id  ? 'text-info' : ''">
+                      <span v-if="users[i].id == sOrder.owner_id">👑</span> {{users[i].name}} {{users[i].email}}
+                    </span>
+                    <div v-if="weights">
+                      Вес: {{weights[users[i].id]}}
+                    </div>  
+                  </div>
+                  <div v-else>
+                    Invite!
+                  </div>
+                </div>
+
+                <!-- Pay -->
+                <div v-if="users[i] != undefined">
+                  <button v-if="(sOrder.pays.findIndex(x => x.user_id == users[i].id) == -1)" 
+                    @click="pay(users[i].id)" 
+                    class="btn btn-info"
+                  >
+                    Оплатить
+                  </button>
+                </div>
+
+                <hr>
+              </div>
+            </div>
+            <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
+          </div>          
+
         </div>
 
       </div>
@@ -120,8 +145,8 @@ data(){return{
 }},
 computed:{
   ...mapGetters({
-    sOrders:'sharedOrder/get',
-    user:'user/get',
+    sOrders:    'sharedOrder/get',
+    user:       'user/get',
   }),
   shareLink(){
     if(!this.link) return false;
@@ -162,6 +187,17 @@ computed:{
     if(!this.sOrder || this.sOrder.delivery_date == undefined) return false;
     
     return moment(this.sOrder.delivery_date).subtract(1, 'd').format('DD.MM.YYYY') + " 21:00";
+
+  },
+  payed(){
+    if(!this.sOrder || this.sOrder.pays == undefined || this.sOrder.pays.length == 0) return 0;
+
+    let payed = 0;
+    this.sOrder.pays.forEach(pay => {
+      console.log(pay);
+    });
+
+    return payed;
 
   }
 },

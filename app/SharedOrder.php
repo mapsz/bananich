@@ -125,7 +125,25 @@ class SharedOrder extends Model
     //Get
     $data = JugeCRUD::get($query,$request);
 
-    // dd($data);
+    
+    {//After Query
+
+      //Get settings
+      $settings = (new Setting)->getList(1);
+             
+      //Loop
+      foreach ($data as $key => $row) {        
+        {//Weight
+          $row['full_weight'] = $settings['x_order_weight'];
+          $row['user_weight'] = round($settings['x_order_weight'] / $row->member_count, 2, PHP_ROUND_HALF_DOWN);
+        }
+        {//Price
+          $row['full_price'] = $settings['x_order_price'];
+          $row['user_price'] = round($settings['x_order_price'] / $row->member_count, 2, PHP_ROUND_HALF_DOWN);
+        }
+      }
+
+    }
   
     //Single
     if(isset($request['id'])){$data = $data[0];}

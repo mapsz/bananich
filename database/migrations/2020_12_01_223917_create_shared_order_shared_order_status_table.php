@@ -32,9 +32,9 @@ class CreateSharedOrderSharedOrderStatusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shared_order_shared_order_status');        
+        Schema::dropIfExists('shared_order_shared_order_status');
         Schema::table('shared_orders', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('status_id');
         });
     }
 }
