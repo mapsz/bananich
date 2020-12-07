@@ -27,7 +27,7 @@
     <div class="cart-items">
 
       <div v-for='(item,i) in items' :key='i' class="item p-3 mb-3" style="position:relative">
-        
+                
         <span v-if="!item.present" @click="removeItem(item.product_id)" class="item-remove"></span>
         <div class="row">
 
@@ -63,13 +63,7 @@
 
         </div>
       </div>
-
-
     </div>
-
-
-
-
   </div>
 </template>
 

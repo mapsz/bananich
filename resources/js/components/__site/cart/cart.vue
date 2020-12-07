@@ -115,16 +115,22 @@ export default {
     },
     bonusesToGet:function (){
       if(
-        this.cart == undefined || this.cart.final_summ  == undefined || this.cart.shipping == undefined || 
-        this.settings == undefined || this.settings.bonus_multiplier== undefined 
+        this.cart == undefined || 
+        this.cart.final_summ  == undefined || 
+        this.cart.shipping == undefined || 
+        this.settings == undefined || 
+        this.settings.bonus_multiplier == undefined 
       ) return false;
       return Math.round((this.cart.final_summ - this.cart.shipping) * parseFloat(this.settings.bonus_multiplier));
-    }
+    },
   },
   watch: {
     cart: {
       handler: async function (val, oldVal) {
         if(this.cart.items == undefined) return;
+        console.log(val);
+        console.log(oldVal);
+        if(val == oldVal) return;
 
         let ids = [];
 
@@ -138,7 +144,7 @@ export default {
         }
 
         if(ids.length == 0) return;
-
+        
         this.addFilter({ids});
         this.getProducts();
         this.clearFilters();
