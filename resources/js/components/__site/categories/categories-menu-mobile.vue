@@ -88,6 +88,9 @@ export default {
     }), 
     async changeCategory(category){
       if(!this.isMobile) return;
+
+      //Remove discount
+      await this.addFilter({'only_discounts':0});
       //Scroll
       $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top-200)}, 300);
       //Route
@@ -108,7 +111,6 @@ export default {
       
 
       if(this.$route.path == "/discounts"){
-        console.log(111);
         //Set Products
         await this.setActive(1);
         await this.addFilter({'category':0});
