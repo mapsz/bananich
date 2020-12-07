@@ -17,7 +17,6 @@ class CreateSharedOrderStatusesTable extends Migration
             $table->integer('id');
             $table->char('name', 100);
         });
-
         
         {//Seed
             DB::table('shared_order_statuses')->insert([
@@ -48,7 +47,6 @@ class CreateSharedOrderStatusesTable extends Migration
                 'id' => '500',
                 'name' => 'Оформлен',
             ]);
-
         }
         
     }

@@ -149,7 +149,7 @@ class OrderController extends Controller
         Order::validateAvailableDays($data['deliveryDate'],$data['deliveryTime']);
       }
       
-      {//Validate available product        
+      {//Validate available product
         Order::validateAvailableProducts($cart);
       }
       

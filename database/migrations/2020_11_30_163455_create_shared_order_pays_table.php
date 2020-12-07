@@ -18,6 +18,8 @@ class CreateSharedOrderPaysTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('shared_order_id')->unsigned();    
             $table->tinyInteger('confirm')->default(0);
+            $table->tinyInteger('slot')->default(1);
+            $table->decimal('amount', 8, 2)->nullable();
             $table->timestamps();
         });
     }

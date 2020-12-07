@@ -174,7 +174,7 @@ class Order extends Model
       }
     }
 
-    Log::info('days - '. json_encode($rDate) . ' cart - ' . json_encode($cart) . ' user - '. $cart['user_id']);
+    // Log::info('days - '. json_encode($rDate) . ' cart - ' . json_encode($cart) . ' user - '. $cart['user_id']);
 
     return $rDate;
 

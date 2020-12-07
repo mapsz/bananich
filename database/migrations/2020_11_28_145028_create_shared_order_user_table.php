@@ -17,6 +17,7 @@ class CreateSharedOrderUserTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('shared_order_id')->unsigned();
+            $table->tinyInteger('slot')->default(1);
             $table->timestamps();
         });
     }
