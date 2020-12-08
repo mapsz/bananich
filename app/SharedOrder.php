@@ -75,19 +75,22 @@ class SharedOrder extends Model
   public static function join($user, $link = false, $sOrder = false){
 
     //Get order
-    if(!$sOrder){$sOrder = SharedOrder::where('link',$link)->first();}
+    if(!$sOrder){$sOrder = SharedOrder::where('link',$link)->with('users')->first();}
+    $slot = count($sOrder->users) + 1;
+
+    if($slot > $sOrder->member_count){return false;} //TODO @@@ to validate
 
     try{
       DB::beginTransaction();{
         
-      // Attach user
-      $sOrder->users()->attach($user->id,['slot' => 2]);
+      // Attach user      
+      $sOrder->users()->attach($user->id,['slot' => $slot]);
       
       {//Attach Contacts
         $sOrderContact = new SharedOrderContact;
-        $sOrderContact->name              = $user->name;
-        $sOrderContact->phone             = $user->phone;
-        $sOrderContact->email             = $user->email;
+        $sOrderContact->name              = isset($user->name) ? $user->name : 'none';
+        $sOrderContact->phone             = isset($user->phone) ? $user->phone : 'none';
+        $sOrderContact->email             = isset($user->email) ? $user->email : 'none';
         $sOrderContact->user_id           = $user->id;
         $sOrderContact->shared_order_id   = $sOrder->id;
         $sOrderContact->save();
@@ -136,7 +139,6 @@ class SharedOrder extends Model
 
   public function jugeGet($request = []) {
 
-    // (new SharedOrder)->handle();
     //Model
     $query = new self;
   
