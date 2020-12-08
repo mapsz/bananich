@@ -83,7 +83,7 @@ class SharedOrderController extends Controller
 
   public function getWeights(Request $request){
 
-    $sOrder = SharedOrder::jugeGet($request);
+    $sOrder = (new SharedOrder)->jugeGet($request);
 
     $users = $sOrder->users;
 
