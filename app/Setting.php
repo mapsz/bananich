@@ -21,6 +21,8 @@ class Setting extends Model
     'x_max_open_days'           => 14,
     'x_order_weight'            => 26,
     'x_order_price'             => 600,
+    'x_order_close_hours'       => 3,
+    'x_pay_close_hours'         => 6,
   ];
 
 

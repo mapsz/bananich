@@ -17,15 +17,17 @@ class Cart extends Model
   //Get actual cart
   public static function getCart($request = []){
 
+
     {//Get user, session
       $user = Auth::User();
       $userId = $user ? $user->id : 0;
       $session = session()->getId();      
       {//Type
-        $request['type'] = 1;
         if(isset($request['type'])){
           if($request['type'] == 'x'){$request['type'] = 2;}
           if($request['type'] == 2){$request['type'] = 2;}
+        }else{
+          $request['type'] = 1;
         }
       }
     }
@@ -256,8 +258,10 @@ class Cart extends Model
     $data = JugeCRUD::get($query,$request);
   
     //Single
-    if(isset($request['id'])){$data = $data[0];}
-    if(isset($request['single'])){$data = $data[0];}
+    if(isset($data[0])){
+      if(isset($request['id'])){$data = $data[0];}
+      if(isset($request['single'])){$data = $data[0];}
+    }
   
     //Return
     return $data;

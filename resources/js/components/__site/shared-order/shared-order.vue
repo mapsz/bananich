@@ -46,24 +46,40 @@
           <div class="col-4">
             <h4>Оплата</h4>
             <div>К оплате: {{sOrder.full_price}} </div>
-            <div>Оплачено: {{payed}}</div>
+            <div>Оплачено: {{sOrder.payed}}</div>
           </div>
-          <!-- Status -->
+          <!-- Info -->
           <div v-if="sOrder.status != undefined" class="col-4">
-            <h4>Статус</h4>
+            <h5>Статус</h5>
             <div>{{sOrder.status.name}}</div>
+            <h5>Адрес</h5>
+            <div>{{sOrder.address.street}} {{sOrder.address.appart}}</div>
+            <h5>Доставка</h5>
+            <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
+            <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
           </div>
 
           <div class="col-4">
+            <!-- Test time -->
+            <div v-if="sOrder.status != undefined" >
+              <h5>Test time</h5>
+              <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
+              <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
+              <div class="d-flex">
+                <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
+                <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
+                <button @click="updateTestTime()" class="btn btn-primary ml-3">update</button>
+              </div>
+            </div>
             <!-- Pay -->
             <div v-if="sOrder.status != undefined" >
               <h5>Оплата до</h5>
-              <div>{{payTill}}</div>
+              <div>{{moment(sOrder.pay_close).locale("ru").format('LLLL')}}</div>
             </div>
             <!-- Close -->
             <div v-if="sOrder.status != undefined">
               <h5>Закрытие</h5>
-              <div>{{closeAt}}</div>
+              <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
             </div>
           </div>
         </div>
@@ -95,34 +111,44 @@
             <div v-if="sOrder && userIn">
               <h4>Участники</h4>
               <hr>
-              <div v-for="(n, i) in sOrder.member_count" :key="i">
-                <!-- Member -->
-                <div>
-                  <div v-if="users[i] != undefined">
-                    <span :class="users[i].id == user.id  ? 'text-info' : ''">
-                      <span v-if="users[i].id == sOrder.owner_id">👑</span> {{users[i].name}} {{users[i].email}}
-                    </span>
-                    <div v-if="weights">
-                      Вес: {{weights[users[i].id]}}
-                    </div>  
+              <template v-if="slots">
+                <div v-for="(n, i) in sOrder.member_count" :key="i">
+                  <!-- Member -->
+                  <div>
+                    <div v-if="slots[n].user != undefined">
+                      <span :class="slots[n].user.id == user.id  ? 'text-info' : ''">
+                        <span v-if="slots[n].user.id == sOrder.owner_id">👑</span> {{slots[n].user.name}} {{slots[n].user.email}}
+                      </span>
+                      <div v-if="weights">
+                        Вес: {{weights[slots[n].user.id]}}
+                      </div>  
+                    </div>
+                    <div v-else>
+                      Invite!
+                    </div>
                   </div>
-                  <div v-else>
-                    Invite!
+
+                  <!-- Pay -->
+                  <div>
+                    <div v-if="slots[n].pay == undefined">
+                      <button 
+                        @click="pay(user.id, n)" 
+                        class="btn btn-info"
+                      >
+                        Оплатить {{sOrder.user_price}}p
+                      </button>
+                    </div>
+                    <div v-else>
+                      <span class="text-success">Оплачено</span>
+                      <span>
+                        {{slots[n].pay.user.name}} {{slots[n].pay.user.email}}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <!-- Pay -->
-                <div v-if="users[i] != undefined">
-                  <button v-if="(sOrder.pays.findIndex(x => x.user_id == users[i].id) == -1)" 
-                    @click="pay(users[i].id)" 
-                    class="btn btn-info"
-                  >
-                    Оплатить
-                  </button>
+                  <hr>
                 </div>
-
-                <hr>
-              </div>
+              </template>
             </div>
             <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
           </div>          
@@ -139,6 +165,8 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
+  moment:moment,
+  test:{},
   data:{},
   shareDescription:"Очень крутой текст!",
   weights:false,
@@ -164,6 +192,27 @@ computed:{
     if(!this.sOrder || this.sOrder.users == undefined || this.sOrder.users.length < 1) return [];
     return this.sOrder.users;
   },
+  slots(){
+    if(!this.sOrder || this.sOrder.member_count == undefined || this.sOrder.member_count < 1) return [];
+    if(this.sOrder.users == undefined) return [];
+
+    let slots = []
+    for (let i = 1; i <= this.sOrder.member_count; i++) {
+      let user = this.sOrder.users.find(x => x.slot == i);
+      let pay = this.sOrder.pays.find(x => x.slot == i);
+      if(pay != undefined){
+        pay.user = this.users.find(x => x.id == pay.user_id);
+      }
+
+      slots[i] = {
+        user:user,
+        pay:pay
+      };      
+    }
+
+    return slots;
+
+  },
   userIn(){
     let r = false;
     if(!this.users || this.users.length < 1) return r;
@@ -174,34 +223,9 @@ computed:{
 
     return r;
 
-  },
-  payTill(){
-    let r = false;
-    if(!this.sOrder || this.sOrder.delivery_date == undefined) return false;
-    
-    return moment(this.sOrder.delivery_date).subtract(1, 'd').format('DD.MM.YYYY') + " 18:00";
-
-  },
-  closeAt(){
-    let r = false;
-    if(!this.sOrder || this.sOrder.delivery_date == undefined) return false;
-    
-    return moment(this.sOrder.delivery_date).subtract(1, 'd').format('DD.MM.YYYY') + " 21:00";
-
-  },
-  payed(){
-    if(!this.sOrder || this.sOrder.pays == undefined || this.sOrder.pays.length == 0) return 0;
-
-    let payed = 0;
-    this.sOrder.pays.forEach(pay => {
-      console.log(pay);
-    });
-
-    return payed;
-
   }
 },
-async mounted() {
+async mounted(){
   //Open shared order
   if(!this.link){
     this.open();
@@ -210,7 +234,7 @@ async mounted() {
   else{
     console.log('get');
     await this.filter({'link':this.link});
-    await this.get();    
+    await this.get();
   }
 
   if(this.sOrder){
@@ -234,19 +258,19 @@ methods:{
       window.location.reload();
     }
   },
-  async pay(userId){
-    let r = await ax.fetch('/shared/order/pay',{'order_id':this.sOrder.id, 'user_id':userId},'put');
-    if(r){
-      window.location.reload();
-    }
-
+  async pay(userId,slot){
+    let r = await ax.fetch('/shared/order/pay',{'order_id':this.sOrder.id, 'user_id':userId, 'slot':slot},'put');
+    this.get();
   },
   async getWeights(){
     let r = await ax.fetch('/shared/order/weights',{id:this.sOrder.id});
     if(r){
       this.weights = r;
     }
-
+  },
+  async updateTestTime(){
+    let r = await ax.fetch('/shared/order/test/time',{'id':this.sOrder.id,'test':this.test},'post');
+    this.get();
   }
 },
 }

@@ -18,10 +18,10 @@ class CreateAddressesTable extends Migration
             $table->bigInteger('addressable_id')->unsigned();
             $table->char('addressable_type',255);
             $table->char('street',255);
-            $table->char('number',20)->nullable();;
-            $table->char('appart',20)->nullable();;
-            $table->char('porch',20)->nullable();;
-            $table->char('stage',20)->nullable();;
+            $table->char('number',20)->nullable();
+            $table->char('appart',20)->nullable();
+            $table->char('porch',20)->nullable();
+            $table->char('stage',20)->nullable();
             $table->timestamps();
         });
     }

@@ -891,9 +891,11 @@ Route::group(['middleware' => ['HttpsRR'
   Route::group(['middleware' => []], function (){
 
     {//Shared Order
+      Route::post('/shared/order/test/time', 'SharedOrderController@testTime');
       Route::put('/shared/order/open', 'SharedOrderController@open');
       Route::post('/shared/order/join', 'SharedOrderController@join');
       Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
+      Route::any('/shared/order/handle', 'SharedOrderController@handle');
       
       {//Shared Order Pay
         // Route::get('/shared/order/pays', 'SharedOrderPayController@get');

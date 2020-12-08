@@ -128,8 +128,6 @@ export default {
     cart: {
       handler: async function (val, oldVal) {
         if(this.cart.items == undefined) return;
-        console.log(val);
-        console.log(oldVal);
         if(val == oldVal) return;
 
         let ids = [];

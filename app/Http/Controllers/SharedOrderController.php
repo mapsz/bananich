@@ -78,7 +78,7 @@ class SharedOrderController extends Controller
     //User
     $user = Auth::user();
 
-    return response()->json(SharedOrder::join($request->link, $user->id));
+    return response()->json(SharedOrder::join($user, $request->link));
   }
 
   public function getWeights(Request $request){
@@ -94,7 +94,12 @@ class SharedOrderController extends Controller
     foreach ($users as $key => $user) {
 
       $cart = Cart::jugeGet(['type' => 2, 'user' => $user->id, 'single' => 1]);
+      if(!isset($cart->items)){
+        Log::info('shared order cart error');
+        return false;
+      }
       $cart = Checkout::addToCart($cart);
+
       
       $weights[$user->id] = 0;
       foreach ($cart['items'] as $item) {
@@ -104,5 +109,35 @@ class SharedOrderController extends Controller
     }
 
     return response()->json($weights);
+  }
+
+  public function handle(Request $request){
+    $h = (new SharedOrder)->handle();
+    return response()->json($h);
+  }
+
+  public function testTime(Request $request){
+    
+    if(!isset($request->test)) return false;
+    if(!isset($request->id)) return false;
+
+    $minutes = 0;
+    if(isset($request->test['hours'])) $minutes += 60 * $request->test['hours'];
+    if(isset($request->test['minutes'])) $minutes += $request->test['minutes'];
+
+    {
+      $so = DB::table('shared_order_test_time')->where('shared_order_id',$request->id)->first();
+      if($so){
+        DB::table('shared_order_test_time')->where('shared_order_id',$request->id)->update([ 'minutes' => $minutes]);
+      }else{
+        DB::table('shared_order_test_time')->insert(['shared_order_id' => $request->id, 'minutes' => $minutes]);
+      }
+    }  
+
+    
+    (new SharedOrder)->handle();
+
+    return response()->json(1, 200);
+
   }
 }
