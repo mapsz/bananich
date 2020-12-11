@@ -177,7 +177,7 @@ class Order extends Model
     }
 
 
-    dd($rDate);
+    // dd($rDate);
     return $rDate;
 
   }
