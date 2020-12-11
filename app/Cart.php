@@ -26,6 +26,8 @@ class Cart extends Model
         if(isset($request['type'])){
           if($request['type'] == 'x'){$request['type'] = 2;}
           if($request['type'] == 2){$request['type'] = 2;}
+          if($request['type'] == false){$request['type'] = 1;}        
+          if($request['type'] == 'false'){$request['type'] = 1;}        
         }else{
           $request['type'] = 1;
         }

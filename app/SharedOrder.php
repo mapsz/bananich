@@ -106,6 +106,12 @@ class SharedOrder extends Model
     return true;
   }
 
+  public static function kick($orderId, $userId){
+
+    return SharedOrder::where('id', $orderId)->first()->users()->detach($userId);
+
+  }
+
   public static function changeStatus($sOrder, $statusId, $userId = false){
     
     if(is_int($sOrder)){

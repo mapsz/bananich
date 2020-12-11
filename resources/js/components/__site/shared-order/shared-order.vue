@@ -116,13 +116,22 @@
                   <!-- Member -->
                   <div>
                     <div v-if="slots[n].user != undefined">
+                      <!-- Name -->
                       <span :class="slots[n].user.id == user.id  ? 'text-info' : ''">
                         <span v-if="slots[n].user.id == sOrder.owner_id">👑</span> {{slots[n].user.name}} {{slots[n].user.email}}
                       </span>
+                      <!-- kick -->
+                      <span v-if="isAdmin">
+                        <button v-if="slots[n].user.id != user.id" @click="kick(slots[n].user.id)" class="btn btn-danger btn-sm">
+                          выкинуть 🥾
+                        </button>
+                      </span>
+                      <!-- Weight -->
                       <div v-if="weights">
                         Вес: {{weights[slots[n].user.id]}}
                       </div>  
                     </div>
+                    <!-- Invite -->
                     <div v-else>
                       Invite!
                     </div>
@@ -138,6 +147,7 @@
                         Оплатить {{sOrder.user_price}}p
                       </button>
                     </div>
+                    <!-- Pay -->
                     <div v-else>
                       <span class="text-success">Оплачено</span>
                       <span>
@@ -223,7 +233,13 @@ computed:{
 
     return r;
 
-  }
+  },
+  isAdmin(){
+    if(this.user == undefined && !this.user) return false;
+    if(!this.sOrder || this.sOrder.owner_id == undefined || this.sOrder.owner_id < 1) return false;
+    if(this.user.id == this.sOrder.owner_id) return true;
+    return false;
+  },
 },
 async mounted(){
   //Open shared order
@@ -268,10 +284,16 @@ methods:{
       this.weights = r;
     }
   },
+  async kick(userId){
+    let r = await ax.fetch('/shared/order/kick',{'sOrderId':this.sOrder.id,'userId':userId},'delete');
+    this.get();
+  },
+
+  //TEST
   async updateTestTime(){
     let r = await ax.fetch('/shared/order/test/time',{'id':this.sOrder.id,'test':this.test},'post');
     this.get();
-  }
+  },
 },
 }
 </script>

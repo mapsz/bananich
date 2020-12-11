@@ -895,6 +895,7 @@ Route::group(['middleware' => ['HttpsRR'
       Route::put('/shared/order/open', 'SharedOrderController@open');
       Route::post('/shared/order/join', 'SharedOrderController@join');
       Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
+      Route::delete('/shared/order/kick', 'SharedOrderController@kick');
       Route::any('/shared/order/handle', 'SharedOrderController@handle');
       
       {//Shared Order Pay
@@ -1119,6 +1120,7 @@ Route::group(['middleware' => ['HttpsRR'
     //Settings
     Route::middleware([])->group(function (){
       Route::post('/settings', 'SettingController@post');  
+      Route::delete('/settings', 'SettingController@delete');  
     });
 
     //Present

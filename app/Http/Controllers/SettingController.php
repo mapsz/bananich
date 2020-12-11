@@ -20,6 +20,16 @@ class SettingController extends Controller
     return response()->json(1);
   }
 
+  public function delete(Request $request){
+
+    if(!isset($request->name)) return response()->json(false);
+
+    DB::table('settings')->where('name',$request->name)->delete();
+
+    return response()->json(1); 
+
+  }
+
   public function get(){
     $settings = new Setting(); 
     $settings = $settings->getList();

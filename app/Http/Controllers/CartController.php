@@ -90,9 +90,10 @@ class CartController extends Controller
     ])->validate();
 
     //Set type
-    $type = false;
+    $type = 1;
     if(isset($request->type)) $type = $request->type;
-    
+
+   
     //Get cart
     $cart = Cart::getCart(['type' => $type]);
 

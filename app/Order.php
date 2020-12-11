@@ -55,6 +55,8 @@ class Order extends Model
     //Get Cart
     $cart = Cart::getCart(['type' => $type]);
 
+    // dd($cart);
+
     {//Get settings
       $settings = self::getLimitSettings();
       $endTime = 24 - $settings['order_limit_day_end_time'];
@@ -174,8 +176,8 @@ class Order extends Model
       }
     }
 
-    // Log::info('days - '. json_encode($rDate) . ' cart - ' . json_encode($cart) . ' user - '. $cart['user_id']);
 
+    dd($rDate);
     return $rDate;
 
   }
@@ -234,16 +236,18 @@ class Order extends Model
 
   public static function getLimitSettings(){
 
-    $settings = Setting::whereIn('name',[
-      'order_limit_interval_11_23',
-      'order_limit_interval_11_15',
-      'order_limit_interval_15_19',
-      'order_limit_interval_19_23',
-      'order_limit_total_orders',
-      'order_limit_days_count',
-      'order_limit_day_end_time',
-      'x_max_open_days',
-    ])->get();
+    $settings = new Setting;
+
+    $settings = $settings->orWhere('name', 'LIKE', 'order_limit_interval_11_23'.'%');
+    $settings = $settings->orWhere('name', 'LIKE', 'order_limit_interval_11_15'.'%');
+    $settings = $settings->orWhere('name', 'LIKE', 'order_limit_interval_15_19'.'%');
+    $settings = $settings->orWhere('name', 'LIKE', 'order_limit_interval_19_23'.'%');
+    $settings = $settings->orWhere('name', 'LIKE', 'order_limit_total_orders'.'%');
+    $settings = $settings->orWhere('name', 'order_limit_days_count');
+    $settings = $settings->orWhere('name', 'order_limit_day_end_time');
+    $settings = $settings->orWhere('name', 'x_max_open_days');
+
+    $settings = $settings->get();
 
     $out = [];
     foreach ($settings as $key => $value) {

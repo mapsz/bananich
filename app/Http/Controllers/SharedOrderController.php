@@ -116,6 +116,10 @@ class SharedOrderController extends Controller
     return response()->json($h);
   }
 
+  public function kick(Request $request){
+    return response()->json(SharedOrder::kick($request->sOrderId, $request->userId));
+  }
+
   public function testTime(Request $request){
     
     if(!isset($request->test)) return false;
