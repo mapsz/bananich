@@ -103,17 +103,40 @@ class Order extends Model
         $dayOrders_19_23 = array_filter($dayOrders, function($k) {
           return $k['delivery_time_from'] == '19:00:00' && $k['delivery_time_to'] == '23:00:00';
         });
-          
+
+        $weekDay = Carbon::parse($day)->format('N');
         array_push($days,[
           'date' => $day,
-          'slots' => $settings['order_limit_total_orders'] - count($dayOrders),
-          'times' => [          
-            ['time' => ['from' => '11', 'to' => '23'] , 'slots' => $settings['order_limit_interval_11_23'] - count($dayOrders_11_23)],
-            ['time' => ['from' => '11', 'to' => '15'] , 'slots' => $settings['order_limit_interval_11_15'] - count($dayOrders_11_15)],
-            ['time' => ['from' => '15', 'to' => '19'] , 'slots' => $settings['order_limit_interval_15_19'] - count($dayOrders_15_19)],
-            ['time' => ['from' => '19', 'to' => '23'] , 'slots' => $settings['order_limit_interval_19_23'] - count($dayOrders_19_23)]
+          'slots' => (
+            isset($settings['order_limit_total_orders_'.$weekDay]) ? $settings['order_limit_total_orders_'.$weekDay] : $settings['order_limit_total_orders']             
+          ) - count($dayOrders),
+          'times' => [
+            [
+              'time' => ['from' => '11', 'to' => '23'], 
+              'slots' => (
+                isset($settings['order_limit_interval_11_23_'.$weekDay]) ? $settings['order_limit_interval_11_23_'.$weekDay] : $settings['order_limit_interval_11_23']             
+              ) - count($dayOrders_11_23)              
+            ],
+            [
+              'time' => ['from' => '11', 'to' => '23'], 
+              'slots' => (
+                isset($settings['order_limit_interval_11_15_'.$weekDay]) ? $settings['order_limit_interval_11_15_'.$weekDay] : $settings['order_limit_interval_11_15']             
+              ) - count($dayOrders_11_15)              
+            ],
+            [
+              'time' => ['from' => '15', 'to' => '23'], 
+              'slots' => (
+                isset($settings['order_limit_interval_15_19_'.$weekDay]) ? $settings['order_limit_interval_15_19_'.$weekDay] : $settings['order_limit_interval_15_19']             
+              ) - count($dayOrders_15_19)              
+            ],
+            [
+              'time' => ['from' => '19', 'to' => '23'], 
+              'slots' => (
+                isset($settings['order_limit_interval_19_23_'.$weekDay]) ? $settings['order_limit_interval_19_23_'.$weekDay] : $settings['order_limit_interval_19_23']             
+              ) - count($dayOrders_19_23)              
+            ],
           ]
-        ]);
+        ]);      
       } 
     }
    
