@@ -118,13 +118,13 @@ class Order extends Model
               ) - count($dayOrders_11_23)              
             ],
             [
-              'time' => ['from' => '11', 'to' => '23'], 
+              'time' => ['from' => '11', 'to' => '15'], 
               'slots' => (
                 isset($settings['order_limit_interval_11_15_'.$weekDay]) ? $settings['order_limit_interval_11_15_'.$weekDay] : $settings['order_limit_interval_11_15']             
               ) - count($dayOrders_11_15)              
             ],
             [
-              'time' => ['from' => '15', 'to' => '23'], 
+              'time' => ['from' => '15', 'to' => '19'], 
               'slots' => (
                 isset($settings['order_limit_interval_15_19_'.$weekDay]) ? $settings['order_limit_interval_15_19_'.$weekDay] : $settings['order_limit_interval_15_19']             
               ) - count($dayOrders_15_19)              
@@ -199,8 +199,6 @@ class Order extends Model
       }
     }
 
-
-    // dd($rDate);
     return $rDate;
 
   }
