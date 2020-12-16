@@ -11,9 +11,16 @@
           <span style="font-size: 48pt;">🍌🍌</span>
         </div>
         
-        <!-- Invite -->
-        <div v-if="shareLink" class="row mt-3">
-          <div class="col-12">
+        <div v-if="sOrder" class="row">
+          <!-- Pay -->
+          <!-- <div class="col-4">
+            <h4>Оплата</h4>
+            <div>К оплате: {{sOrder.full_price}} </div>
+            <div>Оплачено: {{sOrder.payed}}</div>
+          </div> -->
+          
+          <!-- Invite -->
+          <div v-if="shareLink" class="col-4 border">
             <h4>Пригласить</h4>
 
             
@@ -39,55 +46,57 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div v-if="sOrder" class="row mt-3">
-          <!-- Pay -->
-          <div class="col-4">
-            <h4>Оплата</h4>
-            <div>К оплате: {{sOrder.full_price}} </div>
-            <div>Оплачено: {{sOrder.payed}}</div>
-          </div>
           <!-- Info -->
-          <div v-if="sOrder.status != undefined" class="col-4">
-            <h5>Статус</h5>
-            <div>{{sOrder.status.name}}</div>
-            <h5>Адрес</h5>
-            <div>{{sOrder.address.street}} {{sOrder.address.appart}}</div>
-            <h5>Доставка</h5>
-            <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
-            <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
+          <div v-if="sOrder.status != undefined" class="col-4 border">
+            <h4>Данные заказа</h4>
+            <!-- Status -->
+            <div>
+              <h5>Статус</h5>
+              <div>
+                <span :class="sOrder.status.id == 0 ? 'text-danger' : ''">{{sOrder.status.name}}</span>              
+              </div>
+            </div>
+            <!-- Address -->
+            <div>
+              <h5>Адрес</h5>
+              <div>{{sOrder.address.street}} {{sOrder.address.appart}}</div>
+            </div>
+            <!-- Time Date -->
+            <div>
+              <h5>Доставка</h5>
+              <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
+              <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
+            </div>
           </div>
 
-          <div class="col-4">
+          <!-- Timers -->
+          <div class="col-4 border">
+            <!-- Pay -->
+            <!-- <div v-if="sOrder.status != undefined" >
+              <h5>Оплата до</h5>
+              <div>{{moment(sOrder.pay_close).locale("ru").format('LLLL')}}</div>
+            </div> -->
+            <!-- Close -->
+            <div v-if="sOrder.status != undefined">
+              <h5>Закрытие</h5>
+              <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
+            </div>
             <!-- Test time -->
-            <div v-if="sOrder.status != undefined" >
+            <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
               <h5>Test time</h5>
               <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
               <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
               <div class="d-flex">
                 <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
                 <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
-                <button @click="updateTestTime()" class="btn btn-primary ml-3">update</button>
+                <button @click="updateTestTime()" class="btn btn-primary ml-3">add</button>
               </div>
             </div>
-            <!-- Pay -->
-            <div v-if="sOrder.status != undefined" >
-              <h5>Оплата до</h5>
-              <div>{{moment(sOrder.pay_close).locale("ru").format('LLLL')}}</div>
-            </div>
-            <!-- Close -->
-            <div v-if="sOrder.status != undefined">
-              <h5>Закрытие</h5>
-              <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
-            </div>
           </div>
-        </div>
-
-        <div v-if="sOrder" class="row mt-3">
 
           <!-- Weight -->
-          <div class="col-4">
+          <div class="col-4 border">
             <h4>Вес</h4>
             <div v-if="weights">
               <div><b>Общий</b></div>
@@ -101,16 +110,19 @@
           </div>
 
           <!-- Details -->
-          <div class="col-4">
-            <h4>Детали заказа</h4>
+          <div class="col-4 border">
+            <h4>Личнные данные</h4>
             <checkout-contact class="checkout-div " v-model="data.contacts" />
           </div>
           
           <!-- Users -->
-          <div class="col-4">
+          <div class="col-4 border">
             <div v-if="sOrder && userIn">
               <h4>Участники</h4>
+
               <hr>
+
+              <!-- Members -->
               <template v-if="slots">
                 <div v-for="(n, i) in sOrder.member_count" :key="i">
                   <!-- Member -->
@@ -133,37 +145,51 @@
                     </div>
                     <!-- Invite -->
                     <div v-else>
-                      Invite!
+                      <i style="font-style: italic;">Invite!</i> 
                     </div>
                   </div>
 
                   <!-- Pay -->
                   <div>
-                    <div v-if="slots[n].pay == undefined">
+                    <!-- <div v-if="slots[n].pay == undefined">
                       <button 
                         @click="pay(user.id, n)" 
                         class="btn btn-info"
                       >
                         Оплатить {{sOrder.user_price}}p
                       </button>
-                    </div>
+                    </div> -->
                     <!-- Pay -->
-                    <div v-else>
+                    <!-- <div v-else>
                       <span class="text-success">Оплачено</span>
                       <span>
                         {{slots[n].pay.user.name}} {{slots[n].pay.user.email}}
                       </span>
-                    </div>
+                    </div> -->
                   </div>
 
                   <hr>
                 </div>
               </template>
+
+              <!-- Change member count -->
+              <div v-if="isAdmin" class="form-group">
+                <label for="member-count">Количество участников: <b>{{changeMemberCount}}</b></label>
+                <input v-model="changeMemberCount" type="range" class="form-control" id="member-count" min="1" max="5">
+                <button @click="post({'member_count':changeMemberCount})" class="btn btn-sm btn-success">Сохранить</button>
+              </div>
+
             </div>
             <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
-          </div>          
+          </div>   
+
+          <!-- Cancel -->
+          <div v-if="isAdmin && sOrder.status.id > 0" class="col-4 border">
+            <button @click="sOrderCancel()" class="btn btn-danger m-3">Отменить закупку</button>
+          </div>       
 
         </div>
+
 
       </div>
 
@@ -176,6 +202,7 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
   moment:moment,
+  changeMemberCount:1,
   test:{},
   data:{},
   shareDescription:"Очень крутой текст!",
@@ -190,11 +217,11 @@ computed:{
     if(!this.link) return false;
     return window.location.origin+'/shared/order/' + this.link;
   },
-  link (){
+  link(){
     if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
     return this.$route.params.order_link;
   },
-  sOrder (){
+  sOrder(){
     if(this.sOrders == undefined || this.sOrders.length < 1) return false;
     return this.sOrders[0];
   },
@@ -241,6 +268,13 @@ computed:{
     return false;
   },
 },
+watch:{
+  sOrder: function (val, oldVal) {
+    if(!this.sOrder || this.sOrder.member_count == undefined) return;
+    this.changeMemberCount = this.sOrder.member_count;
+    return;
+  },
+},
 async mounted(){
   //Open shared order
   if(!this.link){
@@ -254,19 +288,32 @@ async mounted(){
   }
 
   if(this.sOrder){
+    await this.update();
     this.getWeights();
-  }
+  }  
+
+
 },
 methods:{
   ...mapActions({
     'filter':'sharedOrder/addFilter',
     'get':'sharedOrder/fetchData',
-  }),   
+    'update':'sharedOrder/update',
+  }),
   async open(){
     let r = await ax.fetch('/shared/order/open',{},'put');
     if(r){
       window.location.href = '/shared/order/'+r.link;
     }
+  },
+  async post(data){
+    data.id = this.sOrder.id;
+    let r = await ax.fetch('/shared/order',data,'post');
+    if(r){this.get();}
+  },
+  async sOrderCancel(){
+    let r = await ax.fetch('/shared/order',{id:this.sOrder.id},'delete');
+    if(r){this.get();}
   },
   async join(){
     let r = await ax.fetch('/shared/order/join',{'link':this.link},'post');

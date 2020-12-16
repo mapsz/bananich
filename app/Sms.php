@@ -75,11 +75,16 @@ class Sms extends Model
       if(!isset($bonus->user)){
       } 
 
-
-      $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. У вас ".
-        Carbon::parse($bonus->addBonus->die)->format('j.m в G:i')
-        . " сгорит {$bonus->addBonus->left} рублей. Шлю напоминалку, чтобы успели их потратить)";
+      
       $to = $bonus->user->phone;
+
+      // $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. У вас ".
+      //   Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') .
+      //   " сгорит {$bonus->addBonus->left} рублей. Шлю напоминалку, чтобы успели их потратить)";
+
+      $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. " . 
+      "У вас там ". Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') .
+      " сгорит {$bonus->addBonus->left} рублей. Напоминаю их успеть потратить)";
 
       if(Sms::where('body',$body)->where('to',$to)->exists()){
         // dump('exists');

@@ -332,130 +332,18 @@ class Order extends Model
     }   
     
     {//Order
-
       //Bonus
       $bonus = $cart['bonus'];
+      //Shipping
       $shipping = $cart['shipping'];
-
-      //Random id
-      $randomId = self::generateRandomId();
-
-      //Save order
-      $order = new Order;
-      $order->id = $randomId;
-      $order->customer_id = $customer_id;
-      $order->date = now();
-      $order->delivery_date = $data['deliveryDate'];
-      $order->delivery_time_from = $data['deliveryTime']['from'].':00:00';
-      $order->delivery_time_to = $data['deliveryTime']['to'].':00:00';
-      $order->container = 0;
-      $order->pay_method = $data['payMethod'];
-      $order->confirm = $data['confirm'];
-      $order->comment = $data['comment'];
-      $order->name = $data['name'];
-      $order->phone = $data['phone'];
-      $order->email = $data['email'];
-      $order->address = $data['addressStreet'] . ' ' .$data['addressNumber'];
-      $order->appart = $data['addressApart'];
-      $order->porch = isset($data['addressPorch']) ? $data['addressPorch'] : '';
-      $order->bonus = $bonus;
-      $order->shipping = $shipping;
-      if(!$order->save()) return false;    
-      
-      //Save status
-      Order::find($order->id)->statuses()->attach(900);
-
+      //Put
+      $order = Order::putOrder($data, $bonus, $shipping);
+      //Get id
       $orderId = $order->id;
     }
     
     {//Items
-
-      //Put items
-      foreach($cart['items'] as $item){
-        
-        //double order bug
-        if(array_key_exists('name',$item)){
-          $name = $item['name'];
-          $price = $item['price'];
-        }else{
-          $name = '???';
-          $price = '???';
-          Log::info('double order bug:');
-          Log::info($item);
-        }
-
-        //Save item
-        $putItem = new Item;
-        $putItem->order_id    = $orderId;
-        $putItem->product_id  = $item['product_id'];
-        $putItem->name        = $name;
-        $putItem->quantity    = $item['count'];        
-        $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
-        $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : $putItem->gram_sys;
-        $putItem->price       = $price;
-        if(!$putItem->save()) return false;
-
-        //Save status
-        Item::find($putItem->id)->statuses()->attach(100);
-
-        //Discount
-        if(isset($item['discount']) && isset($item['discount']->discount_price) && $item['discount']->discount_price > 0){
-          self::putDiscount((object)[
-              'product_id' => $item['product_id'],
-              'discount_price' => $item['discount']->discount_price ,
-              'quantity' => $item['discount']->quantity 
-            ],
-          $orderId);
-        }        
-        
-        //Update Available
-        // Product::updateAvailable($item['product_id']);
-
-      }       
-      
-      //Put presents
-      foreach($cart['presents'] as $item){
-
-        //Save item
-        $putItem = new Item;
-        $putItem->order_id    = $orderId;
-        $putItem->product_id  = $item['product_id'];
-        $putItem->name        = $item['product']['name'];
-        $putItem->quantity    = $item['count'];        
-        $putItem->gram_sys    = isset($item['product']['unit']) ? $item['product']['unit'] : 1;
-        $putItem->gram        = isset($item['product']['unit_view']) ? $item['product']['unit_view'] : $putItem->gram_sys;
-        $putItem->price       = 0;
-        if(!$putItem->save()) return false;
-
-        //Save status
-        Item::find($putItem->id)->statuses()->attach(100);
-        
-        //Update Available
-        Product::updateAvailable($item['product_id']);
-
-      } 
-
-      //Container
-      if($cart['container']){
-        //Edit order
-        $order->container = 1;
-        if(!$order->save()) return false;    
-
-        //Save item
-        $putItem = new Item;
-        $putItem->order_id    = $orderId;
-        $putItem->product_id  = $cart['container']->id;
-        $putItem->name        = $cart['container']->name;
-        $putItem->quantity    = 1;
-        $putItem->gram_sys    = 1;
-        $putItem->gram        = 1;
-        $putItem->price       = $cart['container']->price;
-        if(!$putItem->save()) return false;
-
-        //Save status
-        Item::find($putItem->id)->statuses()->attach(100);
-      }
-      
+      self::putItems($cart, $orderId);
     }
 
     //To other
@@ -492,6 +380,145 @@ class Order extends Model
 
     return $order;
 
+  }
+
+  public static function putOrder($data, $bonus = 0, $shipping = 0, $status = 900){
+
+      {//Customer
+        if(Auth::user()){
+          $customer_id = Auth::user()->id;
+        }else{
+          $customer_id = 0;
+        }
+      }  
+
+      //Random id
+      $randomId = self::generateRandomId();
+      
+      {//Save order
+        $order = new Order;
+        $order->id = $randomId;
+        $order->customer_id = $customer_id;
+        $order->date = now();
+        $order->delivery_date = $data['deliveryDate'];
+        $order->delivery_time_from = $data['deliveryTime']['from'].':00:00';
+        $order->delivery_time_to = $data['deliveryTime']['to'].':00:00';
+        $order->container = 0;
+        $order->pay_method = $data['payMethod'];
+        $order->confirm = $data['confirm'];
+        $order->comment = $data['comment'];
+        $order->name = $data['name'];
+        $order->phone = $data['phone'];
+        $order->email = $data['email'];
+        $order->address = $data['addressStreet'] . ' ' .$data['addressNumber'];
+        $order->appart = $data['addressApart'];
+        $order->porch = isset($data['addressPorch']) ? $data['addressPorch'] : '';
+        $order->bonus = $bonus;
+        $order->shipping = $shipping;
+        if(!$order->save()) return false;
+      }  
+      
+      //Save status
+      Order::find($order->id)->statuses()->attach($status);
+      
+      return $order;
+
+  }
+
+  public static function putItems($cart, $orderId){
+
+    //Delete old items
+    Item::where('order_id', $orderId)->delete();
+
+    //Put items
+    foreach($cart['items'] as $item){
+      
+      {//double order bug
+        if(array_key_exists('name',$item)){
+          $name = $item['name'];
+          $price = $item['price'];
+        }else{
+          $name = '???';
+          $price = '???';
+          Log::info('double order bug:');
+          Log::info($item);
+        }
+      }
+
+      {//Save item
+        $putItem = new Item;
+        $putItem->order_id    = $orderId;
+        $putItem->product_id  = $item['product_id'];
+        $putItem->name        = $name;
+        $putItem->quantity    = $item['count'];        
+        $putItem->gram_sys    = isset($item['unit']) ? $item['unit'] : 1;
+        $putItem->gram        = isset($item['unit_view']) ? $item['unit_view'] : $putItem->gram_sys;
+        $putItem->price       = $price;
+        if(!$putItem->save()) return false;
+      }
+      
+      //Save status
+      Item::find($putItem->id)->statuses()->attach(100);
+
+      //Price  TODO @@@ херня какая-то
+      if(isset($item['discount']) && isset($item['discount']->discount_price) && $item['discount']->discount_price > 0){
+        self::putDiscount((object)[
+            'product_id' => $item['product_id'],
+            'discount_price' => $item['discount']->discount_price ,
+            'quantity' => $item['discount']->quantity 
+          ],
+        $orderId);
+      }        
+        
+    }       
+
+    //Put presents
+    foreach($cart['presents'] as $item){
+
+      //Save item
+      $putItem = new Item;
+      $putItem->order_id    = $orderId;
+      $putItem->product_id  = $item['product_id'];
+      $putItem->name        = $item['product']['name'];
+      $putItem->quantity    = $item['count'];        
+      $putItem->gram_sys    = isset($item['product']['unit']) ? $item['product']['unit'] : 1;
+      $putItem->gram        = isset($item['product']['unit_view']) ? $item['product']['unit_view'] : $putItem->gram_sys;
+      $putItem->price       = 0;
+      if(!$putItem->save()) return false;
+
+      //Save status
+      Item::find($putItem->id)->statuses()->attach(100);
+
+    } 
+
+    //Container
+    if($cart['container']){
+      //Edit order
+      $order->container = 1;
+      if(!$order->save()) return false;    
+
+      //Save item
+      $putItem = new Item;
+      $putItem->order_id    = $orderId;
+      $putItem->product_id  = $cart['container']->id;
+      $putItem->name        = $cart['container']->name;
+      $putItem->quantity    = 1;
+      $putItem->gram_sys    = 1;
+      $putItem->gram        = 1;
+      $putItem->price       = $cart['container']->price;
+      if(!$putItem->save()) return false;
+
+      //Save status
+      Item::find($putItem->id)->statuses()->attach(100);
+    }   
+      
+    return true;
+
+  }
+
+
+  public static function changeStatus($orderId, $statusId){
+    return Order::find($orderId)->Statuses()->attach($statusId,['user_id' => Auth::user() ? Auth::user()->id : 0]);
   }
  
   private static function putDiscount($d,$orderId){
@@ -970,6 +997,9 @@ class Order extends Model
 
   public function items(){
     return $this->hasMany('App\Item');
+  }
+  public function sharedOrder(){
+    return $this->belongsToMany('App\SharedOrder','shared_order_order','order_id','shared_order_id');
   }
   public function discounts(){
     return $this->belongsToMany('App\Discount');

@@ -71,7 +71,41 @@ class SharedOrderController extends Controller
 
     return response()->json($sOrder);
   }
+  
+  public static function byAuth(){
 
+    $user = Auth::user();
+
+    if(!$user) return false;
+
+    $sOrder = (new SharedOrder)->jugeGet(['member' => $user->id, 'status' => [200,300]]);
+
+    if(isset($sOrder[0])){
+      $sOrder = $sOrder[0];
+    }
+    return response()->json($sOrder);
+  }
+
+  public function post(Request $request){
+
+    $sOrder = SharedOrder::where('id',$request->id)->update($request->all());
+    return response()->json($sOrder);
+  }
+
+  public function delete(Request $request){
+
+    {//Validate
+      $validate = [        
+        'id'       => ['required','exists:shared_orders,id'],
+      ];
+      Validator::make($request->all(), $validate)->validate();
+    }
+    
+    $sOrder = SharedOrder::cancel($request->id);
+    return response()->json($sOrder);
+
+  }
+  
   public function join(Request $request){
     //TODO @@@ validate
 
@@ -115,6 +149,12 @@ class SharedOrderController extends Controller
     $h = (new SharedOrder)->handle();
     return response()->json($h);
   }
+
+  public function update(Request $request){
+    $h = SharedOrder::updateOrders($request->id);
+    return response()->json($h);
+  }
+  
 
   public function kick(Request $request){
     return response()->json(SharedOrder::kick($request->sOrderId, $request->userId));

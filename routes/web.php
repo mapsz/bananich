@@ -875,7 +875,7 @@ Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->gr
 });
 
 Route::group(['middleware' => ['HttpsRR'
-// ,'under-construction'
+,'under-construction'
 ]], function () {
     
   Route::get('/home', function(){
@@ -893,10 +893,14 @@ Route::group(['middleware' => ['HttpsRR'
     {//Shared Order
       Route::post('/shared/order/test/time', 'SharedOrderController@testTime');
       Route::put('/shared/order/open', 'SharedOrderController@open');
+      Route::post('/shared/order', 'SharedOrderController@post');
+      Route::delete('/shared/order', 'SharedOrderController@delete');
       Route::post('/shared/order/join', 'SharedOrderController@join');
       Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
+      Route::get('/shared/order/auth', 'SharedOrderController@byAuth');
       Route::delete('/shared/order/kick', 'SharedOrderController@kick');
       Route::any('/shared/order/handle', 'SharedOrderController@handle');
+      Route::any('/shared/order/update', 'SharedOrderController@update');
       
       {//Shared Order Pay
         // Route::get('/shared/order/pays', 'SharedOrderPayController@get');

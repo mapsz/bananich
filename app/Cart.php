@@ -225,6 +225,10 @@ class Cart extends Model
       $query = $query->with('presents');
       $query = $query->with('presents.product');
       $query = $query->with('containers');
+      
+      if(isset($request['products'])){
+        $query = $query->with('items.product.metas');
+      }
     }
   
     {//Where
@@ -261,10 +265,9 @@ class Cart extends Model
   
     //Single
     if(isset($data[0])){
-      if(isset($request['id'])){$data = $data[0];}
-      if(isset($request['single'])){$data = $data[0];}
-    }
-  
+      if(isset($request['id']) || isset($request['single'])){$data = $data[0];}
+    } 
+    
     //Return
     return $data;
   }

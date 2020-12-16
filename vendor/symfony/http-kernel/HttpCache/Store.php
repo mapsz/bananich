@@ -140,7 +140,6 @@ class Store implements StoreInterface
         foreach ($entries as $entry) {
             if ($this->requestsMatch(isset($entry[1]['vary'][0]) ? implode(', ', $entry[1]['vary']) : '', $request->headers->all(), $entry[0])) {
                 $match = $entry;
-
                 break;
             }
         }

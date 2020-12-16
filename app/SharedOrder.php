@@ -34,8 +34,8 @@ class SharedOrder extends Model
           $sOrder->member_count = $data['memberCount'];
           $sOrder->link = $link;
           $sOrder->delivery_date      = $data['date'];
-          $sOrder->delivery_time_from = $data['time']['from'];
-          $sOrder->delivery_time_to   = $data['time']['to'];
+          $sOrder->delivery_time_from = $data['time']['from'] . ":00:00";
+          $sOrder->delivery_time_to   = $data['time']['to'] . ":00:00";
           $sOrder->save();            
         }
         
@@ -74,8 +74,9 @@ class SharedOrder extends Model
 
   public static function join($user, $link = false, $sOrder = false){
 
+
     //Get order
-    if(!$sOrder){$sOrder = SharedOrder::where('link',$link)->with('users')->first();}
+    if(!$sOrder) $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1]);
     $slot = count($sOrder->users) + 1;
 
     if($slot > $sOrder->member_count){return false;} //TODO @@@ to validate
@@ -96,6 +97,31 @@ class SharedOrder extends Model
         $sOrderContact->save();
       }
 
+      {//Make Personal Order
+        {//Form data
+          $data['deliveryDate'] = $sOrder['delivery_date'];
+          $data['deliveryTime']['from'] = str_replace (':00:00','',$sOrder->delivery_time_from);
+          $data['deliveryTime']['to'] = str_replace (':00:00','',$sOrder->delivery_time_to);
+          $data['payMethod'] = 'cash'; //TODO @@@
+          $data['confirm'] = 1; // TODO @@@
+          $data['comment'] = ""; // TODO @@@
+          $data['name'] = $user->name;
+          $data['phone'] = $user->phone;
+          $data['email'] = $user->email;
+          $data['addressStreet'] = $sOrder->address->street;
+          $data['addressNumber'] = $sOrder->address->number;
+          $data['addressApart'] = $sOrder->address->appart;
+          $data['addressPorch'] = $sOrder->address->porch;
+        }
+
+        //Put
+        $order = Order::putOrder($data, 0, 0, 950);
+
+        //Attach
+        $sOrder->orders()->attach($order->id);
+
+      }
+
       }DB::commit();    
     } catch (Exception $e){
       // Rollback from DB
@@ -106,9 +132,45 @@ class SharedOrder extends Model
     return true;
   }
 
-  public static function kick($orderId, $userId){
+  public static function kick($sOrderId, $userId){
 
-    return SharedOrder::where('id', $orderId)->first()->users()->detach($userId);
+    {//Order
+      $order = (
+        Order::
+        whereHas('sharedOrder', function($q)use($sOrderId){
+          $q->where('shared_orders.id', '=', $sOrderId);
+        })
+        ->where('customer_id', '=', $userId)
+        ->first()
+      );
+
+      //Cancel
+      Order::changeStatus($order->id,0);
+
+      //Detach
+      $order->sharedOrder()->detach($sOrderId);
+    }
+
+    {//User
+      SharedOrder::where('id', $sOrderId)->first()->users()->detach($userId);
+    }
+
+    return true;
+
+  }
+
+  public static function cancel($id){
+    //TODO @@@ красивей
+
+    $sOrder = (new SharedOrder)->jugeGet(['id' => $id,'single' => 1]);
+
+    foreach ($sOrder->orders as $key => $order) {
+      Order::changeStatus($order->id,0);
+    }
+
+    self::changeStatus($id,0);
+
+    return true;
 
   }
 
@@ -143,6 +205,114 @@ class SharedOrder extends Model
 
   }
 
+  private static function generateLink(){
+
+    //TODO@@@ check exist
+    return (new \PragmaRX\Random\Random())->size(9)->get();
+  }
+
+  public function handle($request = []){
+
+    $orders = $this->jugeGet(['status' => [200,300]]);
+
+    foreach ($orders as $key => $order) {      
+      {//Timers
+        $time = now();
+        if($this->test) $time = $order['test_time'];
+
+        //Close Pay
+        // if($time > $order['pay_close'] && $order->status_id != 300){
+        //   //Not Payed
+        //   if($order['full_price'] - $order['payed'] > 5){
+        //     SharedOrder::changeStatus($order->id, -1);
+        //     continue;
+        //   }
+        //   SharedOrder::changeStatus($order->id,300);          
+        // }
+
+        //Close order
+        if($time > $order['order_close']){
+          dump('order closed ' . $order->id);
+          SharedOrder::lock($order->id);
+        }
+
+      }
+    }
+
+  }
+
+  public static function lock($id){
+
+    {//Shared
+
+      //Get
+      $sOrder = (new SharedOrder)->jugeGet(['id' => $id,'single' => 1]);
+
+      //Change status
+      SharedOrder::changeStatus($id,500);     
+
+      //Update user count
+      $member_count = count($sOrder->users);
+      SharedOrder::where('id',$id)->update(['member_count' => $member_count]);
+
+    }
+
+    {//Personal
+      foreach ($sOrder->users as $user) {
+        {//Get order
+          $order = (
+            Order::
+            whereHas('sharedOrder', function($q)use($id){
+              $q->where('shared_orders.id', '=', $id);
+            })
+            ->where('customer_id', '=', $user->id)
+            ->first()
+          );
+        }
+        //Update status
+        Order::changeStatus($order->id,900);
+      }
+    }
+  
+  }
+
+  public static function updateOrders($id){
+
+    $sOrder = (new SharedOrder)->jugeGet(['id' => $id,'single' => 1]);
+
+    if($sOrder->status_id != 200) return false;
+
+    foreach ($sOrder->users as $user) {
+      //Get cart
+      $cart = Cart::jugeGet(['user' => $user->id,'type' => 'x', 'single' => 1, 'products' => 1]);
+      $cart = Checkout::addToCart($cart);
+      
+      {//Get order
+        $order = (
+          Order::
+          whereHas('sharedOrder', function($q)use($id){
+            $q->where('shared_orders.id', '=', $id);
+          })
+          ->where('customer_id', '=', $user->id)
+          ->first()
+        );
+      }
+
+      //Update items
+      Order::putItems($cart, $order->id);
+
+    }
+
+    return true;
+
+  }
+
+
+  private static function editContacts(){
+    //
+  }
+
+
   public function jugeGet($request = []) {
 
     //Model
@@ -154,6 +324,7 @@ class SharedOrder extends Model
       $query = $query->with('address');
       $query = $query->with('comment');
       $query = $query->with('pays');
+      $query = $query->with('orders');
     }
   
     {//Where
@@ -167,7 +338,13 @@ class SharedOrder extends Model
       if(isset($request['status']) && $request['status'] > -1){
         $statuses = is_array($request['status']) ? $request['status'] : [$request['status']];
         $query = $query->whereIn('status_id',$statuses);
-
+      }
+      //Member      
+      if(isset($request['member']) && isset($request['member']) > 0){
+        $memberId = $request['member'];
+        $query = $query->whereHas('users', function($q)use($memberId){
+          $q->where('user_id', '=', $memberId);
+        });
       }
 
     }
@@ -218,56 +395,18 @@ class SharedOrder extends Model
     }
   
     //Single
-    if(isset($request['id'])){$data = $data[0];}
+    if(isset($request['id']) || isset($request['single'])){$data = $data[0];}
   
     //Return
     return $data;
   }
-
-  private static function generateLink(){
-
-    //TODO@@@ check exist
-    return (new \PragmaRX\Random\Random())->size(9)->get();
-  }
-
-  public function handle($request = []){
-
-    $orders = $this->jugeGet(['status' => [200,300]]);
-
-    foreach ($orders as $key => $order) {      
-      {//Timers
-        $time = now();
-        if($this->test)$time = $order['test_time'];
-
-        //Close Pay
-        if($time > $order['pay_close'] && $order->status_id != 300){
-          //Not Payed
-          if($order['full_price'] - $order['payed'] > 5){
-            SharedOrder::changeStatus($order->id, -1);
-            continue;
-          }
-          SharedOrder::changeStatus($order->id,300);          
-        }
-
-        //Close order
-        if($time > $order['order_close']){
-          dump('order closed ' . $order->id);
-          SharedOrder::changeStatus($order->id,500);
-        }
-
-      }
-    }
-
-  }
-
-  private static function editContacts(){
-    //
-  }
-
   
   //Relations
   public function users(){
     return $this->belongsToMany('App\User','shared_order_user','shared_order_id','user_id')->withPivot('slot');
+  }
+  public function orders(){
+    return $this->belongsToMany('App\Order','shared_order_order','shared_order_id','order_id');
   }
   public function status(){
     return $this->belongsTo('App\SharedOrderStatus');

@@ -39,7 +39,7 @@ class Checkout extends Model
         if(isset($cart->containers) && isset($cart->containers[0])){
           $cart->container = $cart->containers[0]->toArray();
         }
-      }      
+      }    
             
       {// Products
         //Products ids
@@ -69,9 +69,7 @@ class Checkout extends Model
           }
         }
       }
-      
-       
-      
+            
       {//Coupons
         $coupon = 0;
         if(isset($cart->coupon)){

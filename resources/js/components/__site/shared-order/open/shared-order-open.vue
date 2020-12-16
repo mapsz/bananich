@@ -67,7 +67,7 @@ import {ru} from 'vuejs-datepicker/dist/locale'
 import {mapGetters, mapActions} from 'vuex';
 export default {
 components: {Datepicker},
-data(){return{  
+data(){return{
   data:{
     memberCount:1,
     address:null,
@@ -77,7 +77,7 @@ data(){return{
   },
   errors:[],
 }},
-computed:{  
+computed:{
   ...mapGetters({
     settings:'settings/beautyGet',
     availableDays: 'orderLimits/getAvailableDays',
@@ -161,11 +161,17 @@ computed:{
   }
 },
 async mounted() {
-  this.fetch();
+  //Redirect if exist
+  let exist = await this.byAuth();
+  if(exist && exist.link != undefined){window.location.href = '/shared/order/'+exist.link}
+
+
+  await this.fetchAvailableDays();
 },
 methods:{  
   ...mapActions({
-    'fetch'         :'orderLimits/fetchAvailableDays',
+    'fetchAvailableDays':'orderLimits/fetchAvailableDays',
+    'byAuth':'sharedOrder/byAuth',
   }),  
   async open(){
     //Refresh errors
@@ -178,12 +184,9 @@ methods:{
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
 
     //Success
-    if(r){
-      window.location.href = '/shared/order/'+r.link;
-    }
+    if(r){window.location.href = '/shared/order/'+r.link};
 
-
-  },  
+  },
 },
 }
 </script>
