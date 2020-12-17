@@ -516,7 +516,6 @@ class Order extends Model
 
   }
 
-
   public static function changeStatus($orderId, $statusId){
     return Order::find($orderId)->Statuses()->attach($statusId,['user_id' => Auth::user() ? Auth::user()->id : 0]);
   }

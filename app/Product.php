@@ -311,7 +311,6 @@ class Product extends Model
     
     //No main image
     if(isset($request['no_main_image']) && $request['no_main_image']){
-
       $ids = Product::pluck('id')->toArray();
       $ids = self::getNoMainImage($ids);
       $request['ids'] = $ids;
@@ -405,12 +404,20 @@ class Product extends Model
         $products = $products->doesntHave('description');
       }
 
-      //Suppliers
-      if(isset($request['suppliers']) && is_array($request['suppliers'])){
-        $suppliers = $request['suppliers'];
-        $products = $products->whereHas('suppliers', function($q)use($suppliers){
-          $q->whereIn('suppliers.id',$suppliers);
+      //No price
+      if(isset($request['no_price'])){        
+        $products = $products->where(function($q){
+          $q->whereDoesntHave('metas', function($q2){
+            $q2->where('name', '=', 'supply_price');
+          })
+          ->orWhereDoesntHave('metas', function($q2){
+            $q2->where('name', '=', 'charge');
+          })
+          ->orWhereDoesntHave('metas', function($q2){
+            $q2->where('name', '=', 'charge_x');
+          });
         });
+
       }
 
       //Ids

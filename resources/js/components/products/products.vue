@@ -14,6 +14,7 @@
       </router-link>
 
       <div>
+        <button @click="noPrice()" class="btn-secondary btn">Без цены</button>
         <button @click="noImage()" class="btn-secondary btn">Без главного фото</button>
         <button @click="noDescription()" class="btn-secondary btn">Без описание</button>
       </div>
@@ -38,6 +39,10 @@ export default {
     this.$store.dispatch('product/addFilter',{get_all:1});
   },
   methods:{
+    noPrice(){
+      this.$store.dispatch('product/clearFilters');      
+      this.$store.dispatch('product/addFilter',{no_price:1});      
+    },
     noImage(){
       this.$store.dispatch('product/clearFilters');      
       this.$store.dispatch('product/addFilter',{no_main_image:1});      
