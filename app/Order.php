@@ -339,7 +339,12 @@ class Order extends Model
       //Put
       $order = Order::putOrder($data, $bonus, $shipping);
       //Get id
-      $orderId = $order->id;
+      $orderId = $order->id;      
+      //Edit order
+      if($cart['container']){
+        $order->container = 1;
+        if(!$order->save()) return false; 
+      }
     }
     
     {//Items
@@ -493,9 +498,6 @@ class Order extends Model
 
     //Container
     if($cart['container']){
-      //Edit order
-      $order->container = 1;
-      if(!$order->save()) return false;    
 
       //Save item
       $putItem = new Item;
