@@ -448,6 +448,14 @@ class Product extends Model
         $products = $products->whereIn('id', function ($query)use($categories) {
           $query->select('product_id')->from('products_categories')->whereIn('categoty_id', $categories);
         });
+      }       
+      
+      //Suppliers
+      if(isset($request['suppliers']) && is_array($request['suppliers']) && isset($request['suppliers'][0]) && $request['suppliers'][0] > 0){
+        $suppliers = $request['suppliers'];        
+        $products = $products->whereIn('id', function ($query)use($suppliers) {
+          $query->select('product_id')->from('product_supplier')->whereIn('supplier_id', $suppliers);
+        });
       }          
 
       //Price

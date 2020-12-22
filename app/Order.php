@@ -55,8 +55,6 @@ class Order extends Model
     //Get Cart
     $cart = Cart::getCart(['type' => $type]);
 
-    // dd($cart);
-
     {//Get settings
       $settings = self::getLimitSettings();
       $endTime = 24 - $settings['order_limit_day_end_time'];
@@ -75,10 +73,16 @@ class Order extends Model
     }
     
     {//Get orders
-      $orders = self::withStatus()
-        ->where('delivery_date', '>=', $from)
-        ->where('delivery_date', '<=', $to)
-        ->get()->toArray();
+      // $orders = self::withStatus()
+      //   ->where('delivery_date', '>=', $from)
+      //   ->where('delivery_date', '<=', $to)
+      //   ->get()->toArray();
+
+      $orders = self::jugeGet([
+        'deliveryDate' => json_encode(['from' => $from, 'to' => $to]),
+        'status'  => [950,900,850,800,700,600,500,400,300]
+      ])->toArray();
+
     }
 
     {//Days
