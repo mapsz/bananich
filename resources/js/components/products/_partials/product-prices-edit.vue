@@ -7,12 +7,20 @@
     </div>
 
     <div style="background-color: #ffffd3;border: 1px solid #ff9900;padding: 10px;">
-      <h5> <b>Бананыч</b> </h5>
+      <h5> 
+        <b>Бананыч</b> 
+        <!-- Final price -->
+        <span style="color: #002bff;font-weight: 700;float: right;">{{product.final_price}}</span>        
+      </h5>
       <juge-form v-if="inputList" :inputs="inputList" :errors="errors" @submit="postSettings"></juge-form>
     </div>
 
     <div style="margin-top:20px;background-color: rgb(222 222 222);border: 1px solid black;padding: 10px;">
-      <h5> <b>X</b> </h5>
+      <h5>
+         <b>X</b>
+         <!-- Final price -->
+         <span style="color: #002bff;font-weight: 700;float: right;">{{product.final_price_x}}</span>
+      </h5>      
       <juge-form v-if="inputsXList" :inputs="inputsXList" :errors="errors" @submit="postSettings"></juge-form>
     </div>
 

@@ -73,16 +73,10 @@ class Order extends Model
     }
     
     {//Get orders
-      // $orders = self::withStatus()
-      //   ->where('delivery_date', '>=', $from)
-      //   ->where('delivery_date', '<=', $to)
-      //   ->get()->toArray();
-
       $orders = self::jugeGet([
         'deliveryDate' => json_encode(['from' => $from, 'to' => $to]),
         'status'  => [950,900,850,800,700,600,500,400,300]
       ])->toArray();
-
     }
 
     {//Days

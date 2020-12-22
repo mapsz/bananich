@@ -683,19 +683,73 @@ class Product extends Model
 
       {//Price
         foreach ($products as $product) {
+          
           {//Normal bananich
-            $product->final_price = $product->price;
-            //Discount exist
-            if(isset($product->discount) && $product->discount){
-              $product->final_price = $product->discount->discount_price;
+            {//Supply Price
+              $chargePrice = false;
+              if(
+                (isset($product['charge']) && $product['charge'] > 0) &&            //Charge set
+                (isset($product['supply_price']) && $product['supply_price'] > 0)   //Supply Price set
+              ){
+                //Charge
+                $chargePrice = $product['charge'] * $product['supply_price'];
+
+                //Pack
+                if(isset($product['pack']) && $product['pack'] > 0) $chargePrice += $product['pack'];
+
+                //Transport
+                if(isset($product['transport']) && $product['transport'] > 0) {
+                  $chargePrice += ($product['supply_price'] * $product['transport']) - $product['supply_price'];
+                }
+              }
+
+              $product->final_price = $chargePrice;
             }
-            $product->final_price = $product->final_price;
+
+            //Static price
+            if(!$product->final_price) $product->final_price = $product->price;
+
+
           }
+
+          
           {//X bananich
-            $product->price_per_unit_x = isset($product->price_x) ? $product->price_x : $product->price;
-            $product->price_x          = $product->price_per_unit_x;
-            $product->final_price_x    = $product->price_per_unit_x;
-          }          
+            {//Supply Price
+              $xChargePrice = false;
+              if(
+                (isset($product['charge_x']) && $product['charge_x'] > 0) &&        //Charge X set
+                (isset($product['supply_price']) && $product['supply_price'] > 0)   //Supply Price set
+              ){
+                //Charge
+                $xChargePrice = $product['charge_x'] * $product['supply_price'];
+
+                //Pack
+                if(isset($product['pack']) && $product['pack'] > 0) $chargePrice += $product['pack'];
+
+                //Transport
+                if(isset($product['transport']) && $product['transport'] > 0) {
+                  $xChargePrice += ($product['supply_price'] * $product['transport']) - $product['supply_price'];
+                }
+              }
+
+              $product->final_price_x = $xChargePrice;
+            }
+
+            //Static price
+            if(!$product->final_price_x) $product->final_price_x = $product->price_x;
+
+            //Price from normal
+            if(!$product->final_price_x) $product->final_price_x = $product->final_price;
+
+          }
+
+          //Discounts
+          if(isset($product->discount) && $product->discount){
+            $product->final_price = $product->discount->discount_price;
+          }
+
+
+          // dd($product);
         }
 
       }
