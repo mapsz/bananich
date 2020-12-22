@@ -748,6 +748,15 @@ class Product extends Model
             $product->final_price = $product->discount->discount_price;
           }
 
+          {//Rounds
+            $round = 0;
+            $product->price                       = round($product->price, $round);
+            $product->final_price                 = round($product->final_price, $round);
+            $product->final_price_x               = round($product->final_price_x, $round);
+            if(isset($product->discount) && $product->discount)
+              $product->discount->discount_price    = round($product->discount->discount_price, $round);
+
+          }
 
           // dd($product);
         }

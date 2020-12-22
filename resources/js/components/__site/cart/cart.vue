@@ -1,7 +1,6 @@
 <template>
-  <div :class="halloween?'halloween':''">
-
-    <site-header></site-header>
+<juge-main>
+  <div :class="halloween?'halloween':''">   
 
     <main class="cart-page">
       <div class="container">
@@ -18,7 +17,7 @@
 
         <div class="row content-page">
 
-          <div class="col-lg-7">
+          <div class="col-lg-8">
             <div v-if="cart.items != undefined && cart.items.length == 0">Корзина пуста!</div>
 
             <div v-if="cart.items != undefined && cart.items.length > 0" class="content">
@@ -27,7 +26,8 @@
             </div>
 
           </div>
-          <div class="col-lg-4 offset-lg-1">
+          <div class="col-lg-4">
+          <!-- <div class="col-lg-4 offset-lg-1"> -->
             <!-- Sitebar -->
               <div class="cart-sitebar">
 
@@ -93,9 +93,9 @@
       </div>
     </main>
 
-    <site-footer></site-footer>
-
+  
   </div>
+</juge-main>  
 </template>
 
 <script>

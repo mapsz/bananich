@@ -1,10 +1,23 @@
 <template>
-  <div v-if="product != undefined" :id="'cart-input-'+product.id">
-    <form v-if="count > 0 || count === ''" @change.prevent="toCart()" class="to-cart-number">            
-      <span @click="count--;toCart()" class="back" style="text-align: center;cursor: pointer;">-</span>
+  <div v-if="product != undefined" :id="'cart-input-'+product.id" class="to-cart-wrapper" :class="design == 'cart' ? 'cart-design' : ''">
+    <!-- Numbers -->
+    <form v-if="count > 0 || count === ''" @change.prevent="toCart()" class="to-cart-number">        
+      <!-- Minus     -->
+      <span @click="count--;toCart()" class="back to-cart-buttons" style="text-align: center;cursor: pointer;">
+        <span class="to-cart-symbol">
+          -
+        </span>
+      </span>
+      <!-- Digit -->
       <input v-model="count" class="number" type="text">
-      <span @click="count++;toCart()" class="next" style="text-align: center;cursor: pointer;">+</span>
+      <!-- Plus -->
+      <span @click="count++;toCart()" class="next to-cart-buttons" style="text-align: center;cursor: pointer;">        
+        <span class="to-cart-symbol">
+          +
+        </span>        
+      </span>
     </form>
+    <!-- To cart -->
     <div v-else>
       <button  @click="count=1;toCart()" class="to-cart"><img src="/image/cart.svg" alt="В корзину"></button>
       <button @click="count=1;toCart()" class="btn-yellow btn-thick to-cart-big d-none">В корзину</button>
@@ -15,9 +28,10 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  props: ['product'],
+  props: ['product','design'],
   data(){return{
     count:0,
+    isX:isX,
   }},
   watch: {
     cart: {
@@ -77,5 +91,35 @@ export default {
 </script>
 
 <style>
+.cart-design .to-cart-number{
+  width: fit-content;
+}
+.cart-design .to-cart-buttons{  
+  width:42px !important;
+  height:40px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cart-design .back{
+  border-radius: 30px 0px 0px 30px !important;
+}
+.cart-design .next{
+  border-radius: 0px 30px 30px 0px !important;
+}
+.cart-design .number{
+  height:40px !important;
+  width:46px !important;
+}
+.cart-design .to-cart-symbol{
+  font-size: 22px;
+  padding-bottom: 5px;
+}
+
+.page-x .to-cart-buttons{
+  background: #C4C7B9 !important;
+  color:white;
+}
+
 
 </style>

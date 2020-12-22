@@ -82,16 +82,16 @@
       <div class="catalog-item-cart">
         <!-- Price -->
         <template>          
-          <!-- Normal bananich price -->
-          <template v-if="isX">
-            <span>{{Number(product.price_x)}}р</span>
-          </template>
           <!-- X bananich price -->
+          <template v-if="isX">
+            <span>{{Number(product.final_price_x)}}р</span>
+          </template>
+          <!-- Normal bananich price -->
           <template v-else>            
             <span v-if="product.discount" class="sale">
               {{Number(product.discount.discount_price)}}р <span class="old">-{{Number(product.price)}}р</span>                        
             </span>
-            <span v-else>{{Number(product.price)}}р</span>
+            <span v-else>{{Number(product.final_price)}}р</span>
           </template>
         </template>
 

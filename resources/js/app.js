@@ -4,6 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+window.isX = window.location.href.indexOf('x.bananich.') > -1 ? true : false;
+
 window.Vue = require('vue');
 require('./bootstrap');
 
@@ -96,7 +98,7 @@ Vue.directive('click-outside', {
 window.halloween = false;
 window.localServer = (window.location.hostname.indexOf('bananich.loc') > -1) ? true : false;
 
-window.isX = window.location.href.indexOf('x.bananich.') > -1 ? true : false;
+
 
 
 import TelegramButton from "vue-share-buttons/src/components/TelegramButton";

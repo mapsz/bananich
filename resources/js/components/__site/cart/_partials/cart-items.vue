@@ -26,10 +26,61 @@
 
     <div class="cart-items">
 
-      <div v-for='(item,i) in items' :key='i' class="item p-3 mb-3" style="position:relative">
-                
+      <div v-for='(item,i) in items' :key='i' class="item mb-3" style="position:relative">
+
+        <div class="row m-3 mx-lg-4 my-lg-3" style="min-height: 68px; align-items: center;">        
+          
+          <!-- Name -->
+          <div class="col-12 col-lg-6 pr-4 p-0 mb-2 mb-lg-0">
+            <span class="cart-item-name"> 
+              {{
+                item.product != undefined ? 
+                item.product.name + (item.product.unit_name != '' ? ', '+item.product.unit_view : '')
+                :''
+              }}
+            </span>
+          </div>
+          
+          <!-- Other -->
+          <div class="col-12 col-lg-6 p-0 d-flex justify-content-between align-items-center">
+            <!-- Add to cart -->
+            <span v-if="!item.present" ><button><product-add-to-cart :design="'cart'" :product="products.find(x => x.id == item.product_id)"/></button></span>
+
+            <!-- X -->
+            <template v-if="isX">
+              <!-- Weight -->
+              <span >{{item.full_weight_view}}</span>              
+              <!-- Price -->
+              <span class="font-weight-bold pr-lg-3 cart-item-price" >{{item.final_price_x+'р'}}</span>
+            </template>
+            
+            <!-- Normal -->
+            <template v-else>              
+              <!-- Present -->
+              <span v-if="item.present"></span>
+              <div v-if="item.present" class="cart-bonuse-ico d-flex align-items-center m-0">                
+                <a href="/presents" style="width: 30px;"><img src="image/icons/gift.svg" alt="Present"></a>
+                <span class="pl-2 font-weight-bold">Подарок</span>
+              </div>
+              <!-- Bonus -->
+              <span v-if="!item.present">{{'+'+Math.round(item.final_price * parseFloat(settings.bonus_multiplier))+'Б'}}</span>
+              <!-- Price -->
+              <span v-if="!item.present" class="font-weight-bold pr-lg-3 cart-item-price" >{{item.final_price+'р'}}</span>
+            </template>
+
+          </div>
+
+
+        </div>
+
+
+        
+        <!-- Remove -->
         <span v-if="!item.present" @click="removeItem(item.product_id)" class="item-remove"></span>
-        <div class="row">
+
+
+
+        <div v-if="false" class="row">
 
           <div class="col-12 col-lg-7" style="align-self: center;">
             <div class="d-flex">
@@ -53,7 +104,7 @@
               <!-- Add to cart -->
               <span v-if="!item.present"><button><product-add-to-cart :product="products.find(x => x.id == item.product_id)"/></button></span>
               <!-- Bonus -->
-              <span v-if="!item.present" style="color:gray;font-size:10pt;">{{'+'+Math.round(item.final_price * parseFloat(settings.bonus_multiplier))+'Б'}}</span>
+              <span v-if="!item.present">{{'+'+Math.round(item.final_price * parseFloat(settings.bonus_multiplier))+'Б'}}</span>
               <!-- Present -->
               <div v-else class="cart-bonuse-ico" style="align-self: center;width: 30px;"><a href="/presents"><img src="image/icons/gift.svg" alt="Present"></a></div>
               <!-- Price -->
@@ -70,6 +121,9 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  data(){return{
+    isX:isX,
+  }},
   computed:{
     ...mapGetters({
       products:'product/get',
@@ -131,11 +185,26 @@ export default {
 
 .cart-items .item{
   /* background-color: gray; */
-  background-color: #f8f8f8;
+  /* background-color: #f8f8f8;
   border-radius: 20px;
   font-size: 12pt;
   margin-left:-15px;
-  margin-right:-15px;
+  margin-right:-15px; */
+
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 10px;
+
+}
+
+.cart-item-name{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 110%;
+  color: #000000;
 }
 
 

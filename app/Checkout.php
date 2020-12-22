@@ -103,13 +103,17 @@ class Checkout extends Model
               $item->final_price      = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
             }
             {//X bananich
-              $item->price_per_unit_x = $product->price_x;
-              $item->price_x          = $product->price_per_unit_x * $item->count;
+              $item->price_per_unit_x = $product->final_price_x;
+              $item->price_x          = $item->price_per_unit_x * $item->count;
               $item->final_price_x    = $item->price_x;
             }
           }
           {//Weights
             $item->weight = $item->unit * $item->count;
+          }
+          {//Weights Full
+            $item->full_weight = isset($product->unit_full) ? $product->unit_full * $item->count : $item->weight;
+            $item->full_weight_view = $item->full_weight;
           }
         }
       }

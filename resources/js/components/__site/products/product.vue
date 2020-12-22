@@ -53,7 +53,7 @@
                         <span v-if="product.discount" class="product-price">
                           <span style="color: rgb(255, 92, 0);">{{Number(product.discount.discount_price)}}р</span> <span class="product-old-price">-{{Number(product.price)}}р</span>                        
                         </span>
-                        <span v-else class="product-price">{{Number(product.price)}}р</span>
+                        <span v-else class="product-price">{{Number(product.final_price)}}р</span>
                       </template>
                     </div>
 
