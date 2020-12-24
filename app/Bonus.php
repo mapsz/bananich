@@ -48,6 +48,242 @@ class Bonus extends Model
     ],
   ];
 
+  public static function add($userId, $quantity, $type, $order = null, $comment = null, $dieDays = false){
+
+    //Decode type
+    if($type == 'buy') $type = 2;
+    if($type == 'referal') $type = 5;
+    if($type == 'referal-child') $type = 6;
+
+    try{
+      //Start DB
+      DB::beginTransaction();
+
+      //Get Left
+      $currentCount = Bonus::left($userId);
+
+      // Get action user
+      $user = Auth::user();
+      $user ? $actionUserId = $user->id : $actionUserId = null;
+
+      //Put Bonus
+      $bonus = new Bonus;      
+      $bonus->action_user_id = $actionUserId;      
+      $bonus->bonus_type_id = $type;
+      $bonus->user_id = $userId;
+      $bonus->quantity = $quantity;
+      $bonus->quantity = $bonus->quantity > 0 ? $bonus->quantity : 0;
+      $bonus->left = $currentCount + $quantity;
+      $bonus->left = $bonus->left > 0 ? $bonus->left : 0;
+      $bonus->save();
+
+      //Get die date
+      $dieDate = self::getDieDate($type,$dieDays);
+      if(!$dieDate){
+        DB::rollback();
+        return response(['code' => 'bo2','text' => 'Bonus type get error'], 512)->header('Content-Type', 'text/plain');
+      }
+
+      //Put Bonus Add
+      $bonusAdd = new BonusAdd;
+      $bonusAdd->bonus_id = $bonus->id;
+      $bonusAdd->die = $dieDate;
+      $bonusAdd->left = $bonus->quantity;
+      $bonusAdd->save();
+
+      //Put Bonus Comment
+      if($comment){
+        $BonusComment = new BonusComment;
+        $BonusComment->bonus_id         = $bonus->id;
+        $BonusComment->comment          = $comment;
+        $BonusComment->save();
+      }      
+
+
+      //Attach order
+      if($order) $bonus->orders()->attach($order);      
+      
+      //Store to DB
+      DB::commit();    
+    } catch (Exception $e){
+      // Rollback from DB
+      DB::rollback();
+      return response(['code' => 'bo1','text' => 'Bonus add put error'], 512)->header('Content-Type', 'text/plain');
+    }
+
+    return true;
+    
+  }
+
+  public static function remove($userId, $quantity, $type, $comment = null){
+
+    if($quantity < 0) $quantity = $quantity - ($quantity*2);
+
+    try {
+      //Start DB
+      DB::beginTransaction();
+
+      //Get Left
+      $currentCount = Bonus::left($userId,false);
+
+      //Get actual bonus adds
+      $bonusAdds = (
+        Bonus::where('user_id',$userId)
+          ->with('addBonus')
+          ->whereHas('addBonus', function ($q) {
+            $q->where('left', '>', 0);
+          })
+          ->get()
+      );
+
+      //Correct actual bonus adds
+      $toRemove = $quantity;
+      foreach ($bonusAdds as $key => $bonus) {
+        $bonus->addBonus->left -= $toRemove;
+        $toRemove = $bonus->addBonus->left - ($bonus->addBonus->left*2);
+        if($bonus->addBonus->left < 0) $bonus->addBonus->left = 0;
+        $bonus->addBonus->save();     
+        if($toRemove < 1) break;            
+      }
+
+      // Get action user
+      $user = Auth::user();
+      $user ? $actionUserId = $user->id : $actionUserId = null;
+      
+      //Put Bonus
+      $bonus = new Bonus;      
+      $bonus->action_user_id = $type == 3 ? null : $actionUserId;
+      $bonus->user_id = $userId;
+      $bonus->bonus_type_id = $type;
+      $bonus->quantity = -$quantity;
+      $bonus->left = $currentCount - $quantity;
+      $bonus->left = $bonus->left > 0 ? $bonus->left : 0;
+      $bonus->save();
+
+      
+      //Put Bonus Comment
+      if($comment){
+        $BonusComment = new BonusComment;
+        $BonusComment->bonus_id  = $bonus->id;
+        $BonusComment->comment   = $comment;
+        $BonusComment->save();
+      }      
+
+      //Store to DB
+      DB::commit();    
+    } catch (Exception $e){
+      // Rollback from DB
+      DB::rollback();
+      return response(['code' => 'bo4','text' => 'Bonus remove put error'], 512)->header('Content-Type', 'text/plain');
+    }
+
+  }
+
+  public static function cancelOrderBonus($orderId){
+
+    $bonusesList = DB::table('bonus_order')->where('order_id',$orderId);
+
+    foreach ($bonusesList->get() as $bonus) {
+      DB::table('bonus_comments')->where('bonus_id',$bonus->bonus_id)->delete();
+      DB::table('bonus_adds')->where('bonus_id',$bonus->bonus_id)->delete();
+      DB::table('bonuses')->where('id',$bonus->bonus_id)->delete();
+    }
+
+    $bonusesList->delete();
+
+    return;
+
+  }
+
+  public static function getDieDate($type,$dieDays = false){
+
+    $default = DB::table('bonus_types')->where('id',2)->first()->die;
+    //Get die date
+    switch ($type) {
+      case 1:
+        $dieDays = $dieDays; //@@@ add current admin
+        break;
+
+      default:
+        $dieDays = $default;
+        break;
+    }
+
+
+    if(!$dieDays) $dieDays = $default;
+    $dieDate = now()->addDays($dieDays);
+
+    return $dieDate;
+
+  }
+
+  public static function left($userId,$killExpired = true){    
+    if($killExpired){Bonus::killExpired();} 
+    $bonus = Bonus::where('user_id',$userId)->latest()->first();
+    ($bonus == null || $bonus->count() == 0) ? $currentCount = 0 : $currentCount = $bonus->left;
+    return $currentCount;
+  }
+
+  public static function killExpired(){
+    // Get expired
+    $expired = BonusAdd::with('bonus')->where('left','>',0)->where('die','<',now())->get();
+    if($expired->count() < 1) return false;
+
+    //Remove bonus
+    try {      
+      foreach ($expired as $key => $bonus) {
+        if($bonus->bonus == null){
+          Log::info('bonus add have no bonus id-'. $bonus->bonus_id);
+          continue;
+        }
+        Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
+        $bonus->left = 0;
+        $bonus->save();
+      }
+    } catch (Exception $e){
+      return false;
+    }    
+    
+    return true;
+  }
+
+  public static function referalBonusAdd($order){
+    
+    {//Get customer
+      if(!isset($order->customer_id)) return false;
+      $customer = User::where('id',$order->customer_id)->first();
+      if(!$customer) return false;
+    }
+
+    {//Already got ref bonus
+      if(Bonus::where('user_id',$customer->id)->where('bonus_type_id',6)->exists()) return false;
+    }
+
+    {//Get referal
+      $referal = DB::table('user_referals')->where('user_id',$customer->id)->first();
+      if(!$referal) return false;
+      if(!$referal->phone) return false;
+    }
+
+    
+    {//Get referal parent
+      $customerParent = User::where('phone',$referal->phone)->first();
+      if(!$customerParent) return false;
+    }
+    
+
+    {//Add bonus
+      //Parent
+      $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
+      Bonus::add($customerParent->id,   $bonusCount,    'referal',        $order->id, 'Приглашенный: ' . $customer->phone,         14);
+      //Child
+      Bonus::add($customer->id,         100,            'referal-child',  $order->id, 'Пригласивший: ' . $customerParent->phone,   14);
+    }
+
+    return true;
+
+  }
+
   public static function getWithOptions($request = null){
 
     self::killExpired();
@@ -119,236 +355,6 @@ class Bonus extends Model
     return $bonus;
   }
 
-  public static function add($userId, $quantity, $type, $order = null, $comment = null, $dieDays = false){
-
-    //Decode type
-    if($type == 'buy') $type = 2;
-    if($type == 'referal') $type = 5;
-    if($type == 'referal-child') $type = 6;
-
-    try{
-      //Start DB
-      DB::beginTransaction();
-
-      //Get Left
-      $currentCount = Bonus::left($userId);
-
-      // Get action user
-      $user = Auth::user();
-      $user ? $actionUserId = $user->id : $actionUserId = null;
-
-      //Put Bonus
-      $bonus = new Bonus;      
-      $bonus->action_user_id = $actionUserId;      
-      $bonus->bonus_type_id = $type;
-      $bonus->user_id = $userId;
-      $bonus->quantity = $quantity;
-      $bonus->left = $currentCount + $quantity;
-      $bonus->save();
-
-      //Get die date
-      $dieDate = self::getDieDate($type,$dieDays);
-      if(!$dieDate){
-        DB::rollback();
-        return response(['code' => 'bo2','text' => 'Bonus type get error'], 512)->header('Content-Type', 'text/plain');
-      }
-
-      //Put Bonus Add
-      $bonusAdd = new BonusAdd;
-      $bonusAdd->bonus_id = $bonus->id;
-      $bonusAdd->die = $dieDate;
-      $bonusAdd->left = $quantity;
-      $bonusAdd->save();
-
-      //Put Bonus Comment
-      if($comment){
-        $BonusComment = new BonusComment;
-        $BonusComment->bonus_id         = $bonus->id;
-        $BonusComment->comment          = $comment;
-        $BonusComment->save();
-      }      
-
-
-      //Attach order
-      if($order) $bonus->orders()->attach($order);      
-      
-      //Store to DB
-      DB::commit();    
-    } catch (Exception $e){
-      // Rollback from DB
-      DB::rollback();
-      return response(['code' => 'bo1','text' => 'Bonus add put error'], 512)->header('Content-Type', 'text/plain');
-    }
-
-    return true;
-    
-  }
-
-  public static function cancelOrderBonus($orderId){
-
-    $bonusesList = DB::table('bonus_order')->where('order_id',$orderId);
-
-    foreach ($bonusesList->get() as $bonus) {
-      DB::table('bonus_comments')->where('bonus_id',$bonus->bonus_id)->delete();
-      DB::table('bonus_adds')->where('bonus_id',$bonus->bonus_id)->delete();
-      DB::table('bonuses')->where('id',$bonus->bonus_id)->delete();
-    }
-
-    $bonusesList->delete();
-
-    return;
-
-  }
-
-  public static function getDieDate($type,$dieDays = false){
-
-    $default = DB::table('bonus_types')->where('id',2)->first()->die;
-    //Get die date
-    switch ($type) {
-      case 1:
-        $dieDays = $dieDays; //@@@ add current admin
-        break;
-
-      default:
-        $dieDays = $default;
-        break;
-    }
-
-
-    if(!$dieDays) $dieDays = $default;
-    $dieDate = now()->addDays($dieDays);
-
-    return $dieDate;
-
-  }
-
-  public static function remove($userId, $quantity, $type, $comment = null){
-
-    try {
-      //Start DB
-      DB::beginTransaction();
-
-      //Get Left
-      $currentCount = Bonus::left($userId,false);
-
-      //Get actual bonus adds
-      $bonusAdds = (
-        Bonus::where('user_id',$userId)
-          ->with('addBonus')
-          ->whereHas('addBonus', function ($q) {
-            $q->where('left', '>', 0);
-          })
-          ->get()
-      );
-
-      //Correct actual bonus adds
-      $toRemove = $quantity;
-      foreach ($bonusAdds as $key => $bonus) {        
-        $bonus->addBonus->left -= $toRemove;
-        $toRemove = $bonus->addBonus->left - ($bonus->addBonus->left*2);
-        if($bonus->addBonus->left < 0) $bonus->addBonus->left = 0;
-        $bonus->addBonus->save();     
-        if($toRemove < 1) break;            
-      }
-
-      // Get action user
-      $user = Auth::user();
-      $user ? $actionUserId = $user->id : $actionUserId = null;
-      
-      //Put Bonus
-      $bonus = new Bonus;      
-      $bonus->action_user_id = $type == 3 ? null : $actionUserId;
-      $bonus->user_id = $userId;
-      $bonus->bonus_type_id = $type;
-      $bonus->quantity = $quantity;
-      $bonus->left = $currentCount - $quantity;
-      $bonus->save();
-
-      
-      //Put Bonus Comment
-      if($comment){
-        $BonusComment = new BonusComment;
-        $BonusComment->bonus_id  = $bonus->id;
-        $BonusComment->comment   = $comment;
-        $BonusComment->save();
-      }      
-
-      //Store to DB
-      DB::commit();    
-    } catch (Exception $e){
-      // Rollback from DB
-      DB::rollback();
-      return response(['code' => 'bo4','text' => 'Bonus remove put error'], 512)->header('Content-Type', 'text/plain');
-    }
-
-  }
-
-  public static function left($userId,$killExpired = true){    
-    if($killExpired){Bonus::killExpired();} 
-    $bonus = Bonus::where('user_id',$userId)->latest()->first();
-    ($bonus == null || $bonus->count() == 0) ? $currentCount = 0 : $currentCount = $bonus->left;
-    return $currentCount;
-  }
-
-  public static function killExpired(){
-    // Get expired
-    $expired = BonusAdd::with('bonus')->where('left','>',0)->where('die','<',now())->get();
-    if($expired->count() < 1) return false;
-
-    //Remove bonus
-    try {      
-      foreach ($expired as $key => $bonus) {
-        if($bonus->bonus == null){
-          Log::info('bonus add have no bonus id-'. $bonus->bonus_id);
-          continue;
-        }
-        Bonus::remove($bonus->bonus->user_id, $bonus->left, 3);        
-        $bonus->left = 0;
-        $bonus->save();
-      }
-    } catch (Exception $e){
-      return false;
-    }    
-    
-    return true;
-  }
-
-  public static function referalBonusAdd($order){
-    
-    {//Get customer
-      if(!isset($order->customer_id)) return false;
-      $customer = User::where('id',$order->customer_id)->first();
-      if(!$customer) return false;
-    }
-
-    {//Already got ref bonus
-      if(Bonus::where('user_id',$customer->id)->where('bonus_type_id',6)->exists()) return false;
-    }
-
-    {//Get referal
-      $referal = DB::table('user_referals')->where('user_id',$customer->id)->first();
-      if(!$referal) return false;
-      if(!$referal->phone) return false;
-    }
-
-    
-    {//Get referal parent
-      $customerParent = User::where('phone',$referal->phone)->first();
-      if(!$customerParent) return false;
-    }
-    
-
-    {//Add bonus
-      //Parent
-      $bonusCount = round(($order->total_result - $order->shipping) / 10, 0);
-      Bonus::add($customerParent->id,   $bonusCount,    'referal',        $order->id, 'Приглашенный: ' . $customer->phone,         14);
-      //Child
-      Bonus::add($customer->id,         100,            'referal-child',  $order->id, 'Пригласивший: ' . $customerParent->phone,   14);
-    }
-
-    return true;
-
-  }
 
 
   //JugeCRUD  

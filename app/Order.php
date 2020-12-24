@@ -374,7 +374,6 @@ class Order extends Model
     
     //Delete Cart
     Cart::resetItems();
-    // Cart::find($cart['id'])->delete();
 
     //Remove Bonuses
     if($bonus > 0){
