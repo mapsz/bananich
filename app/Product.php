@@ -683,6 +683,8 @@ class Product extends Model
 
       {//Price
         foreach ($products as $product) {
+
+          $unit = !isset($product->unit) || $product->unit <= 0 ? 0 : $product->unit;
           
           {//Normal bananich
             {//Supply Price
@@ -703,7 +705,7 @@ class Product extends Model
                 }
               }
 
-              $product->final_price = $chargePrice;
+              $product->final_price = $chargePrice * $unit;
             }
 
             //Static price
@@ -711,7 +713,6 @@ class Product extends Model
 
 
           }
-
           
           {//X bananich
             {//Supply Price
@@ -732,7 +733,7 @@ class Product extends Model
                 }
               }
 
-              $product->final_price_x = $xChargePrice;
+              $product->final_price_x = $chargePrice * $unit;
             }
 
             //Static price
@@ -750,15 +751,13 @@ class Product extends Model
 
           {//Rounds
             $round = 0;
-            $product->price                       = round($product->price, $round);
-            $product->final_price                 = round($product->final_price, $round);
-            $product->final_price_x               = round($product->final_price_x, $round);
+            $product->price                       = (ceil((($product->price*2)/10))/2)*10;
+            $product->final_price                 = (ceil((($product->final_price*2)/10))/2)*10;
+            $product->final_price_x               = (ceil((($product->final_price_x*2)/10))/2)*10;
             if(isset($product->discount) && $product->discount)
-              $product->discount->discount_price    = round($product->discount->discount_price, $round);
+              $product->discount->discount_price  = round($product->discount->discount_price, $round);
 
           }
-
-          // dd($product);
         }
 
       }

@@ -1,199 +1,353 @@
 <template>
   <div>
-    <site-header/>
+    <juge-main>
     
       <div class="container my-3">
 
-        <h1 class="m-3">Формирование коллективной закупки</h1>
-
-        <!-- Loading -->
-        <div v-if="!sOrder" class="d-flex m-5" style="justify-content: center;">
-          <span style="font-size: 48pt;">🍌🍌</span>
-        </div>
-        
-        <div v-if="sOrder" class="row">
-          <!-- Pay -->
-          <!-- <div class="col-4">
-            <h4>Оплата</h4>
-            <div>К оплате: {{sOrder.full_price}} </div>
-            <div>Оплачено: {{sOrder.payed}}</div>
-          </div> -->
-          
-          <!-- Invite -->
-          <div v-if="shareLink" class="col-4 border">
-            <h4>Пригласить</h4>
-
-            
-            <div>
-              <span class="text-primary">{{shareLink}}</span>
+        <!-- Congratz -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="congratz">
+              Поздравляем, ваша совместная закупка открыта!
             </div>
-            
-            <div>              
-              <telegram-button
-                :shareUrl="shareLink"
-                :description="shareDescription"
+          </div>
+        </div>
+
+        <!-- top text -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="top-text">
+              Теперь можно пригласить в нее соседей или друзей!
+            </div>
+          </div>
+        </div>
+
+        <!-- Invite -->
+        <div class="row">
+          <!-- Button -->
+          <div class="col-12 col-lg-6 p-0 mb-4 mt-lg-3 d-flex justify-content-center justify-content-lg-start ">
+            <button class="button x-btn">
+              Пригласить в закупку соседей
+            </button>
+          </div>
+          <!-- Soc. buttons -->
+          <div class="col-12 col-lg-6">
+            Поделиться:
+            <div>
+                <telegram-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <whatsapp-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <vkontakte-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-5">
+
+        <!-- Announce/Sould do -->
+        <div class="row">
+          <!-- Announce -->
+          <div class="col-12 col-lg-6">
+            <div class="announce-block">
+              <div class="mb-3"><b>Вы можете менять дату, время и адрес закупки только до момента присоединения к ней другого участника.</b></div>  
+              <div>После этого вы сможете вносить изменения только в свою корзину до 21.00 дня накануне доставки.</div>  
+            </div>
+          </div>
+          <!-- Sould do -->
+          <div class="col-12 col-lg-6 d-flex justify-content-center  justify-content-lg-start" style="display: flex !important;align-items: flex-end;">
+            <button class="button x-btn">
+              Начать оформлять заказ
+            </button>
+          </div>
+        </div>
+
+        <!-- Members -->
+        <div v-if="owner && slots" class="row mb-4" style="margin-top:100px">
+          <!-- Owner -->
+          <div class="col-12 col-lg-6 mb-4">
+            <div class="user-group-header mb-3">Организатор</div>
+            <shared-order-member :mSlot="1" :user="owner" />
+          </div>
+          <!-- Other Members -->
+          <div class="col-12 col-lg-6">
+            <div class="user-group-header mb-3">Участники закупки</div>
+            <!-- Members List -->
+            <div v-for="(n, i) in sOrder.member_count" :key="i">
+              <shared-order-member 
+                v-if="
+                  slots[n] == undefined || 
+                  slots[n].user == undefined || 
+                  slots[n].user.id == undefined || 
+                  slots[n].user.id != owner.id
+                "                   
+                :mSlot="n" :user="slots[n].user != undefined ? slots[n].user : {}"
               />
-              <whatsapp-button
-                :shareUrl="shareLink"
-                :description="shareDescription"
-              />
-              <vkontakte-button
-                :shareUrl="shareLink"
-                :description="shareDescription"
-              />
-              <div>
-                https://github.com/Alexandrshy/vue-share-buttons
-              </div>
+              <hr v-if="n < sOrder.member_count && n > 1" class="my-4">              
             </div>
           </div>
 
-          <!-- Info -->
-          <div v-if="sOrder.status != undefined" class="col-4 border">
-            <h4>Данные заказа</h4>
-            <!-- Status -->
+
+
+        </div>
+
+        <hr class="my-4">
+
+        
+        <div class="row" v-if="sOrder">
+          <div class="col-12 col-lg-6 offset-lg-6">
+
+            <!-- Price -->
             <div>
-              <h5>Статус</h5>
-              <div>
-                <span :class="sOrder.status.id == 0 ? 'text-danger' : ''">{{sOrder.status.name}}</span>              
+              <div class="label">
+                Стоимость вашего участия
               </div>
+              <div class="value">
+                {{sOrder.user_price}}р
+              </div> 
             </div>
+
+            <hr class="my-3">
+
             <!-- Address -->
             <div>
-              <h5>Адрес</h5>
-              <div>{{sOrder.address.street}} {{sOrder.address.appart}}</div>
-            </div>
-            <!-- Time Date -->
-            <div>
-              <h5>Доставка</h5>
-              <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
-              <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
-            </div>
-          </div>
-
-          <!-- Timers -->
-          <div class="col-4 border">
-            <!-- Pay -->
-            <!-- <div v-if="sOrder.status != undefined" >
-              <h5>Оплата до</h5>
-              <div>{{moment(sOrder.pay_close).locale("ru").format('LLLL')}}</div>
-            </div> -->
-            <!-- Close -->
-            <div v-if="sOrder.status != undefined">
-              <h5>Закрытие</h5>
-              <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
-            </div>
-            <!-- Test time -->
-            <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
-              <h5>Test time</h5>
-              <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
-              <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
-              <div class="d-flex">
-                <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
-                <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
-                <button @click="updateTestTime()" class="btn btn-primary ml-3">add</button>
+              <div class="label">
+                Адрес доставки
               </div>
+              <div class="value">
+                {{sOrder.address.street}} {{sOrder.address.appart}}
+              </div> 
             </div>
-          </div>
 
-          <!-- Weight -->
-          <div class="col-4 border">
-            <h4>Вес</h4>
-            <div v-if="weights">
-              <div><b>Общий</b></div>
-              <div>Доступно: {{sOrder.full_weight}}кг</div>
-              <div>Использовано: {{weights.overall}}кг</div>
-              <div><b>Мой</b></div>
-              <div>Доступно: {{sOrder.user_weight}}кг</div>
-              <div>Использовано: {{weights[user.id]}}кг</div>
-              <!-- <div>не использовано: {{25 - weights.overall}}кг</div> -->
+            <hr class="my-3">
+
+            <!-- Date/Time -->
+            <div>
+              <div class="label">
+                дата и время доставки
+              </div>
+              <div class="value">
+                <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
+                <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
+              </div> 
             </div>
-          </div>
 
-          <!-- Details -->
-          <div class="col-4 border">
-            <h4>Личнные данные</h4>
-            <checkout-contact class="checkout-div " v-model="data.contacts" />
+
+          </div>
+        </div>
+
+        
+
+
+
+        <hr class="mt-5">
+        <hr>
+        <hr>
+
+
+
+        <div v-if="0">
+
+          <h1 class="m-3">Формирование коллективной закупки</h1>
+
+          <!-- Loading -->
+          <div v-if="!sOrder" class="d-flex m-5" style="justify-content: center;">
+            <span style="font-size: 48pt;">🍌🍌</span>
           </div>
           
-          <!-- Users -->
-          <div class="col-4 border">
-            <div v-if="sOrder && userIn">
-              <h4>Участники</h4>
+          <div v-if="sOrder" class="row">
+            <!-- Pay -->
+            <!-- <div class="col-4">
+              <h4>Оплата</h4>
+              <div>К оплате: {{sOrder.full_price}} </div>
+              <div>Оплачено: {{sOrder.payed}}</div>
+            </div> -->
+            
+            <!-- Invite -->
+            <div v-if="shareLink" class="col-4 border">
+              <h4>Пригласить</h4>
 
-              <hr>
-
-              <!-- Members -->
-              <template v-if="slots">
-                <div v-for="(n, i) in sOrder.member_count" :key="i">
-                  <!-- Member -->
-                  <div>
-                    <div v-if="slots[n].user != undefined">
-                      <!-- Name -->
-                      <span :class="slots[n].user.id == user.id  ? 'text-info' : ''">
-                        <span v-if="slots[n].user.id == sOrder.owner_id">👑</span> {{slots[n].user.name}} {{slots[n].user.email}}
-                      </span>
-                      <!-- kick -->
-                      <span v-if="isAdmin">
-                        <button v-if="slots[n].user.id != user.id" @click="kick(slots[n].user.id)" class="btn btn-danger btn-sm">
-                          выкинуть 🥾
-                        </button>
-                      </span>
-                      <!-- Weight -->
-                      <div v-if="weights">
-                        Вес: {{weights[slots[n].user.id]}}
-                      </div>  
-                    </div>
-                    <!-- Invite -->
-                    <div v-else>
-                      <i style="font-style: italic;">Invite!</i> 
-                    </div>
-                  </div>
-
-                  <!-- Pay -->
-                  <div>
-                    <!-- <div v-if="slots[n].pay == undefined">
-                      <button 
-                        @click="pay(user.id, n)" 
-                        class="btn btn-info"
-                      >
-                        Оплатить {{sOrder.user_price}}p
-                      </button>
-                    </div> -->
-                    <!-- Pay -->
-                    <!-- <div v-else>
-                      <span class="text-success">Оплачено</span>
-                      <span>
-                        {{slots[n].pay.user.name}} {{slots[n].pay.user.email}}
-                      </span>
-                    </div> -->
-                  </div>
-
-                  <hr>
-                </div>
-              </template>
-
-              <!-- Change member count -->
-              <div v-if="isAdmin" class="form-group">
-                <label for="member-count">Количество участников: <b>{{changeMemberCount}}</b></label>
-                <input v-model="changeMemberCount" type="range" class="form-control" id="member-count" min="1" max="5">
-                <button @click="post({'member_count':changeMemberCount})" class="btn btn-sm btn-success">Сохранить</button>
+              
+              <div>
+                <span class="text-primary">{{shareLink}}</span>
               </div>
-
+              
+              <div>              
+                <telegram-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <whatsapp-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <vkontakte-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <div>
+                  https://github.com/Alexandrshy/vue-share-buttons
+                </div>
+              </div>
             </div>
-            <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
-          </div>   
 
-          <!-- Cancel -->
-          <div v-if="isAdmin && sOrder.status.id > 0" class="col-4 border">
-            <button @click="sOrderCancel()" class="btn btn-danger m-3">Отменить закупку</button>
-          </div>       
+            <!-- Info -->
+            <div v-if="sOrder.status != undefined" class="col-4 border">
+              <h4>Данные заказа</h4>
+              <!-- Status -->
+              <div>
+                <h5>Статус</h5>
+                <div>
+                  <span :class="sOrder.status.id == 0 ? 'text-danger' : ''">{{sOrder.status.name}}</span>              
+                </div>
+              </div>
+              <!-- Address -->
+              <div>
+                <h5>Адрес</h5>
+                <div>{{sOrder.address.street}} {{sOrder.address.appart}}</div>
+              </div>
+              <!-- Time Date -->
+              <div>
+                <h5>Доставка</h5>
+                <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
+                <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
+              </div>
+            </div>
+
+            <!-- Timers -->
+            <div class="col-4 border">
+              <!-- Pay -->
+              <!-- <div v-if="sOrder.status != undefined" >
+                <h5>Оплата до</h5>
+                <div>{{moment(sOrder.pay_close).locale("ru").format('LLLL')}}</div>
+              </div> -->
+              <!-- Close -->
+              <div v-if="sOrder.status != undefined">
+                <h5>Закрытие</h5>
+                <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
+              </div>
+              <!-- Test time -->
+              <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
+                <h5>Test time</h5>
+                <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
+                <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
+                <div class="d-flex">
+                  <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
+                  <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
+                  <button @click="updateTestTime()" class="btn btn-primary ml-3">add</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weight -->
+            <div class="col-4 border">
+              <h4>Вес</h4>
+              <div v-if="weights">
+                <div><b>Общий</b></div>
+                <div>Доступно: {{sOrder.full_weight}}кг</div>
+                <div>Использовано: {{weights.overall}}кг</div>
+                <div><b>Мой</b></div>
+                <div>Доступно: {{sOrder.user_weight}}кг</div>
+                <div>Использовано: {{weights[user.id]}}кг</div>
+                <!-- <div>не использовано: {{25 - weights.overall}}кг</div> -->
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="col-4 border">
+              <h4>Личнные данные</h4>
+              <checkout-contact class="checkout-div " v-model="data.contacts" />
+            </div>
+            
+            <!-- Users -->
+            <div class="col-4 border">
+              <div v-if="sOrder && userIn">
+                <h4>Участники</h4>
+
+                <hr>
+
+                <!-- Members -->
+                <template v-if="slots">
+                  <div v-for="(n, i) in sOrder.member_count" :key="i">
+                    <!-- Member -->
+                    <div>
+                      <div v-if="slots[n].user != undefined">
+                        <!-- Name -->
+                        <span :class="slots[n].user.id == user.id  ? 'text-info' : ''">
+                          <span v-if="slots[n].user.id == sOrder.owner_id">👑</span> {{slots[n].user.name}} {{slots[n].user.email}}
+                        </span>
+                        <!-- kick -->
+                        <span v-if="isAdmin">
+                          <button v-if="slots[n].user.id != user.id" @click="kick(slots[n].user.id)" class="btn btn-danger btn-sm">
+                            выкинуть 🥾
+                          </button>
+                        </span>
+                        <!-- Weight -->
+                        <div v-if="weights">
+                          Вес: {{weights[slots[n].user.id]}}
+                        </div>  
+                      </div>
+                      <!-- Invite -->
+                      <div v-else>
+                        <i style="font-style: italic;">Invite!</i> 
+                      </div>
+                    </div>
+
+                    <!-- Pay -->
+                    <div>
+                      <!-- <div v-if="slots[n].pay == undefined">
+                        <button 
+                          @click="pay(user.id, n)" 
+                          class="btn btn-info"
+                        >
+                          Оплатить {{sOrder.user_price}}p
+                        </button>
+                      </div> -->
+                      <!-- Pay -->
+                      <!-- <div v-else>
+                        <span class="text-success">Оплачено</span>
+                        <span>
+                          {{slots[n].pay.user.name}} {{slots[n].pay.user.email}}
+                        </span>
+                      </div> -->
+                    </div>
+
+                    <hr>
+                  </div>
+                </template>
+
+                <!-- Change member count -->
+                <div v-if="isAdmin" class="form-group">
+                  <label for="member-count">Количество участников: <b>{{changeMemberCount}}</b></label>
+                  <input v-model="changeMemberCount" type="range" class="form-control" id="member-count" min="1" max="5">
+                  <button @click="post({'member_count':changeMemberCount})" class="btn btn-sm btn-success">Сохранить</button>
+                </div>
+
+              </div>
+              <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
+            </div>   
+
+            <!-- Cancel -->
+            <div v-if="isAdmin && sOrder.status.id > 0" class="col-4 border">
+              <button @click="sOrderCancel()" class="btn btn-danger m-3">Отменить закупку</button>
+            </div>       
+
+          </div>
 
         </div>
+
 
 
       </div>
-
-    <site-footer/>
+    
+    </juge-main>
   </div>
 </template>
 
@@ -228,6 +382,12 @@ computed:{
   users(){
     if(!this.sOrder || this.sOrder.users == undefined || this.sOrder.users.length < 1) return [];
     return this.sOrder.users;
+  },
+  owner(){
+    if(this.users.length < 1) return false;
+    let user = this.users.find(x => x.id == this.sOrder.owner_id);
+    if(user == -1) return false;
+    return user;
   },
   slots(){
     if(!this.sOrder || this.sOrder.member_count == undefined || this.sOrder.member_count < 1) return [];
@@ -345,6 +505,51 @@ methods:{
 }
 </script>
 
-<style>
+<style scooped>
+  .congratz{
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%;    
+  }  
+  .top-text{
+    font-size: 18px;
+    max-width: 513px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 150%;
+  }
+  .user-group-header{
+    font-size: 18px;
+    line-height: 110%;  
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .label{
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .value{
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  /* Desktop */
+  @media screen and (min-width: 992px){
+    .congratz{
+      max-width: 770px;
+      font-size: 50px;
+    }    
+    .top-text{
+      max-width: 513px;
+      font-size: 26px;
+    }    
+    .user-group-header{
+      font-size: 30px;
+    }    
+  }
+  
+
 
 </style>

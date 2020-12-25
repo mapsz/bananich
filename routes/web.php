@@ -909,6 +909,8 @@ Route::group(['middleware' => ['HttpsRR'
     }
 
     //Order
+    Route::put('/order/log', 'JugeLogsController@orderButton');
+    Route::put('/order/log/success', 'JugeLogsController@orderSuccess');
     Route::put('/order/put', 'OrderController@put');
     Route::any('/order/update/available', 'OrderController@updateAvailable');
 

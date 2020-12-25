@@ -320,6 +320,8 @@ class Order extends Model
   }
 
   public static function placeOrder($data, $cart){
+
+    JugeLogs::log(1, json_encode(['model' => 'order', 'user' => '?']));
     
     {//Customer
       if(Auth::user()){
@@ -328,6 +330,8 @@ class Order extends Model
         $customer_id = 0;
       }
     }   
+
+    JugeLogs::log(2, json_encode(['model' => 'order', 'user' => $customer_id]));
     
     {//Order
       //Bonus
@@ -336,18 +340,27 @@ class Order extends Model
       $shipping = $cart['shipping'];
       //Put
       $order = Order::putOrder($data, $bonus, $shipping);
+
+      JugeLogs::log(4, json_encode(['model' => 'order', 'user' => $customer_id]));
+
       //Get id
       $orderId = $order->id;      
       //Edit order
       if($cart['container']){
+        JugeLogs::log(4, json_encode(['model' => 'order', 'user' => $customer_id]));
         $order->container = 1;
         if(!$order->save()) return false; 
+        JugeLogs::log(5, json_encode(['model' => 'order', 'user' => $customer_id]));
       }
     }
     
+    JugeLogs::log(6, json_encode(['model' => 'order', 'user' => $customer_id]));
+
     {//Items
       self::putItems($cart, $orderId);
     }
+
+    JugeLogs::log(7, json_encode(['model' => 'order', 'user' => $customer_id]));
 
     //To other
     if($data['toOther']){
@@ -359,24 +372,39 @@ class Order extends Model
       ]);
     }
 
+    JugeLogs::log(8, json_encode(['model' => 'order', 'user' => $customer_id]));
+
     //Coupon
     if(isset($cart['coupon'])){
+
+      JugeLogs::log(9, json_encode(['model' => 'order', 'user' => $customer_id]));
       
       //Check if coupons exist
       $coupon = Coupon::where('code',$cart['coupon']->code)->first();
+
+      JugeLogs::log(10, json_encode(['model' => 'order', 'user' => $customer_id]));
+
       if($coupon != null){
+        JugeLogs::log(11, json_encode(['model' => 'order', 'user' => $customer_id]));
         //Attach coupon
-        Order::find($orderId)->coupons()->attach($coupon->id,['discount' => $coupon->discount]);
-      }
+        Order::find($orderId)->coupons()->attach($coupon->id,['discount' => $coupon->discount]);        
+        JugeLogs::log(12, json_encode(['model' => 'order', 'user' => $customer_id]));
+      }      
+
       $coupon->save();
+
+      JugeLogs::log(13, json_encode(['model' => 'order', 'user' => $customer_id]));
 
     }
     
     //Delete Cart
     Cart::resetItems();
 
+    JugeLogs::log(14, json_encode(['model' => 'order', 'user' => $customer_id]));
+
     //Remove Bonuses
     if($bonus > 0){
+      JugeLogs::log(15, json_encode(['model' => 'order', 'user' => $customer_id]));
       Bonus::remove($customer_id, $bonus, 2, $orderId);
     }    
 
@@ -386,6 +414,8 @@ class Order extends Model
 
   public static function putOrder($data, $bonus = 0, $shipping = 0, $status = 900){
 
+      JugeLogs::log(1, json_encode(['model' => 'putOrder', 'user' => '?']));
+
       {//Customer
         if(Auth::user()){
           $customer_id = Auth::user()->id;
@@ -394,8 +424,12 @@ class Order extends Model
         }
       }  
 
+      JugeLogs::log(2, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
+
       //Random id
       $randomId = self::generateRandomId();
+
+      JugeLogs::log(3, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
       
       {//Save order
         $order = new Order;
@@ -420,8 +454,12 @@ class Order extends Model
         if(!$order->save()) return false;
       }  
       
+      JugeLogs::log(4, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
+
       //Save status
       Order::find($order->id)->statuses()->attach($status);
+
+      JugeLogs::log(5, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
       
       return $order;
 
@@ -429,8 +467,12 @@ class Order extends Model
 
   public static function putItems($cart, $orderId){
 
+    JugeLogs::log(1, json_encode(['model' => 'putItems', 'user' => $cart['user_id']]));
+
     //Delete old items
     Item::where('order_id', $orderId)->delete();
+
+    JugeLogs::log(2, json_encode(['model' => 'putItems', 'user' => $cart['user_id']]));
 
     //Put items
     foreach($cart['items'] as $item){
@@ -472,7 +514,9 @@ class Order extends Model
         $orderId);
       }        
         
-    }       
+    }    
+    
+    JugeLogs::log(3, json_encode(['model' => 'putItems', 'user' => $cart['user_id']]));
 
     //Put presents
     foreach($cart['presents'] as $item){
@@ -493,6 +537,8 @@ class Order extends Model
 
     } 
 
+    JugeLogs::log(4, json_encode(['model' => 'putItems', 'user' => $cart['user_id']]));
+
     //Container
     if($cart['container']){
 
@@ -510,6 +556,8 @@ class Order extends Model
       //Save status
       Item::find($putItem->id)->statuses()->attach(100);
     }   
+
+    JugeLogs::log(5, json_encode(['model' => 'putItems', 'user' => $cart['user_id']]));
       
     return true;
 

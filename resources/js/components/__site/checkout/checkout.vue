@@ -75,9 +75,14 @@ export default {
       //Refresh errors
       if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
       this.errors = [];
+      
+      //Log
+      let r = await ax.fetch('/order/log', {}, 'put');
+
+      if(!r) return;
 
       //Put      
-      let r = await ax.fetch('/order/put', {data:this.checkout,'cartId':this.cart.id}, 'put');
+      r = await ax.fetch('/order/put', {data:this.checkout,'cartId':this.cart.id}, 'put');
 
       //Catch errors
       if(!r){      
@@ -88,6 +93,7 @@ export default {
       }
 
       if(r > 0){
+        await ax.fetch('/order/log/success', {}, 'put');
         //Trackers
         if(!localServer){
           ym(54670840,'reachGoal','ordered')

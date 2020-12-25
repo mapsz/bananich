@@ -20,7 +20,33 @@ data(){return{
 </script>
 
 <style>
-.page-x{
-  background: #FAFAFA;
-}
+  .page-x{
+    background: #f3ebe8;  
+    font-family: Open Sans;
+  }
+  .x-btn{
+    font-size: 16px;
+    border-radius: 50px;
+    background: #8AC2A7;
+    height: 50px;
+    padding: 0px 33px;
+  }
+  .announce-block{
+    font-size: 16px;
+    border-left: 5px #8AC2A7 solid;
+    padding-left: 16px;
+  }
+
+  /* Desktop */
+  @media screen and (min-width: 992px){
+    .announce-block{
+      max-width: 560px;
+      font-size: 20px;
+    }
+    .x-btn{
+      font-size: 18px;
+      height: 60px;
+      padding: 0px 33px;
+    }    
+  }
 </style>

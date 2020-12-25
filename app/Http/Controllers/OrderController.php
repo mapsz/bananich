@@ -15,6 +15,7 @@ use App\ProductMeta;
 use App\Discount;
 use App\Cart;
 use App\Setting;
+use App\JugeLogs;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,12 @@ class OrderController extends Controller
 
   public function put(Request $request){
     
+    JugeLogs::log(1, json_encode(['model' => 'orderController', 'user' => '?']));
+    
     {//Data
+      //Get user
+      $user = Auth::user();
+      $userId = $user ? $user->id : 0;
       //Get data
       $data = $request->all();
       $data = $data['data'];
@@ -69,6 +75,8 @@ class OrderController extends Controller
       //Get Settings
       $settings = new Setting(); $settings = $settings->getList(1);
     }
+    
+    JugeLogs::log(2, json_encode(['model' => 'orderController', 'user' => $userId]));
     
     {//Validate
       
@@ -85,6 +93,8 @@ class OrderController extends Controller
         ];
         Validator::make($cart, $cartValidate, $cartMessages)->validate();
       }
+
+      JugeLogs::log(3, json_encode(['model' => 'orderController', 'user' => $userId]));
       
       {//Validate order
         
@@ -145,13 +155,19 @@ class OrderController extends Controller
         Validator::make($data, $validate,$messages)->validate();
       }
 
+      JugeLogs::log(4, json_encode(['model' => 'orderController', 'user' => $userId]));
+
       {//Validate available days
         Order::validateAvailableDays($data['deliveryDate'],$data['deliveryTime']);
       }
+
+      JugeLogs::log(5, json_encode(['model' => 'orderController', 'user' => $userId]));
       
       {//Validate available product
         Order::validateAvailableProducts($cart);
       }
+
+      JugeLogs::log(6, json_encode(['model' => 'orderController', 'user' => $userId]));
       
     }
           
@@ -161,9 +177,13 @@ class OrderController extends Controller
   
           //Place order
           $order = Order::placeOrder($data, $cart);
+
+          JugeLogs::log(7, json_encode(['model' => 'orderController', 'user' => $userId]));
   
           //Check order success
           if(!$order || !isset($order->id)) throw new Exception('order error');
+
+          JugeLogs::log(8, json_encode(['model' => 'orderController', 'user' => $userId]));
   
           {//Mail
             //Set data
@@ -186,6 +206,8 @@ class OrderController extends Controller
               $m->subject('Бананыч заказ №'.$orderId.' получен!');
             });
           }
+
+          JugeLogs::log(9, json_encode(['model' => 'orderController', 'user' => $userId]));
               
         }DB::commit();    
       } catch (Exception $e) {
