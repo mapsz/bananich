@@ -5,21 +5,25 @@
       {{mSlot}}.
     </div>
     <!-- Avatar -->
-    <div class="pl-1" style="width:100px; height:100px;">
-      <img src="https://bananich.ru/image/logo.svg" alt="" style="width:100%; height:100%;">
+    <div class="user-avatar mx-3">
+      <img 
+        alt="Avatar"
+        :src="user.mainImage != undefined ? user.mainImage : '/users/images/main/no-image.png'" 
+        style="max-width:100%; max-height:100%; border-radius: 50px;"
+      >
     </div>
     <!-- Info -->
-    <div class="d-flex pl-2" style="flex-direction: column;justify-content: space-around;">
+    <div class="d-flex" style="flex-direction:column; justify-content:space-around;">
       <!-- Name -->
-      <div>
+      <div class="user-name">
         <b>{{user.name != undefined ? user.name : 'Имя Фамилия'}}</b>
       </div>
       <!-- Email -->
-      <div>
+      <div class="user-email">
         {{user.email != undefined ? user.email : 'E-mail'}}
       </div>
       <!-- Phone -->
-      <div>
+      <div class="user-phone">
         {{user.phone != undefined ? user.phone : 'Телефон'}}
       </div>
     </div>
@@ -55,5 +59,21 @@ props: ['user','mSlot'],
 </script>
 
 <style>
-
+.user-avatar{
+  width:100px;
+  height:100px;
+  background-color: #aba5a3;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+}
+.user-name{
+  font-size: 20px;
+  color: #000000;
+}
+.user-email, .user-phone{
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.6);
+}
+/* #aba5a3 */
 </style>

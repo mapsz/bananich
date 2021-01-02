@@ -351,12 +351,13 @@ class SharedOrder extends Model
   
     //Get
     $data = JugeCRUD::get($query,$request);
-
     
     {//After Query
 
       //Get settings
       $settings = (new Setting)->getList(1);
+
+
              
       //Loop
       foreach ($data as $key => $row) {        
@@ -384,11 +385,17 @@ class SharedOrder extends Model
           
           $row['order_close'] = Carbon::parse($row->delivery_date)->subHours($settings['x_order_close_hours']);
           $row['pay_close'] = Carbon::parse($row->delivery_date)->subHours($settings['x_pay_close_hours']);
-        }
-        {//User slot
-          foreach ($row->users as $user) {
-            $user['slot'] = $user->pivot->slot;
+        }        
+        {//Users        
+          {//Loop
+            foreach ($row->users as $user) {
+              //Slot
+              $user['slot'] = $user->pivot->slot;              
+              //Main_Images
+              $user->mainImage = User::getMainImage($user->id);   
+            }
           }
+
         }
       }
 

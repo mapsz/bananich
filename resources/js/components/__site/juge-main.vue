@@ -31,10 +31,32 @@ data(){return{
     height: 50px;
     padding: 0px 33px;
   }
+  .x-btn-trans{
+    background: #00000000;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+  }
   .announce-block{
     font-size: 16px;
     border-left: 5px #8AC2A7 solid;
     padding-left: 16px;
+  }
+  .info-icon{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #EB5757;    
+  }
+  .info-icon::after{    
+    display: block;
+    content: "i";
+    font-weight: 600;
+    font-size: 21px;
+    margin-left: 12px;
+  }
+  .my-30{
+    margin-top: 30px!important;
+    margin-bottom: 30px!important;
   }
 
   /* Desktop */

@@ -112,7 +112,7 @@ class Checkout extends Model
             $item->weight = $item->unit * $item->count;
           }
           {//Weights Full
-            $item->full_weight = isset($product->unit_full) ? $product->unit_full * $item->count : $item->weight;
+            $item->full_weight = isset($product->unit_full) ? ($product->unit_full * $item->count) : $item->weight;
             $item->full_weight_view = $item->full_weight;
           }
         }

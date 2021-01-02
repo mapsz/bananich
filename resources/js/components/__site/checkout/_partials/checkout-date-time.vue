@@ -1,4 +1,7 @@
 <template>
+<div>
+
+  <!-- Normal design -->
   <div class="row">
     <!-- Delivery Time -->
     <div class="col-lg-6">
@@ -15,11 +18,14 @@
       />
     </div>
   </div>  
+</div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-export default {  
+export default {
+  model: {event: 'blur'},
+  props: ['design'],
   data(){return{
     day:false,
     time:false,
@@ -64,11 +70,15 @@ export default {
 
     }
   },
-  // watch: {
-  //   day: function(){
-  //     //
-  //   },
-  // },
+
+  watch: {
+    day: function(){
+      this.$emit('blur', {date:this.day, time:this.time});
+    },
+    time: function(){
+      this.$emit('blur', {date:this.day, time:this.time});
+    },
+  },
   mounted(){
     this.fetch();
   },

@@ -114,10 +114,9 @@
               </div> 
             </div>
 
-            <hr class="my-3">
-
             <!-- Address -->
             <div>
+              <hr class="my-30">
               <div class="label">
                 Адрес доставки
               </div>
@@ -126,19 +125,73 @@
               </div> 
             </div>
 
-            <hr class="my-3">
-
             <!-- Date/Time -->
             <div>
-              <div class="label">
-                дата и время доставки
+              <hr class="my-30">
+              <div>
+                <span class="label">дата и время доставки</span>
+                <button class="edit float-right">изменить</button>
               </div>
               <div class="value">
                 <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
-                <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
+                <div>
+                  {{sOrder.delivery_time_from.replace(':00:00', ':00')}} - 
+                  {{sOrder.delivery_time_to.replace(':00:00', ':00')}}
+                </div>
               </div> 
             </div>
 
+            <!-- Weight -->
+            <div>
+              <hr class="my-30">
+              <div>
+                <span class="label">Макс. бесплатный вес - </span>
+                <span class="value">{{sOrder.full_weight}}кг</span> 
+                <span class="ml-3 info-icon"></span>
+              </div>
+              <div>
+                <span class="label">вес вашей корзины - </span>
+                <span class="value">{{weights[user.id]}}кг</span>                
+                <button class="edit float-right">изменить</button>
+              </div>
+            </div>          
+
+            <!-- Comment -->
+            <div>
+              <hr class="my-30">
+              <div>
+                <span class="label">КОММЕНТАРИЙ К ЗАКУПКЕ</span>
+                <button class="edit float-right">изменить</button>
+              </div>
+              <div>
+                <span class="value">{{sOrder.comment.body}}</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mb-5">
+              <hr class="my-30">
+              <!-- Edit order -->
+              <div class="mb-3">
+                <button class="action">
+                  Редактировать 
+                  <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
+                    (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
+                  </span>
+                </button>
+              </div>
+              <!-- Cancel order -->
+              <div v-if="isAdmin && sOrder.status.id > 0">
+                <button @click="sOrderCancel()" class="action">Отменить закупку</button>
+              </div>     
+            </div>
+
+            <!-- Big Action -->
+            <div>
+              <button class="x-btn">
+                Начать оформлять заказ
+              </button>
+            </div>
 
           </div>
         </div>
@@ -473,7 +526,10 @@ methods:{
   },
   async sOrderCancel(){
     let r = await ax.fetch('/shared/order',{id:this.sOrder.id},'delete');
-    if(r){this.get();}
+    if(r){
+      // this.get();
+      window.location.href = "/";
+    }
   },
   async join(){
     let r = await ax.fetch('/shared/order/join',{'link':this.link},'post');
@@ -505,7 +561,7 @@ methods:{
 }
 </script>
 
-<style scooped>
+<style scoped>
   .congratz{
     font-size: 22px;
     font-style: normal;
@@ -533,6 +589,15 @@ methods:{
   .value{
     font-size: 16px;
     color: rgba(0, 0, 0, 0.6);
+  }
+  .edit{
+    text-decoration-line: underline;
+    font-size: 20px;
+  }
+  .action{
+    text-align: left;
+    text-decoration-line: underline;
+    font-size: 16px;
   }
 
   /* Desktop */

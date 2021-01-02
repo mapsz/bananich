@@ -1,20 +1,22 @@
 <template>
-<div class="row checkout-address checkout-address-gift">
-  <div class="col-12">
+<div>
+  <div class="row checkout-address checkout-address-gift">
+    <div class="col-12">
 
-    <div class="checkout-title">Адрес</div>
+      <div class="checkout-title">Адрес</div>
 
-    <div class="form-group">
-      <checkout-input v-model="data.addressStreet" :name="'addressStreet'" :placeholder="'Улица'" />
+      <div class="form-group">
+        <checkout-input v-model="data.addressStreet" :name="'addressStreet'" :placeholder="'Улица'" />
+      </div>
+
+      <div class="form-group d-flex form-group-multi">
+        <checkout-input v-model="data.addressNumber" :name="'addressNumber'" :placeholder="'Дом'" />
+        <checkout-input v-model="data.addressApart" :name="'addressApart'" :placeholder="'Квартира'" />
+        <checkout-input v-model="data.addressPorch" :name="'addressPorch'" :placeholder="'Подъезд'" />
+      </div>
+
+
     </div>
-
-    <div class="form-group d-flex form-group-multi">
-      <checkout-input v-model="data.addressNumber" :name="'addressNumber'" :placeholder="'Дом'" />
-      <checkout-input v-model="data.addressApart" :name="'addressApart'" :placeholder="'Квартира'" />
-      <checkout-input v-model="data.addressPorch" :name="'addressPorch'" :placeholder="'Подъезд'" />
-    </div>
-
-
   </div>
 </div>
 </template>
@@ -22,7 +24,8 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  model: {event: 'blur'},
+  model: {event: 'blur'},  
+  props: ['design'],
   data(){return{
     data:{
       addressStreet:false,

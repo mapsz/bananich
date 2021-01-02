@@ -1,10 +1,98 @@
 <template>
   <div>
-    <site-header/>
+    <juge-main>
       <div class="container my-3">
-        <h1 class="m-3">Shared order open</h1>
 
-        <div v-if="loaded" class="row">
+        <div class="header">Формирование коллективной закупки</div>
+
+        <div class="inputs">
+
+          <!-- Member count -->
+          <div class="row">
+            <div class="col-12 col-lg-6 mb-3 label">
+              <span><b>Сколько человек</b> будет участвовать в закупке?</span>            
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="ml-lg-4">
+                <input v-model="data.memberCount" type="range" class="form-control-range custom-range" id="memberCount" min="1" :max="maxMemberCount">
+                <div class="mx-1 d-flex justify-content-between">
+                  <span 
+                    @click="data.memberCount = n"
+                    v-for="(n, i) in maxMemberCount" :key="i" 
+                    :style="data.memberCount == n ? 'font-weight: 600;' : ''"
+                  >
+                    {{n}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-30">
+          
+          <!-- Date/Time -->
+          <div class="row">            
+            <checkout-date-time class="checkout-div w-100" :design="'x'" v-model="data.dateTime"/> 
+          </div>
+
+          <hr class="my-30">
+
+          <!-- Address -->
+          <div class="row">
+            <div class="col-12 col-lg-6 mb-3 label">
+              <!-- <span><b>Дата</b> доставки</span>      -->
+              <checkout-address class="checkout-div" :design="'x'" v-model="data.address"/>
+            </div>
+          </div>
+
+          <hr class="my-30">
+
+          <!-- Comment -->
+          <div class="row">
+            <div class="col-12 col-lg-6 mb-3 label">
+              <!-- <span><b>Дата</b> доставки</span>      -->
+              <checkout-comment class="checkout-div" v-model="data.comment"/>
+            </div>
+          </div>
+          
+          <!-- Annonce -->
+          <div class="row">
+            <div class="col-12 col-lg-6 offset-lg-6">
+              <div class="announce-block">
+                <div><b>Хотите вступить в совместную закупку, но не с кем?</b></div> 
+                <div>Мы найдем для вас соседа!</div> 
+              </div>
+            </div>
+          </div>
+
+ 
+
+          <!-- Actions -->
+          <div class="row">
+            <div class="col-12 col-lg-6 offset-lg-6 mb-3">
+              <div class="actions">
+                <!-- Errors -->
+                <div class="mb-3">
+                  <div v-for='(errorz,z) in errors' :key='z+"d"'>
+                    <span v-for='(error,j) in errorz' :key='j' style="color: tomato;">
+                      ❗{{error}}
+                    </span>    
+                  </div>
+                </div>
+                <button class="x-btn x-btn-trans mb-2">
+                  Найти соседа
+                </button>
+                <button @click="open()" class="x-btn">
+                  Начать закупку
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div v-if="loaded && 0" class="row">
           <div class="col-6">
             <!-- Member count -->
             <div class="form-group">
@@ -56,7 +144,7 @@
         </div>
 
       </div>
-    <site-footer/>
+    </juge-main>
   </div>
 </template>
 
@@ -176,6 +264,14 @@ methods:{
   async open(){
     //Refresh errors
     this.errors = [];
+    if(this.data.dateTime != undefined){
+      if(this.data.dateTime.date  != undefined){
+        this.data.date = this.data.dateTime.date;
+      }
+      if(this.data.dateTime.time  != undefined){
+        this.data.time = this.data.dateTime.time;
+      }
+    }
 
     //Fetch
     let r = await ax.fetch('/shared/order/open',this.data,'put');
@@ -191,6 +287,52 @@ methods:{
 }
 </script>
 
-<style>
+<style scoped>
+.header{  
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 140%;
+}
+.inputs{
+  margin-top:24px;
+}
+.label{
+  font-size: 20px;
+  line-height: 160%;
+  text-transform: uppercase;
+}
+.actions{
+  margin-top:36px;
+}
+.actions .x-btn{
+  width:100%;
+}
 
+/* Desktop */
+@media screen and (min-width: 992px){
+  .header{  
+    max-width: 651px;
+    font-size: 56px;
+  }
+  .label{
+    max-width: 540px;   
+    font-size: 30px;
+  }
+  .inputs{
+    margin-top:200px;
+  }
+  .actions{
+    margin-top:50px;
+  }
+}
+
+.custom-range::-webkit-slider-thumb {
+  background: #8AC2A7;
+}
+.custom-range::-moz-range-thumb {
+  background: #8AC2A7;
+}
+.custom-range::-ms-thumb {
+  background: #8AC2A7;
+}
 </style>

@@ -917,10 +917,14 @@ class Product extends Model
 
   public static function doValidate($request){
 
+    dump($request);
+
+
     Validator::make($request['data'], [
       'name'                  => 'required|unique:products|max:50',
       'price'                 => 'required|numeric',
       'unit'                  => 'required|numeric',
+      'unit_full'             => 'numeric',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
@@ -951,6 +955,7 @@ class Product extends Model
       'name'                  => 'unique:products|max:50',
       'price'                 => 'numeric',
       'unit'                  => 'numeric',
+      'unit_full'             => 'numeric',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',

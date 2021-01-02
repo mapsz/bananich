@@ -145,6 +145,11 @@ class User extends Authenticatable
       //Id
       if(isset($request['id']) && $request['id'] > 0){
         $query = $query->where('id', $request['id']);
+      }      
+      
+      //Ids
+      if(isset($request['ids']) && is_array($request['ids']) && count($request['ids']) > 0){
+        $query = $query->whereIn('id',$request['ids']);
       }
 
       //Search

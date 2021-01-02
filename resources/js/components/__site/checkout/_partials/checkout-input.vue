@@ -66,6 +66,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  input, textarea{
+    background-color: #ff000000;
+  }
 </style>
