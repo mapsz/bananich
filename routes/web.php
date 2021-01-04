@@ -875,7 +875,7 @@ Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->gr
 });
 
 Route::group(['middleware' => ['HttpsRR'
-,'under-construction'
+// ,'under-construction'
 ]], function () {
     
   Route::get('/home', function(){
