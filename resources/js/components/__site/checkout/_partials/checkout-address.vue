@@ -6,13 +6,13 @@
       <div v-if="design != 'x'" class="checkout-title">Адрес</div>
 
       <div class="form-group">
-        <checkout-input v-model="data.addressStreet" :name="'addressStreet'" :placeholder="'Улица'" />
+        <checkout-input v-model="data.addressStreet" :name="'addressStreet'" :placeholder="'Улица'" :no-cache="noCache"/>
       </div>
 
       <div class="form-group d-flex form-group-multi">
-        <checkout-input v-model="data.addressNumber" :name="'addressNumber'" :placeholder="'Дом'" />
-        <checkout-input v-model="data.addressApart" :name="'addressApart'" :placeholder="'Квартира'" />
-        <checkout-input v-model="data.addressPorch" :name="'addressPorch'" :placeholder="'Подъезд'" />
+        <checkout-input v-model="data.addressNumber" :name="'addressNumber'" :placeholder="'Дом'" :no-cache="noCache" />
+        <checkout-input v-model="data.addressApart" :name="'addressApart'" :placeholder="'Квартира'" :no-cache="noCache" />
+        <checkout-input v-model="data.addressPorch" :name="'addressPorch'" :placeholder="'Подъезд'" :no-cache="noCache" />
       </div>
 
 
@@ -25,7 +25,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   model: {prop: 'hidden',event: 'blur'},
-  props: ['hidden','design'],
+  props: ['hidden','design', 'no-cache'],
   data(){return{
     data:{
       addressStreet:false,
@@ -44,11 +44,11 @@ export default {
       deep: true,
       handler(){
         this.$emit('blur', this.data);
-        this.loadUserAddress();
+        // this.loadUserAddress();
       }
     },
     user: function(){
-      this.loadUserAddress();      
+      // this.loadUserAddress();      
     },
     hidden: function(){
       if(this.hidden == undefined) return;

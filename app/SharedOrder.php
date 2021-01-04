@@ -80,7 +80,7 @@ class SharedOrder extends Model
 
   public static function edit($data){
 
-    // dd($data);
+    //@@@ todo проверить is editable
 
     //Validate
     SharedOrder::validate($data, false);
@@ -525,7 +525,10 @@ class SharedOrder extends Model
 
              
       //Loop
-      foreach ($data as $key => $row) {        
+      foreach ($data as $key => $row) {  
+        {//Short Address
+          $row['short_address'] = $row->address->street . ' ' . $row->address->number;
+        }      
         {//Weight
           $row['full_weight'] = $settings['x_order_weight'];
           $row['user_weight'] = round($settings['x_order_weight'] / $row->member_count, 2, PHP_ROUND_HALF_DOWN);
@@ -551,7 +554,7 @@ class SharedOrder extends Model
           $row['order_close'] = Carbon::parse($row->delivery_date)->subHours($settings['x_order_close_hours']);
           $row['pay_close'] = Carbon::parse($row->delivery_date)->subHours($settings['x_pay_close_hours']);
         }        
-        {//Users        
+        {//Users
           {//Loop
             foreach ($row->users as $user) {
               //Slot
@@ -559,6 +562,12 @@ class SharedOrder extends Model
               //Main_Images
               $user->mainImage = User::getMainImage($user->id);   
             }
+          }
+        }
+        {//Editable
+          $row['editable'] = true;
+          if(count($row->users) > 1){
+            $row['editable'] = false;
           }
 
         }

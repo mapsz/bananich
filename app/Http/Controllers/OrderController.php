@@ -325,18 +325,31 @@ class OrderController extends Controller
     if(!isset($data['id'])) return false;
     //Get order
     $order = Order::find($data['id']);
-    if($order->customer_id !=  $user->id) return false;
+    if($order->customer_id != $user->id) return false;
 
     {//Validate
       $validate = [
         'contacts.name'                => ['required', 'string', 'max:190'],
         'contacts.email'               => ['required', 'string', 'email', 'max:190'],
         'contacts.phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
-        'pay_method'          => ['required'],
-        'comment'             => ['max:1000'],
+        'pay_method'                   => ['required'],
+        'comment'                      => ['max:1000'],
       ];  
 
+      if(isset($data['personalAddress']) && $data['personalAddress']){
+        $validate['address.addressStreet'] = ['required', 'min:5', 'max:170' ];
+        $validate['address.addressApart'] = ['max:20' ];
+        $validate['address.addressNumber'] = ['max:20' ];
+        $validate['address.addressPorch'] = ['max:20' ];
+      }
+
       $messages = [
+        'address.addressStreet.required'      => 'Необходимо заполнить поле "Улица"',
+        'address.addressStreet.max'           => 'Количество символов в поле "Улица" не должно превышать :max',
+        'address.addressStreet.min'           => 'Количество символов в поле "Улица" должно быть более :min',
+        'address.addressPorch.max'            => 'Количество символов в поле "Этаж" не должно превышать :max',
+        'address.addressNumber.max'           => 'Количество символов в поле "Дом" не должно превышать :max',
+        'address.addressApart.max'            => 'Количество символов в поле "Квартира" не должно превышать :max',
         'contacts.phone.required'          => 'Необходимо заполнить поле "Номер телефона"',
         'contacts.phone.regex'             => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
         'contacts.email.required'          => 'Необходимо заполнить поле "e-mail"',
@@ -351,11 +364,31 @@ class OrderController extends Controller
     }
 
     {//Update
-      $order->comment = $data['comment'];
-      $order->pay_method = $data['pay_method'];
-      $order->name = $data['contacts']['name'];
-      $order->phone = $data['contacts']['phone'];
-      $order->email = $data['contacts']['email'];
+      $order->comment     = isset($data['comment']) ? $data['comment'] : '';
+      $order->pay_method  = $data['pay_method'];
+      $order->name        = $data['contacts']['name'];
+      $order->phone       = $data['contacts']['phone'];
+      $order->email       = $data['contacts']['email'];
+
+      // dd($data['address']['addressStreet']);
+
+      {//Address
+        if(isset($data['personalAddress']) && $data['personalAddress'] == 1){
+          $order->address  = ($data['address']['addressStreet']) . ' ' . (isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : '');
+          $order->appart   = isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null;
+          $order->porch    = isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null;
+        }
+        if(isset($data['personalAddress']) && $data['personalAddress'] == 0){
+          //Get shared Order    
+          // $sOrder = SharedOrder::jugeGet(['orderId' => $data['id']]);
+        }
+        
+
+
+      }
+
+      // dd($data);
+
       $order->save();
     }
 

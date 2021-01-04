@@ -8,6 +8,23 @@
         <!-- Inputs -->
         <div v-if="load" class="col-12 col-lg-8">
 
+          <div v-if="sOrder && order" class="mb-4">
+            <h5><b>Адрес</b></h5>
+            <!-- Radio -->
+            <div class="form-group mt-3">
+              <div  class="form-radio">
+                <input v-model="personalAddress" class="custom-radio" type="radio" id="personalAddressNah" :value="0" name="personalAddress">
+                <label :for="'personalAddressNah'">{{sOrder.short_address}}</label>
+              </div>
+              <div  class="form-radio">
+                <input v-model="personalAddress" class="custom-radio" type="radio" id="personalAddress" :value="1" name="personalAddress">
+                <label :for="'personalAddress'">Донести мою часть закупки до двери (+50р)</label>
+              </div>
+              <checkout-address v-if="personalAddress" class="checkout-div " :design="'x'" v-model="data.address"  :no-cache="true"/>
+            </div>
+          </div>
+          <!-- <checkout-address class="checkout-div " :design="'x'" v-model="data.address"  :no-cache="true"/> -->
+
           <checkout-contact class="checkout-div " :design="'x'" v-model="data.contacts"  :no-cache="true"/>
 
           <div class="row checkout-div">
@@ -19,12 +36,13 @@
 
         </div>
 
+        <!-- Info -->
         <div class="col-12 col-lg-4">
           <shared-order-numbers />
         </div>
 
         <!-- Errors -->
-        <div class="mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
+        <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
 
         <!-- Big Action -->
         <div class="d-flex justify-content-center">
@@ -46,6 +64,7 @@ import {mapGetters,mapActions} from 'vuex';
 export default {
   data(){return{    
     data:{contacts:{}},
+    personalAddress:0,
     // order:false,
     load:false,
     errors:[],
@@ -53,7 +72,8 @@ export default {
   computed:{
     ...mapGetters({
       cart:'cart/getCart',
-      order:'sharedOrder/getOrder',
+      order:'sharedOrder/getOrder',      
+      sOrder:'sharedOrder/get',
     }),
     link(){
       if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
@@ -71,13 +91,22 @@ export default {
 
       this.load = true;
     },
+    personalAddress: function (val, oldVal) {
+      if(this.personalAddress == 0) this.data.address = null;
+    }
   },
   async mounted() {
-    this.fetchOrder(this.link);
+    await this.fetchOrder(this.link);
+
+    await this.filter({'link':this.link});
+    await this.filter({'single':true});
+    await this.fetch();
   },
   methods:{
     ...mapActions({
+      'filter':'sharedOrder/addFilter',
       'fetchOrder':'sharedOrder/fetchOrder',
+      'fetch':'sharedOrder/fetchData',
     }),  
     async get(){
       let r = await ax.fetch('/shared/order/order',{'link':this.link});
@@ -88,6 +117,7 @@ export default {
       this.errors = [];
       let data = this.data;
       data.id = this.order.id;
+      data.personalAddress = this.personalAddress;
       let r = await ax.fetch('/order/customer',this.data,'post');
 
       //Catch errors

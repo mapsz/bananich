@@ -154,7 +154,7 @@
               <hr class="my-30">
               <div>
                 <span class="label">дата и время доставки</span>
-                <button v-if="isAdmin" @click="goToEdit()" class="edit float-right">изменить</button>
+                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
               <div class="value">
                 <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
@@ -176,7 +176,7 @@
               <div v-if="userIn">
                 <span class="label">вес вашей корзины - </span>
                 <span class="value">{{weights[user.id]}}кг</span>                
-                <button v-if="isAdmin" @click="goToEdit()" class="edit float-right">изменить</button>
+                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
             </div>          
 
@@ -185,7 +185,7 @@
               <hr class="my-30">
               <div>
                 <span class="label">КОММЕНТАРИЙ К ЗАКУПКЕ</span>
-                <button v-if="isAdmin" @click="goToEdit()" class="edit float-right">изменить</button>
+                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
               <div>
                 <span class="value">{{(sOrder.comment && sOrder.comment.body != undefined) ? sOrder.comment.body : ''}}</span>
@@ -197,7 +197,7 @@
               <hr class="my-30">
               <!-- Edit order -->
               <div class="mb-3">
-                <button v-if="isAdmin" @click="goToEdit()" class="action">
+                <button v-if="isAdmin && editable" @click="goToEdit()" class="action">
                   Редактировать 
                   <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
                     (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
@@ -502,6 +502,11 @@ computed:{
     if(this.user.id == this.sOrder.owner_id) return true;
     return false;
   },
+  editable(){
+    if(!this.sOrder || this.sOrder.editable == undefined) return false;
+
+    return this.sOrder.editable
+  }
 },
 watch:{
   sOrder: function (val, oldVal) {

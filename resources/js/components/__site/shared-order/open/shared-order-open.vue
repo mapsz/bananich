@@ -56,7 +56,7 @@
           </template>
 
           <!-- Time -->
-          <template v-if="availableTimes">
+          <template v-if="availableTimes && data.date">
             <hr class="my-30">
             <div class="row">
               <div class="col-12 col-lg-6 mb-3 label">
@@ -201,6 +201,9 @@
         </div>
 
       </div>
+
+      
+    <login-modal :p-show="showLogin" :p-show-type="'signup'" @close="showLogin=false" />
     </juge-main>
   </div>
 </template>
@@ -222,6 +225,7 @@ data(){return{
   },  
   isEdit:false,
   errors:[],
+  showLogin:false,
 }},
 computed:{
   ...mapGetters({
@@ -388,6 +392,10 @@ watch:{
 
 
   },
+  user: function (val, oldVal) {
+    if(!this.user){this.showLogin = true;}
+    if(this.user){this.showLogin = false;}
+  }
 },
 async mounted(){
   await this.handle();
