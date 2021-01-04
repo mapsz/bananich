@@ -688,7 +688,8 @@ class Product extends Model
           
           {//Normal bananich
             {//Supply Price
-              $chargePrice = false;
+              $chargePrice = false;              
+              $pack = 0;
               if(
                 (isset($product['charge']) && $product['charge'] > 0) &&            //Charge set
                 (isset($product['supply_price']) && $product['supply_price'] > 0)   //Supply Price set
@@ -697,7 +698,7 @@ class Product extends Model
                 $chargePrice = $product['charge'] * $product['supply_price'];
 
                 //Pack
-                if(isset($product['pack']) && $product['pack'] > 0) $chargePrice += $product['pack'];
+                if(isset($product['pack']) && $product['pack'] > 0) $pack = $product['pack'];
 
                 //Transport
                 if(isset($product['transport']) && $product['transport'] > 0) {
@@ -705,7 +706,7 @@ class Product extends Model
                 }
               }
 
-              $product->final_price = $chargePrice * $unit;
+              $product->final_price = ($chargePrice * $unit) + $pack;
             }
 
             //Static price
@@ -717,6 +718,7 @@ class Product extends Model
           {//X bananich
             {//Supply Price
               $xChargePrice = false;
+              $pack = 0;
               if(
                 (isset($product['charge_x']) && $product['charge_x'] > 0) &&        //Charge X set
                 (isset($product['supply_price']) && $product['supply_price'] > 0)   //Supply Price set
@@ -725,7 +727,7 @@ class Product extends Model
                 $xChargePrice = $product['charge_x'] * $product['supply_price'];
 
                 //Pack
-                if(isset($product['pack']) && $product['pack'] > 0) $chargePrice += $product['pack'];
+                if(isset($product['pack']) && $product['pack'] > 0) $pack = $product['pack'];
 
                 //Transport
                 if(isset($product['transport']) && $product['transport'] > 0) {
@@ -733,7 +735,7 @@ class Product extends Model
                 }
               }
 
-              $product->final_price_x = $chargePrice * $unit;
+              $product->final_price_x = ($xChargePrice * $unit) + $pack;
             }
 
             //Static price

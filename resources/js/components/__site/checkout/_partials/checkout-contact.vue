@@ -7,17 +7,17 @@
       <template>
         <div class="form-group"> 
           <div class="pl-3 form-content bold" :class="!edit ? 'active' : ''">{{user.name}}</div>          
-          <checkout-input v-if="edit" v-model="name" :name="'name'" :placeholder="'Ваше имя'" />
+          <checkout-input v-if="edit" v-model="name" :name="'name'" :placeholder="'Ваше имя'" :no-cache="noCache"/>
         </div>
 
         <div class="form-group">
           <div class="pl-3 form-content"  :class="!edit ? 'active' : ''">{{user.phone}}</div>
-          <checkout-input v-if="edit" v-model="phone" :name="'phone'" :placeholder="'Ваш телефон'" />
+          <checkout-input v-if="edit" v-model="phone" :name="'phone'" :placeholder="'Ваш телефон'" :no-cache="noCache"/>
         </div>
 
         <div class="form-group">
           <div class="pl-3 form-content" :class="!edit ? 'active' : ''">{{user.email}}</div>
-          <checkout-input v-if="edit" v-model="email" :name="'email'" :placeholder="'Ваш e-mail'" />
+          <checkout-input v-if="edit" v-model="email" :name="'email'" :placeholder="'Ваш e-mail'" :no-cache="noCache"/>
         </div>
       </template>
 
@@ -34,7 +34,8 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-model: {event: 'blur'},
+model: {prop: 'hidden',event: 'blur'},
+props: ['design','hidden', 'no-cache'],
 data(){return{
   name:false,
   phone:false,
@@ -50,12 +51,27 @@ watch: {
   user: function(){
     this.loadUserData();      
   },
+  hidden: function(){
+    this.doHidden();
+  },
+  name: function(){this.doBlur()},
+  phone: function(){this.doBlur()},
+  email: function(){this.doBlur()},
 },
 async mounted(){
-  // this.getUser();
+  this.doHidden();
 },
 methods:{
   ...mapActions({'set':'checkout/setValue'}),
+  doBlur(){
+    this.$emit('blur', {name:this.name,phone:this.phone,email:this.email});
+  },
+  doHidden(){
+    if(this.hidden == undefined) return;
+    this.name  = this.hidden.name;
+    this.phone = this.hidden.phone;
+    this.email = this.hidden.email;
+  },
   isPreData(){
     if(this.user.name && this.user.phone && this.user.email){
       return true;

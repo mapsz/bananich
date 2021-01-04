@@ -28,8 +28,8 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  model: {event: 'blur'},
-  props: ['name', 'placeholder', 'type', 'list', 'checked'],
+  model: {prop: 'hidden',event: 'blur'},
+  props: ['name', 'placeholder', 'type', 'list', 'checked','hidden','no-cache'],
   data(){return{
     value:'',
     fType:'text',
@@ -40,8 +40,11 @@ export default {
   watch: {
     value: function(){
       this.$emit('blur', this.value);
-      this.set({name:this.name, value:this.value});
+      if(!this.noCache) this.set({name:this.name, value:this.value});      
     },
+    hidden: function(){
+      this.value = this.hidden;
+    }
   },
   mounted(){
     //Set placeholder
@@ -51,11 +54,13 @@ export default {
     if(this.type) this.fType = this.type;
     
     //Value
-    if(this.checkout[this.name]){
-      this.value = this.checkout[this.name];
-    }else{
-      this.value = null;
-    } 
+    if(!this.noCache){
+      if(this.checkout[this.name]){
+        this.value = this.checkout[this.name];
+      }else{
+        this.value = null;
+      } 
+    }
     
     if(this.checked != undefined && this.checked) this.value = true;
 

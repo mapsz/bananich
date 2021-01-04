@@ -49,13 +49,18 @@
                 </template>
 
                 <!-- Info -->
-                <buy-info />
+                <div>
+                  <shared-order-numbers class="mb-4" v-if="isX"/>
+                  <buy-info v-else/>
+                </div>
 
                 <!-- To checkout -->
                 <template>                  
                   <!-- X bananich -->
                   <template v-if="isX">
-                    <a href="/shared/order" class="btn btn-yellow btn-thick">Оформить коллективную закупку</a>
+                    <a href="/shared/order">
+                      <button class="x-btn">Оформить коллективную закупку</button>                    
+                    </a>
                   </template>
                   <!-- Normal bananich -->
                   <template v-else>

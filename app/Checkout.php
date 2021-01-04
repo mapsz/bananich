@@ -118,6 +118,13 @@ class Checkout extends Model
         }
       }
     }
+
+    {//Weight
+      $cart->weight    = 0;
+      foreach ($cart->items as $key => $item) {
+        $cart->weight += $item->full_weight;
+      }      
+    }
         
     {//Pre Price
       $cart->pre_price    = 0;

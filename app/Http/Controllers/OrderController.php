@@ -299,7 +299,7 @@ class OrderController extends Controller
     return response()->json(false);
   }
 
-  public function post(Request $request){  
+  public function post(Request $request){
     if(!isset($request->id)) {
       return response(['code' => 'a1','text' => 'Post order'], 512)->header('Content-Type', 'text/plain');
     }
@@ -314,6 +314,54 @@ class OrderController extends Controller
     $order->save();
 
     return response()->json(1);
+  }
+
+  public function customerPost(Request $request){
+
+    //Data
+    $user = Auth::user();
+    if(!$user) return false;
+    $data = $request->all();
+    if(!isset($data['id'])) return false;
+    //Get order
+    $order = Order::find($data['id']);
+    if($order->customer_id !=  $user->id) return false;
+
+    {//Validate
+      $validate = [
+        'contacts.name'                => ['required', 'string', 'max:190'],
+        'contacts.email'               => ['required', 'string', 'email', 'max:190'],
+        'contacts.phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
+        'pay_method'          => ['required'],
+        'comment'             => ['max:1000'],
+      ];  
+
+      $messages = [
+        'contacts.phone.required'          => 'Необходимо заполнить поле "Номер телефона"',
+        'contacts.phone.regex'             => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+        'contacts.email.required'          => 'Необходимо заполнить поле "e-mail"',
+        'contacts.email.max'               => 'Количество символов в поле "Имя" не должно превышать :max',
+        'contacts.name.required'           => 'Необходимо заполнить поле "Имя"',
+        'contacts.name.max'                => 'Количество символов в поле "Имя" не должно превышать :max',
+        'comment.max'             => 'Количество символов в поле "Комментарий" не должно превышать :max',
+        'pay_method.required'     => 'Необходимо выбрать способ оплаты',
+      ];
+      
+      Validator::make($data, $validate,$messages)->validate();
+    }
+
+    {//Update
+      $order->comment = $data['comment'];
+      $order->pay_method = $data['pay_method'];
+      $order->name = $data['contacts']['name'];
+      $order->phone = $data['contacts']['phone'];
+      $order->email = $data['contacts']['email'];
+      $order->save();
+    }
+
+
+    return response()->json($order);
+
   }
 
   public function addItem(Request $request){

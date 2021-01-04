@@ -35,6 +35,9 @@ data(){return{
     background: #00000000;
     border: 1px solid rgba(0, 0, 0, 0.3);
   }
+  .x-btn-red{
+    background: #EB5757;
+  }
   .announce-block{
     font-size: 16px;
     border-left: 5px #8AC2A7 solid;
@@ -58,6 +61,11 @@ data(){return{
     margin-top: 30px!important;
     margin-bottom: 30px!important;
   }
+  .x-header{  
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 140%;
+  }
 
   /* Desktop */
   @media screen and (min-width: 992px){
@@ -69,6 +77,10 @@ data(){return{
       font-size: 18px;
       height: 60px;
       padding: 0px 33px;
-    }    
+    }
+    .x-header{  
+      max-width: 651px;
+      font-size: 56px;
+    }
   }
 </style>

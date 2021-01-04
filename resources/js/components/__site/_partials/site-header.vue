@@ -22,12 +22,13 @@
       <div class="container header-bar-wrap">
 
         <!-- Logo -->
-        <a href="/"><div class="logo"></div> </a>
+        <a v-if="isX" href="/"><div class="neo-logo"></div> </a>
+        <a v-else href="/"><div class="logo"></div> </a>
         
         <!-- Presents -->
         
         <template v-if="isX">
-          bananichX <a :href="'https://' + (localServer ? 'bananich.loc' : 'bananich.ru')">bananich</a>
+          <!-- bananichX <a :href="'https://' + (localServer ? 'bananich.loc' : 'bananich.ru')">bananich</a> -->
         </template>
         <template v-else>
           <present-bar :cart="cart" :settings="presentSettings"/>
@@ -42,7 +43,7 @@
 
         <!-- User -->
         <div class="group-icon">
-          <bonus-header-button />
+          <bonus-header-button v-if="!isX"/>
           <div class="user">
             <a href="/profile">
               <button class="user-btn"><img src="/image/lk.svg" alt="user" style="margin: auto;"></button>
@@ -186,10 +187,24 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
 }
+.neo-logo{
+  height: 45px;
+  width: 256px;
+  margin: 5px;
+  margin-left: 0px;
+  background-image: url('/images/neo-logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 @media (max-width: 768px){
   .logo{
     width: 45px !important;
+  }  
+  .neo-logo{
+    width: 130px !important;
+    height: 22px;
   }
 }
 
@@ -210,6 +225,6 @@ export default {
 
 
 .bananich-x{
-  background-color: #ffd2d2 !important;
+  background-color: #f3ebe8 !important;
 }
 </style>

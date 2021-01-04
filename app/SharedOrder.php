@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\JugeCRUD;
 use App\Address;
 use App\SharedOrderContact;
@@ -18,6 +19,9 @@ class SharedOrder extends Model
 
   public static function open($data){
 
+    //Validate
+    SharedOrder::validate($data, true);
+
     {//Data
       $user = Auth::user();
       $link = SharedOrder::generateLink();
@@ -25,51 +29,208 @@ class SharedOrder extends Model
 
     if(!$user) return false;
 
-    try{
-      DB::beginTransaction();{
-
-        {//Put
-          $sOrder = new SharedOrder;
-          $sOrder->owner_id = $user->id;
-          $sOrder->member_count = $data['memberCount'];
-          $sOrder->link = $link;
-          $sOrder->delivery_date      = $data['date'];
-          $sOrder->delivery_time_from = $data['time']['from'] . ":00:00";
-          $sOrder->delivery_time_to   = $data['time']['to'] . ":00:00";
-          $sOrder->save();            
-        }
-        
-        {//Attach Address
-          $address = [
-            'street' => $data['address']['addressStreet'],
-            'number' => isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : null,
-            'appart' => isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null,
-            'porch' => isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null,
-            'stage' => isset($data['address']['addressStage']) ? $data['address']['addressStage'] : null,
-          ];
-          $sOrder->address()->save(new Address($address));
-        }
-                
-        {//Attach Comment
-          if(isset($data['comment']) && $data['comment']){
-            $sOrder->comment()->save(new Comment(['body' => $data['comment']]));
-          }          
-        }
-
-        //Attach status
-        SharedOrder::changeStatus($sOrder,200,$user->id);
-
-        //Attach owner    
-        SharedOrder::join($user, false, $sOrder);
-
-      }DB::commit();    
-    } catch (Exception $e){
-      // Rollback from DB
-      DB::rollback();
-      return response(['code' => 'so1','text' => 'error open shared order'], 512)->header('Content-Type', 'text/plain');
+    {//DB
+      try{
+        DB::beginTransaction();{
+  
+          {//Put
+            $sOrder = new SharedOrder;
+            $sOrder->owner_id = $user->id;
+            $sOrder->member_count = $data['memberCount'];
+            $sOrder->link = $link;
+            $sOrder->delivery_date      = $data['date'];
+            $sOrder->delivery_time_from = $data['time']['from'] . ":00:00";
+            $sOrder->delivery_time_to   = $data['time']['to'] . ":00:00";
+            $sOrder->save();            
+          }
+          
+          {//Attach Address
+            $address = [
+              'street' => $data['address']['addressStreet'],
+              'number' => isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : null,
+              'appart' => isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null,
+              'porch' => isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null,
+              'stage' => isset($data['address']['addressStage']) ? $data['address']['addressStage'] : null,
+            ];
+            $sOrder->address()->save(new Address($address));
+          }
+                  
+          {//Attach Comment
+            if(isset($data['comment']) && $data['comment']){
+              $sOrder->comment()->save(new Comment(['body' => $data['comment']]));
+            }          
+          }
+  
+          //Attach status
+          SharedOrder::changeStatus($sOrder,200,$user->id);
+  
+          //Attach owner    
+          SharedOrder::join($user, false, $sOrder);
+  
+        }DB::commit();    
+      } catch (Exception $e){
+        // Rollback from DB
+        DB::rollback();
+        return response(['code' => 'so1','text' => 'error open shared order'], 512)->header('Content-Type', 'text/plain');
+      }
     }
     
     return $sOrder;
+  }
+
+  public static function edit($data){
+
+    // dd($data);
+
+    //Validate
+    SharedOrder::validate($data, false);
+
+    //Get order
+    $sOrder = SharedOrder::find($data['id']);
+
+    {//Set data
+      {//Shared order
+        $sOrderData = [];
+        if(isset($data['memberCount'])) $sOrderData['member_count'] = $data['memberCount'];
+        if(isset($data['date'])) $sOrderData['delivery_date'] = $data['date'];
+        if( (isset($data['time']) && isset($data['time']['from'])) && (isset($data['time']) && isset($data['time']['to'])) ){
+          $sOrderData['delivery_time_from'] = $data['time']['from'] . ':00:00';
+          $sOrderData['delivery_time_to'] = $data['time']['to'] . ':00:00';
+        } 
+      }
+
+      {//Address
+        if(isset($data['address']) && is_array($data['address'])){
+          $addressData = [];
+          if(array_key_exists('addressStreet', $data['address'])) $addressData['street'] = $data['address']['addressStreet'];
+          if(array_key_exists('addressNumber', $data['address'])) $addressData['number'] = $data['address']['addressNumber'];
+          if(array_key_exists('addressApart', $data['address'])) $addressData['appart'] = $data['address']['addressApart'];
+          if(array_key_exists('addressPorch', $data['address'])) $addressData['porch'] = $data['address']['addressPorch'];
+        }
+      }
+
+    }
+
+    {//Update
+      {//Address
+        if(count($addressData) > 0){
+          //Delete old
+          Address::where('addressable_type', 'App\SharedOrder')->where('addressable_id', $data['id'])->delete();
+          //Add new
+          $sOrder->address()->save(new Address($addressData));          
+        }
+      }
+
+
+      {//Comment
+        if(isset($data['comment']) || $data['comment'] === null){
+          //Delete old
+          Comment::where('commentable_type', 'App\SharedOrder')->where('commentable_id', $data['id'])->delete();
+          //Add new
+          if($data['comment']){
+            $sOrder->comment()->save(new Comment(['body' => $data['comment']]));
+          }
+        }
+      }
+
+      {//Shared order
+        $sOrder = $sOrder->update($sOrderData);
+      }
+    }
+
+    return true;
+
+  }
+  
+  public static function validate($data, $put=false){
+
+    {//Params
+      //Settings
+      $settings = (new Setting())->getList(1);
+    }
+
+    {//Validate
+
+      {//Validate Shared Order
+        
+        {//Required
+          if($put){
+            $validate = [
+              'address.addressStreet'       => ['required'],          
+              'memberCount'                 => ['required'],
+              'date'                        => ['required'],
+              'time'                        => ['required'],
+            ];
+
+            $messages = [
+              'address.addressStreet.required'      => 'Необходимо заполнить поле "Адрес"',
+              'memberCount.required'                => 'Необходимо выбрать количество участников',
+              'date.required'                       => 'Необходимо выбрать время доставки',
+              'time.required'                       => 'Необходимо выбрать дату доставки',
+            ];
+
+            Validator::make($data, $validate,$messages)->validate();
+          }
+        }
+
+        {//Other
+          $validate = [
+            'address.addressStreet'       => 'bail|string|min:5|max:170',
+            'memberCount'                 => ['min:1', "max:{$settings['x_max_member_count']}"],
+            'address.addressApart'        => ['max:20' ],
+            'address.addressNumber'       => ['max:20' ],
+            'address.addressPorch'        => ['max:20' ],
+            'comment'                     => ['max:1000'],
+          ];
+
+          $messages = [
+            'address.addressStreet.string'        => 'Необходимо заполнить поле "Адрес"',
+            'address.addressStreet.min'           => 'Количество символов в поле "Адрес" не должно быть меньше :min',
+            'address.addressStreet.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
+            'address.addressPorch.max'            => 'Количество символов в поле "Этаж" не должно превышать :max',
+            'address.addressNumber.max'           => 'Количество символов в поле "Дом" не должно превышать :max',
+            'address.addressApart.max'            => 'Количество символов в поле "Квартира" не должно превышать :max',
+            'comment.max'                         => 'Количество символов в поле "Комментарий" не должно превышать :max',
+          ];
+
+          Validator::make($data, $validate,$messages)->validate();
+        }
+        
+      }
+      
+      {//Validate Available Days
+        $date = Carbon::parse($data['date'])->format('Y-m-d');
+        $time = $data['time'];
+        
+        {//Past date
+          $checkAvailableDayse = true;
+          if(isset($data['id'])){
+            $sOrder = SharedOrder::find($data['id']);
+            if(isset($data['date']) && isset($data['time']) && isset($data['time']['from']) && isset($data['time']['to'])){
+              //Check if order date choosed
+              if(
+                $sOrder['delivery_date'] == $data['date'] &&
+                str_replace(':00:00','',$sOrder['delivery_time_from'])  == $data['time']['from'] &&
+                str_replace(':00:00','',$sOrder['delivery_time_to'])    == $data['time']['to']              
+              ){
+                $checkAvailableDayse = false;
+              }
+            }
+            
+          }
+        }
+
+        if($checkAvailableDayse) Order::validateAvailableDays($date,$time,'x');
+      }
+
+      {//Validate available product
+        if($put){
+          $cart = Cart::getCart(['presentProduct' => true, 'type' => 'x']);
+          Order::validateAvailableProducts($cart);
+        }       
+      }
+      
+    }
   }
 
   public static function join($user, $link = false, $sOrder = false){
@@ -112,6 +273,7 @@ class SharedOrder extends Model
           $data['addressNumber'] = $sOrder->address->number;
           $data['addressApart'] = $sOrder->address->appart;
           $data['addressPorch'] = $sOrder->address->porch;
+          $data['type'] = 'x';
         }
 
         //Put
@@ -213,7 +375,7 @@ class SharedOrder extends Model
 
   public function handle($request = []){
 
-    $orders = $this->jugeGet(['status' => [200,300]]);
+    $orders = $this->jugeGet(['status' => [200,300], 'noHandle' => true]);
 
     foreach ($orders as $key => $order) {      
       {//Timers
@@ -313,7 +475,10 @@ class SharedOrder extends Model
   }
 
 
-  public function jugeGet($request = []) {
+  public function jugeGet($request = []){
+
+    if(!isset($request['noHandle'])) (new SharedOrder)->handle();
+    
 
     //Model
     $query = new self;

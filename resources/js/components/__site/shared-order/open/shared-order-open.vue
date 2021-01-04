@@ -3,7 +3,8 @@
     <juge-main>
       <div class="container my-3">
 
-        <div class="header">Формирование коллективной закупки</div>
+        <div v-if="!isEdit" class="x-header">Формирование коллективной закупки</div>
+        <div v-if="isEdit" class="x-header">Редактирование коллективной закупки</div>
 
         <div class="inputs">
 
@@ -26,46 +27,93 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <hr class="my-30">
+          </div>         
           
-          <!-- Date/Time -->
-          <div class="row">            
-            <checkout-date-time class="checkout-div w-100" :design="'x'" v-model="data.dateTime"/> 
-          </div>
-
-          <hr class="my-30">
-
-          <!-- Address -->
-          <div class="row">
-            <div class="col-12 col-lg-6 mb-3 label">
-              <!-- <span><b>Дата</b> доставки</span>      -->
-              <checkout-address class="checkout-div" :design="'x'" v-model="data.address"/>
-            </div>
-          </div>
-
-          <hr class="my-30">
-
-          <!-- Comment -->
-          <div class="row">
-            <div class="col-12 col-lg-6 mb-3 label">
-              <!-- <span><b>Дата</b> доставки</span>      -->
-              <checkout-comment class="checkout-div" v-model="data.comment"/>
-            </div>
-          </div>
-          
-          <!-- Annonce -->
-          <div class="row">
-            <div class="col-12 col-lg-6 offset-lg-6">
-              <div class="announce-block">
-                <div><b>Хотите вступить в совместную закупку, но не с кем?</b></div> 
-                <div>Мы найдем для вас соседа!</div> 
+          <!-- Date -->
+          <template v-if="availableDays">
+            <hr class="my-30">
+            <div class="row">
+              <div class="col-12 col-lg-6 mb-3 label">
+                <span><b>Дата</b>  доставки</span>            
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="ml-lg-4 date-inputs">
+                  <div v-for='(input,i) in availableDays' :key='i' class="mb-3" >
+                    <input 
+                      v-model="data.date" 
+                      @change="data.time = null" 
+                      class="custom-radio" 
+                      type="radio" 
+                      :id="'date-'+i" 
+                      :value="input.date" 
+                      :name="'date'"
+                    >
+                    <label :for="'date-'+i" class="input-label">{{input.date}}</label>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </template>
 
- 
+          <!-- Time -->
+          <template v-if="availableTimes">
+            <hr class="my-30">
+            <div class="row">
+              <div class="col-12 col-lg-6 mb-3 label">
+                <span><b>Время</b> доставки</span>            
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="ml-lg-4 date-inputs">
+                  <div v-for='(input,i) in availableTimes' :key='i' class="mb-3" >
+                    <input v-model="data.time" class="custom-radio" type="radio" :id="'time-'+i" :value="input.value" :name="'time'">
+                    <label :for="'time-'+i" class="input-label">{{input.caption}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Address -->
+          <template>
+            <hr class="my-30">
+            <div class="row">
+              <div class="col-12 col-lg-6 mb-3 label">
+                <span><b>Адрес</b> доставки</span>            
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="ml-lg-4">                  
+                  <checkout-address class="checkout-div" :design="'x'" v-model="data.address"/>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Comment -->
+          <template>
+            <hr class="my-30">
+            <div class="row">
+              <div class="col-12 col-lg-6 mb-3 label">
+                <span><b>комментарий</b> к закупке</span>            
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="ml-lg-4">                  
+                  <checkout-comment class="checkout-div" :design="'x'" v-model="data.comment" :no-cache="true"/>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Annonce -->
+          <template v-if="!isEdit">
+            <div class="row mt-5">
+              <div class="col-12 col-lg-6 offset-lg-6">
+                <div class="announce-block">
+                  <div><b>Хотите вступить в совместную закупку, но не с кем?</b></div> 
+                  <div>Мы найдем для вас соседа!</div> 
+                </div>
+              </div>
+            </div>
+          </template>
 
           <!-- Actions -->
           <div class="row">
@@ -79,12 +127,21 @@
                     </span>    
                   </div>
                 </div>
-                <button class="x-btn x-btn-trans mb-2">
-                  Найти соседа
-                </button>
-                <button @click="open()" class="x-btn">
-                  Начать закупку
-                </button>
+                <!-- Open -->
+                <template v-if="!isEdit">
+                  <button class="x-btn x-btn-trans mb-2">
+                    Найти соседа
+                  </button>
+                  <button @click="open()" class="x-btn">
+                    Начать закупку
+                  </button>
+                </template>
+                <!-- Edit -->
+                <template v-if="isEdit">
+                  <button @click="edit()" class="x-btn">
+                    Редактировать
+                  </button>
+                </template>
               </div>
             </div>
           </div>
@@ -162,14 +219,33 @@ data(){return{
     date:null,
     time:null,
     comment:"",
-  },
+  },  
+  isEdit:false,
   errors:[],
 }},
 computed:{
   ...mapGetters({
-    settings:'settings/beautyGet',
-    availableDays: 'orderLimits/getAvailableDays',
+    sOrders:        'sharedOrder/get',
+    user:           'user/get',
+    settings:       'settings/beautyGet',
+    availableDaysEx:'orderLimits/getAvailableDays',
   }),
+  availableDays:function(){
+    if(!this.availableDaysEx) return false;
+
+    let days = this.availableDaysEx;
+
+    if(this.sOrder != undefined && this.sOrder.delivery_date != undefined){
+      if(days.findIndex(x => x.date == this.sOrder.delivery_date) < 0){
+        days = [{
+          date:this.sOrder.delivery_date,
+        }].concat(days);      
+      }      
+    }
+
+    return days;
+
+  },
   maxMemberCount:function(){
     if(this.settings == undefined) return false;
     if(this.settings.x_max_member_count == undefined) return false;
@@ -222,23 +298,45 @@ computed:{
     }
   },
   availableTimes:function(){
-    if(!this.datePickerConfig) return false;
-    if(!this.data.date) return false;
+    let times = [];
+    if(!this.availableDays) return times;
+    if(!this.data.date) return times;
+
+    //Add current time
+    if(this.sOrder != undefined && this.sOrder.delivery_date != undefined){
+      if(this.sOrder.delivery_date == this.data.date){
+        //time
+        if(this.sOrder.delivery_time_from != undefined && this.sOrder.delivery_time_to != undefined){
+          times.push({
+            'value':{
+              from: this.sOrder.delivery_time_from.replace(':00:00', ''),
+              to:   this.sOrder.delivery_time_to.replace(':00:00', '')
+            },
+            'caption':
+              'с '+ this.sOrder.delivery_time_from.replace(':00:00', '') + 
+              ' до '+ this.sOrder.delivery_time_to.replace(':00:00', '')                   
+          });
+        }
+      }
+    }    
     
     //Get day
     let date = moment(this.data.date).format('YYYY-MM-DD');
     let day = this.availableDays.find(x => x.date == date);
+    if(!day || day.times == undefined) return times;
 
-    //Times
-    let times = [];
+    //Times    
     day.times.forEach(v => {
-        if(v.slots < 1) return;
-        times.push(
-          {
-            'value':v.time,
-            'caption':'с '+ v.time.from + ' до '+v.time.to,
-        });
-      
+      //Skip no free slot
+      if(v.slots == undefined || v.slots < 1) return;
+      //Skip already exists
+      let index = times.findIndex(x => (x.value.from == v.time.from && x.value.to == v.time.to));
+      if(index >= 0){times.splice(index, 1);} 
+      //Add
+      times.push({
+        'value':v.time,
+        'caption':'с '+ v.time.from + ' до '+v.time.to,
+      });      
     });
 
     return times;
@@ -246,20 +344,77 @@ computed:{
   loaded:function(){
     if(this.maxMemberCount) return true;
     return false;
-  }
+  },
+  link(){
+    if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
+    return this.$route.params.order_link;
+  },
+  sOrder(){
+    if(this.sOrders == undefined || this.sOrders.length < 1) return false;
+    return this.sOrders[0];
+  },
 },
-async mounted() {
+watch:{
+  sOrder: function (val, oldVal) {
+    if(val.id == undefined) return;
+
+    //Member count
+    if(val.member_count != undefined)
+      this.data.memberCount = val.member_count;
+
+    //address
+    if(val.address != undefined)
+      this.data.address = val.address;
+
+    //comment
+    if(val.comment != undefined)
+      this.data.comment = val.comment.body;
+
+    //time
+    if(val.delivery_time_from != undefined && val.delivery_time_to != undefined){
+      this.data.time = {
+        from: val.delivery_time_from.replace(':00:00', ''),
+        to:   val.delivery_time_to.replace(':00:00', '')
+      };
+    }
+      
+    //date
+    if(val.delivery_date != undefined){
+      this.data.date = val.delivery_date;
+    }
+
+    // delivery_time_from: (...)
+    // delivery_time_to: (...)
+
+
+  },
+},
+async mounted(){
+  await this.handle();
+
+  //Check edit
+  if(location.href.includes('/shared/order/edit')){
+    this.isEdit = true;
+    //Get order
+    await this.filter({'link':this.link});
+    await this.get();
+  } 
+
   //Redirect if exist
   let exist = await this.byAuth();
-  if(exist && exist.link != undefined){window.location.href = '/shared/order/'+exist.link}
+  if(exist && exist.link != undefined && !this.isEdit){window.location.href = '/shared/order/'+exist.link}
 
 
   await this.fetchAvailableDays();
 },
-methods:{  
+methods:{
   ...mapActions({
     'fetchAvailableDays':'orderLimits/fetchAvailableDays',
     'byAuth':'sharedOrder/byAuth',
+    'handle':'sharedOrder/handle',
+    'filter':'sharedOrder/addFilter',
+    'get':'sharedOrder/fetchData',
+    'update':'sharedOrder/update',
   }),  
   async open(){
     //Refresh errors
@@ -283,16 +438,27 @@ methods:{
     if(r){window.location.href = '/shared/order/'+r.link};
 
   },
+  async edit(){
+    if(this.sOrder == undefined) return;    
+    //Refresh errors
+    this.errors = [];
+    let data = this.data;
+    data.id = this.sOrder.id;
+    let r = await ax.fetch('/shared/order',data,'post');
+
+    //Catch errors
+    if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
+
+    //Success
+    if(r){window.location.href = '/shared/order/'+this.sOrder.link};
+
+    console.log(r);
+  }
 },
 }
 </script>
 
 <style scoped>
-.header{  
-  font-size: 25px;
-  font-weight: 600;
-  line-height: 140%;
-}
 .inputs{
   margin-top:24px;
 }
@@ -307,13 +473,17 @@ methods:{
 .actions .x-btn{
   width:100%;
 }
+.date-inputs{
+  display: grid;   
+  grid-template-columns: 1fr 1fr ;
+}
+.input-label{    
+  font-size: 18px;
+  line-height: 130%;
+}
 
 /* Desktop */
 @media screen and (min-width: 992px){
-  .header{  
-    max-width: 651px;
-    font-size: 56px;
-  }
   .label{
     max-width: 540px;   
     font-size: 30px;
@@ -323,6 +493,10 @@ methods:{
   }
   .actions{
     margin-top:50px;
+  }
+  .input-label{    
+    font-size: 22px;
+    line-height: 130%;
   }
 }
 

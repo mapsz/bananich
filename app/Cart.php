@@ -32,14 +32,14 @@ class Cart extends Model
           $request['type'] = 1;
         }
       }
-    }
+    }  
 
     {//Exists
       //Session
       $sessionExists = Cart::where('type',$request['type'])->where('session_id',$session)->exists();
       //User
       if($user) $userExists = Cart::where('type',$request['type'])->where('user_id',$user->id)->exists();
-      else $userExists = true;
+      else $userExists = false;
     }
 
     {//Set request
@@ -59,7 +59,7 @@ class Cart extends Model
     }
     
     {//Clone Cart
-      if($cart && (!$sessionExists || !$userExists)){
+      if($cart && ($session != $cart->session_id || $userId != $cart->user_id)){
         $cart = self::cloneCart($cart,$user,$session);
       }
     }

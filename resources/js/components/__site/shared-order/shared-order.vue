@@ -5,7 +5,7 @@
       <div class="container my-3">
 
         <!-- Congratz -->
-        <div class="row mb-3">
+        <div v-if="isAdmin" class="row mb-3">
           <div class="col-12">
             <div class="congratz">
               Поздравляем, ваша совместная закупка открыта!
@@ -14,7 +14,7 @@
         </div>
 
         <!-- top text -->
-        <div class="row mb-4">
+        <div v-if="isAdmin" class="row mb-4">
           <div class="col-12">
             <div class="top-text">
               Теперь можно пригласить в нее соседей или друзей!
@@ -23,7 +23,7 @@
         </div>
 
         <!-- Invite -->
-        <div class="row">
+        <div v-if="isAdmin" class="row">
           <!-- Button -->
           <div class="col-12 col-lg-6 p-0 mb-4 mt-lg-3 d-flex justify-content-center justify-content-lg-start ">
             <button class="button x-btn">
@@ -53,7 +53,7 @@
         <hr class="my-5">
 
         <!-- Announce/Sould do -->
-        <div class="row">
+        <div v-if="isAdmin" class="row" style="margin-bottom:100px">
           <!-- Announce -->
           <div class="col-12 col-lg-6">
             <div class="announce-block">
@@ -63,14 +63,37 @@
           </div>
           <!-- Sould do -->
           <div class="col-12 col-lg-6 d-flex justify-content-center  justify-content-lg-start" style="display: flex !important;align-items: flex-end;">
-            <button class="button x-btn">
+            <button @click="goToGallery()" class="button x-btn">
               Начать оформлять заказ
             </button>
           </div>
         </div>
 
+
+        <!-- Close -->
+        <div class="row">
+          <div class="col-12">
+            <!-- Close -->
+            <div v-if="sOrder.status != undefined">
+              <h5>Закрытие</h5>
+              <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
+            </div>
+            <!-- Test time -->
+            <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
+              <h5>Test time</h5>
+              <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
+              <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
+              <div class="d-flex">
+                <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
+                <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
+                <button @click="updateTestTime()" class="btn btn-primary ml-3">add</button>
+              </div>
+            </div>
+          </div>
+        </div>        
+
         <!-- Members -->
-        <div v-if="owner && slots" class="row mb-4" style="margin-top:100px">
+        <div v-if="owner && slots" class="row mb-4">
           <!-- Owner -->
           <div class="col-12 col-lg-6 mb-4">
             <div class="user-group-header mb-3">Организатор</div>
@@ -92,10 +115,11 @@
               />
               <hr v-if="n < sOrder.member_count && n > 1" class="my-4">              
             </div>
+            <!-- Join -->
+            <div class="d-flex justify-content-center mt-3">
+              <button v-if="!userIn" @click="join()" class="x-btn" style="height:50px">Стать участником</button>
+            </div>            
           </div>
-
-
-
         </div>
 
         <hr class="my-4">
@@ -130,7 +154,7 @@
               <hr class="my-30">
               <div>
                 <span class="label">дата и время доставки</span>
-                <button class="edit float-right">изменить</button>
+                <button v-if="isAdmin" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
               <div class="value">
                 <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
@@ -146,13 +170,13 @@
               <hr class="my-30">
               <div>
                 <span class="label">Макс. бесплатный вес - </span>
-                <span class="value">{{sOrder.full_weight}}кг</span> 
+                <span class="value">{{sOrder.user_weight}}кг</span> 
                 <span class="ml-3 info-icon"></span>
               </div>
-              <div>
+              <div v-if="userIn">
                 <span class="label">вес вашей корзины - </span>
                 <span class="value">{{weights[user.id]}}кг</span>                
-                <button class="edit float-right">изменить</button>
+                <button v-if="isAdmin" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
             </div>          
 
@@ -161,10 +185,10 @@
               <hr class="my-30">
               <div>
                 <span class="label">КОММЕНТАРИЙ К ЗАКУПКЕ</span>
-                <button class="edit float-right">изменить</button>
+                <button v-if="isAdmin" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
               <div>
-                <span class="value">{{sOrder.comment.body}}</span>
+                <span class="value">{{(sOrder.comment && sOrder.comment.body != undefined) ? sOrder.comment.body : ''}}</span>
               </div>
             </div>
 
@@ -173,7 +197,7 @@
               <hr class="my-30">
               <!-- Edit order -->
               <div class="mb-3">
-                <button class="action">
+                <button v-if="isAdmin" @click="goToEdit()" class="action">
                   Редактировать 
                   <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
                     (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
@@ -188,23 +212,18 @@
 
             <!-- Big Action -->
             <div>
-              <button class="x-btn">
+              <button v-if="weights[user.id] <= 0" @click="goToGallery()" class="x-btn">
                 Начать оформлять заказ
+              </button>
+
+              <button v-if="weights[user.id] > 0" @click="goToCheckout()" class="x-btn x-btn-red">
+                Завершить оформление заказа
               </button>
             </div>
 
           </div>
         </div>
-
         
-
-
-
-        <hr class="mt-5">
-        <hr>
-        <hr>
-
-
 
         <div v-if="0">
 
@@ -400,6 +419,8 @@
 
       </div>
     
+    <login-modal :p-show="showLogin" :p-show-type="'signup'" @close="showLogin=false" />
+
     </juge-main>
   </div>
 </template>
@@ -414,6 +435,7 @@ data(){return{
   data:{},
   shareDescription:"Очень крутой текст!",
   weights:false,
+  showLogin:false,
 }},
 computed:{
   ...mapGetters({
@@ -488,14 +510,13 @@ watch:{
     return;
   },
 },
-async mounted(){
+async mounted(){  
   //Open shared order
   if(!this.link){
     this.open();
   }
   //Get shared order
   else{
-    console.log('get');
     await this.filter({'link':this.link});
     await this.get();
   }
@@ -513,6 +534,10 @@ methods:{
     'get':'sharedOrder/fetchData',
     'update':'sharedOrder/update',
   }),
+  goToEdit(){
+    if(!this.link) return;
+    location.href = '/shared/order/edit/' +this.link;
+  },
   async open(){
     let r = await ax.fetch('/shared/order/open',{},'put');
     if(r){
@@ -532,6 +557,12 @@ methods:{
     }
   },
   async join(){
+    if(!this.user){
+      this.showLogin = true;
+      return;
+    }
+
+
     let r = await ax.fetch('/shared/order/join',{'link':this.link},'post');
     if(r){
       window.location.reload();
@@ -550,6 +581,12 @@ methods:{
   async kick(userId){
     let r = await ax.fetch('/shared/order/kick',{'sOrderId':this.sOrder.id,'userId':userId},'delete');
     this.get();
+  },
+  async goToGallery(){
+    location.href = '/';
+  },
+  async goToCheckout(){
+    location.href = '/shared/order/checkout/'+this.link;
   },
 
   //TEST

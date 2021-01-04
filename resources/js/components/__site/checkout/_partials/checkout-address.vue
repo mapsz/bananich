@@ -3,7 +3,7 @@
   <div class="row checkout-address checkout-address-gift">
     <div class="col-12">
 
-      <div class="checkout-title">Адрес</div>
+      <div v-if="design != 'x'" class="checkout-title">Адрес</div>
 
       <div class="form-group">
         <checkout-input v-model="data.addressStreet" :name="'addressStreet'" :placeholder="'Улица'" />
@@ -24,8 +24,8 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  model: {event: 'blur'},  
-  props: ['design'],
+  model: {prop: 'hidden',event: 'blur'},
+  props: ['hidden','design'],
   data(){return{
     data:{
       addressStreet:false,
@@ -50,6 +50,14 @@ export default {
     user: function(){
       this.loadUserAddress();      
     },
+    hidden: function(){
+      if(this.hidden == undefined) return;
+
+      if(this.hidden.street != undefined) this.data.addressStreet = this.hidden.street;
+      if(this.hidden.number != undefined) this.data.addressNumber = this.hidden.number;
+      if(this.hidden.appart != undefined) this.data.addressApart = this.hidden.appart;
+      if(this.hidden.porch != undefined) this.data.addressPorch = this.hidden.porch; 
+    }
   },
   methods:{
     ...mapActions({'set':'checkout/setValue'}), 

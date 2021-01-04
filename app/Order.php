@@ -612,7 +612,6 @@ class Order extends Model
 
       //To other
       $query = $query->with('toOther');
-
       //Pay method
       $query = $query->with('pays.method');
       //Coupons

@@ -18,57 +18,17 @@ class SharedOrderController extends Controller
 {
   public function open(Request $request){
 
-    {//Params
-      //Data
-      $data = $request->all();      
-      //Settings
-      $settings = (new Setting())->getList(1);
-      //Cart
-      $cart = Cart::getCart(['presentProduct' => true, 'type' => 'x']);
-    }
-
-    {//Validate
-      {//Validate Shared Order
-        $validate = [        
-          'address.addressStreet'       => ['required', 'string', 'max:170' ],
-          'address.addressApart'        => ['max:20' ],
-          'address.addressNumber'       => ['max:20' ],
-          'address.addressPorch'        => ['max:20' ],
-          'memberCount'       => ['required', 'min:1', "max:{$settings['x_max_member_count']}"],
-          'date'              => ['required'],
-          'time'              => ['required'],
-          'comment'           => ['max:1000'],
-        ];
-
-        $messages = [
-          'address.addressStreet.required'      => 'Необходимо заполнить поле "Адрес"',
-          'address.addressStreet.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
-          'address.addressPorch.max'            => 'Количество символов в поле "Этаж" не должно превышать :max',
-          'address.addressNumber.max'           => 'Количество символов в поле "Дом" не должно превышать :max',
-          'address.addressApart.max'            => 'Количество символов в поле "Квартира" не должно превышать :max',
-          'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
-          'comment.max'                 => 'Количество символов в поле "Комментарий" не должно превышать :max',
-          'deliveryTime.required'       => 'Необходимо выбрать время доставки',
-          'deliveryDate.required'       => 'Необходимо выбрать дату доставки',
-        ];      
-
-        Validator::make($data, $validate,$messages)->validate();
-      }
-      
-      {//Validate Available Days
-        $date = Carbon::parse($data['date'])->format('Y-m-d');
-        $time = $data['time'];
-        Order::validateAvailableDays($date,$time,'x');
-      }
-
-      {//Validate available product
-        Order::validateAvailableProducts($cart);
-      }
-    }
-
     //Open
-    $sOrder = SharedOrder::open($data);
+    $sOrder = SharedOrder::open($request->all());
 
+    return response()->json($sOrder);
+  }
+
+  public function post(Request $request){
+    //Open
+    $sOrder = SharedOrder::edit($request->all());
+
+    // $sOrder = SharedOrder::where('id',$request->id)->update($request->all());
     return response()->json($sOrder);
   }
   
@@ -83,12 +43,6 @@ class SharedOrderController extends Controller
     if(isset($sOrder[0])){
       $sOrder = $sOrder[0];
     }
-    return response()->json($sOrder);
-  }
-
-  public function post(Request $request){
-
-    $sOrder = SharedOrder::where('id',$request->id)->update($request->all());
     return response()->json($sOrder);
   }
 
@@ -144,6 +98,29 @@ class SharedOrderController extends Controller
 
     return response()->json($weights);
   }
+
+  public function getOrder(Request $request){
+
+    //Data
+    $user = Auth::user();
+    if(!$user) return false;
+    $data = $request->all();
+    if(!isset($data['link'])) return false;
+    $link = $data['link'];
+
+    //Get
+    $order = Order::whereHas('sharedOrder', function($q)use($link){
+      $q->where('link','=', $link);
+    })
+    ->where('customer_id','=', $user->id)
+    ->first();
+
+    $order = Order::jugeGet(['id' => $order->id]);
+
+    return response()->json($order);
+
+  }
+  
 
   public function handle(Request $request){
     $h = (new SharedOrder)->handle();
