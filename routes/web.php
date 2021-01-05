@@ -811,6 +811,8 @@ use App\Cart;
 Route::get('/test', function(){
   echo 'Здесь происходит, что-то очень важное 🎩';
 
+  dd();
+
   {//Piece
   
     $products = new App\Product();
