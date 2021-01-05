@@ -54,7 +54,6 @@ class Checkout extends Model
           }
         }
 
-
         //Get Products
         $products = Product::getWithOptions(['ids' => $productIds, 'get_all' => 1]);
 
@@ -84,39 +83,7 @@ class Checkout extends Model
     }
     
     {//Items
-      foreach ($cart->items as $key => $item) {
-        foreach ($products as $product) {        
-          if($product->id != $item->product_id) continue; //Skip
-          {//Data
-            $item->name             = $product->name;
-            $item->unit             = $product->unit;
-            $item->unit_view        = $product->unit_view;
-            $item->unit_digit       = $product->unit_digit;
-            $item->unit_name        = $product->unit_name;
-            $item->bonus            = isset($product->bonus) && $product->bonus ? true : false;
-          }
-          {//Price            
-            {//Normal bananich
-              $item->price_per_unit   = $product->price;
-              $item->price            = $product->price * $item->count;
-              $item->discount         = isset($product->discount) ? $product->discount : false;
-              $item->final_price      = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
-            }
-            {//X bananich
-              $item->price_per_unit_x = $product->final_price_x;
-              $item->price_x          = $item->price_per_unit_x * $item->count;
-              $item->final_price_x    = $item->price_x;
-            }
-          }
-          {//Weights
-            $item->weight = $item->unit * $item->count;
-          }
-          {//Weights Full
-            $item->full_weight = isset($product->unit_full) ? ($product->unit_full * $item->count) : $item->weight;
-            $item->full_weight_view = $item->full_weight;
-          }
-        }
-      }
+      $cart->items = Checkout::items($cart->items, $products);
     }
 
     {//Weight
@@ -221,4 +188,47 @@ class Checkout extends Model
     return $cart;
 
   }
+
+  public static function items($items, $products){
+
+    foreach ($items as $key => $item) {
+      foreach ($products as $product) {        
+        if($product->id != $item->product_id) continue; //Skip
+        {//Data
+          $item->name             = $product->name;
+          $item->unit             = $product->unit;
+          $item->unit_view        = $product->unit_view;
+          $item->unit_digit       = $product->unit_digit;
+          $item->unit_name        = $product->unit_name;
+          $item->bonus            = isset($product->bonus) && $product->bonus ? true : false;
+        }
+        {//Price            
+          {//Normal bananich
+            $item->price_per_unit   = $product->price;
+            $item->price            = $product->price * $item->count;
+            $item->discount         = isset($product->discount) ? $product->discount : false;
+            $item->final_price      = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
+          }
+          {//X bananich
+            $item->price_per_unit_x = $product->final_price_x;
+            $item->price_x          = $item->price_per_unit_x * $item->count;
+            $item->final_price_x    = $item->price_x;
+          }
+        }
+        {//Weights
+          $item->weight = $item->unit * $item->count;
+        }
+        {//Weights Full
+          $item->full_weight = isset($product->unit_full) ? ($product->unit_full * $item->count) : $item->weight;
+          $item->full_weight_view = $item->full_weight;
+        }
+      }
+    }
+
+    return $items;
+
+  }
+
+
+
 }

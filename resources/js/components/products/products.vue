@@ -14,6 +14,8 @@
       </router-link>
 
       <div>
+        <button @click="noWeight()" class="btn-secondary btn">Без полного веса</button>
+        <button @click="noType()" class="btn-secondary btn">Без типа единицы</button>
         <button @click="noPrice()" class="btn-secondary btn">Без цены</button>
         <button @click="noImage()" class="btn-secondary btn">Без главного фото</button>
         <button @click="noDescription()" class="btn-secondary btn">Без описание</button>
@@ -39,6 +41,14 @@ export default {
     this.$store.dispatch('product/addFilter',{get_all:1});
   },
   methods:{
+    noType(){
+      this.$store.dispatch('product/clearFilters');      
+      this.$store.dispatch('product/addFilter',{no_type:1});      
+    },
+    noWeight(){
+      this.$store.dispatch('product/clearFilters');      
+      this.$store.dispatch('product/addFilter',{no_weight:1});      
+    },
     noPrice(){
       this.$store.dispatch('product/clearFilters');      
       this.$store.dispatch('product/addFilter',{no_price:1});      

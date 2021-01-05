@@ -1,5 +1,5 @@
 <template>
-<div class="shared-order-numbers">
+<div v-if="cart" class="shared-order-numbers">
   <h4>Информация о покупке</h4>
 
   <div v-if="cart">

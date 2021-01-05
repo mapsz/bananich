@@ -78,6 +78,16 @@ class Product extends Model
         'type' => 'float'
       ],
       [
+        'name' => 'unit_type',
+        'caption' => 'Тип единицы',
+        'type'=>"select",
+        'list'=> [ 
+          ['id'=>'kg',    'name'=>'Килограммы'], 
+          ['id'=>'l',     'name'=>'Литры'],
+          ['id'=>'piece', 'name'=>'Штуки'] 
+        ],
+      ],
+      [
         'name' => 'unit_full',
         'caption' => 'Единица полный вес',
         'type' => 'float'
@@ -417,8 +427,29 @@ class Product extends Model
             $q2->where('name', '=', 'charge_x');
           });
         });
-
       }
+
+      //No weight
+      if(isset($request['no_weight'])){
+        
+        $products = $products->where(function($q){
+          $q->whereHas('metas', function($q){
+            $q->where('name','unit_type')
+            ->where('value','piece');
+          })
+          ->whereDoesntHave('metas', function($q2){
+            $q2->where('name', '=', 'unit_full');
+          });    
+        });    
+
+      }    
+
+      //No type
+      if(isset($request['no_type'])){
+        $products = $products->whereDoesntHave('metas', function($q2){
+          $q2->where('name', '=', 'unit_type');
+        });        
+      }      
 
       //Ids
       if(isset($request['ids']) && is_array($request['ids'])){
@@ -927,6 +958,7 @@ class Product extends Model
       'price'                 => 'required|numeric',
       'unit'                  => 'required|numeric',
       'unit_full'             => 'numeric',
+      'unit_type'             => 'string|max:50',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
@@ -958,6 +990,7 @@ class Product extends Model
       'price'                 => 'numeric',
       'unit'                  => 'numeric',
       'unit_full'             => 'numeric',
+      'unit_type'             => 'string|max:50',
       'calories'              => 'numeric',
       'carbohydrates'         => 'numeric',
       'proteins'              => 'numeric',
@@ -1010,6 +1043,7 @@ class Product extends Model
           break;
         case 'unit_view':
         case 'unit_full':
+        case 'unit_type':
         case 'calories':  
         case 'carbohydrates':  
         case 'proteins':  

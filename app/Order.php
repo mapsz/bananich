@@ -449,6 +449,7 @@ class Order extends Model
         $order->address = $data['addressStreet'] . ' ' .$data['addressNumber'];
         $order->appart = $data['addressApart'];
         $order->porch = isset($data['addressPorch']) ? $data['addressPorch'] : '';
+        $order->type = isset($data['type']) ? $data['type'] : 0;
         $order->bonus = $bonus;
         $order->shipping = $shipping;
         if(!$order->save()) return false;
@@ -612,6 +613,9 @@ class Order extends Model
 
       //To other
       $query = $query->with('toOther');
+      //Shared Order
+      $query = $query->with('sharedOrder');
+      $query = $query->with('sharedOrder.address');
       //Pay method
       $query = $query->with('pays.method');
       //Coupons
@@ -948,6 +952,15 @@ class Order extends Model
         $order->total = round($order->total,$round);
         $order->total_result = round($order->total_result,$round);
 
+      }
+
+      
+      {//Checkout x
+        foreach ($orders as $ok => $order) {
+          if($order->type == 'x'){
+            // dd($order);
+          }
+        }
       }
 
       // Gruzka_priority

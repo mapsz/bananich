@@ -811,6 +811,65 @@ use App\Cart;
 Route::get('/test', function(){
   echo 'Здесь происходит, что-то очень важное 🎩';
 
+  {//Piece
+  
+    $products = new App\Product();
+    $products = $products->with('metas');
+  
+    $products = $products
+
+    ->where('unit', '=' ,1)
+    ->whereHas('metas', function($q){
+      $q->where('name','unit_view')
+      ->where('value','NOT LIKE','%кг%');
+    })    
+    ->get();    
+
+    // dd($products->toArray());
+  
+    foreach ($products as $key => $v) {
+      if(DB::table('product_metas')->where('name','unit_type')->where('product_id',$v->id)->exists()) continue;
+  
+      DB::table('product_metas')->insert([
+        'product_id' => $v->id,
+        'name' => 'unit_type',
+        'value' => 'piece',
+      ]);
+    }
+  }
+
+  {//Кг
+    $products = new App\Product();
+    $products = $products->with('metas');
+  
+    $products = $products->where('unit', '<>' ,1);
+    $products = $products->whereHas('metas', function($q){
+      $q->where('value','LIKE','%г%')
+      ->orwhere('value','LIKE','%грамм%')
+      ->orwhere('value','LIKE','%кг%');
+    })
+    ->whereHas('metas', function($q){
+      $q->where('name','unit_view')
+      ->where('value','NOT LIKE','%+/-%');
+    })    
+    ->get();
+
+  
+    foreach ($products as $key => $v) {
+      if(DB::table('product_metas')->where('name','unit_type')->where('product_id',$v->id)->exists()) continue;
+  
+      DB::table('product_metas')->insert([
+        'product_id' => $v->id,
+        'name' => 'unit_type',
+        'value' => 'kg',
+      ]);
+    }
+  }
+
+
+
+  // dd($pieces);
+
   //Get 
   // $cart = Cart::with('items')->with('containers')->where('id', 13828)->first();
   
