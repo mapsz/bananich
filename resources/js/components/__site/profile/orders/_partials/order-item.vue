@@ -299,6 +299,7 @@ computed:{
 
 <style scoped>
 
+
   .order-items-item{
     border-bottom: 1px solid #bdbdbd;
   }

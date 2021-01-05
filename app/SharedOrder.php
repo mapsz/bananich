@@ -513,6 +513,8 @@ class SharedOrder extends Model
       }
 
     }
+
+    $query = $query->orderBy('id','DESC');
   
     //Get
     $data = JugeCRUD::get($query,$request);

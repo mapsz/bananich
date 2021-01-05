@@ -36,6 +36,9 @@ let routes = [];
   import siteProfileFavorites from './components/__site/profile/favorites/favorites.vue';
   import siteProfileBonus from './components/__site/profile/bonus/bonus.vue';
   import siteProfileOrders from './components/__site/profile/orders/orders.vue';
+  
+  import siteProfilesharedOrder from './components/__site/profile/shared-orders/profile-shared-orders.vue';
+  
   routes.push(
     {      
       path: '/profile',component:siteProfile,
@@ -56,6 +59,10 @@ let routes = [];
         {
           path: '/profile/orders',    component:siteProfileOrders,
           name: 'Мои заказы', meta: {breadcrumb: 'Мои заказы'}
+        },        
+        {
+          path: '/profile/shared/orders', component:siteProfilesharedOrder,
+          name: 'Мои закупки', meta: {breadcrumb: 'Мои закупки'}
         },
       ]
     }

@@ -16,25 +16,24 @@
 <script>
 export default {
 data(){return{
-  links:[
-    {
-      link:'/profile',
-      caption:'Личные данные',
-    },
-    {
-      link:'/profile/favorites',
-      caption:'Избранное',
-    },
-    {
-      link:'/profile/bonus',
-      caption:'Бонусы',
-    },
-    {
-      link:'/profile/orders',
-      caption:'Мои заказы',
-    },
-  ]
+  isX:isX,
+  links:[],
 }},
+async mounted() {
+
+  this.links.push({link:'/profile',caption:'Личные данные',});
+  this.links.push({link:'/profile/favorites',caption:'Избранное',});
+
+  if(isX){
+    this.links.push({link:'/profile/shared/orders',caption:'Мои закупки',});
+  }else{
+    this.links.push({link:'/profile/bonus',caption:'Бонусы',});
+    this.links.push({link:'/profile/orders',caption:'Мои заказы',});
+  }
+
+  
+
+},
 }
 </script>
 

@@ -1,12 +1,12 @@
 <template>
-   <div>    
-    <site-header></site-header>
+  <div>    
+  <juge-main>
     <!-- <Breadcrumbs /> -->
 
     <router-view></router-view>
 
-    <site-footer></site-footer>
-  </div> 
+  </juge-main>
+</div> 
 </template>
 
 <script>
