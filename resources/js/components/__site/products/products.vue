@@ -1,7 +1,6 @@
 <template>
-  <div :class="halloween?'halloween':''">
-
-    <site-header />
+<div :class="halloween?'halloween':''">
+  <juge-main>
     
 
     <a name="catalogue"></a>
@@ -16,9 +15,17 @@
           </ol>
         </nav>
 
+
         <h1 v-if="!isMobile || $route.path == '/'" class="title-h1">
-          <span>ЭКОдоставка</span> 
-           по выгодным ценам
+          <template v-if="isX">
+            <div class="moto">
+              <b>NEOLAVKA</b> - это продукты по закупочным ценам с оплатой только фиксированной суммы сервисного сбора (включает доставку)
+            </div>            
+          </template>
+          <template v-else>
+            <span>ЭКОдоставка</span> 
+            по выгодным ценам
+          </template>
         </h1>
 
         <!-- To top -->
@@ -93,17 +100,17 @@
       </div>
     </main>
 
-    <!-- Footer -->
-    <site-footer />
 
-  </div>
+  </juge-main>
+
+</div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    halloween:halloween,
+    halloween:halloween,isX:isX,
     busy:false,
     categoriesActive:false,
     showUp:false,
@@ -205,7 +212,22 @@ export default {
   background-position: bottom right;
 }
 
+.moto{
+  max-width:850px;
+  font-size: 44px;
+  line-height: 140%;
+  margin-top:90px;
+  margin-bottom:150px;
+}
+
 @media screen and (max-width: 768px){
+
+  .moto{
+    font-size: 20px;
+    line-height: 130%;
+    margin-top:30px;
+    margin-bottom:40px;
+  }
 
   .halloween .home{
     background-image: url('/halloween/mish.png');

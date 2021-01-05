@@ -169,6 +169,10 @@ export default {
   background-position: top right;
 }
 
+.page-x .sitebar{
+  background: #e7dfdc!important;
+}
+
 @media screen and (max-width: 768px){
 
   .halloween .home{

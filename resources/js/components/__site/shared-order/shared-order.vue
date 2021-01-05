@@ -251,7 +251,7 @@
                 <span class="text-primary">{{shareLink}}</span>
               </div>
               
-              <div>              
+              <div>
                 <telegram-button
                   :shareUrl="shareLink"
                   :description="shareDescription"

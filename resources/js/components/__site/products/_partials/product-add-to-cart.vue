@@ -19,7 +19,7 @@
     </form>
     <!-- To cart -->
     <div v-else>
-      <button  @click="count=1;toCart()" class="to-cart"><img src="/image/cart.svg" alt="В корзину"></button>
+      <button @click="count=1;toCart()" class="to-cart"><img src="/image/cart.svg" alt="В корзину"></button>
       <button @click="count=1;toCart()" class="btn-yellow btn-thick to-cart-big d-none">В корзину</button>
     </div>
   </div>
@@ -118,6 +118,10 @@ export default {
 
 .page-x .to-cart-buttons{
   background: #C4C7B9 !important;
+  color:white;
+}
+.page-x .to-cart{
+  background: #8AC2A7 !important;
   color:white;
 }
 

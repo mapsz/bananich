@@ -51,6 +51,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+ .page-x .cart-num{
+   background: #8AC2A7;
+ }
 </style>

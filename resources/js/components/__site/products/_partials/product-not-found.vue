@@ -59,6 +59,9 @@ methods:{
 }
 </script>
 
-<style>
-
+<style scoped>
+.page-x .btn-yellow{
+  border-color: #8ac2a7!important;
+  background: #8ac2a7!important;
+}
 </style>

@@ -24,6 +24,14 @@ data(){return{
     background: #f3ebe8;  
     font-family: Open Sans;
   }
+  .page-x .custom-radio:checked + label:before {
+      background-color: #8AC2A7;
+      border: 1px solid #8AC2A7;
+  }
+  .page-x .btn-yellow{
+    background: #8AC2A7;
+    border-color: #8AC2A7;
+  }
   .x-btn{
     font-size: 16px;
     border-radius: 50px;

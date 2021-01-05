@@ -144,6 +144,10 @@ export default {
 
 <style scoped>
 
+.page-x .cart-num-mobile{
+  background: #8ac2a7!important;
+}
+
 .search-modal{
   position: absolute;
   top: -70px;
