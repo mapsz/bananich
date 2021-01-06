@@ -25,6 +25,7 @@ let interview = new jugeVuex('interview');
 let category = new jugeVuex('category');
 let page = new jugeVuex('page');
 let menu = new jugeVuex('menu');
+let site = new jugeVuex('site');
 let coupon = new jugeVuex('coupon',true,true);
 let logistic = new jugeVuex('logistic');
 let notFound = new jugeVuex('notFound');
@@ -36,7 +37,7 @@ let store = {
   modules:{
     order,delivery,confirm,report,product,item,supplier,stocktaking,
     purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,
-    settings,category,orderLimits,page,menu,coupon,logistic,notFound,email,libra
+    settings,category,orderLimits,page,menu,site,coupon,logistic,notFound,email,libra
   }
 };
 

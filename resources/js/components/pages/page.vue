@@ -11,27 +11,54 @@
 
       <div class="col-12 col-lg-4">   
         <!-- Menus -->
-        <h5>Меню</h5>
         <div>
-          <span v-for='(menu,i) in menus' :key='i' style="display:block">
-            <span 
-              v-if="!menu.pages.find(x => x.id == id)"
-              @click="attach(menu.id)" 
-              style="cursor:pointer">
-              🔗
+          <h5>Меню</h5>
+          <div>
+            <span v-for='(menu,i) in menus' :key='i' style="display:block">
+              <span 
+                v-if="!menu.pages.find(x => x.id == id)"
+                @click="attach(menu.id)" 
+                style="cursor:pointer">
+                🔗
+              </span>
+              <span
+                v-else
+                @click="detach(menu.id)" 
+                style="cursor:pointer">       
+                ❌  
+              </span>
+              <span
+                :class="'text-' +  (!menu.pages.find(x => x.id == id) ? 'danger' : 'success')"
+              >
+                {{menu.name}} 
+              </span>            
             </span>
-            <span
-              v-else
-              @click="detach(menu.id)" 
-              style="cursor:pointer">       
-              ❌  
+          </div>
+        </div>
+        <!-- Site -->
+        <div class="mt-4">
+          <h5>Сайт</h5>
+          <div>
+            <span v-for='(site,i) in sites' :key='i' style="display:block">
+              <span 
+                v-if="!site.pages.find(x => x.id == id)"
+                @click="attachSite(site.id)" 
+                style="cursor:pointer">
+                🔗
+              </span>
+              <span
+                v-else
+                @click="detachSite(site.id)" 
+                style="cursor:pointer">       
+                ❌  
+              </span>
+              <span
+                :class="'text-' +  (!site.pages.find(x => x.id == id) ? 'danger' : 'success')"
+              >
+                {{site.name}} 
+              </span>            
             </span>
-            <span
-              :class="'text-' +  (!menu.pages.find(x => x.id == id) ? 'danger' : 'success')"
-            >
-              {{menu.name}} 
-            </span>            
-          </span>
+          </div>
         </div>
       </div>
     </div>
@@ -54,6 +81,7 @@ export default {
         inputs:'page/getInputs',
         errors:'page/getErrors',
         menus:'menu/get',
+        sites:'site/get',
       }),    
   },
   async mounted(){
@@ -63,6 +91,7 @@ export default {
     //Get page
     this.id = this.$route.params.id;
     await this.fetchPage(this.id);
+    await this.fetchSites(this.id);
     this.fetchInputs();
   },
   methods:{
@@ -70,6 +99,7 @@ export default {
       'fetchPage':'page/fetchOne',
       'fetchInputs':'page/fetchInputs',
       'fetchMenus':'menu/fetchData',
+      'fetchSites':'site/fetchData',
     }),
     async submit(data){
       data.id = this.id;
@@ -83,6 +113,14 @@ export default {
     async detach(id){
       let r = await ax.fetch('/page/menu/detach',{pageId:this.id,menuId:id},'post');  
       this.fetchMenus();
+    },
+    async attachSite(id){
+      let r = await ax.fetch('/page/site/attach',{pageId:this.id,siteId:id},'post');  
+      this.fetchSites();
+    },
+    async detachSite(id){
+      let r = await ax.fetch('/page/site/detach',{pageId:this.id,siteId:id},'post');  
+      this.fetchSites();
     }
   },
 }

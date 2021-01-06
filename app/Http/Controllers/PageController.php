@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Page;
+use App\Site;
 
 class PageController extends Controller
 {
@@ -46,6 +47,18 @@ class PageController extends Controller
   public function detach(Request $request){
     return response()->json(
       Page::find($request->pageId)->Menu()->detach($request->menuId)
+    );    
+  }
+
+  public function attachSite(Request $request){
+    return response()->json(
+      Page::find($request->pageId)->Site()->attach($request->siteId)
+    );    
+  }
+
+  public function detachSite(Request $request){
+    return response()->json(
+      Page::find($request->pageId)->Site()->detach($request->siteId)
     );    
   }
 }

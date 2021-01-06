@@ -54,13 +54,14 @@ class Page extends Model
     }
 
     $query = $query->with('Menu');
+    $query = $query->with('Site');
     $query = $query->orderBy('sort','DESC');
 
     //Get
     $pages = JugeCRUD::get($query,$request);
 
     //Single
-    if(isset($request['id'])){
+    if(isset($request['id']) && isset($pages[0])){
       $pages = $pages[0];
     }
 
@@ -72,5 +73,8 @@ class Page extends Model
   //Relations
   public function Menu(){
     return $this->belongsToMany('App\Menu','pages_menus');
+  }  
+  public function Site(){
+    return $this->belongsToMany('App\Site','sites_pages');
   }  
 }

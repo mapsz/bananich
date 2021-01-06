@@ -258,6 +258,7 @@ class Checkout extends Model
       //Shared order
       $sOrder = SharedOrder::byAuth();
       if(!$sOrder) return $xData;
+      if(!isset($sOrder->orders)) return $xData;
 
       //Order
       $order = false;

@@ -1160,6 +1160,8 @@ Route::group(['middleware' => ['HttpsRR'
       Route::post('/page', 'PageController@post');
       Route::post('/page/menu/attach', 'PageController@attach');
       Route::post('/page/menu/detach', 'PageController@detach');
+      Route::post('/page/site/attach', 'PageController@attachSite');
+      Route::post('/page/site/detach', 'PageController@detachSite');
       Route::put('/menu', 'MenuController@put');
     });
 
