@@ -537,8 +537,6 @@ class SharedOrder extends Model
 
       //Get settings
       $settings = (new Setting)->getList(1);
-
-
              
       //Loop
       foreach ($data as $key => $row) {  
@@ -585,7 +583,15 @@ class SharedOrder extends Model
           if(count($row->users) > 1){
             $row['editable'] = false;
           }
-
+        }
+        {//Joinable
+          $row['joinable'] = false;
+          if(
+            ($row->status_id == 100 || $row->status_id == 200) && 
+            (count($row->users) < $row->member_count)
+          ){
+            $row['joinable'] = true;
+          }
         }
       }
 

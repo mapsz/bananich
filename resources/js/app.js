@@ -31,6 +31,10 @@ window.load = new load;
 import moment from 'moment';
 window.moment = moment;
 
+//Moment
+import cookie from 'js-cookie';
+window.Cookies = cookie;
+
 //Toasted
 window.terror= function(){console.log('error xzz')};
 

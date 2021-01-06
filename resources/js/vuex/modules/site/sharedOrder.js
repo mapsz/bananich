@@ -3,14 +3,17 @@ let sharedOrder = new jugeVuex('SharedOrder');
 
 //State
 sharedOrder.state.order = false;
+sharedOrder.state.myOrder = false;
 
 //Getter
 sharedOrder.getters.getOrder = (state) => {return state.order;};
+sharedOrder.getters.getMyOrder = (state) => {return state.myOrder;};
 
 //Actions
-sharedOrder.actions.byAuth = async ({dispatch})=>{
+sharedOrder.actions.byAuth = async ({commit})=>{
     let r = await ax.fetch('/shared/order/auth');
 
+    commit('mMyOrder',r);
     return r;
     // dispatch('fetchData');
 };
@@ -31,6 +34,7 @@ sharedOrder.actions.handle = async ({commit}, link)=>{
 
 //Mutations
 sharedOrder.mutations.mOrder = (state,d) => {return state.order = d;};
+sharedOrder.mutations.mMyOrder = (state,d) => {return state.myOrder = d;};
 
 
 

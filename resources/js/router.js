@@ -8,6 +8,12 @@ let routes = [];
   //   {path: '/interview',    component:interview},
   // );
 
+  //Welcome
+  import welcome from './components/__site/welcome/welcome.vue';
+  routes.push(
+    {path: '/welcome',    component:welcome},
+  );
+
   //Shared Order
   import sharedOrder from './components/__site/shared-order/shared-order.vue';
   import sharedOrderOpen from './components/__site/shared-order/open/shared-order-open.vue';
@@ -16,7 +22,7 @@ let routes = [];
     {path: '/shared/order',                         component:sharedOrderOpen},
     {path: '/shared/order/edit/:order_link',        component:sharedOrderOpen},
     {path: '/shared/order/open',                    component:sharedOrderOpen},
-    {path: '/shared/order/:order_link',             component:sharedOrder},
+    {path: '/shared/order/:order_link',             component:sharedOrder, name:'sharedOrder'},
     {path: '/shared/order/checkout/:order_link',    component:sharedOrderCheckout},
   );
 

@@ -524,15 +524,6 @@ watch:{
   },
 },
 async mounted(){  
-  //Open shared order
-  if(!this.link){
-    this.open();
-  }
-  //Get shared order
-  else{
-    await this.filter({'link':this.link});
-    await this.get();
-  }
 
   if(this.sOrder){
     await this.update();

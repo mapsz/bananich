@@ -11,10 +11,70 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
   isX:isX,
 }},
+computed:{
+  ...mapGetters({
+    sOrders:    'sharedOrder/get',
+    myOrder:    'sharedOrder/getMyOrder',
+  }),  
+  link(){
+    if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
+    return this.$route.params.order_link;
+  },
+  sOrder(){
+    if(this.sOrders == undefined || this.sOrders.length < 1) return false;
+    return this.sOrders[0];
+  },
+  invite(){
+    return Cookies.get('x_invite');
+  }
+},
+async mounted() {
+
+  //X busines
+  if(isX){
+
+    //Get my shared order
+    await this.fetchMySharedOrder();
+
+    //Shared order
+    if(this.$route.name != undefined && this.$route.name == 'sharedOrder'){
+
+      {//Get shared order      
+        await this.filter({'link':this.link});
+        await this.get();
+      }
+      
+      //Set invite
+      if(
+        this.myOrder.id == undefined && 
+        this.sOrder.link != undefined &&
+        this.sOrder.joinable
+      ){
+        Cookies.set('x_invite', this.sOrder.link);
+      }
+
+    }
+
+    //Fist Time
+    if(!Cookies.get('x_not_first_time') && this.myOrder.id == undefined){
+      window.location.href = '/welcome';
+    }
+
+  }
+
+},
+methods:{  
+  ...mapActions({
+    'filter':'sharedOrder/addFilter',
+    'get':'sharedOrder/fetchData',
+    'fetchMySharedOrder':'sharedOrder/byAuth',
+  }),
+},
 
 }
 </script>
