@@ -11,7 +11,7 @@ let routes = [];
   //Welcome
   import welcome from './components/__site/welcome/welcome.vue';
   routes.push(
-    {path: '/welcome',    component:welcome},
+    {path: '/welcome',    component:welcome, name:'welcome'},
   );
 
   //Shared Order

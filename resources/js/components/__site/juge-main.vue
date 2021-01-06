@@ -61,7 +61,7 @@ async mounted() {
     }
 
     //Fist Time
-    if(!Cookies.get('x_not_first_time') && this.myOrder.id == undefined){
+    if(!Cookies.get('x_not_first_time') && this.myOrder.id == undefined && this.$route.name != 'welcome'){
       window.location.href = '/welcome';
     }
 
