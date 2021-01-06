@@ -121,7 +121,6 @@ class Checkout extends Model
       //Set bonus
       $cart->bonus = intval($cart->max_bonus_summ >= $bonus ? $bonus : $cart->max_bonus_summ);
     }
-
     
     {//Shipping
       $price_shipping = $settings['shipping_price'];
@@ -131,7 +130,10 @@ class Checkout extends Model
         (($cart->pre_price < $settings['free_shipping']) ? intval($price_shipping) : 0)      
       );
     }
-    
+        
+    {// X Data
+      $cart->xData = Checkout::xdata($cart->items);
+    }
 
     {//Final summ
       {//Normal bananich
@@ -146,11 +148,15 @@ class Checkout extends Model
         $cart->final_summ_x = 0;
         $cart->final_summ_x += $cart->pre_price_x;
         $cart->final_summ_x += $cart->container ? $cart->container['price'] : 0;
+        $cart->final_summ_x += $cart->xData['overWeightPrice'];
+        $cart->final_summ_x += $cart->xData['participation_price'];
       }
       //Cant be less zero
       if($cart->final_summ    < 0) $cart->final_summ    = 0;
       if($cart->final_summ_x  < 0) $cart->final_summ_x  = 0;
     }
+
+
 
     //Cart to array
     $cart = $cart->toArray();  
@@ -229,6 +235,71 @@ class Checkout extends Model
 
   }
 
+  public static function xdata($items){
 
+    $xData = [
+      'fullWeight' => 0,
+      'overWeightKg' => 0,
+      'overWeightSteps' => 0,
+      'overWeightPrice' => 0,
+      'order_id' => false,
+      's_order_id' => false,
+      'participation_price' => 0,
+    ];
+
+    //Full Weight
+    foreach ($items as $key => $item) {
+      $xData['fullWeight'] += $item->full_weight;
+    }   
+
+    $user = Auth::user();
+    
+    {//Get order
+      //Shared order
+      $sOrder = SharedOrder::byAuth();
+      if(!$sOrder) return $xData;
+
+      //Order
+      $order = false;
+      foreach ($sOrder->orders as $key => $v) {
+        if($v->customer_id == $user->id) {
+          $order = $v;
+          $xData['order_id'] = $v->id;
+          $xData['s_order_id'] = $sOrder->id;
+          break;
+        }
+      }
+
+    }
+
+    if(!$order) return $xData;
+
+    $settings = (new Setting)->getList(1);
+
+
+    {//Participation
+      $xData['participation_price'] = $settings['x_order_price'] / $sOrder->member_count;
+    }
+
+    {//Over weight
+      $personKg = ($settings['x_order_weight'] / $sOrder->member_count);
+
+      $overKg = $xData['fullWeight'] - $personKg;
+      if($overKg <= 0){
+        $xData['overWeightKg'] = 0;
+        $xData['overWeightPrice'] = 0;
+      }else{
+        //Over Kg
+        $xData['overWeightKg'] = $overKg;
+        //Over Price
+        $xData['overWeightSteps'] = intval($overKg / $settings['x_weight_step_kg']) + (($overKg % $settings['x_weight_step_kg'] > 0) ? 1 : 0);
+        $xData['overWeightPrice'] = $settings["x_weight_step_price"] * $xData['overWeightSteps'];
+      }
+
+    }
+
+    return $xData;
+
+  }
 
 }

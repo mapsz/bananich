@@ -53,9 +53,9 @@
         <hr class="my-5">
 
         <!-- Announce/Sould do -->
-        <div v-if="isAdmin" class="row" style="margin-bottom:100px">
+        <div  class="row" style="margin-bottom:100px">
           <!-- Announce -->
-          <div class="col-12 col-lg-6">
+          <div v-if="isAdmin" class="col-12 col-lg-6">
             <div class="announce-block">
               <div class="mb-3"><b>Вы можете менять дату, время и адрес закупки только до момента присоединения к ней другого участника.</b></div>  
               <div>После этого вы сможете вносить изменения только в свою корзину до 21.00 дня накануне доставки.</div>  
@@ -212,7 +212,7 @@
 
             <!-- Big Action -->
             <div>
-              <button v-if="weights[user.id] <= 0" @click="goToGallery()" class="x-btn">
+              <button v-if="!userIn || weights[user.id] <= 0" @click="goToGallery()" class="x-btn">
                 Начать оформлять заказ
               </button>
 

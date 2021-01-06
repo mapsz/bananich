@@ -33,17 +33,7 @@ class SharedOrderController extends Controller
   }
   
   public static function byAuth(){
-
-    $user = Auth::user();
-
-    if(!$user) return false;
-
-    $sOrder = (new SharedOrder)->jugeGet(['member' => $user->id, 'status' => [200,300]]);
-
-    if(isset($sOrder[0])){
-      $sOrder = $sOrder[0];
-    }
-    return response()->json($sOrder);
+    return response()->json(SharedOrder::byAuth());
   }
 
   public function delete(Request $request){

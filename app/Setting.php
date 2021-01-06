@@ -23,6 +23,8 @@ class Setting extends Model
     'x_order_price'             => 600,
     'x_order_close_hours'       => 3,
     'x_pay_close_hours'         => 6,
+    'x_weight_step_kg'          => 5,
+    'x_weight_step_price'       => 50,
   ];
 
 

@@ -114,7 +114,7 @@ let cart = {
       dispatch('fetch');
       return r;
     },    
-    async cartReset({dispatch}){
+    async cartReset({dispatch},){
       let r = await ax.fetch('/cart/reset',{},'delete');
       localStorage.cart = false;
       dispatch('fetch');

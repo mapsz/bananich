@@ -474,6 +474,20 @@ class SharedOrder extends Model
     //
   }
 
+  public static function byAuth(){
+
+    $user = Auth::user();
+
+    if(!$user) return false;
+
+    $sOrder = (new SharedOrder)->jugeGet(['member' => $user->id, 'status' => [200,300]]);
+
+    if(isset($sOrder[0])){
+      $sOrder = $sOrder[0];
+    }
+
+    return $sOrder;
+  }
 
   public function jugeGet($request = []){
 

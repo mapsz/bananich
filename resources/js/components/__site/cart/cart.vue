@@ -78,7 +78,7 @@
                 </template>
                 
 
-                <div v-if="user && !(settings.min_order > cart.pre_price) && cart.pre_price > 0" class="cart-message">
+                <div v-if="!isX && (user && !(settings.min_order > cart.pre_price) && cart.pre_price > 0)" class="cart-message">
                   <div class="cart-message-ico">
                     <img src="image/icons/bonus.svg" alt="Bonus">
                   </div>

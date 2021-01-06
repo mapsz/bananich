@@ -126,6 +126,11 @@ export default {
 </script>
 
 <style scoped>
+
+.page-x .user-btn{
+  background: #8ac2a7;
+}
+
 .to-checkout {
     background: #FBE214;
     border: 1px solid #FBE214 !important;
