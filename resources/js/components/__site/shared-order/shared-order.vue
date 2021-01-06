@@ -95,12 +95,12 @@
         <!-- Members -->
         <div v-if="owner && slots" class="row mb-4">
           <!-- Owner -->
-          <div class="col-12 col-lg-6 mb-4">
+          <div class="col-12 col-lg-6 mb-4" :class="sOrder.member_count == 1 ? 'offset-lg-6' : ''">
             <div class="user-group-header mb-3">Организатор</div>
             <shared-order-member :mSlot="1" :user="owner" />
           </div>
           <!-- Other Members -->
-          <div class="col-12 col-lg-6">
+          <div  v-if="sOrder.member_count > 1" class="col-12 col-lg-6">
             <div class="user-group-header mb-3">Участники закупки</div>
             <!-- Members List -->
             <div v-for="(n, i) in sOrder.member_count" :key="i">
@@ -117,7 +117,7 @@
             </div>
             <!-- Join -->
             <div class="d-flex justify-content-center mt-3">
-              <button v-if="!userIn" @click="join()" class="x-btn" style="height:50px">Стать участником</button>
+              <button v-if="!userIn && !isFull" @click="join()" class="x-btn" style="height:50px">Стать участником</button>
             </div>            
           </div>
         </div>
@@ -506,7 +506,15 @@ computed:{
     if(!this.sOrder || this.sOrder.editable == undefined) return false;
 
     return this.sOrder.editable
+  },
+  isFull(){
+    if(!this.sOrder || this.sOrder.member_count == undefined || this.sOrder.users == undefined) return true;
+    if(this.sOrder.users.length < 1) return true;
+    if(this.sOrder.member_count > this.sOrder.users.length) return false;
+
+    return true;
   }
+
 },
 watch:{
   sOrder: function (val, oldVal) {

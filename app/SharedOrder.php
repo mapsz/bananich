@@ -408,7 +408,7 @@ class SharedOrder extends Model
     {//Shared
 
       //Get
-      $sOrder = (new SharedOrder)->jugeGet(['id' => $id,'single' => 1]);
+      $sOrder = (new SharedOrder)->jugeGet(['id' => $id,'single' => 1, 'noHandle' => true]);
 
       //Change status
       SharedOrder::changeStatus($id,500);     

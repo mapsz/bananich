@@ -931,7 +931,8 @@ Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 
 Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
   Route::get('/', function(){
-    return redirect('/catalogue');
+    return redirect('/');
+    // return redirect('/catalogue');
   });
 });
 
