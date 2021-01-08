@@ -200,6 +200,8 @@ class Checkout extends Model
     foreach ($items as $key => $item) {
       foreach ($products as $product) {        
         if($product->id != $item->product_id) continue; //Skip
+
+       
         {//Data
           $item->name             = $product->name;
           $item->unit             = $product->unit;
@@ -210,10 +212,16 @@ class Checkout extends Model
         }
         {//Price            
           {//Normal bananich
-            $item->price_per_unit   = $product->price;
-            $item->price            = $product->price * $item->count;
-            $item->discount         = isset($product->discount) ? $product->discount : false;
-            $item->final_price      = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
+            $item->price_per_unit   = $product->final_price;
+            $item->price            = $item->price_per_unit * $item->count;
+            $item->final_price      = $item->price;
+            //discount
+            $item->discount = false;
+            if(isset($product->discount)){
+              $item->discount = $product->discount;
+              $item->price = $product->price;
+              $item->final_price      = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
+            }
           }
           {//X bananich
             $item->price_per_unit_x = $product->final_price_x;
@@ -221,6 +229,7 @@ class Checkout extends Model
             $item->final_price_x    = $item->price_x;
           }
         }
+
         {//Weights
           $item->weight = $item->unit * $item->count;
         }
@@ -256,7 +265,7 @@ class Checkout extends Model
     
     {//Get order
       //Shared order
-      $sOrder = SharedOrder::byAuth();
+      $sOrder = SharedOrder::byAuth(false);
       if(!$sOrder) return $xData;
       if(!isset($sOrder->orders)) return $xData;
 

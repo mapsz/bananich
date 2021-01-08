@@ -47,7 +47,7 @@
         <!-- Big Action -->
         <div class="d-flex justify-content-center">
           <button @click="edit()" class="x-btn">
-            Оформить
+            Завершить Оформление
           </button>
         </div>
 

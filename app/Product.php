@@ -743,7 +743,6 @@ class Product extends Model
             //Static price
             if(!$product->final_price) $product->final_price = $product->price;
 
-
           }
           
           {//X bananich

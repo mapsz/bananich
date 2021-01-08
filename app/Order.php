@@ -1053,6 +1053,83 @@ class Order extends Model
 
   }
 
+  public static function syncCartOrder($cart = false, $order = false, $user = false){
+
+    
+    
+    {//Data
+      {//User
+        $user = Auth::user();
+        if(!$user) return false;
+      }
+      
+      {//Cart
+        if(!$cart || !isset($cart['id'])){
+          if($cart > 0){
+            $cart = Cart::jugeGet(['id' => $cart]);
+            $cart = Checkout::addToCart($cart);
+          }else{
+            $cart = Cart::getCart(['type' => 'x']);
+          }
+        }
+        if(!$cart || !isset($cart['id'])) return false;
+      }
+
+      {//Order
+        //Get order
+        if(!$order || !isset($order->id)){          
+          if(isset($cart['xData']) && isset($cart['xData']['order_id']) && $cart['xData']['order_id'] > 0){
+            // $order = Order::jugeGet(['id' => $cart['xData']['order_id']]);
+            $order = $cart['xData']['order_id'];
+          }else{
+            //Get shared order
+            // $sOrder = SharedOrder::byAuth();
+            // if(!$sOrder || !isset($sOrder->id)) 
+            return false;
+          }
+        }
+
+        if(!$order) return false;
+
+        {//Sync          
+          {//Delete old
+            Item::where('order_id', $order)->delete();
+          }
+
+          
+          {//Put new
+            $putItems = [];
+            foreach ($cart['items'] as $key => $item) {
+              array_push($putItems,[
+                'order_id' => $order,
+                'product_id' => $item['product_id'],
+                'name' => $item['name'],
+                'quantity' => $item['count'],
+                'gram_sys' => $item['unit'],
+                'gram' => isset($item['unit_view']) ? $item['unit_view'] : $item['unit'],                  
+                'price' => $item['final_price']                  
+              ]);
+            }
+
+            $insert = Item::insert($putItems);
+
+            return $insert;
+          }
+
+        }
+
+
+        return false;
+
+        
+      }
+
+
+    }
+
+
+  }
+
   public function items(){
     return $this->hasMany('App\Item');
   }

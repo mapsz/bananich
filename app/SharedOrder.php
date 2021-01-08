@@ -291,6 +291,10 @@ class SharedOrder extends Model
       return response(['code' => 'so2','text' => 'error attach user'], 512)->header('Content-Type', 'text/plain');
     }
 
+    
+    //Sync order
+    Order::syncCartOrder($cart_id);
+
     return true;
   }
 
@@ -394,7 +398,8 @@ class SharedOrder extends Model
 
         //Close order
         if($time > $order['order_close']){
-          dump('order closed ' . $order->id);
+          // dump('order closed ' . $order->id);
+          //Lock order
           SharedOrder::lock($order->id);
         }
 
@@ -404,7 +409,10 @@ class SharedOrder extends Model
   }
 
   public static function lock($id){
-
+    
+    //Sync order
+    Order::syncCartOrder();
+    
     {//Shared
 
       //Get
@@ -434,7 +442,14 @@ class SharedOrder extends Model
         //Update status
         Order::changeStatus($order->id,900);
       }
+    }    
+
+    {//Delete carts
+      foreach ($sOrder->users as $key => $user) {
+        Cart::where('user_id',$user->id)->where('type',2)->delete();
+      }
     }
+
   
   }
 
@@ -474,13 +489,13 @@ class SharedOrder extends Model
     //
   }
 
-  public static function byAuth(){
+  public static function byAuth($handle = true){
 
     $user = Auth::user();
 
     if(!$user) return false;
 
-    $sOrder = (new SharedOrder)->jugeGet(['member' => $user->id, 'status' => [200,300]]);
+    $sOrder = (new SharedOrder)->jugeGet(['member' => $user->id, 'status' => [200,300],'noHandle' => !$handle]);
 
     if(isset($sOrder[0])){
       $sOrder = $sOrder[0];
@@ -491,7 +506,10 @@ class SharedOrder extends Model
 
   public function jugeGet($request = []){
 
-    if(!isset($request['noHandle'])) (new SharedOrder)->handle();
+    //handle
+    if(!isset($request['noHandle'])){
+      (new SharedOrder)->handle();
+    } 
     
 
     //Model
@@ -599,7 +617,7 @@ class SharedOrder extends Model
   
     //Single
     if(isset($request['id']) || isset($request['single'])){$data = $data[0];}
-  
+    
     //Return
     return $data;
   }

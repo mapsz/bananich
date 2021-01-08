@@ -59,12 +59,12 @@ class Sms extends Model
   public static function bonusNotification(){
     $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1,'nousernolive' => 1]);
 
-
+    $soonDays = 3*(24*60*60);
 
     //Get soon die
     $soonDie = [];
     foreach ($bonuses as $key => $bonus) {
-      if((Carbon::parse($bonus->addBonus->die)->timestamp - now()->timestamp) < 259200){
+      if((Carbon::parse($bonus->addBonus->die)->timestamp - now()->timestamp) < $soonDays){ 
         array_push($soonDie, $bonus);
       }
     }
@@ -82,18 +82,36 @@ class Sms extends Model
       //   Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') .
       //   " сгорит {$bonus->addBonus->left} рублей. Шлю напоминалку, чтобы успели их потратить)";
 
-      $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. " . 
-      "У вас там ". Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') .
-      " сгорит {$bonus->addBonus->left} рублей. Напоминаю их успеть потратить)";
+      // $body = "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. " . 
+      // "У вас там ". Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') .
+      // " сгорит {$bonus->addBonus->left} рублей. Напоминаю их успеть потратить)";
 
-      if(Sms::where('body',$body)->where('to',$to)->exists()){
+      
+      // $body = (
+      //   "{$bonus->user->name}, здравствуйте! Это Дарья из Бананыча. С Рождеством вас!".
+      //   "Восстановили вам сгоревшие за праздники бонусы.".
+      //   "Теперь у вас есть {$bonus->addBonus->left} рублей, которые сгорят " . Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') .
+      //   " Не забудьте успеть их потратить"
+      // );      
+      
+      $body = (
+        "{$bonus->user->name}, добрый день! Это Дарья из Бананыча. У вас ". Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') ." сгорит {$bonus->addBonus->left} рублей." .
+        "Не забудьте их потратить. Если понадобится продлить бонусы, могу это сделать вручную." .
+        "Продлеваем на 5 дней, которые мы не работали, только напишите мне об этом, пожалуйста, в комментарии к заказу."
+      );
+
+      if(
+        Sms::
+          where('body','LIKE', '%'.$bonus->addBonus->left.'%')
+        ->where('created_at', '>', now()->subseconds($soonDays))
+        ->where('to',$to)
+        ->exists()
+      ){
         // dump('exists');
         // dump(Sms::where('body',$body)->where('to',$to)->first()->body);
         // dump('---');
         continue;
       }
-
-      
       // dump('put');
       // dump($bonus);
       // dump('---');

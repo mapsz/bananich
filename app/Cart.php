@@ -18,6 +18,7 @@ class Cart extends Model
   public static function getCart($request = []){
 
 
+
     {//Get user, session
       $user = Auth::User();
       $userId = $user ? $user->id : 0;
@@ -153,6 +154,9 @@ class Cart extends Model
     //Save
     if(!$item->save()) return false;
 
+    //Sync order
+    Order::syncCartOrder($cart_id);
+
     return true;
   }
 
@@ -167,6 +171,10 @@ class Cart extends Model
     //Remove item
     if(!CartItem::where('cart_id',$cart_id)->where('product_id',$productId)->delete()) return false;
 
+    
+    //Sync order
+    Order::syncCartOrder($cart_id);
+
     return true;
   }
 
@@ -177,6 +185,9 @@ class Cart extends Model
 
     //Remove items
     $item = CartItem::where('cart_id',$cart['id'])->delete();
+    
+    //Sync order
+    Order::syncCartOrder($cart_id);
 
     return $item;
 
@@ -216,6 +227,7 @@ class Cart extends Model
   }
 
   public static function jugeGet($request = []) {
+
     //Model
     $query = new self;
   
