@@ -28,7 +28,7 @@
         <!-- Presents -->
         
         <template v-if="isX">
-          <!-- bananichX <a :href="'https://' + (localServer ? 'bananich.loc' : 'bananich.ru')">bananich</a> -->
+          <x-header-button />
         </template>
         <template v-else>
           <present-bar :cart="cart" :settings="presentSettings"/>

@@ -293,7 +293,7 @@ class SharedOrder extends Model
 
     
     //Sync order
-    Order::syncCartOrder($cart_id);
+    Order::syncCartOrder();
 
     return true;
   }

@@ -519,7 +519,8 @@ computed:{
 watch:{
   sOrder: function (val, oldVal) {
     if(!this.sOrder || this.sOrder.member_count == undefined) return;
-    this.changeMemberCount = this.sOrder.member_count;
+    this.changeMemberCount = this.sOrder.member_count;    
+    this.getWeights();
     return;
   },
 },
@@ -527,7 +528,6 @@ async mounted(){
 
   if(this.sOrder){
     await this.update();
-    this.getWeights();
   }  
 
 
