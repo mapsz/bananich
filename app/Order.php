@@ -398,7 +398,7 @@ class Order extends Model
     }
     
     //Delete Cart
-    Cart::resetItems();
+    Cart::where('user_id',$customer_id)->where('type',1)->delete();
 
     JugeLogs::log(14, json_encode(['model' => 'order', 'user' => $customer_id]));
 
@@ -1053,9 +1053,7 @@ class Order extends Model
 
   }
 
-  public static function syncCartOrder($cart = false, $order = false, $user = false){
-
-    
+  public static function syncCartOrder($cart = false, $order = false, $user = false){    
     
     {//Data
       {//User

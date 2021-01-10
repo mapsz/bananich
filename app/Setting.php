@@ -17,7 +17,7 @@ class Setting extends Model
     'day_norm_proteins'         => '150',
     'day_norm_carbs'            => '230',
     'bonus_multiplier'          => '0.1',
-    'x_max_member_count'        => 5,
+    'x_max_member_count'        => 3,
     'x_max_open_days'           => 14,
     'x_order_weight'            => 26,
     'x_order_price'             => 600,

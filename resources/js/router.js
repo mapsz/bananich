@@ -8,10 +8,12 @@ let routes = [];
   //   {path: '/interview',    component:interview},
   // );
 
-  //Welcome
-  import welcome from './components/__site/welcome/welcome.vue';
+  //Neo pages
+  import welcome from './components/__site/pages/welcome/welcome.vue';
+  import rules from './components/__site/pages/rules/rules.vue';
   routes.push(
     {path: '/welcome',    component:welcome, name:'welcome'},
+    {path: '/rules',    component:rules, name:'rules'},
   );
 
   //Shared Order

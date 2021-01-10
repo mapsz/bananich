@@ -1,0 +1,232 @@
+<template>
+  <div>
+    <juge-main>
+        
+      <div class="container">
+
+
+        <!-- Name moto -->
+        <div class="header my-5">
+          <b>NEOLAVKA</b> - все товары по себестоимости
+        </div>
+
+        <!-- Desciprion -->
+        <div class="row">
+          <div class="col-12 col-lg-6 mb-3">
+            Вы покупаете абсолютно все товары нашего сайта по цене себестоимости, а платите только небольшую фиксированную сумму за доставку и наш сервис (сервисный сбор).
+          </div>
+          <div class="col-12 col-lg-6">
+            <button @click="goToGallery()" class="x-btn">Перейти к каталогу оптовых цен</button>
+          </div>
+        </div>
+
+        <div class="header my-5">
+          <b>Почему NEOLAVKA - это здорово?</b>
+        </div>
+
+        
+        <!-- 1 -->
+        <div class="row mb-lg-100">
+          <div class="col-12 col-lg-6">
+            <div class="header mb-4">
+              1. Это очень <b>просто</b>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="wariki mb-5">
+              <ul>
+                <li>Открываете закупку</li>
+                <li>Приглашаете соседей или друзей принять участие в закупке</li>
+                <li>Каждый формирует свой заказ</li>
+                <li>Каждый участник закупки оплачивает свою часть закупки и сервисного сбора по индивидуальной накладной курьеру по прибытии или онлайн по факту сборки.</li>
+              </ul>
+            </div>
+
+            <div class="mb-5">
+              Мы сделали все, чтобы совместные закупки были максимально удобными для вас, поэтому у каждого участника закупки будет:          
+            </div>
+
+            <div class="my-3">
+              <ul>
+                <li>- отдельная корзина</li>
+                <li>- отдельная накладная</li>
+                <li>- отдельный ящик с заказом</li>
+              </ul>
+            </div>
+
+            <div class="mb-5">
+              <b>Вам не надо ничего считать и распределять вручную!</b>
+            </div>
+
+            <div class="announce-block mb-5">
+              <b>Вы можете оплатить сервисный сбор индивидуально, но гораздо выгоднее сделать это в формате совместной закупки с соседями:</b>
+            </div>
+            
+          </div>          
+          <div class="col-12  mb-5">
+            <shared-order-open-blocks />
+          </div>
+        </div>
+
+        <!-- Create Blocks -->
+
+        <!-- 2 -->
+        <div class="row mb-lg-100">
+          <div class="col-12 col-lg-6">
+            <div class="header mb-4">
+              2. Это очень <b>честно</b>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+
+            <div class="mb-5">
+              <b>Обычно наценка магазинов составляет 50-200% </b>
+            </div>
+
+            <div class="welcome-list mb-5">
+              <ul>
+                <li>На фрукты/овощи/чай/кофе наценка обычно больше <b>100%</b></li>
+                <li>На крупы и орехи - <b>70-100%</b></li>
+                <li>Самые маленькие наценки обычно на молочную продукцию, бытовую химию и косметику (там розница накручивает от <b>50%</b>).</li>
+              </ul>
+            </div>
+
+            <div class="announce-block mb-5">
+              <b>Мы решили попробовать новую модель:</b><br>
+              вы оплачиваете только фиксированную стоимость сервисного сбора, а вся продукция на сайте продается без торговой наценки.
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- 3 -->
+        <div class="row mb-lg-100">
+          <div class="col-12 col-lg-6">
+            <div class="header mb-4">
+              3. Это очень <b>выгодно</b>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="mb-5">
+              Покупая доступ на Бананыч Х, вы получаете возможность экономить до 10 000 рублей в месяц на покупке продуктов питания, бытовой химии и косметики.
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="row mb-lg-100">
+          <div class="col-12 col-lg-6">
+            <div class="header mb-4">
+              4. широкий <b>ассортимент</b>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="mb-5">
+              Бананыч очень старается сделать так, чтобы всю базовую потребительскую корзину вы смогли купить у нас по закупочным ценам. Поэтому мы продаем уже не только фрукты и овощи, но еще добавили и рыбу с мясом, молочную продукцию, бытовую химию и косметику и многое другое. Мы очень открыты к диалогу, поэтому все, чего вам не хватает у нас на сайте вы можете указать в поле "не нашел на сайте" в конце каждого раздела и мы обязательно постараемся добавить запрашиваемую вами позицию на сайт. 
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <div class="header mb-4">
+              5. ЭТО ЭКОЛОГИЧНО И <b>ОСОЗНАННО</b>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">        
+            <div class="mb-5">
+              Вы уже в курсе, мы за осознанность. Поэтому мы стараемся по-максимуму использовать оборотную тару и минимум пластика, а еще мы собираем втор сырье на переработку. Его вы можете отдать нашим водителям при получении заказа. Подробнее о том, какое вторсырье мы умеем перерабатывать можно почитать вот тут (ссылка).
+            </div>
+
+            <div class="announce-block mb-5">
+              <b>Давайте пробовать новые форматы магазинов вместе.</b><br>
+              От этого всем будет только хорошо
+            </div>    
+
+            <div class="mb-5 d-flex justify-content-center justify-content-lg-start">
+              <a href="/rules">
+                <button class="x-btn">Правила проведения закупок</button>  
+              </a>              
+            </div> 
+          </div>
+        </div>
+
+
+   
+
+      </div>
+
+    </juge-main>
+  </div>
+</template>
+
+<script>
+export default {
+data(){return{
+  isX:isX,
+}},
+async mounted() {
+
+  Cookies.set('x_not_first_time');
+
+},
+methods:{  
+  async goToGallery(){
+    location.href = '/';
+  },
+},
+
+}
+</script>
+
+<style scoped>
+
+.header{
+  font-size: 25px;
+  line-height: 130%;
+  text-transform: uppercase;
+}
+
+.wariki{
+  font-size: 16px;
+  line-height: 160%;    
+  border-left: 2px solid gray;
+  padding-left: 20px;
+}
+.wariki li {
+  font-size: 16px;
+  line-height: 160%;
+  margin-bottom: 30px;   
+  background-color: white;
+  width: fit-content;
+  padding: 17px 30px;
+  border-radius: 30px;
+}
+.welcome-list li{
+  list-style: disc;
+  margin-left: 20px;  
+  margin-bottom: 16px;
+}   
+.welcome-list li:last-child{ 
+  margin-bottom: 0;
+}   
+
+@media screen and (min-width: 992px){
+  .header{
+    max-width:850px;
+    font-size: 44px;
+    line-height: 140%;
+  }  
+  .wariki li {
+    font-size: 20px;
+    line-height: 180%;
+  }
+  .mb-lg-100{
+    margin-bottom:100px;
+  }
+
+}
+
+</style>

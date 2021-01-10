@@ -1,7 +1,7 @@
 <template>
 <div v-if="$route.name != 'sharedOrder'">
-  <button v-if="!myOrder && invite" @click="goToInvite()" class="x-btn">Присоединиться к закупке</button>
-  <button v-else-if="myOrder" @click="goToOrder()" class="x-btn">К моей закупке</button>
+  <button v-if="myOrder.id == undefined && invite" @click="goToInvite()" class="x-btn">Присоединиться к закупке</button>
+  <button v-else-if="myOrder && myOrder.id != undefined" @click="goToOrder()" class="x-btn">К моей закупке</button>
   <button v-else @click="goToOpen()" class="x-btn">Открыть закупку</button>
 </div>  
 </template>
@@ -12,7 +12,7 @@ export default {
 
 computed:{
   ...mapGetters({
-    user:'user/get',
+    user:       'user/get',
     myOrder:    'sharedOrder/getMyOrder',
   }),
   invite(){
@@ -34,6 +34,13 @@ methods:{
 }
 </script>
 
-<style>
+<style scoped>
+
+
+@media screen and (max-width: 991px){
+  .x-btn{
+    padding: 0px 15px;
+  }
+}
 
 </style>

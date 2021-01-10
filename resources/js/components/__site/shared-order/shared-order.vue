@@ -34,6 +34,9 @@
           <div class="col-12 col-lg-6">
             Поделиться:
             <div>
+              https://neolavka.ru/shared/order/{{link}}
+            </div>
+            <div>
                 <telegram-button
                   :shareUrl="shareLink"
                   :description="shareDescription"

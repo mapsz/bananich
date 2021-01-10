@@ -95,6 +95,20 @@
             <!-- Sitebar -->
           </div>
         </div>
+
+        <div v-if="isX" class="row my-5">
+
+          <div v-if="cart && cart.items != undefined && cart.items.length > 0" class="announce-block mb-5">
+            <b>Поздравляем!</b>
+            <div>
+              Вы собрали свой заказ на Бананыч Х, чтобы купить все по супер-ценам необходимо открыть закупку. Выберете план закупки:
+            </div>
+          </div>
+
+          <div class="col-12">
+            <shared-order-open-blocks />
+          </div>
+        </div>
       </div>
     </main>
 

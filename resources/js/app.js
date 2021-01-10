@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-window.isX = window.location.href.indexOf('x.bananich.') > -1 ? true : false;
+window.isX = (window.location.href.indexOf('x.bananich.') > -1 || window.location.href.indexOf('neolavka') > -1) ? true : false;
 
 window.Vue = require('vue');
 require('./bootstrap');

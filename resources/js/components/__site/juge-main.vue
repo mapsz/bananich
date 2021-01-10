@@ -44,7 +44,7 @@ async mounted() {
     //Shared order
     if(this.$route.name != undefined && this.$route.name == 'sharedOrder'){
 
-      {//Get shared order      
+      {//Get shared order
         await this.filter({'link':this.link});
         await this.get();
       }
@@ -121,7 +121,9 @@ methods:{
     background-color: #EB5757;    
   }
   .info-icon::after{    
-    display: block;
+    display: flex;
+    height: 100%;
+    align-items: center;
     content: "i";
     font-weight: 600;
     font-size: 21px;

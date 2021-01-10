@@ -187,7 +187,7 @@ class Cart extends Model
     $item = CartItem::where('cart_id',$cart['id'])->delete();
     
     //Sync order
-    Order::syncCartOrder($cart_id);
+    Order::syncCartOrder();
 
     return $item;
 
