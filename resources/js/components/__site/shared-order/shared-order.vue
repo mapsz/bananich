@@ -4,74 +4,85 @@
     
       <div class="container my-3">
 
-        <!-- Congratz -->
-        <div v-if="isAdmin" class="row mb-3">
-          <div class="col-12">
-            <div class="congratz">
-              Поздравляем, ваша совместная закупка открыта!
+        <template v-if="isAdmin">
+          <!-- Congratz -->
+          <div v-if="isAdmin" class="row mb-3">
+            <div class="col-12">
+              <div class="congratz">
+                Поздравляем, ваша совместная закупка открыта!
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- top text -->
-        <div v-if="isAdmin" class="row mb-4">
-          <div class="col-12">
-            <div class="top-text">
-              Теперь можно пригласить в нее соседей или друзей!
+          <!-- top text -->
+          <div v-if="isAdmin" class="row mb-4">
+            <div class="col-12">
+              <div class="top-text">
+                Теперь можно пригласить в нее соседей или друзей!
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Invite -->
-        <div v-if="isAdmin" class="row">
-          <!-- Button -->
-          <div class="col-12 col-lg-6 p-0 mb-4 mt-lg-3 d-flex justify-content-center justify-content-lg-start ">
-            <button class="button x-btn">
-              Пригласить в закупку соседей
-            </button>
-          </div>
-          <!-- Soc. buttons -->
-          <div class="col-12 col-lg-6">
-            Поделиться:
-            <div>
-              https://neolavka.ru/shared/order/{{link}}
+          <!-- Invite -->
+          <div v-if="isAdmin" class="row">
+            <!-- Button -->
+            <div class="col-12 col-lg-3 p-0 mt-lg-3 d-flex justify-content-center justify-content-lg-start ">                
+              <button @click="copyInviteLink()" class="button x-btn">
+                Пригласить в закупку соседей
+              </button>
             </div>
-            <div>
-                <telegram-button
-                  :shareUrl="shareLink"
-                  :description="shareDescription"
-                />
-                <whatsapp-button
-                  :shareUrl="shareLink"
-                  :description="shareDescription"
-                />
-                <vkontakte-button
-                  :shareUrl="shareLink"
-                  :description="shareDescription"
-                />
+            <!-- Copied -->
+            <div class="col-12 col-lg-3 mt-lg-3" style="color: #eb5757;">
+              <div v-if="copied">
+                Ссылка на закупку скопирована в буфер обмена, теперь вы можете поделиться ей с друзьями
+              </div>              
             </div>
-          </div>
-        </div>
+            <!-- Soc. buttons -->
+            <div class="col-12 col-lg-6 mt-4">
+              Поделиться:
+              <div class="invite-link my-2" style="font-size: 9pt;">
+                https://neolavka.ru/shared/order/{{link}}
+              </div>
+              <div>
+                  <telegram-button
+                    :shareUrl="shareLink"
+                    :description="shareDescription"
+                  />
+                  <whatsapp-button
+                    :shareUrl="shareLink"
+                    :description="shareDescription"
+                  />
+                  <vkontakte-button
+                    :shareUrl="shareLink"
+                    :description="shareDescription"
+                  />
+              </div>
+            </div>
 
-        <hr class="my-5">
+            <div class="col-12">              
+              <hr class="my-5">
+            </div>
+
+          </div>
+        
+        </template>
 
         <!-- Announce/Sould do -->
-        <div  class="row" style="margin-bottom:100px">
+        <div  class="row" style="mb-5">
           <!-- Announce -->
-          <div v-if="isAdmin" class="col-12 col-lg-6">
-            <div class="announce-block">
+          <div class="col-12 col-lg-6">
+            <div  v-if="isAdmin && editable" class="announce-block">
               <div class="mb-3"><b>Вы можете менять дату, время и адрес закупки только до момента присоединения к ней другого участника.</b></div>  
               <div>После этого вы сможете вносить изменения только в свою корзину до 21.00 дня накануне доставки.</div>  
             </div>
           </div>
           <!-- Sould do -->
-          <div class="col-12 col-lg-6 d-flex justify-content-center  justify-content-lg-start" style="display: flex !important;align-items: flex-end;">
+          <div v-if="0" class="col-12 col-lg-6 d-flex justify-content-center  justify-content-lg-start" style="display: flex !important;align-items: flex-end;">
             <button @click="goToGallery()" class="button x-btn">
               Начать оформлять заказ
             </button>
           </div>
         </div>
-
 
         <!-- Close -->
         <div class="row">
@@ -87,9 +98,9 @@
               <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
               <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
               <div class="d-flex">
-                <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
-                <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
-                <button @click="updateTestTime()" class="btn btn-primary ml-3">add</button>
+                <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:40px">
+                <label for="t-m" class="ml-2">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:40px">
+                <button class="btn btn-primary ml-2" @click="updateTestTime()">add</button>
               </div>
             </div>
           </div>
@@ -100,34 +111,44 @@
           <!-- Owner -->
           <div class="col-12 col-lg-6 mb-4" :class="sOrder.member_count == 1 ? 'offset-lg-6' : ''">
             <div class="user-group-header mb-3">Организатор</div>
-            <shared-order-member :mSlot="1" :user="owner" />
+            <shared-order-member :pSlot="slots[1]" />
           </div>
           <!-- Other Members -->
           <div  v-if="sOrder.member_count > 1" class="col-12 col-lg-6">
             <div class="user-group-header mb-3">Участники закупки</div>
             <!-- Members List -->
             <div v-for="(n, i) in sOrder.member_count" :key="i">
-              <shared-order-member 
+              <template
                 v-if="
                   slots[n] == undefined || 
                   slots[n].user == undefined || 
                   slots[n].user.id == undefined || 
                   slots[n].user.id != owner.id
-                "                   
-                :mSlot="n" :user="slots[n].user != undefined ? slots[n].user : {}"
-              />
+                "
+              >
+                <!-- Member -->
+                <shared-order-member :pSlot="slots[n]" />              
+                <!-- Kick -->
+                <div v-if="slots[n].user != undefined && isAdmin" 
+                  @click="kick(slots[n].user.id)"
+                  class="member-kick"
+                >
+                  Удалить участника
+                </div>
+              </template>
+              <!-- Line -->
               <hr v-if="n < sOrder.member_count && n > 1" class="my-4">              
             </div>
             <!-- Join -->
             <div class="d-flex justify-content-center mt-3">
               <button v-if="!userIn && !isFull" @click="join()" class="x-btn" style="height:50px">Стать участником</button>
-            </div>            
+            </div> 
           </div>
         </div>
 
         <hr class="my-4">
 
-        
+        <!-- Info -->
         <div class="row" v-if="sOrder">
           <div class="col-12 col-lg-6 offset-lg-6">
 
@@ -171,15 +192,17 @@
             <!-- Weight -->
             <div>
               <hr class="my-30">
-              <div>
+              <div class="d-flex">
                 <span class="label">Макс. бесплатный вес - </span>
                 <span class="value">{{sOrder.user_weight}}кг</span> 
                 <span class="ml-3 info-icon"></span>
               </div>
               <div v-if="userIn">
                 <span class="label">вес вашей корзины - </span>
-                <span class="value">{{weights[user.id]}}кг</span>                
-                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
+                <span class="value">{{memberWeight}}кг</span>
+              </div>
+              <div v-if="userIn" class="value mt-2">
+                изменить можно до {{moment(sOrder.order_close).locale("ru").format('LLLL')}}
               </div>
             </div>          
 
@@ -195,8 +218,48 @@
               </div>
             </div>
 
+
+            <div>
+              <hr class="my-30">
+              <div class="row">
+                <div class="col-12 col-lg-6">
+                  <div>
+                    <span class="label" style="color: #eb5757;">сумма вашего заказа</span>
+                    <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right d-lg-none">изменить</button>
+                  </div>
+                  <div>
+                    <span class="value">{{orderSum}}p</span>
+                  </div>
+                </div>
+                <div  class="col-12 col-lg-6">                  
+                  <hr class="my-30 d-lg-none">
+                  <div>
+                    <span class="label" style="">способ оплаты</span>
+                    <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
+                  </div>
+                  <div>
+                    <span class="value">                      
+                      <span v-if="!order || order.pay_method == undefined" style="color:rgb(235, 87, 87)">
+                        Не указано
+                      </span>
+                      <span v-else>
+                        <template v-if="order.pay_method == 'cash'">
+                          Наличные
+                        </template>
+                        <template v-else-if="order.pay_method == 'cart'">
+                          Карта
+                        </template>
+                      </span>
+                      <button v-if="userIn" @click="goToCheckout()" class="edit float-right">изменить</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Actions -->
             <div class="mb-5">
+              
               <hr class="my-30">
               <!-- Edit order -->
               <div class="mb-3">
@@ -211,21 +274,40 @@
               <div v-if="isAdmin && sOrder.status.id > 0">
                 <button @click="sOrderCancel()" class="action">Отменить закупку</button>
               </div>     
+              <!-- Exit order -->
+              <div v-if="userIn && !isAdmin" 
+                  @click="kick(user.id)"
+                  class="member-kick ml-0"
+                >
+                  Выйти из закупки
+              </div>
             </div>
 
             <!-- Big Action -->
             <div>
-              <button v-if="!userIn || weights[user.id] <= 0" @click="goToGallery()" class="x-btn">
+              <button v-if="!userIn || memberWeight <= 0" 
+                @click="goToGallery()" 
+                class="x-btn"
+              >
                 Начать оформлять заказ
               </button>
 
-              <button v-if="weights[user.id] > 0" @click="goToCheckout()" class="x-btn x-btn-red">
-                Завершить оформление заказа
+              <button @click="goToCheckout()" v-if="userIn && !confirmable && memberWeight > 0 && !confirm" class="x-btn">
+                Оформить заказ
               </button>
+
+              <div v-if="userIn && memberWeight > 0 && confirm != 1 && confirmable">
+                <shared-order-confirm />
+              </div>
             </div>
 
           </div>
         </div>
+
+        <!-- Confirm -->
+        <!-- <div class="row">
+          
+        </div> -->
         
 
         <div v-if="0">
@@ -421,8 +503,15 @@
 
 
       </div>
-    
-    <login-modal :p-show="showLogin" :p-show-type="'signup'" @close="showLogin=false" />
+
+
+      <!-- Other -->
+      <template>
+        <login-modal :p-show="showLogin" :p-show-type="'signup'" @close="showLogin=false" />
+        <x-popup :title="'Спасибо, что открыли закупку!'" :active="0">
+          Мы предложим вашим соседям присоединиться к вашей закупке. Участников закупки вы сможете увидеть в вашем личном кабинете в разделе закупки
+        </x-popup>
+      </template>
 
     </juge-main>
   </div>
@@ -430,6 +519,7 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
+import copy from 'copy-to-clipboard';
 export default {
 data(){return{
   moment:moment,
@@ -439,9 +529,11 @@ data(){return{
   shareDescription:"Очень крутой текст!",
   weights:false,
   showLogin:false,
+  copied:false,
 }},
 computed:{
   ...mapGetters({
+    cart:'cart/getCart',
     sOrders:    'sharedOrder/get',
     user:       'user/get',
   }),
@@ -475,13 +567,19 @@ computed:{
     for (let i = 1; i <= this.sOrder.member_count; i++) {
       let user = this.sOrder.users.find(x => x.slot == i);
       let pay = this.sOrder.pays.find(x => x.slot == i);
+      //order
+      let order = false;
+      if(user != undefined && user.id > 0)order = this.sOrder.orders.find(x => x.customer_id == user.id);
+        
       if(pay != undefined){
         pay.user = this.users.find(x => x.id == pay.user_id);
       }
 
       slots[i] = {
+        n:i,
         user:user,
-        pay:pay
+        pay:pay,
+        order:order
       };      
     }
 
@@ -516,6 +614,36 @@ computed:{
     if(this.sOrder.member_count > this.sOrder.users.length) return false;
 
     return true;
+  },
+  order(){
+    if(this.user == undefined && !this.user) return false;
+    if(!this.sOrder || this.sOrder.orders == undefined || this.sOrder.orders.length <= 0) return false;
+
+    let order = this.sOrder.orders.find(x => x.customer_id == this.user.id);
+    if(!order || order.id == undefined) return false
+    return order;
+
+  },
+  confirm(){
+    if(this.user == undefined && !this.user) return false;
+    if(!this.sOrder || this.sOrder.orders == undefined || this.sOrder.orders.length <= 0) return false;
+
+    let order = this.sOrder.orders.find(x => x.customer_id == this.user.id);
+    if(!order || order.x_confirm == undefined) return false
+    return order.x_confirm;    
+  },
+  memberWeight(){
+    if(!this.order || this.order.xData == undefined) return false;
+
+    return this.order.xData.fullWeight;
+  },
+  orderSum(){
+    if(!this.order || this.order.x_price_final == undefined) return false;
+    return this.order.x_price_final;
+  },
+  confirmable(){
+    if(this.order == undefined || this.order.confirmable == undefined) return false;
+    return this.order.confirmable;
   }
 
 },
@@ -541,6 +669,10 @@ methods:{
     'get':'sharedOrder/fetchData',
     'update':'sharedOrder/update',
   }),
+  copyInviteLink(){
+    copy('https://neolavka.ru/shared/order/' + this.link);
+    this.copied = true;
+  },
   goToEdit(){
     if(!this.link) return;
     location.href = '/shared/order/edit/' +this.link;
@@ -568,8 +700,6 @@ methods:{
       this.showLogin = true;
       return;
     }
-
-
     let r = await ax.fetch('/shared/order/join',{'link':this.link},'post');
     if(r){
       window.location.reload();
@@ -606,6 +736,13 @@ methods:{
 </script>
 
 <style scoped>
+  .member-kick{  
+    text-decoration-line: underline;
+    font-size: 14px;
+    margin-left: 110px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
   .congratz{
     font-size: 22px;
     font-style: normal;
@@ -635,8 +772,8 @@ methods:{
     color: rgba(0, 0, 0, 0.6);
   }
   .edit{
-    text-decoration-line: underline;
-    font-size: 20px;
+    text-decoration-line: underline;    
+    font-size: 15px;
   }
   .action{
     text-align: left;
@@ -657,6 +794,14 @@ methods:{
     .user-group-header{
       font-size: 30px;
     }    
+    .member-kick{  
+      font-size: 16px;
+      margin-left: 147px;
+    }  
+    .edit{
+      font-size: 20px;
+    }
+
   }
   
 

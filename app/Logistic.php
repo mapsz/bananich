@@ -52,12 +52,17 @@ class Logistic extends Model
 
   public static function daily(){
 
-    if(DB::table('logistics')->where('date',now()->format('yy-m-d'))->exists()) return 3;
+    // dd();
 
-    self::getFromMaxopra();
+    // if(DB::table('logistics')->where('date',now()->format('yy-m-d'))->exists()) return 3;
 
-    self::saveFromRaw();
+    $exist = self::getFromMaxopra();
 
+    
+    // if(!$exist){
+      self::saveFromRaw();
+    // }
+    
     return true;
 
   }
@@ -65,21 +70,31 @@ class Logistic extends Model
 
   public static function saveFromRaw(){
 
-    if(DB::table('logistics')->where('date',now()->format('yy-m-d'))->exists()) return true;
+    // if(DB::table('logistics')->where('date',now()->format('Y-m-d'))->exists()) return true;
+
+    DB::table('logistics')->where('date',now()->format('Y-m-d'))->delete();
 
     $logistic = self::getFromRaw();
 
-    DB::table('logistics')->insert($logistic);
+    // dd($logistic);
+
+    dd(DB::table('logistics')->insert($logistic));
 
     return true;
   }
 
   public static function getFromRaw(){
 
-    $date = now()->format('yy-m-d');
+
+    $date = now()->format('Y-m-d');
+
+    if(DB::table('logistics')->where('date',$date)->exists()) return false;
+
+    dump(11);
 
     //Get raw
     $raws = DB::table('logistic_raw')->where('date',$date)->get();
+
 
     //Find non error raw
     $raw = false;
@@ -89,12 +104,16 @@ class Logistic extends Model
         break;
       }      
     }
+
+    
     
     //Return if no errorless raw
     if(!$raw) return false;
 
     //To object
     $obj = simplexml_load_string ($raw);
+
+    
 
     //Make beauty array
     $logistics = [];
@@ -144,8 +163,7 @@ class Logistic extends Model
     $login = 'vvenkov@yandex.ru';
     $password = 'vfuk6ZXW';
     $accountId = 'dostavoshka';
-    $date = now()->format('d.m.yy');
-
+    $date = now()->format('d.m.Y');
 
     $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/authentication/createSession?accountID='.$accountId.'&user='.$login.'&password='.$password);
 
@@ -165,14 +183,29 @@ class Logistic extends Model
 
     $response = $client->request('POST', 'https://'.$name.'.maxoptra.com/rest/2/distribution-api/schedules/getScheduleByAOCOnDate?sessionID='.$sessionID.'&date='.$date.'&aocID=1748');
 
-    $ras = $response->getBody()->getContents();
+    $raw = $response->getBody()->getContents();
 
 
-    DB::table('logistic_raw')->insert([
-      ['raw' => $ras,'date' => now(),'created_at'=>now()]
-    ]);
+    // Errors
+    if(strpos($raw,'<error>')){
+      dump('raw error');
+      dump($raw);
+      DB::table('logistic_raw')->insert([
+        ['raw' => $raw,'date' => now(),'created_at'=>now()]
+      ]);
+      return false;
+    }    
 
-    
+    $exist = DB::table('logistic_raw')->where('raw', '=', $raw)->exists();
+
+    if(!$exist){
+      DB::table('logistic_raw')->insert([
+        ['raw' => $raw, 'date' => now(), 'created_at' => now()]
+      ]);
+    }
+  
+
+    return $exist;
     // $obj = simplexml_load_string ($ras);
 
     // dd($obj);

@@ -1,5 +1,5 @@
 <template>
-<div v-if="$route.name != 'sharedOrder'">
+<div v-if="$route.name != 'sharedOrder' && $route.name != 'sharedOrderOpen'">
   <button v-if="myOrder.id == undefined && invite" @click="goToInvite()" class="x-btn">Присоединиться к закупке</button>
   <button v-else-if="myOrder && myOrder.id != undefined" @click="goToOrder()" class="x-btn">К моей закупке</button>
   <button v-else @click="goToOpen()" class="x-btn">Открыть закупку</button>

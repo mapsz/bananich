@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\SharedOrder;
 use App\Order;
+use App\OrderMeta;
 use App\Checkout;
 use App\Cart;
 use App\Setting;
@@ -30,6 +31,43 @@ class SharedOrderController extends Controller
 
     // $sOrder = SharedOrder::where('id',$request->id)->update($request->all());
     return response()->json($sOrder);
+  }
+
+  public function confirm(){
+
+    //Get Shared Order
+    $sOrder = SharedOrder::byAuth();
+    if(!$sOrder) return response()->json(false);
+
+    //Get auth
+    $user = Auth::user();
+    if(!$user) return response()->json(false);
+    
+    {// Order
+      $orderId = false;
+      foreach ($sOrder->orders as $key => $order) {
+        if($order->customer_id == $user->id){
+          $orderId = $order->id;
+          break;
+        }
+      }
+      if(!$orderId) return response()->json(false);
+    }
+
+
+
+    $meta = DB::table('order_metas')->updateOrInsert(
+      [
+        'order_id' => $orderId,
+        'name' => 'x_confirm'
+      ],
+      [
+        'value' => 1,
+      ]    
+    );
+
+    return response()->json(true);
+
   }
   
   public static function byAuth(){

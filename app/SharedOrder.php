@@ -315,6 +315,9 @@ class SharedOrder extends Model
 
       //Detach
       $order->sharedOrder()->detach($sOrderId);
+
+      //Delete
+      $order->delete();
     }
 
     {//User
@@ -381,7 +384,7 @@ class SharedOrder extends Model
 
     $orders = $this->jugeGet(['status' => [200,300], 'noHandle' => true]);
 
-    foreach ($orders as $key => $order) {      
+    foreach ($orders as $key => $order) {
       {//Timers
         $time = now();
         if($this->test) $time = $order['test_time'];
@@ -511,7 +514,6 @@ class SharedOrder extends Model
       (new SharedOrder)->handle();
     } 
     
-
     //Model
     $query = new self;
   
@@ -521,10 +523,11 @@ class SharedOrder extends Model
       $query = $query->with('address');
       $query = $query->with('comment');
       $query = $query->with('pays');
-      $query = $query->with('orders');
+      // $query = $query->with('orders');
     }
   
     {//Where
+      // dd($request);
       if(isset($request['link'])){
         $query = $query->where('link',$request['link']);
       }
@@ -550,6 +553,13 @@ class SharedOrder extends Model
   
     //Get
     $data = JugeCRUD::get($query,$request);
+    
+    {//After With
+      //Order
+      foreach ($data as $key => $row) {  
+        $row['orders'] = Order::jugeGet(['sharedOrder' => $row->id]);
+      }      
+    }
     
     {//After Query
 

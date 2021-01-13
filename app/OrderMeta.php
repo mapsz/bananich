@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductMeta extends Model
+class OrderMeta extends Model
 {
   public $incrementing = false;
   public $timestamps = false;
-  protected $table = 'product_metas';
+  protected $table = 'order_metas';
   protected $guarded = [];
 }

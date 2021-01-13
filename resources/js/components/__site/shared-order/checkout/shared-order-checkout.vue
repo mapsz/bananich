@@ -39,6 +39,7 @@
         <!-- Info -->
         <div class="col-12 col-lg-4">
           <shared-order-numbers />
+          <shared-order-confirm class="mt-3" v-if="confirmable"/>
         </div>
 
         <!-- Errors -->
@@ -47,7 +48,7 @@
         <!-- Big Action -->
         <div class="d-flex justify-content-center">
           <button @click="edit()" class="x-btn">
-            Завершить Оформление
+            Внести изменения
           </button>
         </div>
 
@@ -79,6 +80,10 @@ export default {
       if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
       return this.$route.params.order_link;
     },
+    confirmable(){
+      if(this.order == undefined || this.order.confirmable == undefined) return false;
+      return this.order.confirmable;
+    }
   },
   watch:{
     order: function (val, oldVal) {

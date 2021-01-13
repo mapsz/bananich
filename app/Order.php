@@ -613,6 +613,8 @@ class Order extends Model
 
       //To other
       $query = $query->with('toOther');
+      //Metas
+      $query = $query->with('metas');
       //Shared Order
       $query = $query->with('sharedOrder');
       $query = $query->with('sharedOrder.address');
@@ -660,6 +662,15 @@ class Order extends Model
     
     //Where
     if('WHERE' == 'WHERE'){
+
+      //Shared order
+      if(isset($request['sharedOrder']) && $request['sharedOrder'] > 0){
+        $sharedOrderId = $request['sharedOrder'];
+        $query = $query->whereHas('sharedOrder', function($q)use($sharedOrderId){
+          $q->where('shared_orders.id',$sharedOrderId);
+        });
+      }
+
       //Search
       if(isset($request['search']) && $request['search']){
 
@@ -746,7 +757,39 @@ class Order extends Model
     //Postedit data
     if("EDIT" == "EDIT"){
 
+      //More info
       foreach ($orders as $ok => $order) {
+        {//Metas
+          foreach ($order['metas'] as $meta) {
+            $order[$meta->name] = $meta->value;
+          }
+          unset($order['metas']);
+        }
+
+        {//X shared order
+          $order['sharedOrderId'] = false;
+          if(isset($order->sharedOrder) && isset($order->sharedOrder[0]) && isset($order->sharedOrder[0]->id) && $order->sharedOrder[0]->id > 0){
+            $order['sharedOrderId'] = $order->sharedOrder[0]->id;
+          }
+        }
+
+        
+        {//Confirmable
+          $order['confirmable'] = false;
+          if(
+            isset($order->pay_method) && $order->pay_method &&
+            isset($order->address) && $order->address &&
+            isset($order->phone) && $order->phone
+          ){
+            $order['confirmable'] = true;
+          }
+        }
+
+        {//x confirm
+          if(!isset($order['x_confirm']) || (isset($order['x_confirm']) && $order['x_confirm'] == "0" )){
+            $order['x_confirm'] = false;
+          }
+        }
 
         //Logistic
         if(isset($request['with_logistic'])){
@@ -809,6 +852,19 @@ class Order extends Model
         }  
         $orders[$ok]['termobox'] = $termobox;
 
+      }
+      
+      {//Items
+        foreach ($orders as $ok => $order) {
+          foreach ($order->items as $key => $item) {
+            $item->product = Product::setMetas($item->product);
+            $item->unit = $item->gram_sys;
+            $item->count = $item->quantity;
+            $item->unit_full = floatval($item->unit_full);
+          }
+          
+          $order->items = Checkout::itemsWeight($order->items);
+        }
       }
 
       //Checkout
@@ -953,12 +1009,18 @@ class Order extends Model
         $order->total_result = round($order->total_result,$round);
 
       }
-
       
       {//Checkout x
         foreach ($orders as $ok => $order) {
           if($order->type == 'x'){
-            // dd($order);
+            $order->xData = Checkout::xdata($order->items, $order, $order->sharedOrder[0]);
+            $order->x_items_subtotal = 0;
+            foreach ($order->items as $key => $item) {
+              $order->x_items_subtotal += $item->price_final;
+            }
+
+            
+            $order->x_price_final = Checkout::x_final_price($order->x_items_subtotal, $order->xData);
           }
         }
       }
@@ -1093,7 +1155,6 @@ class Order extends Model
           {//Delete old
             Item::where('order_id', $order)->delete();
           }
-
           
           {//Put new
             $putItems = [];
@@ -1105,29 +1166,27 @@ class Order extends Model
                 'quantity' => $item['count'],
                 'gram_sys' => $item['unit'],
                 'gram' => isset($item['unit_view']) ? $item['unit_view'] : $item['unit'],                  
-                'price' => $item['final_price']                  
+                'price' => $item['final_price'],
+                'unit_type' => $item['product']['unit_type'],
+                'unit_full' => isset($item['product']['full_weight']) ? $item['product']['full_weight'] : $item['unit']        
               ]);
             }
-
             $insert = Item::insert($putItems);
-
             return $insert;
           }
-
         }
 
-
         return false;
-
         
       }
-
-
     }
-
-
   }
 
+
+  
+  public function metas(){
+    return $this->hasMany('App\OrderMeta');
+  }   
   public function items(){
     return $this->hasMany('App\Item');
   }

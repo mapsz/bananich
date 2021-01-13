@@ -133,7 +133,7 @@
                     Найти соседа
                   </button>
                   <button @click="open()" class="x-btn">
-                    Начать закупку
+                    Открыть закупку
                   </button>
                 </template>
                 <!-- Edit -->

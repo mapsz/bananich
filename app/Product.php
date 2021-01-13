@@ -683,16 +683,7 @@ class Product extends Model
       //Metas
       if(!isset($request['no_metas'])){
         foreach ($products as $product) {
-          //Metas
-          foreach ($product['metas'] as $meta) {
-            $product[$meta->name] = $meta->value;
-          }
-          unset($product['metas']);
-          //Long Metas
-          foreach ($product['longMetas'] as $meta) {
-            $product[$meta->name] = $meta->value;
-          }
-          unset($product['longMetas']);
+          $product = Product::setMetas($product);
         }
       }
 
@@ -832,6 +823,22 @@ class Product extends Model
     return $products;
   }
 
+  public static function setMetas($product){
+    
+    //Metas
+    foreach ($product['metas'] as $meta) {
+      $product[$meta->name] = $meta->value;
+    }
+    unset($product['metas']);
+    //Long Metas
+    foreach ($product['longMetas'] as $meta) {
+      $product[$meta->name] = $meta->value;
+    }
+    unset($product['longMetas']);
+
+    return $product;
+  }
+
   public static function getImages($id){
 
     $path = public_path() . '/products/images/source';
@@ -949,7 +956,7 @@ class Product extends Model
 
   public static function doValidate($request){
 
-    dump($request);
+    // dump($request);
 
 
     Validator::make($request['data'], [

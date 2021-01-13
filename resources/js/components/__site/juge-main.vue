@@ -1,6 +1,7 @@
 <template>
   <div :class="isX?'page-x':''">
     <site-header />
+    <announces />
       <template functional>
 
         <slot/>
@@ -82,9 +83,12 @@ methods:{
 </script>
 
 <style>
+  body{
+    font-family: "Open Sans", "Roboto";
+  }
+
   .page-x{
-    background: #f3ebe8;  
-    font-family: Open Sans;
+    background: #f3ebe8;      
   }
   .page-x .custom-radio:checked + label:before {
       background-color: #8AC2A7;
@@ -94,7 +98,7 @@ methods:{
     background: #8AC2A7;
     border-color: #8AC2A7;
   }
-  .x-btn{
+  .x-btn{    
     font-size: 16px;
     border-radius: 50px;
     background: #8AC2A7;
@@ -118,7 +122,7 @@ methods:{
     width: 30px;
     height: 30px;
     border-radius: 15px;
-    background-color: #EB5757;    
+    background-color: #EB5757;
   }
   .info-icon::after{    
     display: flex;
@@ -127,8 +131,16 @@ methods:{
     content: "i";
     font-weight: 600;
     font-size: 21px;
-    margin-left: 12px;
+    margin-left: 13px;
   }
+  .info-icon-confirm{
+    background-color: #8ac2a7;
+  }
+  .info-icon-confirm::after{    
+    content: "✓";
+        margin-left: 6px;
+  }
+
   .my-30{
     margin-top: 30px!important;
     margin-bottom: 30px!important;

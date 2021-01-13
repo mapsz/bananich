@@ -163,4 +163,13 @@ export default {
 .bananich-x .catalog-item-text{
   background-color: #f3ebe8;
 }
+
+    /* white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; */
+
+
 </style>

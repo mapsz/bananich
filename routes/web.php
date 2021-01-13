@@ -971,6 +971,7 @@ Route::group(['middleware' => ['HttpsRR'
       Route::any('/shared/order/handle', 'SharedOrderController@handle');
       Route::any('/shared/order/update', 'SharedOrderController@update');
       Route::any('/shared/order/order', 'SharedOrderController@getOrder');
+      Route::post('/shared/order/confirm', 'SharedOrderController@confirm');
       
       {//Shared Order Pay
         // Route::get('/shared/order/pays', 'SharedOrderPayController@get');

@@ -146,10 +146,9 @@ class Checkout extends Model
       }
       {//X bananich
         $cart->final_summ_x = 0;
-        $cart->final_summ_x += $cart->pre_price_x;
+        
+        $cart->final_summ_x = Checkout::x_final_price($cart->pre_price_x,$cart->xData);        
         $cart->final_summ_x += $cart->container ? $cart->container['price'] : 0;
-        $cart->final_summ_x += $cart->xData['overWeightPrice'];
-        $cart->final_summ_x += $cart->xData['participation_price'];
       }
       //Cant be less zero
       if($cart->final_summ    < 0) $cart->final_summ    = 0;
@@ -195,14 +194,24 @@ class Checkout extends Model
 
   }
 
-  public static function items($items, $products){
+  public static function x_final_price($pre, $xData){
 
+    $sum = 0;
+    $sum += $pre;
+    $sum += $xData['overWeightPrice'];
+    $sum += $xData['participation_price'];
+
+    return $sum;
+
+  }
+
+  public static function items($items, $products){    
+    //Items
     foreach ($items as $key => $item) {
       foreach ($products as $product) {        
-        if($product->id != $item->product_id) continue; //Skip
-
-       
-        {//Data
+        if($product->id != $item->product_id) continue; //Skip       
+        {//Data          
+          $item->product          = $product;
           $item->name             = $product->name;
           $item->unit             = $product->unit;
           $item->unit_view        = $product->unit_view;
@@ -210,41 +219,70 @@ class Checkout extends Model
           $item->unit_name        = $product->unit_name;
           $item->bonus            = isset($product->bonus) && $product->bonus ? true : false;
         }
-        {//Price            
-          {//Normal bananich
-            $item->price_per_unit   = $product->final_price;
-            $item->price            = $item->price_per_unit * $item->count;
-            $item->final_price      = $item->price;
-            //discount
-            $item->discount = false;
-            if(isset($product->discount)){
-              $item->discount = $product->discount;
-              $item->price = $product->price;
-              $item->final_price      = ProductDiscount::getFinalPrice($item->price_per_unit,$item->count,$item->discount);
-            }
-          }
-          {//X bananich
-            $item->price_per_unit_x = $product->final_price_x;
-            $item->price_x          = $item->price_per_unit_x * $item->count;
-            $item->final_price_x    = $item->price_x;
-          }
-        }
 
-        {//Weights
-          $item->weight = $item->unit * $item->count;
+      }
+    }
+
+    //Price Weight
+    $items = Checkout::itemsPirce($items);
+    $items = Checkout::itemsWeight($items);
+
+    return $items;
+
+  }
+
+  public static function itemsPirce($items){
+
+    foreach ($items as $key => $item) {
+
+      {//Price            
+        {//Normal bananich
+          $item->price_per_unit   = $item->product->final_price;
+          $item->price            = $item->price_per_unit * $item->count;
+          $item->final_price      = $item->price;
+          {//discount
+            $item->discount = false;
+            if(isset($item->product->discount)){
+              $item->discount = $item->product->discount;
+              $item->price = $item->product->price;
+              $item->final_price      = ProductDiscount::getFinalPrice($item->product->price,$item->count, $item->discount);
+            }
+          }          
         }
-        {//Weights Full
-          $item->full_weight = isset($product->unit_full) ? ($product->unit_full * $item->count) : $item->weight;
-          $item->full_weight_view = $item->full_weight;
+        {//X bananich
+          $item->price_per_unit_x = $item->product->final_price_x;
+          $item->price_x          = $item->price_per_unit_x * $item->count;
+          $item->final_price_x    = $item->price_x;
         }
       }
+
+    }    
+
+    return $items;
+
+
+  }
+
+  public static function itemsWeight($items){  
+
+    foreach ($items as $key => $item) {
+
+      // dd( $item);
+      {//Weights
+        $item->weight = $item->unit * $item->count;
+      }
+      {//Weights Full
+        $item->full_weight = $item->unit_full ? $item->unit_full * $item->count : $item->weight;
+        $item->full_weight_view = $item->full_weight;
+      }
+
     }
 
     return $items;
 
   }
 
-  public static function xdata($items){
+  public static function xdata($items, $order = false, $sOrder = false){
 
     $xData = [
       'fullWeight' => 0,
@@ -259,24 +297,26 @@ class Checkout extends Model
     //Full Weight
     foreach ($items as $key => $item) {
       $xData['fullWeight'] += $item->full_weight;
-    }   
+    }
 
     $user = Auth::user();
     
     {//Get order
       //Shared order
-      $sOrder = SharedOrder::byAuth(false);
-      if(!$sOrder) return $xData;
-      if(!isset($sOrder->orders)) return $xData;
+      if(!$sOrder){      
+        $sOrder = SharedOrder::byAuth(false);
+        if(!$sOrder) return $xData;
+        if(!isset($sOrder->orders)) return $xData;
+      }
 
       //Order
-      $order = false;
-      foreach ($sOrder->orders as $key => $v) {
-        if($v->customer_id == $user->id) {
-          $order = $v;
-          $xData['order_id'] = $v->id;
-          $xData['s_order_id'] = $sOrder->id;
-          break;
+      if(!$order){      
+        $order = false;
+        foreach ($sOrder->orders as $key => $v) {
+          if($v->customer_id == $user->id) {
+            $order = $v;
+            break;
+          }
         }
       }
 
@@ -285,7 +325,9 @@ class Checkout extends Model
     if(!$order) return $xData;
 
     $settings = (new Setting)->getList(1);
-
+  
+    $xData['order_id'] = $order->id;
+    $xData['s_order_id'] = $sOrder->id;
 
     {//Participation
       $xData['participation_price'] = $settings['x_order_price'] / $sOrder->member_count;
