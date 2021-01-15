@@ -3,6 +3,10 @@
     <!-- Image Container -->
     <div class="juge-catalogue-item-image-container">
       <div class="juge-catalogue-item-image" :style='"background-image:url(\""+product.mainImage+"\")"'>
+        <a 
+          :href="($route.path == '/profile/favorites' ? '' : $route.path) + ($route.path == '/' ? '':'/') + 'product/' + product.id"
+          class="juge-catalogue-item-image-link"
+        />
         <!-- Icons -->
         <template>
           <!-- Bonus -->
@@ -180,6 +184,12 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
+  }
+  .juge-catalogue-item-image-link{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;    
   }
 
   /* Name */

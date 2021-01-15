@@ -26,5 +26,6 @@ export default {
   .catalog-item-icon img{
     width:30px;
     display: inline-block;
+    z-index:1;
   }
 </style>
