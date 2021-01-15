@@ -215,7 +215,7 @@ export default {
   }
 
   /* Country */
-  .catalog-item-country{    
+  .catalog-item-country{
     font-size: 11px;
     color: gray;
     height: 100%;
@@ -344,6 +344,10 @@ export default {
       font-size: 18px;
     }
 
+    /* Country */
+    .catalog-item-country{
+      font-size: 14px;
+    }
     /* БЖУ */
     .juge-catalog-item-cal-container {
       height: 42px;

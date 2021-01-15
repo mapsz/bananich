@@ -44,6 +44,7 @@ class Statistic extends Model
   public static function jugeGet($request) {    
     //Get orders
     $request['limit'] = 100000;
+    $request['type'] = 0;
     $orders = Order::getWithOptions($request);
 
     //Count

@@ -737,6 +737,11 @@ class Order extends Model
         $query = $query->where('customer_id', '=', $request['customerId']);
       }
 
+      //Customer
+      if(isset($request['type'])){
+        $query = $query->where('type', $request['type']);
+      }
+
     }
 
 
@@ -1011,16 +1016,17 @@ class Order extends Model
       }
       
       {//Checkout x
-        foreach ($orders as $ok => $order) {
-          if($order->type == 'x'){
-            $order->xData = Checkout::xdata($order->items, $order, $order->sharedOrder[0]);
-            $order->x_items_subtotal = 0;
-            foreach ($order->items as $key => $item) {
-              $order->x_items_subtotal += $item->price_final;
+        if(!isset($request['type']) || $request['type'] == 'x'){
+          foreach ($orders as $ok => $order) {
+            if($order->type == 'x'){
+              if(!isset($order->sharedOrder) || count($order->sharedOrder) == 0) continue;
+              $order->xData = Checkout::xdata($order->items, $order, $order->sharedOrder[0]);
+              $order->x_items_subtotal = 0;
+              foreach ($order->items as $key => $item) {
+                $order->x_items_subtotal += $item->price_final;
+              }            
+              $order->x_price_final = Checkout::x_final_price($order->x_items_subtotal, $order->xData);
             }
-
-            
-            $order->x_price_final = Checkout::x_final_price($order->x_items_subtotal, $order->xData);
           }
         }
       }
