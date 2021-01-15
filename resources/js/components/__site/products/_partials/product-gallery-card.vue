@@ -2,7 +2,9 @@
   <div class="juge-catalogue-item" :class="isX?'bananich-x':''">
     <!-- Image Container -->
     <div class="juge-catalogue-item-image-container">
-      <div class="juge-catalogue-item-image" :style='"background-image:url(\""+product.mainImage+"\")"'>
+      <div class="juge-catalogue-item-image" >
+        <!-- Image -->
+        <img class="juge-catalogue-item-img" :src="product.mainImage" alt="Product image">
         <!-- Icons -->
         <template>
           <!-- Bonus -->
@@ -181,6 +183,15 @@ export default {
     bottom: 0;
     right: 0;
   }
+  .juge-catalogue-item-img{
+    vertical-align: middle;
+    border-style: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 0;    
+  }
 
   /* Name */
   .juge-catalog-item-name-container{ 
@@ -304,8 +315,7 @@ export default {
   }
   .page-x .juge-catalogue-item-more-info{
     background-color:#8ac2a7d6;
-  }
-  
+  }  
   .juge-catalogue-item-more-info div {
     margin: 0 5px 5px 5px;
   }
@@ -313,6 +323,7 @@ export default {
     margin-top: 5px;
   }
 
+  /* Not Available */
   .juge-catalogue-item-not-available{
     border-radius: 10px;
     display: block;
@@ -321,7 +332,7 @@ export default {
     height: 100%;
     top: 0;
     background: #000000a8;
-    z-index: 999;
+    z-index: 9;
     display: flex;
     align-items: center;
     justify-content: center;
