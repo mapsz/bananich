@@ -34,6 +34,16 @@
           
           <checkout-comment class="checkout-div" v-model="data.comment" :no-cache="true"/>
 
+          <!-- Errors -->
+          <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
+
+          <!-- Big Action -->
+          <div class="d-flex justify-content-center mb-3">
+            <button @click="edit()" class="x-btn">
+              Внести изменения
+            </button>
+          </div>
+
         </div>
 
         <!-- Info -->
@@ -42,15 +52,7 @@
           <shared-order-confirm class="mt-3" v-if="confirmable"/>
         </div>
 
-        <!-- Errors -->
-        <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
 
-        <!-- Big Action -->
-        <div class="d-flex justify-content-center">
-          <button @click="edit()" class="x-btn">
-            Внести изменения
-          </button>
-        </div>
 
       </div>
 

@@ -1137,7 +1137,7 @@ class Order extends Model
 
       {//Order
         //Get order
-        if(!$order || !isset($order->id)){          
+        if(!$order || !isset($order->id)){
           if(isset($cart['xData']) && isset($cart['xData']['order_id']) && $cart['xData']['order_id'] > 0){
             // $order = Order::jugeGet(['id' => $cart['xData']['order_id']]);
             $order = $cart['xData']['order_id'];
@@ -1166,7 +1166,7 @@ class Order extends Model
                 'quantity' => $item['count'],
                 'gram_sys' => $item['unit'],
                 'gram' => isset($item['unit_view']) ? $item['unit_view'] : $item['unit'],                  
-                'price' => $item['final_price'],
+                'price' => $item['final_price_x'],
                 'unit_type' => $item['product']['unit_type'],
                 'unit_full' => isset($item['product']['full_weight']) ? $item['product']['full_weight'] : $item['unit']        
               ]);

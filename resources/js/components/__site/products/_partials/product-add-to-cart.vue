@@ -1,5 +1,5 @@
 <template>
-  <div v-if="product != undefined" :id="'cart-input-'+product.id" class="to-cart-wrapper" :class="design == 'cart' ? 'cart-design' : ''">
+  <div v-if="product != undefined && !notAloved" :id="'cart-input-'+product.id" class="to-cart-wrapper" :class="design == 'cart' ? 'cart-design' : ''">
     <!-- Numbers -->
     <form v-if="count > 0 || count === ''" @change.prevent="toCart()" class="to-cart-number">        
       <!-- Minus     -->
@@ -31,6 +31,7 @@ export default {
   props: ['product','design'],
   data(){return{
     count:0,
+    notAloved:false,
     isX:isX,
   }},
   watch: {
@@ -81,6 +82,13 @@ export default {
 
       //Edit cart
       let r = await this.editItem({id:this.product.id,'count':this.count});
+
+     if(!r && ax.lastResponse.status == 422 && ax.lastResponse.data == "not available"){
+       this.notAloved = true;
+       this.count = 0;
+       this.$emit('notAloved')
+       return;
+      }
 
       //Pixel
       if(typeof fbq === 'function')

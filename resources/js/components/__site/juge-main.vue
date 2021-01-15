@@ -118,27 +118,23 @@ methods:{
     padding-left: 16px;
   }
   .info-icon{
-    display: inline-block;
+    display: flex;
+    justify-content: center;
     width: 30px;
     height: 30px;
     border-radius: 15px;
     background-color: #EB5757;
   }
   .info-icon::after{    
-    display: flex;
-    height: 100%;
-    align-items: center;
     content: "i";
     font-weight: 600;
     font-size: 21px;
-    margin-left: 13px;
   }
   .info-icon-confirm{
     background-color: #8ac2a7;
   }
   .info-icon-confirm::after{    
     content: "✓";
-        margin-left: 6px;
   }
 
   .my-30{

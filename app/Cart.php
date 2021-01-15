@@ -135,7 +135,19 @@ class Cart extends Model
     if($count == 0){
       self::removeItem($productId,$cart_id);
       return true;
-    } 
+    }
+
+    
+    {//Check available
+      $cart = Cart::find($cart_id);
+      if($cart->type == 2){
+        $sOrder = SharedOrder::byAuth();
+        if(!Product::checkProductAvailable($productId, $sOrder->delivery_date)){
+          self::removeItem($productId,$cart_id);
+          return 'notAvailable';
+        } 
+      }
+    }
 
     //Attach
     //Get item
@@ -178,10 +190,10 @@ class Cart extends Model
     return true;
   }
 
-  public static function resetItems(){
+  public static function resetItems($request){
 
-    //Get cart
-    $cart = self::getCart();
+     //Get cart
+    $cart = self::getCart($request);
 
     //Remove items
     $item = CartItem::where('cart_id',$cart['id'])->delete();

@@ -249,6 +249,24 @@ class Product extends Model
 
   }
 
+  public static function checkProductAvailable($id, $date){
+
+    //Get product time
+    $beforeDeliveryTimes = ProductMeta::where('product_id',$id)->where('name', '=', 'deliveryTime')->first();
+
+    //Skip if no time
+    if($beforeDeliveryTimes == null) return true;
+
+    //Get timespamps
+    $deliveryTS = Carbon::parse($date)->timestamp;
+    $productAvailableTS = now()->addHours($beforeDeliveryTimes->value)->timestamp;
+    
+    //Compare
+    if($productAvailableTS > $deliveryTS) return false;
+
+    return true;
+  }
+
   public static function checkCartAvailable($cart){
 
     //Get ids
@@ -257,7 +275,6 @@ class Product extends Model
 
     // self::updateAvailable($ids);
     $products = self::getWithOptions(['ids' => $ids]);
-
 
     foreach ($products as $key => $product) {
       foreach ($cart['items'] as $key => $item) {
@@ -274,10 +291,6 @@ class Product extends Model
         }
       }
     }
-
-
-    
-    
 
     return ['r' => true];
 

@@ -14,13 +14,18 @@ computed:{
   ...mapGetters({
     user:       'user/get',
     myOrder:    'sharedOrder/getMyOrder',
+    inviteOrder:    'sharedOrder/getInviteOrder',
+    invite:    'sharedOrder/getInviteLink',
   }),
-  invite(){
-    return Cookies.get('x_invite');
-  },
+},
+async mounted() {
+  this.getInviteOrder();
 },
 
 methods:{  
+  ...mapActions({
+    'getInviteOrder':'sharedOrder/fetchInviteOrder',
+  }),  
   goToInvite(){
     location.href = '/shared/order/' + this.invite;
   },

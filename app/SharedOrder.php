@@ -263,7 +263,7 @@ class SharedOrder extends Model
           $data['deliveryDate'] = $sOrder['delivery_date'];
           $data['deliveryTime']['from'] = str_replace (':00:00','',$sOrder->delivery_time_from);
           $data['deliveryTime']['to'] = str_replace (':00:00','',$sOrder->delivery_time_to);
-          $data['payMethod'] = 'cash'; //TODO @@@
+          $data['payMethod'] = 0; //TODO @@@
           $data['confirm'] = 1; // TODO @@@
           $data['comment'] = ""; // TODO @@@
           $data['name'] = $user->name;
@@ -546,6 +546,10 @@ class SharedOrder extends Model
           $q->where('user_id', '=', $memberId);
         });
       }
+      //Actual
+      if(isset($request['actual']) && $request['actual']){
+        $query = $query->where('delivery_date','>',now());
+      }
 
     }
 
@@ -626,7 +630,8 @@ class SharedOrder extends Model
     }
   
     //Single
-    if(isset($request['id']) || isset($request['single'])){$data = $data[0];}
+    if((isset($request['id']) || isset($request['single']) && isset($data[0]))){$data = $data[0];}
+
     
     //Return
     return $data;

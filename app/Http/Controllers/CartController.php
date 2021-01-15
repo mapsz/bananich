@@ -78,6 +78,9 @@ class CartController extends Controller
     //Edit cart
     $cart = Cart::editItem($request->id,$request->count,$request->cart_id);
 
+    if($cart === "notAvailable")
+      return response()->json('not available', 422);
+
     //Return
     return response()->json($cart ? $cart : false);
 
@@ -108,10 +111,10 @@ class CartController extends Controller
 
   }
 
-  public function resetItems(){
+  public function resetItems(Request $request){
 
     //Remove
-    Cart::resetItems();
+    Cart::resetItems($request);
 
     //Return
     return response()->json(1);

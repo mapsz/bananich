@@ -1,5 +1,6 @@
 <template>
   <div class="catalog-item-icon">
+    <img v-if="bonus" src="" style="visibility: hidden;">
     <img v-if="product.no_lactose != undefined && product.no_lactose == 1" src="/image/no-milk.svg" alt="Без лактозы" data-toggle="tooltip" title="Без лактозы">
     <img v-if="product.no_gluten != undefined && product.no_gluten == 1" src="/image/no-gluten.svg" alt="Без глютена" data-toggle="tooltip" title="Без глютена">
     <img v-if="product.no_sugar != undefined && product.no_sugar == 1" src="/image/no-sugar.svg" alt="Без сахара" data-toggle="tooltip" title="Без сахара">
@@ -12,7 +13,7 @@
 
 <script>
 export default {
-  props: ['product'],
+  props: ['product','bonus'],
   mounted(){
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()

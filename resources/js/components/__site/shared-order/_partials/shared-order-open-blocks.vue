@@ -66,10 +66,8 @@ computed:{
     sOrders:    'sharedOrder/get',
     user:       'user/get',
     settings:   'settings/beautyGet',
+    invite:     'sharedOrder/getInviteLink',
   }),
-  invite(){
-    return Cookies.get('x_invite');
-  },
   inviteSOrder(){
     if(this.sOrders == undefined || this.sOrders.length < 1) return false;
     return this.sOrders[0];

@@ -84,6 +84,8 @@ let cart = {
     async editItem({commit,state,dispatch},data){
       data.cart_id = state.cart.id;
       let r = await ax.fetch('/cart/edit/item',data,'post',false);
+
+      dispatch('fetch');
       if(r){
         // //Find cart
         // let cart = JSON.parse(JSON.stringify(state.cart));
@@ -99,7 +101,7 @@ let cart = {
         // cart.items[index].count = data.count;
 
         //Commit
-        dispatch('fetch');
+        
 
         return true;
       }
@@ -114,8 +116,12 @@ let cart = {
       dispatch('fetch');
       return r;
     },    
-    async cartReset({dispatch},){
-      let r = await ax.fetch('/cart/reset',{},'delete');
+    async cartReset({dispatch},){      
+      //Set type
+      let type = 1;
+      if(isX) type = 'x';
+
+      let r = await ax.fetch('/cart/reset',{type},'delete');
       localStorage.cart = false;
       dispatch('fetch');
     },

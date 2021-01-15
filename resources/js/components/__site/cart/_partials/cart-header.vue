@@ -3,7 +3,7 @@
     <button class="cart-btn">
       <a href="/cart">
         <img src="/image/cart.svg" alt="cart">
-        <div v-if="cart.items != undefined && cart.items.length > 0" class="cart-num">{{cart.pre_price}}р</div>
+        <div v-if="summ" class="cart-num">{{summ}}р</div>
       </a>
     </button>
     <div class="cart-sum"></div>
@@ -23,7 +23,7 @@
 
       <div class="filter-line-end">
         <div class="cart-line-name">Всего:</div>
-        <div class="cart-line-sum">{{cart.pre_price}}р</div>
+        <div class="cart-line-sum">{{summ}}р</div>
       </div>
 
       <a href="/cart"><button class="btn-yellow btn-think">Оформить заказ</button></a>
@@ -43,7 +43,18 @@ export default {
     ...mapGetters({
       cart:'cart/getCart',
       settings:'settings/beautyGet',
-    }),    
+    }),
+    summ(){
+      if(this.cart == undefined) return false;
+
+      if(this.cart.type != undefined && this.cart.type == 2){
+        if(this.cart.pre_price_x == undefined) return false;
+        return this.cart.pre_price_x;
+      }else{
+        if(this.cart.pre_price == undefined) return false;
+        return this.cart.pre_price;
+      }
+    }, 
   }, 
   methods:{    
     hide(){this.cartDrop=false;},

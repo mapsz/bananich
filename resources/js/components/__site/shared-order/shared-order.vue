@@ -153,13 +153,16 @@
           <div class="col-12 col-lg-6 offset-lg-6">
 
             <!-- Price -->
-            <div>
+            <div v-if="sOrder">
               <div class="label">
                 Стоимость вашего участия
               </div>
               <div class="value">
                 {{sOrder.user_price}}р
               </div> 
+              <div class="value">
+                Финальная стоимость организационного сбора для вас будет рассчитана исходя из количества участников закупки. Итоговая стоимость организационного сбора {{sOrder.full_price}}р на всех
+              </div>
             </div>
 
             <!-- Address -->
@@ -235,7 +238,7 @@
                   <hr class="my-30 d-lg-none">
                   <div>
                     <span class="label" style="">способ оплаты</span>
-                    <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
+                    <button v-if="userIn" @click="goToCheckout()" class="edit float-right">изменить</button>
                   </div>
                   <div>
                     <span class="value">                      
@@ -250,7 +253,6 @@
                           Карта
                         </template>
                       </span>
-                      <button v-if="userIn" @click="goToCheckout()" class="edit float-right">изменить</button>
                     </span>
                   </div>
                 </div>
