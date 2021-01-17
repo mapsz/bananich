@@ -1,5 +1,6 @@
 <template>
 <juge-main>
+
   <div :class="halloween?'halloween':''">   
 
     <main class="cart-page">

@@ -6,6 +6,7 @@ import user from './modules/user'
 import product from './modules/product'
 import settings from './modules/settings'
 import orderLimits from './modules/orderLimits'
+import sharedOrder from './modules/site/sharedOrder'
 // import statistic from './modules/statistic'
 
 
@@ -37,7 +38,8 @@ let store = {
   modules:{
     order,delivery,confirm,report,product,item,supplier,stocktaking,
     purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,
-    settings,category,orderLimits,page,menu,site,coupon,logistic,notFound,email,libra
+    settings,category,orderLimits,page,menu,site,coupon,logistic,notFound,email,
+    libra,sharedOrder
   }
 };
 

@@ -2,6 +2,15 @@
 <div class="container-fluid"> 
 
   <h3>Заказ #{{order.id}}</h3>
+
+  <div v-if="sOrder" class="row x-data">
+    <!-- Client -->
+    <div class="col-12 col-md-4 order-container">
+      <div class="order-inner-container">   
+        <order-shared-order :s-order-id="sOrder.id"/>
+      </div>
+    </div>
+  </div>
   
   <div class="row">
     <!-- Client -->
@@ -257,6 +266,10 @@ export default {
 
       return this.order.pay_method;
     },
+    sOrder(){
+      if(!this.order || this.order.shared_order == undefined || this.order.shared_order[0] == undefined) return false;
+      return this.order.shared_order[0];
+    }
   },
   async mounted(){
     await this.addFilter({'with_logistic':true});
@@ -336,9 +349,6 @@ export default {
     },    
   }
 
-
-
-
 }
 </script>
 
@@ -367,5 +377,9 @@ export default {
   border:1px solid black;
   padding:5px;
   border-radius:10px;
+}
+
+.x-data .order-inner-container{
+  border:1px solid #8ac2a7;
 }
 </style>

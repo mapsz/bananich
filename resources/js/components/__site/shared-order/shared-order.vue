@@ -646,6 +646,19 @@ computed:{
   confirmable(){
     if(this.order == undefined || this.order.confirmable == undefined) return false;
     return this.order.confirmable;
+  },
+  untilClose(){
+    if(this.sOrder == undefined || this.sOrder.order_close == undefined) return false;
+    return moment(this.sOrder.order_close).unix() - moment().unix();
+  },
+  allConfirmed(){
+    let c = -1;
+    if(!this.sOrder || this.sOrder.orders == undefined || this.sOrder.orders.length <= 0) return c;    
+    c = 1;
+    this.sOrder.orders.forEach(order => {
+      if(!order.x_confirm) c = 0;
+    });
+    return c;
   }
 
 },

@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\JugeCRUD;
 use App\Address;
 use App\SharedOrderContact;
+use App\Announce;
 use Carbon\Carbon;
-
 class SharedOrder extends Model
 {
 
@@ -242,6 +242,8 @@ class SharedOrder extends Model
 
     if($slot > $sOrder->member_count){return false;} //TODO @@@ to validate
 
+  
+
     try{
       DB::beginTransaction();{
         
@@ -291,6 +293,15 @@ class SharedOrder extends Model
       return response(['code' => 'so2','text' => 'error attach user'], 512)->header('Content-Type', 'text/plain');
     }
 
+    //Announce
+    $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1,'noHandle' => true]);
+    if(count($sOrder->users) > 1){
+      foreach ($sOrder->users as $key => $oUser) {
+        if($user->id == $oUser->id) continue;
+        Announce::add($oUser->id,'join',[['tag'=> 'order_link','value'=>$sOrder->link]]);
+      }
+    }
+
     
     //Sync order
     Order::syncCartOrder();
@@ -299,6 +310,9 @@ class SharedOrder extends Model
   }
 
   public static function kick($sOrderId, $userId){
+
+    //Get shared order
+    $sOrder = SharedOrder::where('id', $sOrderId)->first();
 
     {//Order
       $order = (
@@ -309,6 +323,7 @@ class SharedOrder extends Model
         ->where('customer_id', '=', $userId)
         ->first()
       );
+ 
 
       //Cancel
       Order::changeStatus($order->id,0);
@@ -321,8 +336,20 @@ class SharedOrder extends Model
     }
 
     {//User
-      SharedOrder::where('id', $sOrderId)->first()->users()->detach($userId);
+      $sOrder->users()->detach($userId);
     }
+
+    //Announce
+    $currentUser = Auth::user();
+    if($userId != $currentUser->id){
+      Announce::add($userId,'kicked',[['tag'=> 'order_link','value'=>$sOrder->link]]);
+    }
+    if($userId == $currentUser->id){
+      foreach ($sOrder->users as $key => $oUser) {
+        if($oUser->id == $currentUser->id) continue;
+        Announce::add($oUser->id,'left',[['tag'=> 'order_link','value'=>$sOrder->link]]);
+      }
+    }    
 
     return true;
 

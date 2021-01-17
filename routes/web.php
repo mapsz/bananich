@@ -985,6 +985,10 @@ Route::group(['middleware' => ['HttpsRR'
     Route::put('/order/put', 'OrderController@put');
     Route::post('/order/customer', 'OrderController@customerPost');
     Route::any('/order/update/available', 'OrderController@updateAvailable');
+    
+    //Anounces
+    Route::get('/announce/auth', 'AnnounceController@byAuth');
+    Route::delete('/announce', 'AnnounceController@delete');
 
     //Cart
     Route::get('/json/cart', 'CartController@get');

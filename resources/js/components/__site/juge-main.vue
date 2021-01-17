@@ -120,6 +120,7 @@ methods:{
   .info-icon{
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 30px;
     height: 30px;
     border-radius: 15px;
@@ -135,6 +136,13 @@ methods:{
   }
   .info-icon-confirm::after{    
     content: "✓";
+  }
+  .info-icon-cancel{
+    background-color: #ff000000;
+    border: 1px solid black;
+  }
+  .info-icon-cancel::after{    
+    content: "×";
   }
 
   .my-30{

@@ -142,7 +142,7 @@ class Cart extends Model
       $cart = Cart::find($cart_id);
       if($cart->type == 2){
         $sOrder = SharedOrder::byAuth();
-        if(!Product::checkProductAvailable($productId, $sOrder->delivery_date)){
+        if(isset($sOrder->delivery_date) && !Product::checkProductAvailable($productId, $sOrder->delivery_date)){
           self::removeItem($productId,$cart_id);
           return 'notAvailable';
         } 

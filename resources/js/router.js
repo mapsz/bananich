@@ -31,11 +31,11 @@ let routes = [];
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';
   routes.push(
-    {path: '/category/:cat_id',    component:siteProducts},
-    {path: '/category/:parent_cat_id/category/:cat_id',    component:siteProducts},
-    {path: '/catalogue',    component:siteProducts},
-    {path: '/discounts',    component:siteProducts,},
-    {path: '/',    component:siteProducts,},
+    {path: '/category/:cat_id',    component:siteProducts, name:'catalogue'},
+    {path: '/category/:parent_cat_id/category/:cat_id',    component:siteProducts, name:'catalogue'},
+    {path: '/catalogue',    component:siteProducts, name:'catalogue'},
+    {path: '/discounts',    component:siteProducts, name:'catalogue'},
+    {path: '/',             component:siteProducts, name:'catalogue'},
   );
 
   //Profile
@@ -110,7 +110,7 @@ let routes = [];
   //Cart
   import siteCart from './components/__site/cart/cart.vue';
   routes.push(
-    {path: '/cart',    component:siteCart},
+    {path: '/cart',    component:siteCart, name:'cart'},
   );
 
   //Checkout
