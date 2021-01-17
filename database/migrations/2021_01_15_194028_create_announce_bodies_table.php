@@ -19,6 +19,31 @@ class CreateAnnounceBodiesTable extends Migration
             $table->text('body');
             $table->timestamps();
         });
+
+        
+        {//Seed
+            DB::table('announce_bodies')->insert([
+                'id' => '1',
+                'name' => 'kicked',
+                'body' => 'Вы были удалены из <a href="/shared/order/<:order_link:>">закупки</a> организатором',
+            ]);
+            DB::table('announce_bodies')->insert([
+                'id' => '2',
+                'name' => 'overweight',
+                'body' => 'Вы превысили допустимый лимит веса заказа на 4 кг. Каждые дополнительные 5 кг оплачиваются отдельно в сумме 50 р за 5 кг',
+            ]);
+            DB::table('announce_bodies')->insert([
+                'id' => '3',
+                'name' => 'left',
+                'body' => 'Вашу <a href="/shared/order/<:order_link:>">закупку</a> покинул участник',
+            ]);
+            DB::table('announce_bodies')->insert([
+                'id' => '4',
+                'name' => 'join',
+                'body' => 'К вашей <a href="/shared/order/<:order_link:>">закупке</a> присоединился новый участник.',
+            ]);
+        }
+
     }
 
     /**
