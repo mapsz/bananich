@@ -129,7 +129,7 @@
                 </div>
                 <!-- Open -->
                 <template v-if="!isEdit">
-                  <button class="x-btn x-btn-trans mb-2">
+                  <button @click="open(true)" class="x-btn x-btn-trans mb-2">
                     Найти соседа
                   </button>
                   <button @click="open()" class="x-btn">
@@ -424,7 +424,7 @@ methods:{
     'get':'sharedOrder/fetchData',
     'update':'sharedOrder/update',
   }),  
-  async open(){
+  async open(neighbor = false){
     //Refresh errors
     this.errors = [];
     if(this.data.dateTime != undefined){
@@ -437,7 +437,9 @@ methods:{
     }
 
     //Fetch
-    let r = await ax.fetch('/shared/order/open',this.data,'put');
+    let data = this.data;
+    if(neighbor) data.neighbor = true;
+    let r = await ax.fetch('/shared/order/open',data,'put');
 
     //Catch errors
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}

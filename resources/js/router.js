@@ -35,6 +35,7 @@ let routes = [];
     {path: '/category/:parent_cat_id/category/:cat_id',    component:siteProducts, name:'catalogue'},
     {path: '/catalogue',    component:siteProducts, name:'catalogue'},
     {path: '/discounts',    component:siteProducts, name:'catalogue'},
+    {path: '/popular',    component:siteProducts, name:'catalogue'},
     {path: '/',             component:siteProducts, name:'catalogue'},
   );
 

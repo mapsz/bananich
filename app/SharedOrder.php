@@ -65,7 +65,8 @@ class SharedOrder extends Model
           SharedOrder::changeStatus($sOrder,200,$user->id);
   
           //Attach owner    
-          SharedOrder::join($user, false, $sOrder);
+          $neighbor = isset($data['neighbor']) && $data['neighbor'] ? true : false;
+          SharedOrder::join($user, false, $sOrder, $neighbor);
   
         }DB::commit();    
       } catch (Exception $e){
@@ -233,7 +234,7 @@ class SharedOrder extends Model
     }
   }
 
-  public static function join($user, $link = false, $sOrder = false){
+  public static function join($user, $link = false, $sOrder = false, $neighbor = false){
 
 
     //Get order
@@ -280,6 +281,11 @@ class SharedOrder extends Model
 
         //Put
         $order = Order::putOrder($data, 0, 0, 950);
+
+        //Neighbor
+        if($neighbor){
+          DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'neighbor', 'value'=>1]);
+        }
 
         //Attach
         $sOrder->orders()->attach($order->id);
@@ -604,11 +610,11 @@ class SharedOrder extends Model
         }      
         {//Weight
           $row['full_weight'] = $settings['x_order_weight'];
-          $row['user_weight'] = round($settings['x_order_weight'] / $row->member_count, 2, PHP_ROUND_HALF_DOWN);
+          $row['user_weight'] = round($settings['x_order_weight'] / ($row->member_count == 0 ? 1 : $row->member_count), 2, PHP_ROUND_HALF_DOWN);
         }
         {//Price
           $row['full_price'] = $settings['x_order_price'];
-          $row['user_price'] = round($settings['x_order_price'] / $row->member_count, 2, PHP_ROUND_HALF_DOWN);
+          $row['user_price'] = round($settings['x_order_price'] / ($row->member_count == 0 ? 1 : $row->member_count), 2, PHP_ROUND_HALF_DOWN);
           //Payed
           $row['payed'] = 0;
           foreach ($row->pays as $pay) {

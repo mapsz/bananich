@@ -3,13 +3,24 @@
   <ul  class="sitebar-wrap">
     
     <!-- Discounts -->
-    <li v-if="!parent" class="sitebar-category">
+    <li v-if="!parent && !isX" class="sitebar-category">
       <a
         class="sitebar-link"
         @click.prevent="setDiscounts()"
         :href="'/discounts/'"
       >
         <div class="sitebar-text">Акции</div> 
+        <div class="sitebar-bg" :style='"background-image: url(/image/r-1.png); background-color: #ebeff2;"'></div>
+      </a>
+    </li>
+    <!-- Popular -->
+    <li v-if="!parent && isX" class="sitebar-category">
+      <a
+        class="sitebar-link"
+        @click.prevent="setPopular()"
+        :href="'/popular/'"
+      >
+        <div class="sitebar-text">Популярное</div> 
         <div class="sitebar-bg" :style='"background-image: url(/image/r-1.png); background-color: #ebeff2;"'></div>
       </a>
     </li>
@@ -41,6 +52,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    isX:isX,
     parent:false,
   }},
   computed:{
@@ -104,6 +116,13 @@ export default {
       //Route
       this.$router.push('/discounts');
     },
+    setPopular(){
+      if(!this.isMobile) return;
+      //Scroll
+      $('html,body').stop().animate({ scrollTop: ($('.content-page').offset().top-200)}, 300);
+      //Route
+      this.$router.push('/popular');
+    },
     async setRoute(){
       if(!this.isMobile) return;
       this.parent = false;
@@ -115,6 +134,15 @@ export default {
         await this.setActive(1);
         await this.addFilter({'category':0});
         await this.addFilter({'only_discounts':1});
+        this.fetchProducts(); 
+        return;       
+      }
+
+      if(this.$route.path == "/popular"){
+        //Set Products
+        await this.setActive(1);
+        await this.addFilter({'category':0});
+        await this.addFilter({'popular':1}) ; 
         this.fetchProducts(); 
         return;       
       }

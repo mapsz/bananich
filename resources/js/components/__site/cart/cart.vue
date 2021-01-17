@@ -1,6 +1,5 @@
 <template>
 <juge-main>
-
   <div :class="halloween?'halloween':''">   
 
     <main class="cart-page">
@@ -49,6 +48,19 @@
                   </div>
                 </template>
 
+                <!-- Overweight -->
+                <div v-if="cart != undefined && cart.xData != undefined && cart.xData.overWeightKg != undefined && cart.xData.overWeightKg > 0" class="cart-overweight">
+                  <div class="d-flex">
+                    <div>
+                      <span class="info-icon"></span>
+                    </div>
+                    <div class="ml-3">
+                      <div><b>Вес вашей закупки превышен на {{cart.xData.overWeightKg}} кг (+{{cart.xData.overWeightPrice}}р)</b></div>
+                      <div>*Для вашей закупки доступно {{cart.xData.maxFreeWeight}} кг на человека </div>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- Info -->
                 <div>
                   <shared-order-numbers class="mb-4" v-if="isX"/>
@@ -56,10 +68,10 @@
                 </div>
 
                 <!-- To checkout -->
-                <template>                  
+                <template>
                   <!-- X bananich -->
                   <template v-if="isX">
-                    <a href="/shared/order">
+                    <a v-if="myOrder.id == undefined" href="/shared/order">
                       <button class="x-btn">Оформить коллективную закупку</button>                    
                     </a>
                   </template>
@@ -97,7 +109,7 @@
           </div>
         </div>
 
-        <div v-if="isX" class="row my-5">
+        <div v-if="isX && myOrder.id == undefined" class="row my-5">
 
           <div v-if="cart && cart.items != undefined && cart.items.length > 0" class="announce-block mb-5">
             <b>Поздравляем!</b>
@@ -112,7 +124,6 @@
         </div>
       </div>
     </main>
-
   
   </div>
 </juge-main>  
@@ -129,6 +140,7 @@ export default {
       cart:'cart/getCart',
       settings:'settings/beautyGet',
       user:'user/get',
+      myOrder:    'sharedOrder/getMyOrder',
     }),
     freeShipping: function(){
       return this.settings.free_shipping;     
@@ -197,6 +209,13 @@ export default {
 </script>
 
 <style scoped>
+
+  .cart-overweight{
+    border-radius: 20px;
+    padding: 28px 22px;
+    margin-bottom: 16px;
+    border: 1px solid #e7dfdc;    
+  }
 
   .cart-sitebar {
     margin-bottom: 20px !important;

@@ -455,6 +455,16 @@ class Product extends Model
           });    
         });    
 
+      } 
+
+      //Shtuki
+      if(isset($request['shtuki'])){
+        
+        $products = $products->whereHas('metas', function($q){
+          $q->where('name','unit_type')
+          ->where('value','piece');
+        });    
+
       }    
 
       //No type

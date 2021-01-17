@@ -289,6 +289,7 @@ class Checkout extends Model
       'overWeightKg' => 0,
       'overWeightSteps' => 0,
       'overWeightPrice' => 0,
+      'maxFreeWeight' => 0,
       'order_id' => false,
       's_order_id' => false,
       'participation_price' => 0,
@@ -330,11 +331,13 @@ class Checkout extends Model
     $xData['s_order_id'] = $sOrder->id;
 
     {//Participation
+      if($sOrder->member_count == 0) return $xData;
       $xData['participation_price'] = $settings['x_order_price'] / $sOrder->member_count;
     }
 
     {//Over weight
       $personKg = ($settings['x_order_weight'] / $sOrder->member_count);
+      $xData['maxFreeWeight'] = $personKg;
 
       $overKg = $xData['fullWeight'] - $personKg;
       if($overKg <= 0){

@@ -14,6 +14,7 @@
       </router-link>
 
       <div>
+        <button @click="shtuki()" class="btn-secondary btn">Штуки</button>
         <button @click="noWeight()" class="btn-secondary btn">Без полного веса</button>
         <button @click="noType()" class="btn-secondary btn">Без типа единицы</button>
         <button @click="noPrice()" class="btn-secondary btn">Без цены</button>
@@ -41,6 +42,10 @@ export default {
     this.$store.dispatch('product/addFilter',{get_all:1});
   },
   methods:{
+    shtuki(){
+      this.$store.dispatch('product/clearFilters');      
+      this.$store.dispatch('product/addFilter',{shtuki:1});      
+    },
     noType(){
       this.$store.dispatch('product/clearFilters');      
       this.$store.dispatch('product/addFilter',{no_type:1});      

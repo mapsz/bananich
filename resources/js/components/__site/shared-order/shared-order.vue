@@ -129,11 +129,10 @@
                 <!-- Member -->
                 <shared-order-member :pSlot="slots[n]" />              
                 <!-- Kick -->
-                <div v-if="slots[n].user != undefined && isAdmin" 
-                  @click="kick(slots[n].user.id)"
+                <div v-if="slots[n].user != undefined && isAdmin"                  
                   class="member-kick"
                 >
-                  Удалить участника
+                  <span  @click="kickUserShow=slots[n].user.id; " style="cursor: pointer;">Удалить участника</span>
                 </div>
               </template>
               <!-- Line -->
@@ -195,10 +194,13 @@
             <!-- Weight -->
             <div>
               <hr class="my-30">
-              <div class="d-flex">
-                <span class="label">Макс. бесплатный вес - </span>
-                <span class="value">{{sOrder.user_weight}}кг</span> 
-                <span class="ml-3 info-icon"></span>
+              <div class="d-flex" style="justify-content: space-between;">
+                <div class="d-flex">
+                  <span class="label">Макс. бесплатный вес - </span>
+                  <span class="value">{{sOrder.user_weight}}кг</span> 
+                  <span class="ml-3 info-icon"></span>
+                </div>
+                <button v-if="isAdmin && editable" @click="goToGallery()" class="edit float-right">изменить</button>
               </div>
               <div v-if="userIn">
                 <span class="label">вес вашей корзины - </span>
@@ -242,7 +244,7 @@
                   </div>
                   <div>
                     <span class="value">                      
-                      <span v-if="!order || order.pay_method == undefined" style="color:rgb(235, 87, 87)">
+                      <span v-if="!order || order.pay_method == undefined || order.pay_method == 0" style="color:rgb(235, 87, 87)">
                         Не указано
                       </span>
                       <span v-else>
@@ -274,14 +276,14 @@
               </div>
               <!-- Cancel order -->
               <div v-if="isAdmin && sOrder.status.id > 0">
-                <button @click="sOrderCancel()" class="action">Отменить закупку</button>
+                <!-- <button @click="sOrderCancel()" class="action">Отменить закупку</button> -->
+                <button @click="cancelOrderShow=true;" class="action">Отменить закупку</button>
               </div>     
               <!-- Exit order -->
               <div v-if="userIn && !isAdmin" 
-                  @click="kick(user.id)"
-                  class="member-kick ml-0"
-                >
-                  Выйти из закупки
+                class="member-kick ml-0"
+              >
+                <span  @click="kick(slots[n].user.id)" style="cursor: pointer;">Выйти из закупки</span>                  
               </div>
             </div>
 
@@ -512,6 +514,26 @@
         <login-modal :p-show="showLogin" :p-show-type="'signup'" @close="showLogin=false" />
         <x-popup :title="'Спасибо, что открыли закупку!'" :active="0">
           Мы предложим вашим соседям присоединиться к вашей закупке. Участников закупки вы сможете увидеть в вашем личном кабинете в разделе закупки
+        </x-popup>  
+        <!-- Cancel order -->
+        <x-popup :title="'Отменить закупку?'" :active="cancelOrderShow" @close="cancelOrderShow=false" id="share-order-cancel-modal">
+          <div class="m-3">
+            какой-то текст
+          </div>
+          <div style="justify-content: space-evenly; display:flex">
+            <button @click="cancelOrderShow=false" class="x-btn x-btn-trans">Отмена</button>
+            <button @click="sOrderCancel()" class="x-btn x-btn-red">Отменить Закупку</button>
+          </div>
+        </x-popup>
+        <!-- Kick -->
+        <x-popup :title="'Исключить участника?'" :active="kickUserShow" @close="kickUserShow=false" id="share-order-kick-modal">
+          <div class="m-3">
+            какой-то текст
+          </div>
+          <div style="justify-content: space-evenly; display:flex">
+            <button @click="kickUserShow=false" class="x-btn x-btn-trans">Отмена</button>
+            <button @click="kick(kickUserShow);kickUserShow=false" class="x-btn x-btn-red">Исключить</button>
+          </div>
         </x-popup>
       </template>
 
@@ -532,6 +554,8 @@ data(){return{
   weights:false,
   showLogin:false,
   copied:false,
+  cancelOrderShow:0,
+  kickUserShow:0,
 }},
 computed:{
   ...mapGetters({
@@ -756,7 +780,6 @@ methods:{
     font-size: 14px;
     margin-left: 110px;
     margin-top: 10px;
-    cursor: pointer;
   }
   .congratz{
     font-size: 22px;

@@ -43,6 +43,9 @@ export default {
   },
   async mounted() {
     if(this.active) $('#'+this.cID).modal('show');
+    $('#'+this.cID).on('hidden.bs.modal', () => {
+      this.$emit('close');
+    })
   },
   watch:{
     active: function (val, oldVal) {

@@ -3,13 +3,13 @@
     <div class="sitebar-title">Разделы</div>
     <ul  class="sitebar-wrap">
       <!-- Discounts -->
-      <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
+      <li v-if="!isX" class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
         <a @click.prevent="setDiscounts()" class="sitebar-link " href="/">Акции</a>
       </li>
       <!-- Popular -->
-      <!-- <li class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
+      <li v-if="isX" class="sitebar-category sitebar-category-all" :class="!active ? 'active' : ''">
         <a @click.prevent="setPopular()" class="sitebar-link " href="/">Популярное</a>
-      </li> -->
+      </li>
       <!-- Categories -->
       <template v-for='(category,i) in categories'>
         <li        
@@ -65,7 +65,8 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  data(){return{    
+  data(){return{
+    isX:isX,
     halloween:halloween,
   }},
   computed:{
@@ -130,7 +131,11 @@ export default {
       let id = this.$route.params.cat_id;
       //Get base categories
       if(id == undefined){
-        this.setDiscounts();
+        if(this.isX){
+          this.setPopular();
+        }else{
+          this.setDiscounts();
+        }
         return;
       }
 
@@ -140,7 +145,13 @@ export default {
       //Category not found
       if(category == undefined){
         this.$router.push('/');
-        this.setDiscounts();
+        if(this.isX){
+          this.setPopular();
+        }else{
+          this.setDiscounts();
+        }
+        
+        
         return;
       }
 

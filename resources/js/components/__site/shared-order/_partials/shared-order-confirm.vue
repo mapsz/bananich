@@ -2,10 +2,10 @@
 <div class="">
     
   <div class="">
-    <button @click="active=0;active=1;" class="x-btn">✅ <b>Завершить оформление заказа</b></button>
+    <button @click="active=1;" class="x-btn">✅ <b>Завершить оформление заказа</b></button>
   </div>
           
-  <x-popup :title="'order confirm'" :active="active" id="share-order-confirm">
+  <x-popup :title="'order confirm'" :active="active" @close="active=false" id="share-order-confirm">
       <div class="m-3">
         какой-то текст
       </div>
@@ -23,7 +23,6 @@ export default {
 data(){return{
   active:false,
 }},
-
 methods:{
   ...mapActions({
     'get':'sharedOrder/fetchData',

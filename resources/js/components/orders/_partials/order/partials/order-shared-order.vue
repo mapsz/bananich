@@ -1,6 +1,7 @@
 <template>
 <div v-if="sOrder">
   <div><b>NEO</b></div>
+  <div v-if="neighbor == 1"> 🙋‍♂️ хочет соседа</div>
   <div>Закрытие: {{moment(sOrder.order_close).locale("ru").format('LLL')}}</div>
   <div>Организатор: <a :href="'/admin/user'+ owner.id"> {{owner.id}}</a> {{owner.name}} </div>
   <div>
@@ -38,6 +39,11 @@ computed:{
     if(user == -1) return false;
     return user;
   },
+  neighbor(){
+    if(!this.sOrder || this.sOrder.orders == undefined || this.sOrder.orders[0] == undefined) return false;
+    let order = this.sOrder.orders.find(x => x.customer_id == this.sOrder.owner_id);
+    return order.neighbor;    
+  }
 },
 watch:{
   sOrderId: async function (val, oldVal) {
