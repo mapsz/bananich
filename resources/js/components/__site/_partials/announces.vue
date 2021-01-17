@@ -1,5 +1,5 @@
 <template>
-<div class="row"><div class="col-12">
+<div v-if="isX" class="row"><div class="col-12">
   <div v-if="announces.length > 0" class="announces-block py-3">
     <div class="container p-0">
       <div v-for="(announce, i) in announces" :key="i"  class="announce mx-3">
@@ -28,6 +28,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
+  isX:isX,
   moment:moment,
   fetchrdAnnounces:[],
 }},
