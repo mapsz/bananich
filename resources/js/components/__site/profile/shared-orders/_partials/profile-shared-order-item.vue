@@ -39,7 +39,7 @@
       </div>
 
       <div class="d-flex justify-content-end">
-        <a class="change" :href="'/shared/order/'+sOrder.link">изминить</a>
+        <a class="change" :href="'/shared/order/'+sOrder.link">изменить</a>
       </div>
 
     </div>

@@ -72,12 +72,11 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
-    {
+    protected function create(array $data){
       //Put user
       $user = User::create([
         'name' => $data['name'],
-        'surname' => $data['surname'],
+        'surname' => isset($data['surname']) ? $data['surname'] : '',
         'email' => $data['email'],
         'phone' => $data['phone'],
         'password' => Hash::make($data['password']),
@@ -93,4 +92,18 @@ class RegisterController extends Controller
 
       return $user;
     }
+
+    protected function fastRegister(Request $request){
+
+      //Validate
+      Validator::make($request->all(), [
+        'email' => ['required', 'email', 'max:190', 'unique:users'],
+      ])->validate();
+
+      
+
+      dd($request);
+
+    }
+
 }

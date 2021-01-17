@@ -77,6 +77,12 @@ let routes = [];
     }
   );
 
+  //Register
+  import siteFastRegister from './components/__site/login/fast-register.vue';
+  routes.push(
+    {path: '/fast/register',            component:siteFastRegister},
+    {path: '/fast/register/:link',     component:siteFastRegister},
+  );
 
   //Order thanks
   import siteOrderThanks from './components/__site/order-thanks/order-thanks.vue';

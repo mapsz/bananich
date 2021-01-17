@@ -22,7 +22,7 @@
 </template>
 
 <script>
-export default {  
+export default {
   props: ['p-show'],
   data(){return{
     show:'signin',
