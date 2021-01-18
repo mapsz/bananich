@@ -11,6 +11,9 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  data(){return{
+    isX:isX,
+  }},
   computed:{
     ...mapGetters({
       pages:'page/get',
@@ -27,7 +30,26 @@ export default {
         }
       });
 
-      if(!curPage) location.href = "/404";
+      //404
+      if(!curPage){
+        location.href = "/404";
+        return;
+      } 
+      
+      {//Bad site
+        let badSite = false;
+        //No site
+        if(curPage.site == undefined || curPage.site[0] == undefined) badSite = true;
+        //No bananich
+        if(!isX && curPage.site.findIndex(x => x.name == 'Bananich') < 0) badSite = true;
+        //No neo
+        if(isX && curPage.site.findIndex(x => x.name == 'Neo') < 0) badSite = true;
+        //Redirect
+        if(badSite){
+          location.href = "/404";
+          return false;
+        } 
+      }
 
       return curPage;
     }

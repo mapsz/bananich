@@ -23,13 +23,30 @@ export default {
   computed:{
     showMenus: function(){
       if(this.menus == undefined) return [];
-      let menus = [];
+      let menus = [];      
       
-      $.each(this.menus, (k, menu) => {
-        if(menu.menu.findIndex(x => x.name == this.position) > -1){
-          menus.push(menu);
-        }        
-      });
+      {//Sort
+        $.each(this.menus, (k, menu) => {
+          if(menu.menu.findIndex(x => x.name == this.position) > -1){
+            menus.push(menu);
+          }
+        });
+      }
+      
+      {//Remove bad menus
+        let goodSiteMenu = [];
+        $.each(menus, (k, menu) => {
+          //Bad site
+          if(!isX){
+            if(menu.site.findIndex(x => x.name == 'Bananich') >= 0) goodSiteMenu.push(menu);
+          }
+          if(isX){
+            if(menu.site.findIndex(x => x.name == 'Neo') >= 0) goodSiteMenu.push(menu);
+          }
+        });
+        menus = goodSiteMenu;
+      }
+
       return menus;
     }
   },
