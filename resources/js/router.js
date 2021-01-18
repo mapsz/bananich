@@ -78,7 +78,7 @@ let routes = [];
   );
 
   //Register
-  import siteFastRegister from './components/__site/login/fast-register.vue';
+  import siteFastRegister from './components/__site/login/fast-register-page.vue';
   routes.push(
     {path: '/fast/register',            component:siteFastRegister},
     {path: '/fast/register/:link',     component:siteFastRegister},

@@ -14,7 +14,11 @@
 
     <!-- Header -->
     <div class="header-bar" :class="isX?'bananich-x':''" v-scroll="handleScroll" 
-      style="position:absolute; width:100%; background-color:white;"
+      style="
+        position:absolute; 
+        width:100%; 
+        background-color:white;
+      "
       :style="
         isMobile ? '' : (position > 55 ? 'height: 80px;top:0; position:fixed;' : '')
       "
@@ -60,10 +64,8 @@
   <div style="display: block; " :style="isMobile ? 'height: 62px;' : 'height: 108px;'"></div>
 
   <!-- Mobile upper header -->
-  <div class="tap-bar">
-    <div class="container">
-      <mobile-bootom-menu></mobile-bootom-menu>
-    </div>
+  <div class="tap-bar" style="max-width: 100%;">
+    <mobile-bootom-menu />
   </div>
 </div>
 </template>

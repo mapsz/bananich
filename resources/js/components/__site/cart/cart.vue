@@ -55,8 +55,8 @@
                       <span class="info-icon"></span>
                     </div>
                     <div class="ml-3">
-                      <div><b>Вес вашей закупки превышен на {{cart.xData.overWeightKg}} кг (+{{cart.xData.overWeightPrice}}р)</b></div>
-                      <div>*Для вашей закупки доступно {{cart.xData.maxFreeWeight}} кг на человека </div>
+                      <div><b>Вес вашей закупки превышен на {{cart.xData.overWeightKg.toFixed(2)}} кг (+{{cart.xData.overWeightPrice}}р)</b></div>
+                      <div>*Для вашей закупки доступно {{cart.xData.maxFreeWeight.toFixed(2)}} кг на человека </div>
                     </div>
                   </div>
                 </div>
@@ -73,6 +73,9 @@
                   <template v-if="isX">
                     <a v-if="myOrder.id == undefined" href="/shared/order">
                       <button class="x-btn">Оформить коллективную закупку</button>                    
+                    </a>
+                    <a v-else :href="'/shared/order/'+myOrder.link">
+                      <button class="x-btn">К моей закупке</button>                    
                     </a>
                   </template>
                   <!-- Normal bananich -->

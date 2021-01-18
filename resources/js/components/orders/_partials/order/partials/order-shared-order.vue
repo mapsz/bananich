@@ -5,6 +5,7 @@
   <div>Закрытие: {{moment(sOrder.order_close).locale("ru").format('LLL')}}</div>
   <div>Организатор: <a :href="'/admin/user'+ owner.id"> {{owner.id}}</a> {{owner.name}} </div>
   <div>Статус: {{sOrder.status.name}} </div>
+  <div>Кмментарий: {{(sOrder.comment != undefined && sOrder.comment.body != undefined) ? sOrder.comment.body : ''}} </div>
   <div>
     <div>Заказы:</div>
     <div v-for="(order, index) in sOrder.orders" :key="index" class="ml-2">

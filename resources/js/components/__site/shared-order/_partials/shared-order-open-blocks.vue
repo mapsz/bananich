@@ -38,7 +38,7 @@
             </button>
           </a>
 
-          <a v-else href="/shared/order">
+          <a v-else :href="'/shared/order?pre='+n">
             <button 
               class="x-btn"
             >

@@ -104,6 +104,7 @@ export default {
         //Set Products
         this.setActive(category);
         await this.addFilter({'only_discounts':0})  
+        await this.addFilter({'popular':0})  
         this.addFilter({'category':category.id})  
         this.fetchProducts();
         

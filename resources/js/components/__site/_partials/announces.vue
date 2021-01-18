@@ -1,11 +1,11 @@
 <template>
-<div v-if="isX" class="row"><div class="col-12">
+<div v-if="isX">
   <div v-if="announces.length > 0" class="announces-block py-3">
     <div class="container p-0">
       <div v-for="(announce, i) in announces" :key="i"  class="announce mx-3">
         <div class="d-flex align-items-center justify-content-between w-100">
           <div>
-            <span v-if="announce.created_at" class="announce-time" style="font-size: 10pt;">{{moment(announce.created_at).locale("ru").format('LLL')}}</span>
+            <span v-if="announce.created_at" class="announce-time">{{moment(announce.created_at).locale("ru").format('LLL')}}</span>
             <span class="announce-body" v-html="announce._body" />
           </div>
           
@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-</div></div>
+</div>
 </template>
 
 <script>
@@ -37,6 +37,7 @@ computed:{
     cart:       'cart/getCart',
     sOrders:    'sharedOrder/get',
     myOrder:    'sharedOrder/getMyOrder',
+    invite:     'sharedOrder/getInviteLink',
     settings:   'settings/beautyGet',
     user:       'user/get',
   }), 
@@ -86,7 +87,7 @@ computed:{
       this.settings
     ){
       statics.push(
-        {'_body':'Вы превысили допустимый лимит веса заказа на '+this.overWeightKg+' кг. Каждые дополнительные '+this.settings.x_weight_step_kg+' кг оплачиваются отдельно в сумме '+this.settings.x_weight_step_price+' р за '+this.settings.x_weight_step_kg+' кг'}
+        {'_body':'Вы превысили допустимый лимит веса заказа на '+this.overWeightKg.toFixed(2)+' кг. Каждые дополнительные '+this.settings.x_weight_step_kg+' кг оплачиваются отдельно в сумме '+this.settings.x_weight_step_price+' р за '+this.settings.x_weight_step_kg+' кг'}
       );
     }
 
@@ -95,7 +96,16 @@ computed:{
       (this.sOrder.id != undefined && !this.confirm)
     ){
       statics.push(
-        {'_body':'Напоминаем, что необходимо <a href="/shared/order/'+this.myOrder.link+'">завершить оформление</a> заказа до '+ moment(this.sOrder.order_close).locale("ru").format('LLL')}
+        {'_body':'Напоминаем, что необходимо <a href="/shared/order/checkout/'+this.myOrder.link+'">завершить оформление</a> заказа до '+ moment(this.sOrder.order_close).locale("ru").format('LLL')}
+      );
+    }
+
+    if(
+      (this.$route.name != 'sharedOrder') &&
+      (this.invite && !this.myOrder)
+    ){
+      statics.push(
+        {'_body':'Вы приглашены принять участие в <a href="/shared/order/'+this.invite+'">совместной закупке</a> на Neo Lavka'}
       );
     }
 
@@ -157,7 +167,14 @@ methods:{
 <style>
   .announces-block{
     background-color: #e7dfdc;
-  }
+    font-size: 14px;
+    line-height: 115%;
+  }  
+  .announce-time{
+    background-color: #e7dfdc;
+    font-size: 12px;
+    line-height: 115%;
+  }  
   .announce{
     border-bottom: 1px solid #00000038;
     padding-bottom: 10px;
@@ -174,5 +191,15 @@ methods:{
   }
   .announce-body{
     display: block; 
+  }
+  
+  /* Desktop */
+  @media screen and (min-width: 992px){
+    .announces-block{
+      font-size: 18px;
+    }
+  .announce-time{
+    font-size: 14px;
+  }  
   }
 </style>

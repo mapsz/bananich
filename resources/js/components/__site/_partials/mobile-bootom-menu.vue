@@ -2,7 +2,7 @@
   <div>
 
 
-      <div class="row">
+      <div class="row" style="max-width: 100%;">
 
         <!-- Menu -->
         <div class="col-3" v-click-outside="hideMenu">
@@ -77,7 +77,7 @@
                 </button>
               
               <!-- <span>Корзина</span> -->
-              <div v-if="itemsCount > 0" class="cart-num-mobile">{{cart.pre_price}}р</div>
+              <div v-if="itemsCount > 0" class="cart-num-mobile">{{summ}}р</div>
             </div>
           </a>
         </div>
@@ -133,6 +133,17 @@ export default {
     itemsCount:function(){
       return this.cart.items != undefined ? this.cart.items.length : 0
     },
+    summ(){
+      if(this.cart == undefined) return false;
+
+      if(this.cart.type != undefined && this.cart.type == 2){
+        if(this.cart.pre_price_x == undefined) return false;
+        return this.cart.pre_price_x;
+      }else{
+        if(this.cart.pre_price == undefined) return false;
+        return this.cart.pre_price;
+      }
+    }, 
   },
   methods:{    
     hideMenu(){this.menuDrop =false;},

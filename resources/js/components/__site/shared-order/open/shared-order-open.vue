@@ -412,7 +412,12 @@ async mounted(){
   let exist = await this.byAuth();
   if(exist && exist.link != undefined && !this.isEdit){window.location.href = '/shared/order/'+exist.link}
 
+  //Get pre
+  if(this.$route != undefined && this.$route.query != undefined  && this.$route.query.pre != undefined){
+    this.data.memberCount = this.$route.query.pre;
+  }
 
+  //Get available days
   await this.fetchAvailableDays();
 },
 methods:{
@@ -445,7 +450,7 @@ methods:{
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
 
     //Success
-    if(r){window.location.href = '/shared/order/'+r.link};
+    if(r){window.location.href = '/shared/order/'+r.link + (neighbor ? '?neighbor=true' : '')};
 
   },
   async edit(){

@@ -1,6 +1,5 @@
 <template>
-<juge-main>
-  <div  class="container my-5">
+  <div class="my-5">
 
     <!-- Make password -->
     <div v-if="link">
@@ -69,8 +68,12 @@
     <!-- Send link -->
     <div v-else>      
       <div v-if="!send">
-        <input v-model="email" type="email" placeholder="укажите ваш емэил">
-        <button class="x-btn" @click="makeLink()">ok</button>
+        <div class="d-flex justify-content-center mb-3">
+          <input v-model="email" type="email" placeholder="Укажите ваш емэил" class="modal-sad-form-input">
+        </div>
+        <div class="d-flex justify-content-center">
+          <button class="x-btn" @click="makeLink()">Регистрироваться</button>
+        </div>
         <!-- Errors -->
         <juge-errors :errors="errors" />
       </div>
@@ -80,7 +83,6 @@
     </div>
 
   </div>
-</juge-main>
 </template>
 
 <script>

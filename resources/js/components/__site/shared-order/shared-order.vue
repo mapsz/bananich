@@ -6,22 +6,26 @@
 
         <template v-if="isAdmin">
           <!-- Congratz -->
-          <div v-if="isAdmin" class="row mb-3">
-            <div class="col-12">
-              <div class="congratz">
-                Поздравляем, ваша совместная закупка открыта!
+          <template v-if="isAdmin && moment().unix() - moment(this.sOrder.created_at).unix() < 120 && !confirm">
+            <!-- Congratz -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="congratz">
+                  Поздравляем, ваша совместная закупка открыта!
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- top text -->
-          <div v-if="isAdmin" class="row mb-4">
-            <div class="col-12">
-              <div class="top-text">
-                Теперь можно пригласить в нее соседей или друзей!
+            <!-- top text -->
+            <div v-if="isAdmin" class="row mb-4">
+              <div class="col-12">
+                <div class="top-text">
+                  Теперь можно пригласить в нее соседей или друзей!
+                </div>
               </div>
             </div>
-          </div>
+          </template>
+
 
           <!-- Invite -->
           <div v-if="isAdmin" class="row">
@@ -194,20 +198,30 @@
             <!-- Weight -->
             <div>
               <hr class="my-30">
-              <div class="d-flex" style="justify-content: space-between;">
-                <div class="d-flex">
-                  <span class="label">Макс. бесплатный вес - </span>
-                  <span class="value">{{sOrder.user_weight}}кг</span> 
-                  <span class="ml-3 info-icon"></span>
-                </div>
-                <button v-if="isAdmin && editable" @click="goToGallery()" class="edit float-right">изменить</button>
-              </div>
-              <div v-if="userIn">
-                <span class="label">вес вашей корзины - </span>
-                <span class="value">{{memberWeight}}кг</span>
-              </div>
-              <div v-if="userIn" class="value mt-2">
-                изменить можно до {{moment(sOrder.order_close).locale("ru").format('LLLL')}}
+              <div style="display: flex; justify-content: space-between;">
+                <div>
+                  <div class="d-flex">
+                    <div class="d-flex">
+                      <span class="label">Макс. бесплатный вес - </span>
+                      <span class="value">{{sOrder.user_weight}}кг</span>                   
+                    </div>               
+                  </div>
+                  <div v-if="userIn">
+                    <span class="label">вес вашей корзины - </span>
+                    <span class="value">{{memberWeight}}кг</span>
+                  </div>
+                  <div v-if="userIn" class="value mt-2">
+                    изменить можно до {{moment(sOrder.order_close).locale("ru").format('LLL')}}
+                  </div>
+                </div>                
+                <div style="max-width: 20px;">
+                  <div style="direction: rtl;" >
+                    <a href="/lavka/rules#weight">
+                      <span class="mt-2 ml-3 info-icon" style="color:black; text-decoretion:none"></span>
+                    </a>
+                  </div>                  
+                  <button v-if="isAdmin && editable" @click="goToCart()" class="edit float-right">изменить</button>
+                </div> 
               </div>
             </div>          
 
@@ -224,7 +238,7 @@
             </div>
 
 
-            <div>
+            <div v-if="userIn">
               <hr class="my-30">
               <div class="row">
                 <div class="col-12 col-lg-6">
@@ -233,10 +247,10 @@
                     <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right d-lg-none">изменить</button>
                   </div>
                   <div>
-                    <span class="value">{{orderSum}}p</span>
+                    <span class="value">{{orderSum == false ? '' : orderSum+'p'}}</span>
                   </div>
                 </div>
-                <div  class="col-12 col-lg-6">                  
+                <div  class="col-12 col-lg-6">
                   <hr class="my-30 d-lg-none">
                   <div>
                     <span class="label" style="">способ оплаты</span>
@@ -269,10 +283,11 @@
               <div class="mb-3">
                 <button v-if="isAdmin && editable" @click="goToEdit()" class="action">
                   Редактировать 
-                  <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
-                    (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
-                  </span>
                 </button>
+                <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
+                  (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
+                </span>
+                
               </div>
               <!-- Cancel order -->
               <div v-if="isAdmin && sOrder.status.id > 0">
@@ -283,7 +298,7 @@
               <div v-if="userIn && !isAdmin" 
                 class="member-kick ml-0"
               >
-                <span  @click="kick(slots[n].user.id)" style="cursor: pointer;">Выйти из закупки</span>                  
+                <span  @click="kick(user.id)" style="cursor: pointer;">Выйти из закупки</span>                  
               </div>
             </div>
 
@@ -528,11 +543,17 @@
         <!-- Kick -->
         <x-popup :title="'Исключить участника?'" :active="kickUserShow" @close="kickUserShow=false" id="share-order-kick-modal">
           <div class="m-3">
-            какой-то текст
+            Вы действительно хотите удалить этого участника из закупки? Это действие отменить будет нельзя
           </div>
           <div style="justify-content: space-evenly; display:flex">
             <button @click="kickUserShow=false" class="x-btn x-btn-trans">Отмена</button>
             <button @click="kick(kickUserShow);kickUserShow=false" class="x-btn x-btn-red">Исключить</button>
+          </div>
+        </x-popup>        
+        <!-- Neighbor -->
+        <x-popup v-if="neighborAnnouceShow" :title="'Спасибо, ваша заявка принята!'" :active="neighborAnnouceShow" @close="neighborAnnouceShow=false" id="share-order-neighbor-modal">
+          <div class="m-3">
+            Мы постараемся найти того, кто присоединится к вашей закупке. После присоединения к вашей закупке других участников, вы узнаете об этом на странице закупки
           </div>
         </x-popup>
       </template>
@@ -550,12 +571,13 @@ data(){return{
   changeMemberCount:1,
   test:{},
   data:{},
-  shareDescription:"Очень крутой текст!",
+  shareDescription:"Смотри какой крутой сервис! Давай вместе?",
   weights:false,
   showLogin:false,
   copied:false,
   cancelOrderShow:0,
   kickUserShow:0,
+  neighborAnnouceShow:0,
 }},
 computed:{
   ...mapGetters({
@@ -701,6 +723,14 @@ async mounted(){
   }  
 
 
+  
+  //Neighbor accounce
+  if(this.$route != undefined && this.$route.query != undefined  && this.$route.query.neighbor != undefined && this.$route.query.neighbor){
+    this.neighborAnnouceShow = 1;
+    $vm.$router.replace({});
+  }
+
+
 },
 methods:{
   ...mapActions({
@@ -760,6 +790,9 @@ methods:{
   },
   async goToGallery(){
     location.href = '/';
+  },
+  async goToCart(){
+    location.href = '/cart';
   },
   async goToCheckout(){
     location.href = '/shared/order/checkout/'+this.link;
