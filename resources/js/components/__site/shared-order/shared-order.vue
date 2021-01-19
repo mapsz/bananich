@@ -536,7 +536,7 @@
         <!-- Cancel order -->
         <x-popup :title="'Отменить закупку?'" :active="cancelOrderShow" @close="cancelOrderShow=false" id="share-order-cancel-modal">
           <div class="m-3">
-            какой-то текст
+            Вы уверены, что хотите отменить закупку? Восстановить её после удаления будет не возможно.
           </div>
           <div style="justify-content: space-evenly; display:flex">
             <button @click="cancelOrderShow=false" class="x-btn x-btn-trans">Отмена</button>

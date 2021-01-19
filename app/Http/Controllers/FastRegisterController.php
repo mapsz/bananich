@@ -28,7 +28,7 @@ class FastRegisterController extends Controller
 
     $link = $_SERVER['SERVER_NAME'] .  '/fast/register/' . $link;
     
-    $send = Mail::send('mail.registerMail', ['link' => $link], function($m)use($request){
+    $send = Mail::send('mail.registerMail', ['link' => $link, 'site' => 'x'], function($m)use($request){
       $m->to($request->email,'to');
       $m->from('no-reply@bananich.ru');
       $m->subject('Регистрация Neolavka.ru');

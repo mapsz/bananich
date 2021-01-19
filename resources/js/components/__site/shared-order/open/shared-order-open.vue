@@ -247,7 +247,19 @@ computed:{
       }      
     }
 
-    return days;
+
+    //Launch remove days
+    let noBadDays = [];
+    days.forEach(day => {
+      if(
+        day.date != '2021-01-20' &&
+        day.date != '2021-01-21'        
+      ){
+        noBadDays.push(day);
+      }
+    });
+
+    return noBadDays;
 
   },
   maxMemberCount:function(){

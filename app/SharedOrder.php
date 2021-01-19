@@ -81,13 +81,15 @@ class SharedOrder extends Model
 
   public static function edit($data){
 
-    //@@@ todo проверить is editable
+    //is editable    
+    $sOrder = (new SharedOrder)->jugeGet(['id' => $data['id']]);
+    if(!isset($sOrder->editable) || !$sOrder->editable) return false;
 
     //Validate
     SharedOrder::validate($data, false);
 
     //Get order
-    $sOrder = SharedOrder::find($data['id']);
+    $sOrder = SharedOrder::find($data['id']);   
 
     {//Set data
       {//Shared order
@@ -240,8 +242,6 @@ class SharedOrder extends Model
     if(!$sOrder) $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1]);
     $slot = count($sOrder->users) + 1;
 
-    if($slot > $sOrder->member_count){return false;} //TODO @@@ to validate 
-
     try{
       DB::beginTransaction();{
         
@@ -263,9 +263,9 @@ class SharedOrder extends Model
           $data['deliveryDate'] = $sOrder['delivery_date'];
           $data['deliveryTime']['from'] = str_replace (':00:00','',$sOrder->delivery_time_from);
           $data['deliveryTime']['to'] = str_replace (':00:00','',$sOrder->delivery_time_to);
-          $data['payMethod'] = 0; //TODO @@@
-          $data['confirm'] = 1; // TODO @@@
-          $data['comment'] = ""; // TODO @@@
+          $data['payMethod'] = 0;
+          $data['confirm'] = 1;
+          $data['comment'] = "";
           $data['name'] = $user->name;
           $data['phone'] = $user->phone;
           $data['email'] = $user->email;
@@ -405,9 +405,10 @@ class SharedOrder extends Model
   }
 
   private static function generateLink(){
-
-    //TODO@@@ check exist
-    return (new \PragmaRX\Random\Random())->size(9)->get();
+    do{
+      $link = (new \PragmaRX\Random\Random())->size(9)->get();
+    }while(SharedOrder::where('link', $link)->exists());
+    return $link;
   }
 
   public function handle($request = []){

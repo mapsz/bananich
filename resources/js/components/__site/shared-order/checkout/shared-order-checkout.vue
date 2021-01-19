@@ -49,7 +49,7 @@
         <!-- Info -->
         <div class="col-12 col-lg-4">
           <shared-order-numbers />
-          <shared-order-confirm class="mt-3" v-if="confirmable"/>
+          <shared-order-confirm class="mt-3" v-if="confirmable && confirm != 1"/>
         </div>
 
 
@@ -85,7 +85,11 @@ export default {
     confirmable(){
       if(this.order == undefined || this.order.confirmable == undefined) return false;
       return this.order.confirmable;
-    }
+    },
+    confirm(){
+      if(this.order == undefined || this.order.x_confirm == undefined) return false;
+      return this.order.x_confirm;    
+    },
   },
   watch:{
     order: function (val, oldVal) {

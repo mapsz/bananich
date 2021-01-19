@@ -7,6 +7,7 @@
         <div class="modal-form" style="width:300px">          
           <div>
             <!-- Inputs -->
+            <div class="mb-3">Пожалуйста, введите ваши данные:</div> 
             <template>
               <div class="modal-sad-form-group">
                 <input 

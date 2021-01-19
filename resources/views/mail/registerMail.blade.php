@@ -1,4 +1,25 @@
+@extends('layouts.mail')
 
+@section('content')
+<?php
+$color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610'
+?>
 
-<a href="{{$link}}">сюда</a>
+  <div>
+  Спасибо, что зарегистрировались на NEO LAVKA. Для того, чтобы завершить процесс регистрации, пожалуйста, перейдите по <a href="{{$link}}">ссылке</a>
+  </div>
+  
+  <br>
 
+  <div style="display: flex;">
+    <a href="{{$link}}" style="margin: auto;"> <button style="background-color:{{$color}};border: 0;padding: 10px;border-radius: 50px;">Кнопка</button></a>
+  </div>  
+
+  <br>
+
+  <div>Если не работает, Скопируйте ссылку...</div>
+  <div style="font-size:10px;    overflow-wrap: anywhere;">
+    {{$link}}
+  </div>
+
+@endsection
