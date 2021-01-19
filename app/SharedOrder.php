@@ -236,14 +236,11 @@ class SharedOrder extends Model
 
   public static function join($user, $link = false, $sOrder = false, $neighbor = false){
 
-
     //Get order
     if(!$sOrder) $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1]);
     $slot = count($sOrder->users) + 1;
 
-    if($slot > $sOrder->member_count){return false;} //TODO @@@ to validate
-
-  
+    if($slot > $sOrder->member_count){return false;} //TODO @@@ to validate 
 
     try{
       DB::beginTransaction();{
@@ -475,6 +472,10 @@ class SharedOrder extends Model
             ->first()
           );
         }
+        $order->delivery_date       = $sOrder->delivery_date;
+        $order->delivery_time_from  = $sOrder->delivery_time_from;
+        $order->delivery_time_to    = $sOrder->delivery_time_to;
+        $order->save();
         //Update status
         Order::changeStatus($order->id,900);
       }

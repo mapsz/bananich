@@ -29,16 +29,17 @@
         </h1>
 
         <!-- To top -->
-        <a v-if="showUp" href="#catalogue" style="
-          position: fixed;
-          z-index: 9999;
-          right: 20px;
-          bottom: 50px;
-          border: 1px solid black;
-          padding: 5px;
-          border-radius: 10px;
-          background-color: #fbe21485;
-          color: black;
+        <a v-if="showUp" href="#catalogue" 
+          :style="isX ? 'background-color: rgb(138 194 167);' : 'background-color: #fbe21485;'"
+          style="
+            position: fixed;
+            z-index: 9999;
+            right: 20px;
+            bottom: 50px;
+            border: 1px solid black;
+            padding: 5px;
+            border-radius: 10px;
+            color: black;
         ">Наверх ⇑</a>
         <div class="row content-page">          
 
@@ -216,8 +217,8 @@ export default {
   max-width:850px;
   font-size: 44px;
   line-height: 140%;
-  margin-top:90px;
-  margin-bottom:150px;
+  margin-top:50px;
+  margin-bottom:80px;
 }
 
 @media screen and (max-width: 768px){

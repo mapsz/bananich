@@ -155,8 +155,6 @@ class Checkout extends Model
       if($cart->final_summ_x  < 0) $cart->final_summ_x  = 0;
     }
 
-
-
     //Cart to array
     $cart = $cart->toArray();  
 
@@ -200,6 +198,7 @@ class Checkout extends Model
     $sum += $pre;
     $sum += $xData['overWeightPrice'];
     $sum += $xData['participation_price'];
+    $sum += $xData['personalAddress'];
 
     return $sum;
 
@@ -285,6 +284,8 @@ class Checkout extends Model
   public static function xdata($items, $order = false, $sOrder = false){
 
     $xData = [
+      'participation_price' => 0,
+      'personalAddress' => 0,
       'fullWeight' => 0,
       'overWeightKg' => 0,
       'overWeightSteps' => 0,
@@ -292,7 +293,6 @@ class Checkout extends Model
       'maxFreeWeight' => 0,
       'order_id' => false,
       's_order_id' => false,
-      'participation_price' => 0,
     ];
 
     //Full Weight
@@ -351,6 +351,11 @@ class Checkout extends Model
         $xData['overWeightPrice'] = $settings["x_weight_step_price"] * $xData['overWeightSteps'];
       }
 
+    }
+
+    {//Personal address
+      $sameAddress = ($sOrder->address->street . ' ' . $sOrder->address->number) == $order->address;
+      $xData['personalAddress'] = $sameAddress ? 0 : 50; 
     }
 
     return $xData;

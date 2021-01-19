@@ -126,7 +126,7 @@
       </div>
 
       <!-- Bonus -->
-      <label class="filter-line">
+      <label v-if="!isX" class="filter-line">
         <div class="filter-line-left">
           Товары за бонусы
         </div>
@@ -219,7 +219,8 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-data(){return{  
+data(){return{
+  isX:isX,
   dropFilter:false,
   dropCategory:false,
   dropPrice:false,

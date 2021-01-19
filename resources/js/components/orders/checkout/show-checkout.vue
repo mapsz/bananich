@@ -40,6 +40,18 @@
       <span>-{{parseInt(coupon.discount)}}</span>
     </div>
   </div> 
+  <!-- X -->
+  <h5 v-if="this.order.type == 'x' &&order.xData != undefined" style="color:#8ac2a7">X</h5>
+  <div class="mb-2" style="border-top:2px dashed #8ac2a7;">
+    <div class="d-flex justify-content-between border-bottom">
+      <span>Участие:</span>
+      <span>{{parseInt(order.xData.participation_price)}}</span>
+    </div>
+    <div class="d-flex justify-content-between border-bottom">
+      <span>Перевес:</span>
+      <span>{{parseInt(order.xData.overWeightPrice)}}</span>
+    </div>
+  </div> 
   <!-- Pre -->
   <div v-if="pre">
     <h5 v-if="!buttons && (pre && result)" class="m-0">Предварительно</h5>
@@ -86,12 +98,27 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
   props: ['order','buttons','show'],
   data(){return{
     pre:true,
     result:true,
   }},
+  computed:{
+    ...mapGetters({
+      sOrders:    'sharedOrder/get',
+    }), 
+    sOrder(){
+      if(this.sOrders == undefined || this.sOrders.length < 1) return false;
+      return this.sOrders[0];
+    },   
+  },
+  watch:{
+    order: function (val, oldVal) {
+      this.getSOrder();
+    },    
+  },
   mounted(){
     if(this.buttons){
       this.pre = false;
@@ -107,6 +134,22 @@ export default {
         this.pre = true;
         this.result = false;   
       }
+    }
+
+    this.getSOrder();
+  },
+  methods:{
+    ...mapActions({
+      'filter':'sharedOrder/addFilter',
+      'get':'sharedOrder/fetchData',
+    }),
+    async getSOrder(){
+      if(this.order == undefined || this.order.id == undefined) return false;
+      if(this.order.type == undefined || this.order.type != 'x') return false;
+      if(this.order.shared_order == undefined || this.order.shared_order[0] == undefined) return false;
+      
+      await this.filter({'id':this.order.shared_order[0].id, 'single':1, 'noHandle':1});
+      await this.get();
     }
   },
 }

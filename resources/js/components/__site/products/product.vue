@@ -1,6 +1,5 @@
 <template>
-<div>
-    <site-header />
+<juge-main>
 
 
     <main>
@@ -48,8 +47,11 @@
                   <div class="d-flex justify-content-between">
 
                     <!-- Price -->
-                    <div class="d-flex align-items-center">                    
-                      <template>
+                    <div class="d-flex align-items-center">      
+                      <template v-if="isX">
+                          <span class="product-price">{{Number(product.final_price_x)}}р</span>
+                      </template>              
+                      <template v-else>
                         <span v-if="product.discount" class="product-price">
                           <span style="color: rgb(255, 92, 0);">{{Number(product.discount.discount_price)}}р</span> <span class="product-old-price">-{{Number(product.price)}}р</span>                        
                         </span>
@@ -122,8 +124,7 @@
       </div>
     </main>
   
-    <site-footer />
-</div>
+</juge-main>
 </template>
 
 <script>

@@ -89,10 +89,36 @@ class SharedOrderController extends Controller
   }
   
   public function join(Request $request){
-    //TODO @@@ validate
 
-    //User
-    $user = Auth::user();
+    {//Validate
+      {//User
+        $user = Auth::user();  
+        $isUser = (isset($user->id) && $user->id > 0) ? true : false;
+        Validator::make(['user' => $isUser], ['user' => 'required|accepted'], ['user.accepted' => 'Необходимо залогиниться'])->validate();
+      }
+
+      {//Already in order
+        $mySOrder = SharedOrder::byAuth();
+        $isMySOrder = isset($mySOrder->id) ? false : true;
+        Validator::make(['mySOrder' => $isMySOrder], ['mySOrder' => 'required|accepted'], ['mySOrder.accepted' => 'Вы уже учавствуете в закупке!'])->validate();
+      }
+
+      {//Bad link
+        $link = isset($request->link) ? $request->link : false;
+        Validator::make(['link' => $link], ['link' => 'required|string'], ['link.string' => 'Не действительная ссылка'])->validate();
+      }
+
+      {//Shared order is open
+        $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1, 'noHandle' => 1]);
+        $isOpen = ($sOrder->status_id == 100 || $sOrder->status_id == 200) ? true : false;
+        Validator::make(['isOpen' => $isOpen], ['isOpen' => 'required|accepted'], ['isOpen.accepted' => 'Закупка недоступна!'])->validate();    
+      }
+
+      {//Full        
+        $isFull = count($sOrder->users) < $sOrder->member_count ? true : false;
+        Validator::make(['isFull' => $isFull], ['isFull' => 'required|accepted'], ['isFull.accepted' => 'Закупка сформирована!'])->validate();        
+      }
+    }    
 
     return response()->json(SharedOrder::join($user, $request->link));
   }

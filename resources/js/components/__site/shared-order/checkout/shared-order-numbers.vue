@@ -5,6 +5,7 @@
   <div v-if="cart">
     <div class="d-flex justify-content-between"><span>Товары ({{cart.items.length}} шт)</span><b>{{cart.pre_price_x}} p</b></div>
     <div class="d-flex justify-content-between" v-if="participation_price"><span>Сервисный взнос</span><b>{{participation_price}} p</b></div>
+    <div class="d-flex justify-content-between" v-if="personalAddress"><span>Доставка</span><b>{{personalAddress}} p</b></div>
     <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight}} кг</b></div>
     <div class="d-flex justify-content-between" v-if="overWeightPrice"><span>Доп. вес</span><b>{{overWeightPrice}} p</b></div>
 
@@ -37,6 +38,10 @@ export default {
     order_id (){
       if(!this.cart || this.cart.xData == undefined || this.cart.xData.order_id == undefined) return false;
       return this.cart.xData.order_id;
+    },
+    personalAddress (){
+      if(!this.cart || this.cart.xData == undefined || this.cart.xData.personalAddress == undefined) return false;
+      return this.cart.xData.personalAddress;
     },
   },
 }

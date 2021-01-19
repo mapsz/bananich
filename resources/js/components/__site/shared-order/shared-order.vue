@@ -144,8 +144,11 @@
             </div>
             <!-- Join -->
             <div class="d-flex justify-content-center mt-3">
-              <button v-if="!userIn && !isFull" @click="join()" class="x-btn" style="height:50px">Стать участником</button>
-            </div> 
+              <div>
+                <button v-if="!userIn && !isFull" @click="join()" class="x-btn" style="height:50px">Стать участником</button>
+                <juge-errors :errors="errors" />
+              </div>              
+            </div>            
           </div>
         </div>
 
@@ -578,6 +581,7 @@ data(){return{
   cancelOrderShow:0,
   kickUserShow:0,
   neighborAnnouceShow:0,
+  errors:[],
 }},
 computed:{
   ...mapGetters({
@@ -765,14 +769,14 @@ methods:{
     }
   },
   async join(){
+    this.errors = [];
     if(!this.user){
       this.showLogin = true;
       return;
     }
     let r = await ax.fetch('/shared/order/join',{'link':this.link},'post');
-    if(r){
-      window.location.reload();
-    }
+    if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
+    if(r){window.location.reload();}
   },
   async pay(userId,slot){
     let r = await ax.fetch('/shared/order/pay',{'order_id':this.sOrder.id, 'user_id':userId, 'slot':slot},'put');
