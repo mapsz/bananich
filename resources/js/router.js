@@ -11,9 +11,13 @@ let routes = [];
   //Neo pages
   import welcome from './components/__site/pages/welcome/welcome.vue';
   import rules from './components/__site/pages/rules/rules.vue';
+  import service from './components/__site/pages/service/service.vue';
+  import payment from './components/__site/pages/payment/payment.vue';
   routes.push(
     {path: '/welcome',    component:welcome, name:'welcome'},
     {path: '/rules',    component:rules, name:'rules'},
+    {path: '/service',    component:service, name:'service'},
+    {path: '/payment',    component:service, name:'payment'},
   );
 
   //Shared Order

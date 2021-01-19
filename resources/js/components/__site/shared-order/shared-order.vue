@@ -216,7 +216,7 @@
                 </div>                
                 <div style="max-width: 20px;">
                   <div style="direction: rtl;" >
-                    <a href="/lavka/rules#weight">
+                    <a href="/rules#weight">
                       <span class="mt-2 ml-3 info-icon" style="color:black; text-decoretion:none"></span>
                     </a>
                   </div>                  

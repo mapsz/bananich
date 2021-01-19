@@ -33,7 +33,9 @@
           Заказ оформлен
         </template>
         <template v-else>
-          <span class="info-icon mr-2"></span>
+          <a :href="meh ? ('/shared/order/checkout/'+link) : '/rules#notconfirm'">
+            <span class="info-icon mr-2"  style="color:black; text-decoretion:none" />
+          </a>
           Заказ не оформлен
         </template>
       </div>
@@ -63,10 +65,22 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 export default {
 props: ['pSlot'],
 
 computed:{
+  ...mapGetters({
+    currentUser:       'user/get',
+  }),
+  meh(){
+    if(this.currentUser == undefined || this.currentUser.id == undefined) return false;
+    if(!this.user || this.user.id == undefined) return false;
+
+    if(this.user.id == this.currentUser.id) return true;
+
+    return false;
+  },
   user(){
     if(this.pSlot == undefined || this.pSlot.user == undefined) return false;
     return this.pSlot.user;
@@ -78,7 +92,11 @@ computed:{
   confirm(){
     if(this.pSlot == undefined || this.pSlot.order == undefined || this.pSlot.order.x_confirm == undefined) return false;
     return this.pSlot.order.x_confirm;
-  }
+  },
+  link(){
+    if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
+    return this.$route.params.order_link;
+  },
 },
 }
 </script>

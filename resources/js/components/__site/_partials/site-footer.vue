@@ -22,7 +22,8 @@
         <hr>
         <div class="row footer-copy">
           <div class="col-lg-5"><div class="footer-copy-left">Предложение не является договором публичной оферты</div></div>
-          <div class="col-lg-7"><div class="footer-copy-right">Copyright © 2019 Бананыч.рф – Всегда свежие овощи и фрукты по человеческим ценам.</div></div>
+          <div v-if="!isX" class="col-lg-7"><div class="footer-copy-right">Copyright © 2019 Бананыч.рф – Всегда свежие овощи и фрукты по человеческим ценам.</div></div>
+          <div v-else class="col-lg-7"><div class="footer-copy-right">Copyright © 2021 Neolavka – Всегда свежие овощи и фрукты по человеческим ценам.</div></div>
         </div>
       </div>
     </footer>
@@ -32,7 +33,9 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-
+  data(){return{
+    isX:isX,
+  }},
   computed:{
     ...mapGetters({
       menus:'page/get',
