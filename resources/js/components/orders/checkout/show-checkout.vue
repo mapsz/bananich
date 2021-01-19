@@ -41,17 +41,20 @@
     </div>
   </div> 
   <!-- X -->
-  <h5 v-if="this.order.type == 'x' &&order.xData != undefined" style="color:#8ac2a7">X</h5>
-  <div class="mb-2" style="border-top:2px dashed #8ac2a7;">
-    <div class="d-flex justify-content-between border-bottom">
-      <span>Участие:</span>
-      <span>{{parseInt(order.xData.participation_price)}}</span>
-    </div>
-    <div class="d-flex justify-content-between border-bottom">
-      <span>Перевес:</span>
-      <span>{{parseInt(order.xData.overWeightPrice)}}</span>
-    </div>
-  </div> 
+  <template v-if="this.order.type == 'x' &&order.xData != undefined">
+  <h5  style="color:#8ac2a7">X</h5>
+    <div class="mb-2" style="border-top:2px dashed #8ac2a7;">
+      <div class="d-flex justify-content-between border-bottom">
+        <span>Участие:</span>
+        <span>{{parseInt(order.xData.participation_price)}}</span>
+      </div>
+      <div class="d-flex justify-content-between border-bottom">
+        <span>Перевес:</span>
+        <span>{{parseInt(order.xData.overWeightPrice)}}</span>
+      </div>
+    </div> 
+  </template>
+
   <!-- Pre -->
   <div v-if="pre">
     <h5 v-if="!buttons && (pre && result)" class="m-0">Предварительно</h5>
