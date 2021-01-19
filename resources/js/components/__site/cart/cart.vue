@@ -74,8 +74,8 @@
                     <a v-if="myOrder.id == undefined" href="/shared/order">
                       <button class="x-btn">Оформить коллективную закупку</button>                    
                     </a>
-                    <a v-else :href="'/shared/order/'+myOrder.link">
-                      <button class="x-btn">К моей закупке</button>                    
+                    <a v-else :href="'/shared/order/checkout/'+myOrder.link">
+                      <button class="x-btn">Оформить заказ</button>                    
                     </a>
                   </template>
                   <!-- Normal bananich -->

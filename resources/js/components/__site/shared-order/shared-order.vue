@@ -89,22 +89,56 @@
         </div>
 
         <!-- Close -->
-        <div class="row">
+        <div v-if="untilClose" class="row my-5">
           <div class="col-12">
-            <!-- Close -->
-            <div v-if="sOrder.status != undefined">
-              <h5>Закрытие</h5>
-              <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
+
+
+            <div class="shared-order-timer-container">
+              <div class="p-3">
+                <div class="row">
+                  <div class="col-12 col-lg-4">
+                    <div class="announce-block mb-3">
+                      <div class="shared-order-timer">
+                        {{('0'+(untilClose/60/60).toFixed(0)).slice(-2)}} :
+                        {{('0'+((untilClose/60)%60).toFixed(0)).slice(-2)}} :
+                        {{('0'+((untilClose)%60).toFixed(0)).slice(-2)}} 
+                      </div>
+                      <div class="shared-order-timer-text">
+                        время до окончания оформления заказа
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-8" style="display: flex;align-items: center;">
+                    <div class="shared-order-timer-description">
+                      Участники, не успевшие завершить оформление заказа до 21.00 дня накануне доставки, 
+                      <b>автоматически исключаются из закупки</b>
+                    </div>                
+                  </div>
+                </div>
+              </div>
             </div>
+            
+          </div>
+        </div>
+
+
+        <div class="row my-5">
+          <div class="col-12">
             <!-- Test time -->
             <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
               <h5>Test time</h5>
-              <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
-              <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
-              <div class="d-flex">
-                <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:40px">
-                <label for="t-m" class="ml-2">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:40px">
-                <button class="btn btn-primary ml-2" @click="updateTestTime()">add</button>
+              <div><b>now:  </b>{{moment().locale("ru").format('LLL')}}</div>
+              <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLL')}}</div>
+              <div class="">
+                <div>
+                  <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:40px">
+                </div>
+                <div>
+                  <label for="t-m" class="ml-2">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:40px">
+                </div>
+                <div>  
+                  <button class="btn btn-primary ml-2" @click="updateTestTime()">add</button>
+                </div>
               </div>
             </div>
           </div>
@@ -582,6 +616,7 @@ data(){return{
   kickUserShow:0,
   neighborAnnouceShow:0,
   errors:[],
+  time:1,
 }},
 computed:{
   ...mapGetters({
@@ -698,7 +733,8 @@ computed:{
     return this.order.confirmable;
   },
   untilClose(){
-    if(this.sOrder == undefined || this.sOrder.order_close == undefined) return false;
+    if(this.sOrder == undefined || this.sOrder.order_close == undefined) return false;    
+    let triger = this.time;
     return moment(this.sOrder.order_close).unix() - moment().unix();
   },
   allConfirmed(){
@@ -720,7 +756,7 @@ watch:{
     return;
   },
 },
-async mounted(){  
+async mounted(){
 
   if(this.sOrder){
     await this.update();
@@ -734,6 +770,8 @@ async mounted(){
     $vm.$router.replace({});
   }
 
+  this.timerTrigger();
+
 
 },
 methods:{
@@ -742,6 +780,12 @@ methods:{
     'get':'sharedOrder/fetchData',
     'update':'sharedOrder/update',
   }),
+  timerTrigger(){
+    setTimeout(() => { 
+      this.timerTrigger();
+      this.time ++; 
+    }, 333);     
+  },
   copyInviteLink(){
     copy('https://neolavka.ru/shared/order/' + this.link);
     this.copied = true;
@@ -812,6 +856,23 @@ methods:{
 </script>
 
 <style scoped>
+  .shared-order-timer-container{  
+    background-color: #e7dfdc;
+    border: 1px solid #cbcbcb;
+    border-radius: 10px;
+  }
+  .shared-order-timer{  
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 150%;  
+  }
+  .shared-order-timer-text{
+    width: 170px;
+  }
+  .shared-order-timer-description{
+    font-size: 16px;
+    line-height: 160%;
+  }
   .member-kick{  
     text-decoration-line: underline;
     font-size: 14px;
@@ -858,6 +919,20 @@ methods:{
 
   /* Desktop */
   @media screen and (min-width: 992px){
+    
+    .shared-order-timer{  
+      font-size: 50px;
+    }
+    .shared-order-timer-text{      
+      width: 314px;
+      font-size: 20px;
+      line-height: 140%;
+    }
+    .shared-order-timer-description{
+      width: 519px;
+      font-size: 20px;
+      line-height: 160%;
+    }
     .congratz{
       max-width: 770px;
       font-size: 50px;
