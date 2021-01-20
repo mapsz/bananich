@@ -1,15 +1,33 @@
 <template>
-<div v-if="cart" class="shared-order-numbers">
-  <h4>Информация о покупке</h4>
+<div>
 
-  <div v-if="cart">
-    <div class="d-flex justify-content-between"><span>Товары ({{cart.items.length}} шт)</span><b>{{cart.pre_price_x}} p</b></div>
-    <div class="d-flex justify-content-between" v-if="participation_price"><span>Сервисный взнос</span><b>{{participation_price}} p</b></div>
-    <div class="d-flex justify-content-between" v-if="personalAddress"><span>Доставка</span><b>{{personalAddress}} p</b></div>
-    <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight}} кг</b></div>
-    <div class="d-flex justify-content-between" v-if="overWeightPrice"><span>Доп. вес</span><b>{{overWeightPrice}} p</b></div>
 
-    <div class="d-flex justify-content-between mt-3"><span><b>Общая сумма</b></span><b>{{cart.final_summ_x}} p</b></div>
+  <!-- Overweight -->
+  <div v-if="cart != undefined && cart.xData != undefined && cart.xData.overWeightKg != undefined && cart.xData.overWeightKg > 0" class="cart-overweight">
+    <div class="d-flex">
+      <div>
+        <span class="info-icon"></span>
+      </div>
+      <div class="ml-3">
+        <div><b>Вес вашей закупки превышен на {{cart.xData.overWeightKg.toFixed(2)}} кг (+{{cart.xData.overWeightPrice}}р)</b></div>
+        <div>*Для вашей закупки доступно {{cart.xData.maxFreeWeight.toFixed(2)}} кг на человека </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="cart" class="shared-order-numbers mt-3">
+    <h4>Информация о покупке</h4>
+
+    <div v-if="cart">
+      <div class="d-flex justify-content-between"><span>Товары ({{cart.items.length}} шт)</span><b>{{cart.pre_price_x}} p</b></div>
+      <div class="d-flex justify-content-between" v-if="participation_price"><span>Сервисный взнос</span><b>{{participation_price}} p</b></div>
+      <div class="d-flex justify-content-between" v-if="personalAddress"><span>Доставка</span><b>{{personalAddress}} p</b></div>
+      <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight}} кг</b></div>
+      <div class="d-flex justify-content-between" v-if="overWeightPrice"><span>Доп. вес</span><b>{{overWeightPrice}} p</b></div>
+
+      <div class="d-flex justify-content-between mt-3"><span><b>Общая сумма</b></span><b>{{cart.final_summ_x}} p</b></div>
+    </div>
+
   </div>
 
 </div>

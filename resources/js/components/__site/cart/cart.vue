@@ -48,19 +48,6 @@
                   </div>
                 </template>
 
-                <!-- Overweight -->
-                <div v-if="cart != undefined && cart.xData != undefined && cart.xData.overWeightKg != undefined && cart.xData.overWeightKg > 0" class="cart-overweight">
-                  <div class="d-flex">
-                    <div>
-                      <span class="info-icon"></span>
-                    </div>
-                    <div class="ml-3">
-                      <div><b>Вес вашей закупки превышен на {{cart.xData.overWeightKg.toFixed(2)}} кг (+{{cart.xData.overWeightPrice}}р)</b></div>
-                      <div>*Для вашей закупки доступно {{cart.xData.maxFreeWeight.toFixed(2)}} кг на человека </div>
-                    </div>
-                  </div>
-                </div>
-
                 <!-- Info -->
                 <div>
                   <shared-order-numbers class="mb-4" v-if="isX"/>
@@ -74,6 +61,7 @@
                     <a v-if="myOrder.id == undefined" href="/shared/order">
                       <button class="x-btn">Оформить коллективную закупку</button>                    
                     </a>
+                    <span v-else-if="order && order.confirmable"><b>Заказ оформлен</b> </span>
                     <a v-else :href="'/shared/order/checkout/'+myOrder.link">
                       <button class="x-btn">Оформить заказ</button>                    
                     </a>
@@ -157,6 +145,15 @@ export default {
         this.settings.bonus_multiplier == undefined 
       ) return false;
       return Math.round((this.cart.final_summ - this.cart.shipping) * parseFloat(this.settings.bonus_multiplier));
+    },
+    order(){
+      if(this.user == undefined && !this.user) return false;
+      if(!this.myOrder || this.myOrder.orders == undefined || this.myOrder.orders.length <= 0) return false;
+
+      let order = this.myOrder.orders.find(x => x.customer_id == this.user.id);
+      if(!order || order.id == undefined) return false
+      return order;
+
     },
   },
   watch: {
