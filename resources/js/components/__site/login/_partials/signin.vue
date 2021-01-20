@@ -63,6 +63,14 @@ data(){return{
 computed:{
   ...mapGetters({user:'user/get'}), 
 },
+watch:{
+  user: function (val, oldVal) {
+    if(this.user.id != undefined){
+      this.errors = [];
+      location.reload();
+    } 
+  },  
+},
 methods:{
   ...mapActions({'getUser':'user/fetch',}), 
   async singin(){
@@ -81,6 +89,8 @@ methods:{
     //Post
     let r = await ax.fetch('/login', data, 'post');
 
+    this.getUser();
+
     //Catch errors
     if(!r){      
       if(ax.lastResponse.status == 422){
@@ -88,10 +98,6 @@ methods:{
         return;
       }
     }
-
-    //Check signin
-    await this.getUser();
-    if(this.user.id != undefined) location.reload();
 
   }
 },

@@ -6,7 +6,10 @@
         <div class="row footer-main">
           <div class="footer-main-tel-soc col-12 col-lg-4 py-2 px-0 border-top border-bottom">
             <div class="d-flex d-lg-block align-items-center justify-content-around">
-              <div class="m-0 pb-lg-2 phone"><a :href="'tel:'+settings.phone_number">{{settings.phone_number}}</a></div>
+              <template>
+                <div v-if="isX" class="m-0 pb-lg-2 phone"><a :href="'tel:'+settings.x_phone_number">{{settings.x_phone_number}}</a></div>
+                <div v-else class="m-0 pb-lg-2 phone"><a :href="'tel:'+settings.phone_number">{{settings.phone_number}}</a></div>
+              </template>
               <div class="m-0 footer-soc d-flex ">
                 <!-- <a href="https://instagram.com/bananich.ru" target="_blank" class="footer-soc-link"><img src="/image/insta.svg" alt="Мы в instagram"></a> -->
                 <!-- <a href="https://vk.com/bananichru" target="_blank" class="footer-soc-link"><img src="/image/vk.svg" alt="Мы в контакте"></a> -->

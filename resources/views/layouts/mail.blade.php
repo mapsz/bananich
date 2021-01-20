@@ -1,5 +1,7 @@
 <?php
-$color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610'
+$s = new App\Setting;
+$number = (isset($site) && $site == 'x') ? $s->byName('x_phone_number') : $s->byName('phone_number');
+$color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610';
 ?>
 
 <!-- Mail -->
@@ -123,7 +125,6 @@ $color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610'
             </p>              
           </td>
           <td width="150">
-            <?php $s = new App\Setting; $numner = $s->byName('phone_number'); ?>
             @if($numner) <span>📞 <a href="#" style="color:black"><b>{{$numner}}</b></a></span> @endif                
           </td>
           {{-- Socs / Link --}}

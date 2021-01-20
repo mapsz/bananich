@@ -8,7 +8,10 @@
           <nav class="navbar-sad">
             <menu-component :menus="menus" :position="'top'"></menu-component>
           </nav>
-          <div class="phone header-phone"><a :href="'tel:'+settings.phone_number">📞{{settings.phone_number}}</a></div>
+          <template>
+            <div v-if="isX" class="phone header-phone"><a :href="'tel:'+settings.x_phone_number">📞{{settings.x_phone_number}}</a></div>
+            <div v-else class="phone header-phone"><a :href="'tel:'+settings.phone_number">📞{{settings.phone_number}}</a></div>
+          </template>          
       </div>
     </div>
 

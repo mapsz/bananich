@@ -24,62 +24,117 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-  model: {prop: 'hidden',event: 'blur'},
-  props: ['hidden','design', 'no-cache'],
-  data(){return{
-    data:{
-      addressStreet:false,
-      addressNumber:false,
-      addressApart:false,
-      addressPorch:false,
-    },
-
-    loadUser:false,
-  }},
-  computed:{
-    ...mapGetters({user:'user/get'}),
+model: {prop: 'hidden',event: 'blur'},
+props: ['hidden','design', 'no-cache'],
+data(){return{
+  data:{
+    addressStreet:false,
+    addressNumber:false,
+    addressApart:false,
+    addressPorch:false,
   },
-  watch: {
-    data: {
-      deep: true,
-      handler(){
-        this.$emit('blur', this.data);
-        // this.loadUserAddress();
-      }
-    },
-    user: function(){
-      // this.loadUserAddress();      
-    },
-    hidden: function(){
-      if(this.hidden == undefined) return;
-
-      if(this.hidden.street != undefined) this.data.addressStreet = this.hidden.street;
-      if(this.hidden.number != undefined) this.data.addressNumber = this.hidden.number;
-      if(this.hidden.appart != undefined) this.data.addressApart = this.hidden.appart;
-      if(this.hidden.porch != undefined) this.data.addressPorch = this.hidden.porch; 
+}},
+computed:{
+  ...mapGetters({user:'user/get'}),
+  ...mapGetters({local:'checkout/get'}),
+  userAddress(){
+    if(this.user == undefined || this.user.addresses == undefined || this.user.addresses[0] == undefined || this.user.addresses[0].street == undefined || !this.user.addresses[0].street) return false;
+    return this.user.addresses[0];  
+  }
+},
+watch:{
+  data: {
+    deep: true,
+    handler(){
+      this.$emit('blur', this.data);
+      // this.loadUserAddress();
     }
   },
-  methods:{
-    ...mapActions({'set':'checkout/setValue'}), 
-    loadUserAddress(){
-      if(this.loadUser) return;
-      if(!this.user) return;
-      if(this.user.addresses == undefined ) return;
-      if(this.user.addresses[0] == undefined) return;
-
-      if(this.addressStreet === null){
-        this.loadUser = true;
-        this.set({name:'addressStreet', value:this.user.addresses[0].street});
-        this.set({name:'addressNumber', value:this.user.addresses[0].number});
-        this.set({name:'addressApart', value:this.user.addresses[0].appart});
-        this.set({name:'addressPorch', value:this.user.addresses[0].porch});
-        this.data.addressStreet = this.user.addresses[0].street;
-        this.data.addressNumber = this.user.addresses[0].number;
-        this.data.addressApart = this.user.addresses[0].appart;
-        this.data.addressPorch = this.user.addresses[0].porch;
-      }
-    }
+  user: function (val, oldVal) {
+    if(this.userAddress) this.loadUserAddress();
   },
+},
+methods:{
+  ...mapActions({'set':'checkout/setValue'}),
+  loadUserAddress(){
+    if(!this.local.addressStreet){
+      this.set({name:'addressStreet', value:this.userAddress.street});
+      this.set({name:'addressNumber', value:this.userAddress.number});
+      this.set({name:'addressApart', value:this.userAddress.appart});
+      this.set({name:'addressPorch', value:this.userAddress.porch});
+      this.data.addressStreet = this.userAddress.street;
+      this.data.addressNumber = this.userAddress.number;
+      this.data.addressApart = this.userAddress.appart;
+      this.data.addressPorch = this.userAddress.porch;
+    }
+  }  
+},
+
+
+
+
+
+
+
+
+
+
+
+
+  // data(){return{
+  //   data:{
+  //     addressStreet:false,
+  //     addressNumber:false,
+  //     addressApart:false,
+  //     addressPorch:false,
+  //   },
+
+  //   loadUser:false,
+  // }},
+  // computed:{
+  //   ...mapGetters({user:'user/get'}),
+  // },
+  // watch: {
+  //   data: {
+  //     deep: true,
+  //     handler(){
+  //       this.$emit('blur', this.data);
+  //       // this.loadUserAddress();
+  //     }
+  //   },
+  //   user: function(){
+  //     // this.loadUserAddress();      
+  //   },
+  //   hidden: function(){
+  //     if(this.hidden == undefined) return;
+
+  //     if(this.hidden.street != undefined) this.data.addressStreet = this.hidden.street;
+  //     if(this.hidden.number != undefined) this.data.addressNumber = this.hidden.number;
+  //     if(this.hidden.appart != undefined) this.data.addressApart = this.hidden.appart;
+  //     if(this.hidden.porch != undefined) this.data.addressPorch = this.hidden.porch; 
+  //   }
+  // },
+  // methods:{
+  //   ...mapActions({'set':'checkout/setValue'}), 
+  //   loadUserAddress(){
+  //     if(this.loadUser) return;
+  //     if(!this.user) return;
+  //     if(this.user.addresses == undefined ) return;
+  //     if(this.user.addresses[0] == undefined) return;
+
+  //     if(this.addressStreet === null){
+  //       this.loadUser = true;
+  //       this.set({name:'addressStreet', value:this.user.addresses[0].street});
+  //       this.set({name:'addressNumber', value:this.user.addresses[0].number});
+  //       this.set({name:'addressApart', value:this.user.addresses[0].appart});
+  //       this.set({name:'addressPorch', value:this.user.addresses[0].porch});
+  //       this.data.addressStreet = this.user.addresses[0].street;
+  //       this.data.addressNumber = this.user.addresses[0].number;
+  //       this.data.addressApart = this.user.addresses[0].appart;
+  //       this.data.addressPorch = this.user.addresses[0].porch;
+  //     }
+  //   }
+  // },
 }
 </script>
 

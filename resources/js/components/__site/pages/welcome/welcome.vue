@@ -225,9 +225,6 @@ methods:{
     font-size: 20px;
     line-height: 180%;
   }
-  .mb-lg-100{
-    margin-bottom:100px;
-  }
 
 }
 

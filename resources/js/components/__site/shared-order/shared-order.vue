@@ -89,11 +89,19 @@
         </div>
 
         <!-- Close -->
-        <div v-if="untilClose" class="row my-5">
+        <div v-if="sOrder && untilClose" class="row my-5">
           <div class="col-12">
 
+            <div v-if="sOrder.status_id == 0">
+              Закупка отменина
+            </div>
 
-            <div class="shared-order-timer-container">
+            <div v-else-if="sOrder.status_id > 200 || sOrder.status_id == 1">
+              Закупка состоялась
+            </div>
+
+
+            <div v-else class="shared-order-timer-container">
               <div class="p-3">
                 <div class="row">
                   <div class="col-12 col-lg-4">
@@ -629,8 +637,8 @@ computed:{
     return window.location.origin+'/shared/order/' + this.link;
   },
   link(){
-    if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
-    return this.$route.params.order_link;
+    if(!this.sOrder || this.sOrder.link == undefined || !this.sOrder.link) return false;
+    return this.sOrder.link;
   },
   sOrder(){
     if(this.sOrders == undefined || this.sOrders.length < 1) return false;
@@ -767,7 +775,7 @@ async mounted(){
   //Neighbor accounce
   if(this.$route != undefined && this.$route.query != undefined  && this.$route.query.neighbor != undefined && this.$route.query.neighbor){
     this.neighborAnnouceShow = 1;
-    $vm.$router.replace({});
+    this.$router.replace({});
   }
 
   this.timerTrigger();
@@ -907,10 +915,6 @@ methods:{
     font-size: 16px;
     color: rgba(0, 0, 0, 0.6);
   }
-  .edit{
-    text-decoration-line: underline;    
-    font-size: 15px;
-  }
   .action{
     text-align: left;
     text-decoration-line: underline;
@@ -948,9 +952,6 @@ methods:{
       font-size: 16px;
       margin-left: 147px;
     }  
-    .edit{
-      font-size: 20px;
-    }
 
   }
   

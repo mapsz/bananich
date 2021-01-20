@@ -104,11 +104,12 @@ class Sms extends Model
       
 
       if(
-        Sms::
-          where('body','LIKE', '%'.$bonus->addBonus->left.'%')
-        ->where('created_at', '>', now()->subseconds($soonDays))
-        ->where('to',$to)
-        ->exists()
+        // Sms::
+        //   where('body','LIKE', '%'.$bonus->addBonus->left.'%')
+        // ->where('created_at', '>', now()->subseconds($soonDays))
+        // ->where('to',$to)
+        // ->exists()
+        Sms::where('body',$body)->where('to',$to)->exists()
       ){
         // dump('exists');
         // dump(Sms::where('body',$body)->where('to',$to)->first()->body);

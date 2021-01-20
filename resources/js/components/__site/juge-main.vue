@@ -154,6 +154,10 @@ methods:{
     font-weight: 600;
     line-height: 140%;
   }
+  .edit{
+    text-decoration-line: underline;    
+    font-size: 15px;
+  }
 
   /* Desktop */
   @media screen and (min-width: 992px){
@@ -169,6 +173,12 @@ methods:{
     .x-header{  
       max-width: 651px;
       font-size: 56px;
+    }
+    .mb-lg-100{
+      margin-bottom:100px!important;
+    }
+    .edit{
+      font-size: 20px;
     }
   }
 </style>

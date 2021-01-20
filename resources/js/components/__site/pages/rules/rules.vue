@@ -49,7 +49,7 @@
       </div>
     </div> 
    
-    <div class="row mb-lg-100 mb-5">
+    <div class="row mb-lg-100 mb-5 mb-lg-100">
       <div class="col-12 col-lg-6">
         <div class="header mb-4">
           <b>Редактирование данных</b> совместной закупки
@@ -70,7 +70,7 @@
     </div>  
 
     <a name="weight"></a>
-    <div class="row mb-lg-100 mb-5">      
+    <div class="row mb-lg-100 mb-5 mb-lg-100">
       <div class="col-12 col-lg-6">
         <div class="header mb-4">
           <b>Общий </b> вес заказа
@@ -86,7 +86,7 @@
       </div>
     </div> 
 
-    <div class="row mb-lg-100 mb-5">
+    <div class="row mb-lg-100 mb-5 mb-lg-100">
       <div class="col-12 col-lg-6">
         <div class="header mb-4">
           Особенности <b>доставки </b>
@@ -99,7 +99,7 @@
       </div>
     </div>     
 
-    <div class="row mb-lg-100 mb-5">
+    <div class="row mb-lg-100 mb-5 mb-lg-100">
       <div class="col-12 col-lg-6">
         <div class="header mb-4">
           <b>Оплата</b>

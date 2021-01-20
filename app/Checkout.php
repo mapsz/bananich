@@ -339,7 +339,7 @@ class Checkout extends Model
       $personKg = ($settings['x_order_weight'] / $sOrder->member_count);
       $xData['maxFreeWeight'] = $personKg;
 
-      $overKg = $xData['fullWeight'] - $personKg;
+      $overKg = round($xData['fullWeight'] - $personKg, 3);
       if($overKg <= 0){
         $xData['overWeightKg'] = 0;
         $xData['overWeightPrice'] = 0;
@@ -347,7 +347,12 @@ class Checkout extends Model
         //Over Kg
         $xData['overWeightKg'] = $overKg;
         //Over Price
-        $xData['overWeightSteps'] = intval($overKg / $settings['x_weight_step_kg']) + (($overKg % $settings['x_weight_step_kg'] > 0) ? 1 : 0);
+        $xData['overWeightSteps'] = (
+          intval($overKg / $settings['x_weight_step_kg']) + 
+          ((($overKg * 1000) % ($settings['x_weight_step_kg'] * 1000) > 0) ? 1 : 0)
+        );
+        
+        
         $xData['overWeightPrice'] = $settings["x_weight_step_price"] * $xData['overWeightSteps'];
       }
 

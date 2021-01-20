@@ -11,7 +11,15 @@
           <div v-if="sOrder && order" class="mb-4">
             <h5><b>Адрес</b></h5>
             <!-- Radio -->
-            <div class="form-group mt-3">
+            <div v-if="isAdmin">
+              <div style="color:#595959">
+                {{sOrder.short_address}}
+              </div>
+              <div v-if="editable">
+                <button @click="goToEdit()" class="edit" style="font-size: 16px;">изменить</button>
+              </div>
+            </div>
+            <div v-else class="form-group mt-3">
               <div  class="form-radio">
                 <input v-model="personalAddress" class="custom-radio" type="radio" id="personalAddressNah" :value="0" name="personalAddress">
                 <label :for="'personalAddressNah'">{{sOrder.short_address}}</label>
@@ -40,7 +48,7 @@
           <!-- Big Action -->
           <div class="d-flex justify-content-center mb-3">
             <button @click="edit()" class="x-btn">
-              Внести изменения
+              {{isCartreferrer ? 'оформить' : 'Внести изменения'}}
             </button>
           </div>
 
@@ -77,7 +85,19 @@ export default {
       cart:'cart/getCart',
       order:'sharedOrder/getOrder',      
       sOrder:'sharedOrder/get',
+      user:       'user/get',
     }),
+    editable(){
+      if(!this.sOrder || this.sOrder.editable == undefined) return false;
+
+      return this.sOrder.editable
+    },
+    isAdmin(){
+      if(this.user == undefined && !this.user) return false;
+      if(!this.sOrder || this.sOrder.owner_id == undefined || this.sOrder.owner_id < 1) return false;
+      if(this.user.id == this.sOrder.owner_id) return true;
+      return false;
+    },
     link(){
       if(this.$route == undefined || this.$route.params == undefined || this.$route.params.order_link == undefined) return false;    
       return this.$route.params.order_link;
@@ -90,6 +110,9 @@ export default {
       if(this.order == undefined || this.order.x_confirm == undefined) return false;
       return this.order.x_confirm;    
     },
+    isCartreferrer(){
+      return document.referrer.includes('/cart');
+    }
   },
   watch:{
     order: function (val, oldVal) {
@@ -137,8 +160,12 @@ export default {
       //Success
       if(r){window.location.href = '/shared/order/'+this.link};
 
-    console.log(r);
-    }
+      console.log(r);
+    },
+    goToEdit(){
+      if(!this.link) return;
+      location.href = '/shared/order/edit/' +this.link;
+    },
   }
 }
 </script>
