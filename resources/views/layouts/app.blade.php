@@ -46,10 +46,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>
-        {{ strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'Bananich' : '' }}
-        {{ strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'Neolavka' : '' }}
-        {{ strpos($_SERVER['SERVER_NAME'], '.loc') !== false ? 'Local' : '' }}
+    <title>    
+        {{ strpos($_SERVER['SERVER_NAME'], '.loc') !== false ? '🎢LOCAL🎢' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'Bananich 🍌' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'Neolavka 🌿' : '' }}
     </title>
 
     <!-- Scripts -->

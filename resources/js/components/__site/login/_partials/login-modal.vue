@@ -32,6 +32,7 @@ export default {
 <style scoped>
 @media (max-width: 580px){
   .modal-sad-phone {
+    margin-top: 50px;
     position: fixed !important;
     top: 0px;
     overflow: scroll;
