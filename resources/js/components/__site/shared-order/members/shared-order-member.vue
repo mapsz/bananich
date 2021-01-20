@@ -105,16 +105,6 @@ computed:{
 .member-confirm{
   font-size:14px;
 }
-
-.user-avatar{
-  min-width: 75px;
-  height: 75px;
-  margin:0px 10px;
-  background-color: #aba5a3;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-}
 .user-name, .user-email, .user-phone{
   white-space: normal;
   overflow: hidden;
@@ -139,11 +129,6 @@ computed:{
 
 /* Desktop */
 @media screen and (min-width: 992px){
-  .user-avatar{
-    min-width:100px;
-    height:100px;
-    border-radius: 50px;
-  } 
   .user-name{
     font-size: 20px;
     color: #000000;

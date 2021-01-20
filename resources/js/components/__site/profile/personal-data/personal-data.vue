@@ -16,6 +16,36 @@
               <h2 class="title-h2">Личные данные</h2>
             </div>          
             <div class="content">
+
+              <!-- Avatar -->
+              <div v-if="0" class="row mb-4">
+                <div class="col-12">
+                  <h4 class="mb-3">Аватарка</h4>
+                  <div class="">
+                    <div class="user-avatar">
+                      <img alt="Avatar" :src="user.mainImage" style="max-width: 100%; max-height: 100%; border-radius: 50px;">
+                    </div>
+                    <button @click="avatarUploadShow=true" class="form-url" style="margin-top:0px">Редактировать</button>     
+                    <!-- Upload avatar -->
+                    <x-popup v-if="avatarUploadShow" :title="'Редактирование аватара'" :active="avatarUploadShow" @close="avatarUploadShow=false" id="avatar-upload-modal">
+                      <div class="m-3">                        
+                        <!-- File -->
+                        <div>      
+                          <file-upload
+                            v-model="avatarFile"
+                            :file-type="'image/*'" 
+                            :max-file-count="1" 
+                            :value="avatarFile"
+                          />
+                        </div>
+                        
+
+                      </div>
+                    </x-popup>
+                  </div>
+                </div>
+              </div>
+
               
               <div class="row">
 
@@ -107,15 +137,20 @@ export default {
       {caption:'Подъезд',name:'porch'},
     ],
 
+    avatarFile:null,
     data:{},
     dataAddress:{street:'',number:'',appart:'',porch:''},
     editContact:false,
     editAddress:false,
+    avatarUploadShow:false,
   }},
   computed:{
     ...mapGetters({user:'user/get'}), 
   },
   watch: {
+    avatarFile: function (val, oldVal) {
+      console.log(val);
+    },
     user: {
       handler: function (val, oldVal) {
         this.data.name      = this.user.name;

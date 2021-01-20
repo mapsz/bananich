@@ -4,6 +4,7 @@
     
       <div class="container my-3">
 
+        <!-- Congratz -->
         <template v-if="isAdmin">
           <!-- Congratz -->
           <template v-if="isAdmin && moment().unix() - moment(this.sOrder.created_at).unix() < 120 && !confirm">
@@ -93,7 +94,7 @@
           <div class="col-12">
 
             <div v-if="sOrder.status_id == 0">
-              Закупка отменина
+              Закупка отменена
             </div>
 
             <div v-else-if="sOrder.status_id > 200 || sOrder.status_id == 1">
@@ -129,7 +130,7 @@
           </div>
         </div>
 
-
+        <!-- Test time -->
         <div class="row my-5">
           <div class="col-12">
             <!-- Test time -->
@@ -372,6 +373,7 @@
         <!-- <div class="row">
           
         </div> -->
+        
         
 
         <div v-if="0">

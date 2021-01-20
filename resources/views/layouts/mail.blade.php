@@ -125,7 +125,7 @@ $color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610';
             </p>              
           </td>
           <td width="150">
-            @if($numner) <span>📞 <a href="#" style="color:black"><b>{{$numner}}</b></a></span> @endif                
+            @if($number) <span>📞 <a href="#" style="color:black"><b>{{$number}}</b></a></span> @endif                
           </td>
           {{-- Socs / Link --}}
           <td>

@@ -1,10 +1,7 @@
 <template>
-  <div>    
+<div>    
   <juge-main>
-    <!-- <Breadcrumbs /> -->
-
     <router-view></router-view>
-
   </juge-main>
 </div> 
 </template>

@@ -158,6 +158,20 @@ methods:{
     text-decoration-line: underline;    
     font-size: 15px;
   }
+  .user-avatar{
+    width: 75px;
+    height: 75px;
+    margin:0px 10px;
+    background-color: #aba5a3;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+  }
+  .user-avatar img{    
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50px;
+  }
 
   /* Desktop */
   @media screen and (min-width: 992px){
@@ -180,5 +194,10 @@ methods:{
     .edit{
       font-size: 20px;
     }
+    .user-avatar{
+      width:100px;
+      height:100px;
+      border-radius: 50px;
+    } 
   }
 </style>

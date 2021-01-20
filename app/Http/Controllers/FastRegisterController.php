@@ -17,7 +17,7 @@ class FastRegisterController extends Controller
 
     //Validate
     Validator::make($request->all(), [
-      'email' => ['required', 'email', 'max:190', 'unique:users'],
+      'email' => ['required', 'email', 'max:190'],
     ])->validate();
 
     //Put fast register
@@ -68,7 +68,7 @@ class FastRegisterController extends Controller
           [
             'name'      => ['required','max:190'],
             'surname'   => ['max:190'],
-            'email'     => ['required', 'email', 'max:190', 'unique:users'],
+            'email'     => ['required', 'email', 'max:190'],
             'password'  => ['required', 'min:6', 'confirmed'],
             'phone'     => ['required', 'regex:/^8(\d){10}?$/', 'unique:users'],
           ],
@@ -79,19 +79,22 @@ class FastRegisterController extends Controller
       }
     }
 
-    //Put user
-    $user = User::create([
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'phone' => $data['phone'],
-      'password' => Hash::make($data['password']),
-    ]);
+    //Put/Post user
+    $user = User::where('email', $data['email'])->first();
+    if(!isset($user->id)){
+      $user = new user();
+    }
+
+    $user->name = $data['name'];
+    $user->email = $data['email'];
+    $user->phone = $data['phone'];
+    $user->password = Hash::make($data['password']);
+    $user->save();
 
     Auth::loginUsingId($user->id);
     
     return $user;
 
-    dd($request);
   }
   
 }

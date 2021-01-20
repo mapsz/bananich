@@ -261,7 +261,7 @@ class SharedOrder extends Model
 
       {//Make Personal Order
         {//Form data
-          $data['id'] = $sOrder['id'] . '' . $slot;
+          $data['id'] = $sOrder['id'] . '0' . $slot;
           $data['deliveryDate'] = $sOrder['delivery_date'];
           $data['deliveryTime']['from'] = str_replace (':00:00','',$sOrder->delivery_time_from);
           $data['deliveryTime']['to'] = str_replace (':00:00','',$sOrder->delivery_time_to);
