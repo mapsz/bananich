@@ -46,7 +46,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>
+        {{ strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'Bananich' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'Neolavka' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], '.loc') !== false ? 'Local' : '' }}
+    </title>
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
@@ -60,7 +64,11 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
     {{-- Favicon --}}
-    <link rel="icon" href="img/favicon.png" type="image/x-icon">
+    <?php
+        $favicon = strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'img/favicon.png' : 'img/neo_favicon.png';
+    ?>
+    <link rel="icon" href="{{$favicon}}" type="image/x-icon">
+    
 </head>
 <body>
     @if (ENV('APP_ENV') != 'local')

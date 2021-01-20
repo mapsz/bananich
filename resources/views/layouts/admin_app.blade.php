@@ -7,7 +7,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} local</title>
+    <title>
+        {{ strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'Adminka Bananich' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'Adminka Neolavka' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], '.loc') !== false ? 'Local' : '' }}
+    </title>
 
     <!-- Scripts -->
     <script src="{{ mix('js/adminApp.js') }}" defer></script>
