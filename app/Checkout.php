@@ -137,22 +137,25 @@ class Checkout extends Model
 
     {//Final summ
       {//Normal bananich
-        $cart->final_summ = 0;
-        $cart->final_summ += $cart->pre_price;
-        $cart->final_summ += $cart->shipping;
-        $cart->final_summ -= $cart->bonus;
-        $cart->final_summ -= $coupon;
-        $cart->final_summ += $cart->container ? $cart->container['price'] : 0;
+        $cart->final_summ_n = 0;
+        $cart->final_summ_n += $cart->pre_price;
+        $cart->final_summ_n += $cart->shipping;
+        $cart->final_summ_n -= $cart->bonus;
+        $cart->final_summ_n -= $coupon;
+        $cart->final_summ_n += $cart->container ? $cart->container['price'] : 0;
       }
       {//X bananich
-        $cart->final_summ_x = 0;
-        
+        $cart->final_summ_x = 0;        
         $cart->final_summ_x = Checkout::x_final_price($cart->pre_price_x,$cart->xData);        
         $cart->final_summ_x += $cart->container ? $cart->container['price'] : 0;
+      }
+      {//Final
+        $cart->final_summ = isset($cart->type) && ($cart->type == 2 || $cart->type == 'x') ? $cart->final_summ_x : $cart->final_summ_n;
       }
       //Cant be less zero
       if($cart->final_summ    < 0) $cart->final_summ    = 0;
       if($cart->final_summ_x  < 0) $cart->final_summ_x  = 0;
+      if($cart->final_summ_n  < 0) $cart->final_summ_n  = 0;
     }
 
     //Cart to array

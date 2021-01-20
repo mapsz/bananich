@@ -427,7 +427,12 @@ class Order extends Model
       JugeLogs::log(2, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
 
       //Random id
-      $randomId = self::generateRandomId();
+      if(isset($data['id']) && $data['id'] > 0){
+        $randomId = $data['id'];
+      }else{
+        $randomId = self::generateRandomId();
+      }
+      
 
       JugeLogs::log(3, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
       
@@ -601,9 +606,8 @@ class Order extends Model
 
     //Create Query
     $query = self::withStatus();
-
-    //With
-    if('With' == 'With'){
+    
+    {//With
 
       //Logistic
       if(isset($request['with_logistic'])){
@@ -654,14 +658,14 @@ class Order extends Model
             }]);
       }
     }
+        
+    {//Sort
+      $sort = ['col' => 'id','order' => 'DESC'];
+      if(isset($request['sort'])) $sort = (array) json_decode($request['sort']);   
+      $query = $query->orderBy($sort['col'],$sort['order']);
+    }
     
-    //Sort
-    $sort = ['col' => 'id','order' => 'DESC'];
-    if(isset($request['sort'])) $sort = (array) json_decode($request['sort']);   
-    $query = $query->orderBy($sort['col'],$sort['order']);
-    
-    //Where
-    if('WHERE' == 'WHERE'){
+    {//Where
 
       //Shared order
       if(isset($request['sharedOrder']) && $request['sharedOrder'] > 0){
@@ -744,20 +748,22 @@ class Order extends Model
 
     }
 
-
-    //Pagginate limit
-    if(isset($request['limit']) && $request['limit']){
-      $limit = $request['limit'];
-    }else{
-      $limit = 100;
+    {//Pagginate limit
+      if(isset($request['limit']) && $request['limit']){
+        $limit = $request['limit'];
+      }else{
+        $limit = 100;
+      }
     }
-
-    //Get
-    if(!isset($request['page'])){
-      $orders = $query->get();
-    }else{
-      $orders = $query->paginate($limit);
-    }    
+    
+    {//Get
+      if(!isset($request['page'])){
+        $orders = $query->get();
+      }else{
+        $orders = $query->paginate($limit);
+      }  
+    }
+  
 
     //Postedit data
     if("EDIT" == "EDIT"){
@@ -872,164 +878,186 @@ class Order extends Model
         }
       }
 
-      //Checkout
-      $round = 0;
-      foreach ($orders as $ok => $order) {
-        
-        //Items
-        foreach ($order->items as $ik => $item) {
-          $item->gram_sys = $item->gram_sys == 0 ? 1 : $item->gram_sys;
-
-          //Price
-          $item->price = round($item->price,$round);
-
-          // Price per Unit
-          if($item->quantity == 0 || $item->price == 0){
-            $item->price_unit = 0;
-          }else{
-            $item->price_unit = round($item->price / $item->quantity, $round);
-          }
+      
+      {//Checkout
+        $round = 0;
+        foreach ($orders as $ok => $order) {
+          
+          //Items
+          foreach ($order->items as $ik => $item) {
+            $item->gram_sys = $item->gram_sys == 0 ? 1 : $item->gram_sys;
+  
+            //Price
+            $item->price = round($item->price,$round);
+  
+            // Price per Unit
+            if($item->quantity == 0 || $item->price == 0){
+              $item->price_unit = 0;
+            }else{
+              $item->price_unit = round($item->price / $item->quantity, $round);
+            }
+              
+            // Price per One
+            $item->price_one = round((1 / $item->gram_sys) * $orders[$ok]->items[$ik]['price_unit'],$round);
             
-          // Price per One
-          $item->price_one = round((1 / $item->gram_sys) * $orders[$ok]->items[$ik]['price_unit'],$round);
-          
-          // Price result
-          if($item->quantity_result){
-            $item->price_result = round($item->price_unit * ($item->quantity_result / $item->gram_sys),$round);            
-          }      
-          
-          //Quantity result in units
-          if($item->quantity_result){
-            $item->quantity_unit_result = $item->quantity_result / $item->gram_sys;  
-          }
-
-          // Discounts
-          foreach ($orders[$ok]->discounts as $dk => $discount) {
-            if($item->product_id == $discount->product_id){
-              
-              //Add discount
-              $item->discount = $discount;
-              
-              //Add pre discount
-              $itemDiscount = 0;
-              if($item->quantity > $discount->quantity){
-                $itemDiscount = ($discount->quantity * $item->price_unit) - ($discount->quantity * $discount->discount_price);
-              }
-              else{
-                $itemDiscount = ($item->quantity * $item->price_unit) - ($item->quantity * $discount->discount_price);
-              }     
-              $itemDiscount = $itemDiscount - ($itemDiscount * 2);
-              $item->discount_final = round($itemDiscount,$round);
-              //Discount totals
-              $order->discounts_total += $item->discount_final;            
-
-              //Add result discount
-              if($item->quantity_result){
+            // Price result
+            if($item->quantity_result){
+              $item->price_result = round($item->price_unit * ($item->quantity_result / $item->gram_sys),$round);            
+            }      
+            
+            //Quantity result in units
+            if($item->quantity_result){
+              $item->quantity_unit_result = $item->quantity_result / $item->gram_sys;  
+            }
+  
+            // Discounts
+            foreach ($orders[$ok]->discounts as $dk => $discount) {
+              if($item->product_id == $discount->product_id){
+                
+                //Add discount
+                $item->discount = $discount;
+                
+                //Add pre discount
                 $itemDiscount = 0;
-                //Get one discount
-                $discount_one = $item->price_one - ((1 / $item->gram_sys) * $discount->discount_price);            
-                if(
-                  $item->quantity_unit_result <= $discount->quantity || 
-                  $item->quantity <= $discount->quantity
-                )
-                {
-                  $itemDiscount = $discount_one * $item->quantity_result;
-                }
-                elseif($item->quantity_unit_result > $discount->quantity){
+                if($item->quantity > $discount->quantity){
                   $itemDiscount = ($discount->quantity * $item->price_unit) - ($discount->quantity * $discount->discount_price);
                 }
+                else{
+                  $itemDiscount = ($item->quantity * $item->price_unit) - ($item->quantity * $discount->discount_price);
+                }     
                 $itemDiscount = $itemDiscount - ($itemDiscount * 2);
-                $item->discount_final_result = round($itemDiscount,$round);
+                $item->discount_final = round($itemDiscount,$round);
                 //Discount totals
-                $order->discounts_total_result += $item->discount_final_result;
-              }   
+                $order->discounts_total += $item->discount_final;            
+  
+                //Add result discount
+                if($item->quantity_result){
+                  $itemDiscount = 0;
+                  //Get one discount
+                  $discount_one = $item->price_one - ((1 / $item->gram_sys) * $discount->discount_price);            
+                  if(
+                    $item->quantity_unit_result <= $discount->quantity || 
+                    $item->quantity <= $discount->quantity
+                  )
+                  {
+                    $itemDiscount = $discount_one * $item->quantity_result;
+                  }
+                  elseif($item->quantity_unit_result > $discount->quantity){
+                    $itemDiscount = ($discount->quantity * $item->price_unit) - ($discount->quantity * $discount->discount_price);
+                  }
+                  $itemDiscount = $itemDiscount - ($itemDiscount * 2);
+                  $item->discount_final_result = round($itemDiscount,$round);
+                  //Discount totals
+                  $order->discounts_total_result += $item->discount_final_result;
+                }   
+              }
             }
+            
+            //Final item price
+            //pre
+            $item->price_final = round($item->price + $item->discount_final,$round);
+            if($item->price_final < 0) $item->price_final = 0;
+            //res
+            if($item->quantity_result){
+              $item->price_final_result = round($item->price_result + $item->discount_final_result,$round);
+              if($item->price_final_result < 0) $item->price_final_result = 0;
+            }
+  
+            //Items Totals        
+            //pre
+            $order->items_subtotal += $item->price;
+            $order->items_discounts += $item->discount_final;
+            $order->items_total += $item->price_final;
+            //res
+            if($item->quantity_result){
+              $order->items_subtotal_result += $item->price_result;
+              $order->items_discounts_result += $item->discount_final_result;
+              $order->items_total_result += $item->price_final_result;
+            }
+  
+          }  
+          
+          {//Coupons
+            $order->coupons_total = 0;
+            foreach ($order->coupons as $ck => $coupon) {
+              $order->coupons_total += $coupon->discount;
+            }     
+            if($order->coupons_total > 0){
+              $order->coupons_total = $order->coupons_total - ($order->coupons_total * 2);
+            } 
           }
           
-          //Final item price
-          //pre
-          $item->price_final = round($item->price + $item->discount_final,$round);
-          if($item->price_final < 0) $item->price_final = 0;
-          //res
-          if($item->quantity_result){
-            $item->price_final_result = round($item->price_result + $item->discount_final_result,$round);
-            if($item->price_final_result < 0) $item->price_final_result = 0;
+          {//Bonus
+            if($order->bonus > 0){
+              $order->bonus = $order->bonus - ($order->bonus * 2);
+            }
+          }   
+  
+          
+          {//Normal Totals
+            $order->n_total = (
+              $order->items_total + 
+              $order->shipping + 
+              $order->bonus +
+              $order->coupons_total
+            );            
+            $order->n_total_result = (
+              $order->items_total_result + 
+              $order->shipping + 
+              $order->bonus +
+              $order->coupons_total
+            );
+            $order->n_items_total = $order->items_total;
+            $order->n_items_total_result = $order->items_total_result;
           }
 
-          //Items Totals        
-          //pre
-          $order->items_subtotal += $item->price;
-          $order->items_discounts += $item->discount_final;
-          $order->items_total += $item->price_final;
-          //res
-          if($item->quantity_result){
-            $order->items_subtotal_result += $item->price_result;
-            $order->items_discounts_result += $item->discount_final_result;
-            $order->items_total_result += $item->price_final_result;
+  
+          {//Round values
+            $order->bonus = round($order->bonus,$round);
+            $order->shipping= round($order->shipping,$round);
+            $order->discounts_total = round($order->discounts_total,$round);
+            $order->discounts_total_result = round($order->discounts_total_result,$round);
+            $order->items_subtotal = round($order->items_subtotal,$round);
+            $order->items_subtotal_result = round($order->items_subtotal_result,$round);
+            $order->items_discounts = round($order->items_discounts,$round);
+            $order->items_discounts_result = round($order->items_discounts_result,$round);
+            $order->items_total = round($order->items_total,$round);
+            $order->items_total_result = round($order->items_total_result,$round);
+            $order->total = round($order->total,$round);
+            $order->total_result = round($order->total_result,$round);
           }
-
-        }
-
-        //Coupons
-        $order->coupons_total = 0;
-        foreach ($order->coupons as $ck => $coupon) {
-          $order->coupons_total += $coupon->discount;
-        }     
-        if($order->coupons_total > 0){
-          $order->coupons_total = $order->coupons_total - ($order->coupons_total * 2);
-        }       
-
-        //Bonus
-        if($order->bonus > 0){
-          $order->bonus = $order->bonus - ($order->bonus * 2);
-        }      
-
-        //Add total
-        $order->total = (
-          $order->items_total + 
-          $order->shipping + 
-          $order->bonus +
-          $order->coupons_total
-        );
-        
-        $order->total_result = (
-          $order->items_total_result + 
-          $order->shipping + 
-          $order->bonus +
-          $order->coupons_total
-        );
-
-        //Round values
-        $order->bonus = round($order->bonus,$round);
-        $order->shipping= round($order->shipping,$round);
-        $order->discounts_total = round($order->discounts_total,$round);
-        $order->discounts_total_result = round($order->discounts_total_result,$round);
-        $order->items_subtotal = round($order->items_subtotal,$round);
-        $order->items_subtotal_result = round($order->items_subtotal_result,$round);
-        $order->items_discounts = round($order->items_discounts,$round);
-        $order->items_discounts_result = round($order->items_discounts_result,$round);
-        $order->items_total = round($order->items_total,$round);
-        $order->items_total_result = round($order->items_total_result,$round);
-        $order->total = round($order->total,$round);
-        $order->total_result = round($order->total_result,$round);
-
-      }
-      
-      {//Checkout x
-        if(!isset($request['type']) || $request['type'] == 'x'){
-          foreach ($orders as $ok => $order) {
-            if($order->type == 'x'){
+          
+          {//X
+            if(isset($order->type) && $order->type == 'x' ){
               if(!isset($order->sharedOrder) || count($order->sharedOrder) == 0) continue;
-              $order->xData = Checkout::xdata($order->items, $order, $order->sharedOrder[0]);
-              $order->x_items_subtotal = 0;
-              foreach ($order->items as $key => $item) {
-                $order->x_items_subtotal += $item->price_final;
-              }            
-              $order->x_price_final = Checkout::x_final_price($order->x_items_subtotal, $order->xData);
+              $order->xData = Checkout::xdata($order->items, $order, $order->sharedOrder[0]);              
+              {//Items
+                $order->x_items_total = 0;
+                foreach ($order->items as $key => $item) {
+                  $order->x_items_total += $item->price_final;
+                }
+                $order->x_items_total_result = 0;
+              }         
+              {//Total
+                $order->x_total = Checkout::x_final_price($order->x_items_subtotal, $order->xData);
+                $order->x_total_result = 0;              
+              }
             }
           }
+
+          {//By type
+            $order->total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_total : $order->x_total;
+            $order->total_result = !(isset($order->type) && $order->type == 'x' ) ? $order->n_total_result : $order->x_total_result;
+            $order->items_total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total : $order->x_items_subtotal;
+            $order->items_total_result = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total_result : $order->x_items_total_result;
+          }
+
+            
         }
+      
       }
+
+
 
       // Gruzka_priority
       if(isset($request['gruzka_priority'])){

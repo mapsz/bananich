@@ -733,8 +733,8 @@ computed:{
     return this.order.xData.fullWeight;
   },
   orderSum(){
-    if(!this.order || this.order.x_price_final == undefined) return false;
-    return this.order.x_price_final;
+    if(!this.order || this.order.x_total == undefined) return false;
+    return this.order.x_total;
   },
   confirmable(){
     if(this.order == undefined || this.order.confirmable == undefined) return false;

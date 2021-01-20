@@ -35,6 +35,7 @@ class SharedOrder extends Model
   
           {//Put
             $sOrder = new SharedOrder;
+            $sOrder->id = self::generateRandomId();
             $sOrder->owner_id = $user->id;
             $sOrder->member_count = $data['memberCount'];
             $sOrder->link = $link;
@@ -260,6 +261,7 @@ class SharedOrder extends Model
 
       {//Make Personal Order
         {//Form data
+          $data['id'] = $sOrder['id'] . '' . $slot;
           $data['deliveryDate'] = $sOrder['delivery_date'];
           $data['deliveryTime']['from'] = str_replace (':00:00','',$sOrder->delivery_time_from);
           $data['deliveryTime']['to'] = str_replace (':00:00','',$sOrder->delivery_time_to);
@@ -522,7 +524,6 @@ class SharedOrder extends Model
 
   }
 
-
   private static function editContacts(){
     //
   }
@@ -540,6 +541,28 @@ class SharedOrder extends Model
     }
 
     return $sOrder;
+  }
+
+  private static function generateRandomId(){
+    
+    {//Make id
+      $date = now()->format('ymd');
+      $random = rand(100,999);
+      $id = $date . $random;
+    }
+
+    do{//Check exists
+      $exists = SharedOrder::where('id',$id)->exists();      
+      if($exists){
+        //Generate other
+        if($random == 999) $random = 99;
+        $random++;
+        $id = $date . $random;
+      }
+    }while($exists);
+
+    return $id;
+
   }
 
   public function jugeGet($request = []){
