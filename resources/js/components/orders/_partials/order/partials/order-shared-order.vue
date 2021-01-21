@@ -3,6 +3,7 @@
   <div><b>NEO</b></div>
   <div v-if="neighbor == 1"> 🙋‍♂️ хочет соседа</div>
   <div>id: {{sOrder.id}}</div>
+  <div>Ссылка: <a :href="'/shared/order/'+sOrder.link">{{sOrder.link}}</a> </div>
   <div>Закрытие: {{moment(sOrder.order_close).locale("ru").format('LLL')}}</div>
   <div>Организатор: <a :href="'/admin/user'+ owner.id"> {{owner.id}}</a> {{owner.name}} </div>
   <div>Статус: {{sOrder.status.name}} </div>

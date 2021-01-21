@@ -98,7 +98,7 @@
             v-if="orderStatus != 1"
             class="btn-main btn-no-item btn" 
             :class="
-              item.statuses[0].id == 200 ? 'btn-danger' : 'btn-outline-danger'
+              itemStatus == 200 ? 'btn-danger' : 'btn-outline-danger'
             "
             @click="noItem()"
           >
@@ -117,7 +117,7 @@
             v-if="orderStatus != 1"
             class="btn-main btn-confirm btn" 
             :class="
-              item.statuses[0].id == 300 ? 'btn-success' : 'btn-outline-success'
+              itemStatus == 300 ? 'btn-success' : 'btn-outline-success'
             "
             @click="confirm()"
           >
@@ -162,6 +162,12 @@
 
         return this.order.statuses[0].id;
       },
+      itemStatus(){
+        if(this.item == undefined || this.item.statuses == undefined) return false;
+        if(this.item.statuses[0] == undefined) return 100;
+        if(this.item.statuses[0].id == undefined) return false;
+        return this.item.statuses[0];
+      }
     },
     watch:{
       item: {

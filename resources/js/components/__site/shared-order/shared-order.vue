@@ -326,14 +326,13 @@
               
               <hr class="my-30">
               <!-- Edit order -->
-              <div class="mb-3">
-                <button v-if="isAdmin && editable" @click="goToEdit()" class="action">
+              <div v-if="isAdmin && editable" class="mb-3">
+                <button @click="goToEdit()" class="action">
                   Редактировать 
                 </button>
                 <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
                   (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
-                </span>
-                
+                </span>                
               </div>
               <!-- Cancel order -->
               <div v-if="isAdmin && sOrder.status.id > 0 && isOpen">
