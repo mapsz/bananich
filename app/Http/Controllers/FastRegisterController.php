@@ -38,7 +38,7 @@ class FastRegisterController extends Controller
 
   }
 
-  protected function fastRegisterUser(Request $request){
+   protected function fastRegisterUser(Request $request){
 
     {//Validate
       {//Link

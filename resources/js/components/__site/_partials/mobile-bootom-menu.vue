@@ -45,10 +45,17 @@
               </div>
             </div>
             <ul v-if="user" class="menu-navbarmenu-navbar">
-              <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
-              <li class="m-2"><a href="/profile/favorites" class="nav-link-sad" style="font-size:12pt">Избранное</a> </li>
-              <li class="m-2"><a href="/profile/bonus" class="nav-link-sad" style="font-size:12pt">Бонусы</a> </li>
-              <li class="m-2"><a href="/profile/orders" class="nav-link-sad" style="font-size:12pt">Мои заказы</a> </li>
+              <template v-if="isX">
+                <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
+                <li class="m-2"><a href="/profile/favorites" class="nav-link-sad" style="font-size:12pt">Избранное</a> </li>
+                <li class="m-2"><a href="/profile/shared/orders" class="nav-link-sad" style="font-size:12pt">Мои закупки</a> </li>
+              </template>
+              <template v-else>
+                <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
+                <li class="m-2"><a href="/profile/favorites" class="nav-link-sad" style="font-size:12pt">Избранное</a> </li>
+                <li class="m-2"><a href="/profile/bonus" class="nav-link-sad" style="font-size:12pt">Бонусы</a> </li>
+                <li class="m-2"><a href="/profile/orders" class="nav-link-sad" style="font-size:12pt">Мои заказы</a> </li>
+              </template>
             </ul>
             <div v-else style="font-size: 12pt;color: black;"> 
               <a href="/register" style="font-size: 12pt;color: black; text-decoration: underline !important;">Зарегистрироваться</a> 
@@ -103,6 +110,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{  
+      isX:isX,
       menuDrop:false,
       cartDrop:false,
       profileDrop:false,    
