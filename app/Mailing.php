@@ -4467,9 +4467,12 @@ class Mailing extends Model
         $send = [];
         $send['email'] = $user['email'];
         $send['subject'] = $email->subject;
+        //From
+        if($site == 'x') $send['from'] = 'no-reply@neolavka.ru';
+        else $send['from'] = 'no-reply@bananich.ru';
         Mail::send('mail.customEmail', ['html' => $toSendHtml, 'site' => $site], function($m)use($send){
           $m->to($send['email'],'to');
-          $m->from('no-reply@bananich.ru');
+          $m->from($send['from']);
           $m->subject($send['subject']);
         });
         dump(count($users) - $key . ' - ' . $user['name'] . ' - ' . $user['email']);
