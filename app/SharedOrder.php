@@ -240,7 +240,7 @@ class SharedOrder extends Model
   public static function join($user, $link = false, $sOrder = false, $neighbor = false){
 
     //Get order
-    if(!$sOrder) $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1]);
+    if(!$sOrder) $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1, 'noHandle' => true]);
     $slot = count($sOrder->users) + 1;
 
     try{

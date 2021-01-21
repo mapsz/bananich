@@ -1,8 +1,10 @@
 <?php
-$site = strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'x' : false;
 $s = new App\Setting;
 $number = (isset($site) && $site == 'x') ? $s->byName('x_phone_number') : $s->byName('phone_number');
 $color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610';
+if(isset($_SERVER['SERVER_NAME']) && !isset($site)){
+  $site = strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'x' : false;
+}
 ?>
 
 <!-- Mail -->

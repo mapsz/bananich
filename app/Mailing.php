@@ -35,7 +35,7 @@ class Mailing extends Model
   }
 
 
-    public static function open($id,$test = true){
+    public static function open($id,$test = true,$site = false){
       // $users = User::get();
       $users = array(
         array(
@@ -4467,7 +4467,7 @@ class Mailing extends Model
         $send = [];
         $send['email'] = $user['email'];
         $send['subject'] = $email->subject;
-        Mail::send('mail.customEmail', ['html' => $toSendHtml], function($m)use($send){
+        Mail::send('mail.customEmail', ['html' => $toSendHtml, 'site' => $site], function($m)use($send){
           $m->to($send['email'],'to');
           $m->from('no-reply@bananich.ru');
           $m->subject($send['subject']);
