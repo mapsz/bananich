@@ -669,9 +669,9 @@ class SharedOrder extends Model
           }
         }
         {//Editable
-          $row['editable'] = true;
-          if(count($row->users) > 1){
-            $row['editable'] = false;
+          $row['editable'] = false;
+          if(count($row->users) < 2 && ($row->status_id == 100 || $row->status_id == 200)){
+            $row['editable'] = true;
           }
         }
         {//Joinable

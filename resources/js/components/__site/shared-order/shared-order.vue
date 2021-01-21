@@ -300,7 +300,7 @@
                   <hr class="my-30 d-lg-none">
                   <div>
                     <span class="label" style="">способ оплаты</span>
-                    <button v-if="userIn" @click="goToCheckout()" class="edit float-right">изменить</button>
+                    <button v-if="userIn && isOpen" @click="goToCheckout()" class="edit float-right">изменить</button>
                   </div>
                   <div>
                     <span class="value">                      
@@ -350,7 +350,7 @@
 
             <!-- Big Action -->
             <div>
-              <button v-if="!userIn || memberWeight <= 0" 
+              <button v-if="userIn && memberWeight <= 0" 
                 @click="goToGallery()" 
                 class="x-btn"
               >
@@ -755,6 +755,11 @@ computed:{
       if(!order.x_confirm) c = 0;
     });
     return c;
+  },
+  isOpen(){
+    if(!this.sOrder || this.sOrder.status_id == undefined) return false;
+    if(!(this.sOrder.status_id == 100 || this.sOrder.status_id == 200)) return false;
+    return true;
   }
 
 },

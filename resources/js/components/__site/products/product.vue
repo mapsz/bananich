@@ -136,6 +136,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    isX:isX,
     halloween:halloween,
     id:this.$route.params.id,
   }},

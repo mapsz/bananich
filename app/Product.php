@@ -799,7 +799,8 @@ class Product extends Model
             $round = 0;
             $product->price                       = (ceil((($product->price*2)/10))/2)*10;
             $product->final_price                 = (ceil((($product->final_price*2)/10))/2)*10;
-            $product->final_price_x               = (ceil((($product->final_price_x*2)/10))/2)*10;
+            // $product->final_price_x               = (ceil((($product->final_price_x*2)/10))/2)*10;
+            $product->final_price_x               = round($product->final_price_x);
             if(isset($product->discount) && $product->discount)
               $product->discount->discount_price  = round($product->discount->discount_price, $round);
 

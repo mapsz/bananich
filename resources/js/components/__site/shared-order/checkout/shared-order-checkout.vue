@@ -112,7 +112,7 @@ export default {
     },
     isCartreferrer(){
       return document.referrer.includes('/cart');
-    }
+    },
   },
   watch:{
     order: function (val, oldVal) {
@@ -127,6 +127,11 @@ export default {
     },
     personalAddress: function (val, oldVal) {
       if(this.personalAddress == 0) this.data.address = null;
+    },
+    sOrder: function (val, oldVal) { //Redirect if closed
+      if(!this.sOrder || this.sOrder.status_id == undefined) return false;
+      if(this.sOrder.status_id == 100 || this.sOrder.status_id == 200) return false;
+      location.href = '/shared/order/' + this.sOrder.link;
     }
   },
   async mounted() {
