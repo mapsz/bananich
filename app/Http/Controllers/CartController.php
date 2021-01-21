@@ -17,6 +17,7 @@ class CartController extends Controller
     
     //Get cart
     $cart = Cart::getCart(['type' => $type]);
+
     //Return
     return response()->json($cart);
 
