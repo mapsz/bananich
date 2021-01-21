@@ -336,7 +336,7 @@
                 
               </div>
               <!-- Cancel order -->
-              <div v-if="isAdmin && sOrder.status.id > 0">
+              <div v-if="isAdmin && sOrder.status.id > 0 && isOpen">
                 <!-- <button @click="sOrderCancel()" class="action">Отменить закупку</button> -->
                 <button @click="cancelOrderShow=true;" class="action">Отменить закупку</button>
               </div>     
@@ -349,7 +349,7 @@
             </div>
 
             <!-- Big Action -->
-            <div>
+            <div v-if="isOpen">
               <button v-if="userIn && memberWeight <= 0" 
                 @click="goToGallery()" 
                 class="x-btn"

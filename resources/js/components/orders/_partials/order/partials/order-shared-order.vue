@@ -10,7 +10,12 @@
   <div>
     <div>Заказы:</div>
     <div v-for="(order, index) in sOrder.orders" :key="index" class="ml-2">
-      <a :href="'/admin/order/'+ order.id" style=""><span v-if="order.customer_id == owner.id">👑</span> {{order.id}}</a>
+      <a :href="'/admin/order/'+ order.id" style="">
+        <span :style="order.status == 'Отменён' ? 'color:tomato;text-decoration: line-through;' : ''">          
+          <span v-if="order.customer_id == owner.id">👑</span>
+          {{order.id}}
+        </span>
+      </a>
     </div>
   </div>
 

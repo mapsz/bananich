@@ -14,6 +14,7 @@ use Carbon\Carbon;
 class Order extends Model
 {
 
+  public $guarded = [];
   protected $keys = [
     ['key'    => 'id','label' => '#','type' => 'link', 'link' => '/admin/order/{id}'],
     ['key'    => 'address','label' => 'адрес'], 
@@ -694,7 +695,6 @@ class Order extends Model
         $query = $query->where('customer_id', '=', $request['customer_id']);
       }
       
-
       //Delivery Time
       if(isset($request['deliveryTime'])){
         $deliveryTime = json_decode($request['deliveryTime']);

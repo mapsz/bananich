@@ -445,52 +445,53 @@ class SharedOrder extends Model
   }
 
   public static function lock($id){
+
+    // dd($id);
     
     //Sync order
     Order::syncCartOrder();
     
     {//Shared
-
-      //Get
+      // //Get
       $sOrder = (new SharedOrder)->jugeGet(['id' => $id,'single' => 1, 'noHandle' => true]);
-
-      //Change status
-      SharedOrder::changeStatus($id,500);     
-
-      //Update user count
-      $member_count = count($sOrder->users);
-      SharedOrder::where('id',$id)->update(['member_count' => $member_count]);
-
+      // //Change status
+      SharedOrder::changeStatus($id,500);
     }
 
+    
     {//Personal
-      foreach ($sOrder->users as $user) {
-        {//Get order
-          $order = (
-            Order::
-            whereHas('sharedOrder', function($q)use($id){
-              $q->where('shared_orders.id', '=', $id);
-            })
-            ->where('customer_id', '=', $user->id)
-            ->first()
-          );
-        }
-        $order->delivery_date       = $sOrder->delivery_date;
-        $order->delivery_time_from  = $sOrder->delivery_time_from;
-        $order->delivery_time_to    = $sOrder->delivery_time_to;
-        $order->save();
+      $member_count = 0;
+      foreach ($sOrder->orders as $order) {
+        //Update date/time
+        $update = Order::find($order->id)->update([
+          'delivery_date'         => $sOrder->delivery_date,
+          'delivery_time_from'    => $sOrder->delivery_time_from,
+          'delivery_time_to'      => $sOrder->delivery_time_to,
+        ]);
+                
         //Update status
-        Order::changeStatus($order->id,900);
+        if($order->x_confirm){
+          $statusId = 900;
+          $member_count++;
+        }else{
+          $statusId = 0;
+        }
+        $statusId = $order->x_confirm ? 900 : 0;
+        Order::changeStatus($order->id, $statusId);
       }
     }    
+
+    
+    {//Update member count
+      $member_count = count($sOrder->users);
+      SharedOrder::where('id',$id)->update(['member_count' => $member_count]);      
+    }
 
     {//Delete carts
       foreach ($sOrder->users as $key => $user) {
         Cart::where('user_id',$user->id)->where('type',2)->delete();
       }
-    }
-
-  
+    }  
   }
 
   public static function updateOrders($id){
