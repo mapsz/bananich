@@ -37,13 +37,11 @@
 
           <div class="row checkout-div">
             <!-- <checkout-container v-model="data.container"  :no-cache="true"/> -->
-            <checkout-paymethod v-model="data.pay_method" :no-cache="true"/>
+            <checkout-paymethod v-model="payMethod" :no-cache="true"/>
           </div>
           
           <checkout-comment class="checkout-div" v-model="data.comment" :no-cache="true"/>
 
-          <!-- Errors -->
-          <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
 
 
 
@@ -55,15 +53,22 @@
           <span v-if="confirmable && sOrder">
             Вы можете вносить изменения в корзину до {{moment(sOrder.order_close).locale("ru").format('LLL')}}
           </span>
+          <!-- <div v-if="changes" style="color:limegreen;font-weight: 600;">
+            Изменения внесены
+          </div> -->
+          <!-- Errors -->
+          <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
+
           <shared-order-confirm class="mt-3" @confirm="doConfirm()" v-if="confirmable && confirm != 1"/>
-          <div v-if="confirmable && confirm" class="d-flex justify-content-center mt-3">
+          <!-- <div v-if="confirmable && confirm" class="d-flex justify-content-center mt-3">
             <button @click="edit()" class="x-btn">
               {{'Внести изменения'}}
             </button>
-          </div>
+          </div> -->
         </div>
 
-
+        <!-- {{payMethod}}
+        {{data.payMethod}} -->
 
       </div>
 
@@ -78,11 +83,13 @@ import {mapGetters,mapActions} from 'vuex';
 export default {
   data(){return{    
     data:{contacts:{}},
+    payMethod:false,
     moment:moment,
     personalAddress:0,
     // order:false,
     load:false,
     errors:[],
+    changes:false,
   }},
   computed:{
     ...mapGetters({
@@ -120,13 +127,16 @@ export default {
   },
   watch:{
     order: function (val, oldVal) {
+      console.log(this.load);
+      console.log(val);
       if(!val) return false;
       if(val.name != undefined) this.data.contacts.name = val.name;
       if(val.email != undefined) this.data.contacts.email = val.email;
       if(val.phone != undefined) this.data.contacts.phone = val.phone;
       if(val.comment != undefined) this.data.comment = val.comment;
       if(val.pay_method != undefined) this.data.pay_method = val.pay_method;
-
+      if(val.pay_method != undefined) this.payMethod = val.pay_method;
+      
       this.load = true;
     },
     personalAddress: function (val, oldVal) {
@@ -136,6 +146,16 @@ export default {
       if(!this.sOrder || this.sOrder.status_id == undefined) return false;
       if(this.sOrder.status_id == 100 || this.sOrder.status_id == 200) return false;
       location.href = '/shared/order/' + this.sOrder.link;
+    },
+    payMethod: function (val, oldVal) { 
+      this.data.pay_method = val;
+      this.edit();
+    },
+    data: {
+      deep: true,
+      handler(){
+        this.edit();
+      }
     }
   },
   async mounted() {
@@ -152,8 +172,8 @@ export default {
       'fetch':'sharedOrder/fetchData',
     }),  
     async get(){
-      let r = await ax.fetch('/shared/order/order',{'link':this.link});
-      if(r) this.order = r;
+      // let r = await ax.fetch('/shared/order/order',{'link':this.link});
+      // if(r) this.order = r;
     },
     async edit(){
       //Refresh errors
@@ -167,14 +187,16 @@ export default {
       if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
 
       //Success
-      if(r){window.location.href = '/shared/order/'+this.link};
+      this.changes = true;
+      
+      this.fetchOrder(this.link);
     },
     goToEdit(){
       if(!this.link) return;
       location.href = '/shared/order/edit/' +this.link;
     },
     async doConfirm(){
-      this.edit();
+      window.location.href = '/shared/order/'+this.link;
     }
   }
 }

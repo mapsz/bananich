@@ -37,6 +37,9 @@ window.Cookies = cookie;
 
 //Toasted
 window.terror= function(){console.log('error xzz')};
+import Toasted from 'vue-toasted'; 
+Vue.use(Toasted);
+window.tsuccess = function(){Vue.toasted.global.tsuccess();};
 
 // Infinite scroll
 var infiniteScroll = require('vue-infinite-scroll');
