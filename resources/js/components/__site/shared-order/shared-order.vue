@@ -349,14 +349,17 @@
 
             <!-- Big Action -->
             <div v-if="isOpen">
-              <button v-if="userIn && memberWeight <= 0" 
+              <button v-if="userIn && items <= 0" 
                 @click="goToGallery()" 
                 class="x-btn"
               >
                 Начать оформлять заказ
               </button>
 
-              <button @click="goToCheckout()" v-if="userIn && !confirmable && memberWeight > 0 && !confirm" class="x-btn">
+              <button v-if="userIn && !confirmable && memberWeight > 0 && !confirm"
+                @click="goToCheckout()"  
+                class="x-btn"
+              >
                 Оформить заказ
               </button>
 
@@ -720,6 +723,10 @@ computed:{
     return order;
 
   },
+  items(){
+    if(!this.order || this.order.items == undefined) return false;
+    return this.order.items.length;
+  },
   confirm(){
     if(this.user == undefined && !this.user) return false;
     if(!this.sOrder || this.sOrder.orders == undefined || this.sOrder.orders.length <= 0) return false;
@@ -730,7 +737,6 @@ computed:{
   },
   memberWeight(){
     if(!this.order || this.order.xData == undefined) return false;
-
     return this.order.xData.fullWeight;
   },
   orderSum(){
