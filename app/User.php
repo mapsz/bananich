@@ -220,7 +220,7 @@ class User extends Authenticatable
 }
 
 {
-  // SELECT u.`id`,`email`,`phone`, `name`,b.`left`,delivery_date,`comment`,oc.`count` FROM users u
+  // SELECT u.`id`,`email`,`phone`, `name`,b.`left`,delivery_date,`comment`,oc.`count`,address FROM users u
   // /* Order Count*/
   // LEFT JOIN (
   // 	SELECT id, customer_id, COUNT(id) AS `count` FROM (
@@ -253,8 +253,8 @@ class User extends Authenticatable
   // ON u.id = b.user_id
   // /* Last Order */
   // LEFT JOIN (
-  // 	SELECT id, customer_id, delivery_date FROM (
-  // 		SELECT ol.id, customer_id, delivery_date FROM orders ol
+  // 	SELECT id, customer_id, delivery_date,address FROM (
+  // 		SELECT ol.id, customer_id, delivery_date, address FROM orders ol
   // 		INNER JOIN (
   // 			SELECT * FROM order_order_status
   // 			WHERE order_status_id = 1

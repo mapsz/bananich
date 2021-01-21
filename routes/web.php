@@ -937,12 +937,12 @@ Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->gr
   });
 });
 
-Route::domain('neolavka.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
-  Route::get('/', function(){
-    // return redirect('/');
-    return redirect('/catalogue');
-  });
-});
+// Route::domain('neolavka.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
+//   Route::get('/', function(){
+//     // return redirect('/');
+//     return redirect('/catalogue');
+//   });
+// });
 
 Route::group(['middleware' => ['HttpsRR'
 // ,'under-construction'
