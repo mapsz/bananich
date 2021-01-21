@@ -172,6 +172,15 @@ methods:{
     max-height: 100%;
     border-radius: 50px;
   }
+  .breadcrumb {
+    background-color: #ffffff00 !important;
+  }
+  .breadcrumb a{
+    color:black!important;
+  }
+  .breadcrumb-item.active {
+    font-weight: 600;
+  }
 
   /* Desktop */
   @media screen and (min-width: 992px){

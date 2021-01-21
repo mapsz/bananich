@@ -1035,11 +1035,11 @@ class Order extends Model
                 $order->x_items_total = 0;
                 foreach ($order->items as $key => $item) {
                   $order->x_items_total += $item->price_final;
-                }
+                }                
                 $order->x_items_total_result = 0;
               }         
               {//Total
-                $order->x_total = Checkout::x_final_price($order->x_items_subtotal, $order->xData);
+                $order->x_total = Checkout::x_final_price($order->x_items_total, $order->xData);
                 $order->x_total_result = 0;              
               }
             }

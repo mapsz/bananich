@@ -45,19 +45,22 @@
           <!-- Errors -->
           <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
 
-          <!-- Big Action -->
-          <div class="d-flex justify-content-center mb-3">
-            <button @click="edit()" class="x-btn">
-              {{isCartreferrer ? 'оформить' : 'Внести изменения'}}
-            </button>
-          </div>
+
 
         </div>
 
         <!-- Info -->
         <div class="col-12 col-lg-4">
           <shared-order-numbers />
-          <shared-order-confirm class="mt-3" v-if="confirmable && confirm != 1"/>
+          <span v-if="confirmable && sOrder">
+            Вы можете вносить изменения в корзину до {{moment(sOrder.order_close).locale("ru").format('LLL')}}
+          </span>
+          <shared-order-confirm class="mt-3" @confirm="doConfirm()" v-if="confirmable && confirm != 1"/>
+          <div v-if="confirmable && confirm" class="d-flex justify-content-center mt-3">
+            <button @click="edit()" class="x-btn">
+              {{'Внести изменения'}}
+            </button>
+          </div>
         </div>
 
 
@@ -75,6 +78,7 @@ import {mapGetters,mapActions} from 'vuex';
 export default {
   data(){return{    
     data:{contacts:{}},
+    moment:moment,
     personalAddress:0,
     // order:false,
     load:false,
@@ -151,7 +155,7 @@ export default {
       let r = await ax.fetch('/shared/order/order',{'link':this.link});
       if(r) this.order = r;
     },
-    async edit(){    
+    async edit(){
       //Refresh errors
       this.errors = [];
       let data = this.data;
@@ -164,13 +168,14 @@ export default {
 
       //Success
       if(r){window.location.href = '/shared/order/'+this.link};
-
-      console.log(r);
     },
     goToEdit(){
       if(!this.link) return;
       location.href = '/shared/order/edit/' +this.link;
     },
+    async doConfirm(){
+      this.edit();
+    }
   }
 }
 </script>

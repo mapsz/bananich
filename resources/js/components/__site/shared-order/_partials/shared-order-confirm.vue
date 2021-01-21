@@ -30,7 +30,7 @@ methods:{
   async doConfirm(){    
     let r = await ax.fetch('/shared/order/confirm',{},'post');    
     if(r){
-      location.reload(); return;
+      this.$emit('confirm');
       this.get();
       this.active = false;
     }

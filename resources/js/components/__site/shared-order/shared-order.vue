@@ -4,73 +4,73 @@
     
       <div class="container my-3">
 
+        <!-- Header -->
+        <div v-if="sOrder" class="my-5">
+          <h1>Закупка №{{sOrder.id}}</h1>
+        </div>        
+
         <!-- Congratz -->
-        <template v-if="isAdmin">
+        <template v-if="isAdmin && moment().unix() - moment(this.sOrder.created_at).unix() < 120 && !confirm">
           <!-- Congratz -->
-          <template v-if="isAdmin && moment().unix() - moment(this.sOrder.created_at).unix() < 120 && !confirm">
-            <!-- Congratz -->
-            <div class="row mb-3">
-              <div class="col-12">
-                <div class="congratz">
-                  Поздравляем, ваша совместная закупка открыта!
-                </div>
+          <div class="row mb-3">
+            <div class="col-12">
+              <div class="congratz">
+                Поздравляем, ваша совместная закупка открыта!
               </div>
             </div>
-
-            <!-- top text -->
-            <div v-if="isAdmin" class="row mb-4">
-              <div class="col-12">
-                <div class="top-text">
-                  Теперь можно пригласить в нее соседей или друзей!
-                </div>
-              </div>
-            </div>
-          </template>
-
-
-          <!-- Invite -->
-          <div v-if="isAdmin" class="row">
-            <!-- Button -->
-            <div class="col-12 col-lg-3 p-0 mt-lg-3 d-flex justify-content-center justify-content-lg-start ">                
-              <button @click="copyInviteLink()" class="button x-btn">
-                Пригласить в закупку соседей
-              </button>
-            </div>
-            <!-- Copied -->
-            <div class="col-12 col-lg-3 mt-lg-3" style="color: #eb5757;">
-              <div v-if="copied">
-                Ссылка на закупку скопирована в буфер обмена, теперь вы можете поделиться ей с друзьями
-              </div>              
-            </div>
-            <!-- Soc. buttons -->
-            <div class="col-12 col-lg-6 mt-4">
-              Поделиться:
-              <div class="invite-link my-2" style="font-size: 9pt;">
-                https://neolavka.ru/shared/order/{{link}}
-              </div>
-              <div>
-                  <telegram-button
-                    :shareUrl="shareLink"
-                    :description="shareDescription"
-                  />
-                  <whatsapp-button
-                    :shareUrl="shareLink"
-                    :description="shareDescription"
-                  />
-                  <vkontakte-button
-                    :shareUrl="shareLink"
-                    :description="shareDescription"
-                  />
-              </div>
-            </div>
-
-            <div class="col-12">              
-              <hr class="my-5">
-            </div>
-
           </div>
-        
+
+          <!-- top text -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="top-text">
+                Теперь можно пригласить в нее соседей или друзей!
+              </div>
+            </div>
+          </div>
         </template>
+        
+        <!-- Invite -->
+        <div v-if="isAdmin && !isFull && isOpen" class="row">
+          <!-- Button -->
+          <div class="col-12 col-lg-3 p-0 mt-lg-3 d-flex justify-content-center justify-content-lg-start ">                
+            <button @click="copyInviteLink()" class="button x-btn">
+              Пригласить в закупку соседей
+            </button>
+          </div>
+          <!-- Copied -->
+          <div class="col-12 col-lg-3 mt-lg-3" style="color: #eb5757;">
+            <div v-if="copied">
+              Ссылка на закупку скопирована в буфер обмена, теперь вы можете поделиться ей с друзьями
+            </div>              
+          </div>
+          <!-- Soc. buttons -->
+          <div class="col-12 col-lg-6 mt-4">
+            Поделиться:
+            <div class="invite-link my-2" style="font-size: 9pt;">
+              https://neolavka.ru/shared/order/{{link}}
+            </div>
+            <div>
+                <telegram-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <whatsapp-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+                <vkontakte-button
+                  :shareUrl="shareLink"
+                  :description="shareDescription"
+                />
+            </div>
+          </div>
+
+          <div class="col-12">              
+            <hr class="my-5">
+          </div>
+
+        </div>
 
         <!-- Announce/Sould do -->
         <div  class="row" style="mb-5">

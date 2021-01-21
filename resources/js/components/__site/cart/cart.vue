@@ -57,11 +57,14 @@
                 <!-- To checkout -->
                 <template>
                   <!-- X bananich -->
-                  <template v-if="isX">
-                    <a v-if="myOrder.id == undefined" href="/shared/order">
+                  <template v-if="isX">                    
+                    <span v-if="order.confirmable">
+                      Вы можете вносить изменения в корзину до {{moment(myOrder.order_close).locale("ru").format('LLL')}}
+                    </span>
+                    <a v-if="myOrder.id == undefined" href="/shared/order">                    
                       <button class="x-btn">Оформить коллективную закупку</button>                    
                     </a>
-                    <span v-else-if="order && order.confirmable"><b>Заказ оформлен</b> </span>
+                    <span v-else-if="order && order.confirmable"></span>
                     <a v-else :href="'/shared/order/checkout/'+myOrder.link">
                       <button class="x-btn">Оформить заказ</button>                    
                     </a>
@@ -125,6 +128,7 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
     halloween:halloween,isX:isX,
+    moment:moment,
   }},
   computed:{
     ...mapGetters({
