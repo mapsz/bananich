@@ -131,7 +131,7 @@
         </div>
 
         <!-- Test time -->
-        <div class="row my-5">
+        <div v-if="0" class="row my-5">
           <div class="col-12">
             <!-- Test time -->
             <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
