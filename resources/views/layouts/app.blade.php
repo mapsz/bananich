@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @if (ENV('APP_ENV') != 'local')
+    @if (
+            ENV('APP_ENV') != 'local' &&
+            strpos($_SERVER['SERVER_NAME'], 'neolavka.') === false
+        )
         <!-- Facebook Pixel Code -->
         <script>
         !function(f,b,e,v,n,t,s)
@@ -71,7 +74,10 @@
     
 </head>
 <body>
-    @if (ENV('APP_ENV') != 'local')
+    @if (
+            ENV('APP_ENV') != 'local' && 
+            strpos($_SERVER['SERVER_NAME'], 'neolavka.') === false
+        )
         <!-- Google Tag Manager (noscript) -->
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRKP3N3"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
