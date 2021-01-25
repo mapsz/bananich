@@ -37,6 +37,7 @@ computed:{
     cart:       'cart/getCart',
     sOrders:    'sharedOrder/get',
     myOrder:    'sharedOrder/getMyOrder',
+    inviteOrder:    'sharedOrder/getInviteOrder',
     invite:     'sharedOrder/getInviteLink',
     settings:   'settings/beautyGet',
     user:       'user/get',
@@ -102,7 +103,7 @@ computed:{
 
     if(
       (this.$route.name != 'sharedOrder') &&
-      (this.invite && !this.myOrder)
+      ((invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)) && !this.myOrder)
     ){
       statics.push(
         {'_body':'Вы приглашены принять участие в <a href="/shared/order/'+this.invite+'">совместной закупке</a> на Neo Lavka'}

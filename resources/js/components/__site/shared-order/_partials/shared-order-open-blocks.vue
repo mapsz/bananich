@@ -30,7 +30,7 @@
         <!-- Button -->
         <div class="d-flex justify-content-center shared-order-open-button">
 
-          <a v-if="(inviteSOrder && inviteSOrder.member_count > 0) && inviteSOrder.member_count == n" :href="'/shared/order/' + inviteSOrder.link">
+          <a v-if="(invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)) && inviteOrder.member_count == n" :href="'/shared/order/' + inviteSOrder.link">
             <button   
               class="x-btn"
             >
@@ -67,6 +67,7 @@ computed:{
     user:       'user/get',
     settings:   'settings/beautyGet',
     invite:     'sharedOrder/getInviteLink',
+    inviteOrder:    'sharedOrder/getInviteOrder',
   }),
   inviteSOrder(){
     if(this.sOrders == undefined || this.sOrders.length < 1) return false;

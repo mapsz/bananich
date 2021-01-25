@@ -202,7 +202,7 @@
           <div class="col-12 col-lg-6 offset-lg-6">
 
             <!-- Price -->
-            <div v-if="sOrder">
+            <div v-if="sOrder && 0">
               <div class="label">
                 Стоимость вашего участия
               </div>
@@ -214,36 +214,9 @@
               </div>
             </div>
 
-            <!-- Address -->
-            <div>
-              <hr class="my-30">
-              <div class="label">
-                Адрес доставки
-              </div>
-              <div class="value">
-                {{sOrder.address.street}} {{sOrder.address.appart}}
-              </div> 
-            </div>
-
-            <!-- Date/Time -->
-            <div>
-              <hr class="my-30">
-              <div>
-                <span class="label">дата и время доставки</span>
-                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
-              </div>
-              <div class="value">
-                <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
-                <div>
-                  {{sOrder.delivery_time_from.replace(':00:00', ':00')}} - 
-                  {{sOrder.delivery_time_to.replace(':00:00', ':00')}}
-                </div>
-              </div> 
-            </div>
-
             <!-- Weight -->
             <div>
-              <hr class="my-30">
+              <!-- <hr class="my-30"> -->
               <div style="display: flex; justify-content: space-between;">
                 <div>
                   <div class="d-flex">
@@ -272,7 +245,7 @@
             </div>          
 
             <!-- Comment -->
-            <div>
+            <div v-if="0">
               <hr class="my-30">
               <div>
                 <span class="label">КОММЕНТАРИЙ К ЗАКУПКЕ</span>
@@ -283,44 +256,142 @@
               </div>
             </div>
 
+            <!-- Date/Time -->
+            <div>
+              <hr class="my-30">
+              <div>
+                <span class="label">дата и время доставки</span>
+                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
+              </div>
+              <div class="value">
+                <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
+                <div>
+                  {{sOrder.delivery_time_from.replace(':00:00', ':00')}} - 
+                  {{sOrder.delivery_time_to.replace(':00:00', ':00')}}
+                </div>
+              </div> 
+            </div>
+            
+            <!-- Address -->
+            <div>
+              <hr class="my-30">
+              <div class="label">
+                Адрес доставки
+              </div>
+              <div class="value">
+                {{sOrder.address.street}} {{sOrder.address.appart}}
+              </div> 
+            </div>
 
+            <!-- Checkout -->
             <div v-if="userIn">
               <hr class="my-30">
-              <div class="row">
-                <div class="col-12 col-lg-6">
-                  <div>
-                    <span class="label" style="color: #eb5757;">сумма вашего заказа</span>
-                    <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right d-lg-none">изменить</button>
-                  </div>
-                  <div>
-                    <span class="value">{{orderSum == false ? '' : orderSum+'p'}}</span>
-                  </div>
+              <div>
+                <span class="label">Ваши данные</span>
+                <button v-if="isAdmin && editable" @click="showModalContacts=true" class="edit float-right">изменить</button>
+              </div>
+              <div class="checkout-user-data">
+                <div>Имя:</div><div class="value">{{order.name}}</div>
+                <div>Телефон:</div><div class="value">{{order.phone}}</div>
+                <div>E-mail:</div><div class="value">{{order.email}}</div>
+              </div>
+              <x-popup :title="'Изменить'" :active="showModalContacts" @close="showModalContacts=false" id="contacts-edit-modal">
+                <checkout-contact v-model="checkout.contacts" :no-cache="true"/>
+                <div class="d-flex justify-content-center">
+                  <button @click="checkoutEdit();" type="button" class="x-btn">Сохранить</button>
                 </div>
-                <div  class="col-12 col-lg-6">
-                  <hr class="my-30 d-lg-none">
-                  <div>
-                    <span class="label" style="">способ оплаты</span>
-                    <button v-if="userIn && isOpen" @click="goToCheckout()" class="edit float-right">изменить</button>
-                  </div>
-                  <div>
-                    <span class="value">                      
-                      <span v-if="!order || order.pay_method == undefined || order.pay_method == 0" style="color:rgb(235, 87, 87)">
-                        Не указано
-                      </span>
-                      <span v-else>
-                        <template v-if="order.pay_method == 'cash'">
-                          Наличные
-                        </template>
-                        <template v-else-if="order.pay_method == 'cart'">
-                          Карта
-                        </template>
-                      </span>
-                    </span>
-                  </div>
+              </x-popup> 
+            </div>
+
+            <!-- Comment -->
+            <div >
+              <hr class="my-30">
+              <div>
+                <span class="label">Комментарий к заказу</span>
+                <button v-if="isAdmin && editable" @click="showModal.comment = true" class="edit float-right">
+                  <span v-if="order.comment && order.comment != undefined && order.comment != ''" style="">
+                    изменить
+                  </span>
+                  <span v-else>
+                    указать
+                  </span>                  
+                </button>
+              </div>
+              <div>
+                <span v-if="order.comment && order.comment != undefined && order.comment != ''" class="value">{{order.comment}}</span>
+                <span v-else class="value" style="font-style:italic"><i>Не указано</i></span>
+              </div>
+              <x-popup :title="'Изменить'" :active="showModal.comment" @close="showModal.comment=false" id="comment-edit-modal">
+                <checkout-comment v-model="checkout.comment" :no-cache="true"/>
+                <div class="d-flex justify-content-center">
+                  <button @click="checkoutEdit();" type="button" class="x-btn">Сохранить</button>
                 </div>
+              </x-popup>  
+            </div>
+
+            <!-- Pay method -->
+            <div>
+              <hr class="my-30">
+              <div>
+                <span class="label" style="">способ оплаты</span>
+                <button v-if="userIn && isOpen" @click="showModal.payMethod = true" class="edit float-right">
+                  <span v-if="!order || order.pay_method == undefined || order.pay_method == 0" 
+                    style="color: rgb(235, 87, 87);text-decoration-color: red; text-decoration-line: underline;"
+                  >
+                    указать
+                  </span>
+                  <span v-else>
+                    изменить
+                  </span>
+                </button>
+              </div>
+              <div>
+                <span class="value">
+                  <span v-if="!order || order.pay_method == undefined || order.pay_method == 0" style="color:rgb(235, 87, 87); font-style:italic">
+                    <i>Не указано</i>
+                  </span>
+                  <span v-else>
+                    <template v-if="order.pay_method == 'cash'">
+                      Наличные
+                    </template>
+                    <template v-else-if="order.pay_method == 'cart'">
+                      Карта
+                    </template>
+                    <template v-else-if="order.pay_method == 'transfer'">
+                      По банковским реквизитам
+                    </template>
+                  </span>
+                </span>
+              </div>
+              <x-popup :title="'Изменить'" :active="showModal.payMethod" @close="showModal.payMethod=false" id="pay-method-edit-modal">
+                <checkout-paymethod v-model="checkout.pay_method" :no-cache="true"/>
+                <div class="d-flex justify-content-center">
+                  <button @click="checkoutEdit();" type="button" class="x-btn">Сохранить</button>
+                </div>
+              </x-popup>  
+            </div>
+
+            <!-- Final summ -->
+            <div v-if="userIn">
+              <hr class="my-30">
+              <div>
+                <span class="label" style="color: #eb5757;">сумма вашего заказа</span>
+                <button v-if="isAdmin && editable" @click="goToGallery()" class="edit float-right d-lg-none">изменить</button>
+              </div>
+              <div>
+                <span class="value">{{orderSum == false ? '' : orderSum+'p'}}</span>
               </div>
             </div>
 
+
+
+          </div>
+        </div>
+
+
+        <!-- Actions -->
+        <div class="row" v-if="sOrder">
+          <div class="col-12 col-lg-6 offset-lg-6">
             <!-- Actions -->
             <div class="mb-5">
               
@@ -356,20 +427,23 @@
                 Начать оформлять заказ
               </button>
 
-              <button v-if="userIn && !confirmable && memberWeight > 0 && !confirm"
+              <!-- <button v-if="userIn && !confirmable && memberWeight > 0 && !confirm"
                 @click="goToCheckout()"  
                 class="x-btn"
               >
                 Оформить заказ
-              </button>
+              </button> -->
 
-              <div v-if="userIn && memberWeight > 0 && confirm != 1 && confirmable">
-                <shared-order-confirm />
+              <div v-if="userIn && memberWeight > 0 && confirm != 1">
+                <shared-order-confirm :fast="true"/>
+              </div>
+              <div v-if="confirm">
+                <span ><b style="color: limegreen!important; font-size: 22px;">Заказ оформлен!</b></span>
               </div>
             </div>
-
           </div>
         </div>
+
 
         <!-- Confirm -->
         <!-- <div class="row">
@@ -617,6 +691,11 @@ import copy from 'copy-to-clipboard';
 export default {
 data(){return{
   moment:moment,
+  //Checkout
+  checkout:{},
+  showModal:{},
+  showModalContacts:false,
+  //
   changeMemberCount:1,
   test:{},
   data:{},
@@ -774,6 +853,14 @@ watch:{
     this.changeMemberCount = this.sOrder.member_count;    
     this.getWeights();
     return;
+  },    
+  showModalContacts: function (val, oldVal) {
+    if(!val) return;
+    if(!this.order) return;
+    this.checkout.contacts = {};
+    this.checkout.contacts.name = this.order.name;
+    this.checkout.contacts.phone = this.order.phone;
+    this.checkout.contacts.email = this.order.email;
   },
 },
 async mounted(){
@@ -864,6 +951,23 @@ methods:{
   },
   async goToCheckout(){
     location.href = '/shared/order/checkout/'+this.link;
+  },    
+  async checkoutEdit(){
+    //Refresh errors
+    this.errors = [];
+    console.log(this.checkout);
+    let data = this.checkout;
+    data.id = this.order.id;
+    let r = await ax.fetch('/order/customer',data,'post');
+
+    //Catch errors
+    if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
+
+    //Success
+    this.showModal = {};
+    this.showModalContacts = false;
+    
+    this.get(this.link);
   },
 
   //TEST
@@ -932,6 +1036,16 @@ methods:{
     text-decoration-line: underline;
     font-size: 16px;
   }
+
+  .checkout-user-data {
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+
+  .checkout-user-data  .value{
+    margin-left: 10px;
+  }
+
 
   /* Desktop */
   @media screen and (min-width: 992px){

@@ -92,6 +92,7 @@ class Libra extends Model
     $doubles = DB::select("
       SELECT * FROM (
         SELECT COUNT('product_id') AS `count`, product_id FROM libras
+        WHERE site IS NULL
         GROUP BY product_id
       ) l
       WHERE `count` > 1
@@ -160,8 +161,8 @@ class Libra extends Model
         
         {//Price
           //Get prop
-          $price = $v->product->final_price;
-          $unit = $v->product->unit;
+          $price = ($v->site == 'x') ? $v->product->final_price_x : $v->product->final_price;
+          $unit = $v->product->unit;        
           //Make price
           $price_full = number_format((float)((1 / $unit) * $price), 2, '.', '');
           //Get lenght
@@ -241,11 +242,11 @@ class Libra extends Model
         if(count($AddProps) > 8){
           
           $error = "Количество дополнительных строк не должно превышать 8!\n";
-          $error = $v->product->name . "\n";
+          $error .= $v->product->name . "\n";
           $error .= "Дополнительные строки:\n";
 
           foreach ($AddProps as $k => $v) {
-            $error .= $k+1 . ' - ' . $v . "\n";
+            $error .= $k+1 . ') ' . $v . "\n";
           }
 
           self::log($error, 'danger');
@@ -313,8 +314,11 @@ class Libra extends Model
 
   public static function sortButtonsByName(){
 
+    //Delete Neo
+    Libra::where('site','x')->delete();
+
     //Get
-    $libra = self::jugeGet();
+    $libra = self::jugeGet(['site' => 'isNull']);
 
     //Sort
     $sorted = $libra->sortBy('product.name');
@@ -327,9 +331,33 @@ class Libra extends Model
 
     //Log
     self::log('Sort by name', 'info');
+
+    //Neo 
+    self::addNeoButtons();
     
     //Return
     return true;
+  }
+
+  public static function addNeoButtons(){
+    $libras = self::jugeGet(['site' => 'isNull']);
+    $maxButton = $libras->max('button');
+    $maxButton = (intval($maxButton / 100) + 1) * 100;
+
+    foreach ($libras as $key => $libra) {
+      $button = $libra->button;
+      $button += $maxButton;
+      Libra::where('button',$button)->where('site','x')->delete();
+      Libra::insert([
+        'libra' => $libra->libra,
+        'button' => $button,
+        'product_id' => $libra->product_id,
+        'site' => 'x',
+      ]);
+    }
+
+    self::log('Add neo buttons', 'info');
+
   }
 
 
@@ -345,7 +373,13 @@ class Libra extends Model
     }
 
     {//Where
-      //
+      if(isset($request['site'])){
+        if($request['site'] == 'isNull'){
+          $query = $query->whereNull('site');
+        }else{
+          $query = $query->where('site',$request['site']);
+        }        
+      }
     }
 
     {//Sort

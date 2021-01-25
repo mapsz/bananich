@@ -1,5 +1,14 @@
 <template>
-<div class="">
+<div v-if="fast">
+  <div class="">
+    <button @click="active=doConfirm();" class="x-btn"><b>Завершить оформление заказа</b></button>
+  </div>
+  <div>
+    <juge-errors :errors="errors" />
+  </div>
+</div>
+
+<div v-else class="">
     
   <div class="">
     <button @click="active=1;" class="x-btn">✅ <b>Завершить оформление заказа</b></button>
@@ -20,8 +29,10 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+props: ['fast'],
 data(){return{
   active:false,
+  errors:[],
 }},
 methods:{
   ...mapActions({
@@ -34,6 +45,9 @@ methods:{
       this.get();
       this.active = false;
     }
+
+    // Catch errors
+    if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
   }
 },
 }

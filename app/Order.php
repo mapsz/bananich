@@ -51,6 +51,61 @@ class Order extends Model
     ['key'    => 'termobox', 'label' => 'termobox'],
   ];  
 
+  public static function orderValidate($data){
+
+    //Validate
+    $validate = [
+      'name'                => ['required', 'string', 'max:190'],
+      'email'               => ['required', 'string', 'email', 'max:190'],
+      'phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
+      'appart'        => ['max:20' ],
+      'porch'        => ['max:20' ],
+      'address'       => ['required', 'string', 'max:170' ],
+      'delivery_date'        => ['required'],
+      'delivery_time_from'        => ['required'],
+      'delivery_time_to'        => ['required'],
+      'pay_method'           => ['required','not_in:0'],
+      'comment'             => ['max:1000'],
+    ];  
+
+    //ToOther Validate
+    if(isset($data['toOther']) && $data['toOther']){
+      $validate['toOtherName'] = ['required', 'string', 'max:190'];
+      $validate['toOtherPhone'] = ['required', 'regex:/^8(\d){10}?$/'];
+      $validate['toOtherComment'] = ['string', 'max:1000'];
+    }   
+
+    $messages = [
+      'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
+      'aggrePersonal.accepted'      => 'Необходимо согласие на обработку персональных данных',
+      'toOtherComment.max'          => 'Количество символов в поле "Текст получателю" не должно превышать :max',
+      'toOtherPhone.required'       => 'Необходимо заполнить поле "Телефон другого человека"',
+      'toOtherPhone.regex'          => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'toOtherName.max'             => 'Количество символов в поле "Имя другого человека" не должно превышать :max',
+      'comment.max'                 => 'Количество символов в поле "Комментарий" не должно превышать :max',
+      'confirm.required'            => 'Необходимо выбрать способ подтверждение заказа',
+      'pay_method.required'          => 'Необходимо выбрать способ оплаты',
+      'pay_method.not_in'          => 'Необходимо выбрать способ оплаты',
+      'container.required'          => 'Необходимо выбрать упаковку',
+      'delivery_time_from.required'       => 'Необходимо выбрать время доставки',
+      'delivery_time_to.required'       => 'Необходимо выбрать время доставки',
+      'delivery_date.required'       => 'Необходимо выбрать дату доставки',
+      'address.required'      => 'Необходимо заполнить поле "Адрес"',
+      'address.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
+      'phone.required'   => 'Необходимо заполнить поле "Номер телефона"',
+      'phone.regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
+      'email.required'   => 'Необходимо заполнить поле "e-mail"',
+      'email.max'        => 'Количество символов в поле "Имя" не должно превышать :max',
+      'name.required'    => 'Необходимо заполнить поле "Имя"',
+      'name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
+    ];
+
+    Validator::make($data, $validate,$messages)->validate();
+
+    return true;
+
+  }
+
   public static function getAvailableDays($type = 1){
     
     //Get Cart

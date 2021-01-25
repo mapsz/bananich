@@ -329,10 +329,10 @@ class OrderController extends Controller
 
     {//Validate
       $validate = [
-        'contacts.name'                => ['required', 'string', 'max:190'],
-        'contacts.email'               => ['required', 'string', 'email', 'max:190'],
-        'contacts.phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
-        'pay_method'                   => ['required'],
+        'contacts.name'                => ['string', 'max:190'],
+        'contacts.email'               => ['string', 'email', 'max:190'],
+        'contacts.phone'               => ['regex:/^8(\d){10}?$/', ],
+        // 'pay_method'                   => [],
         'comment'                      => ['max:1000'],
       ];  
 
@@ -364,11 +364,16 @@ class OrderController extends Controller
     }
 
     {//Update
-      $order->comment     = isset($data['comment']) ? $data['comment'] : '';
-      $order->pay_method  = $data['pay_method'];
-      $order->name        = $data['contacts']['name'];
-      $order->phone       = $data['contacts']['phone'];
-      $order->email       = $data['contacts']['email'];
+      if(array_key_exists('comment', $data)){
+        $order->comment = $data['comment'];
+      } 
+      if(isset($data['pay_method'])) $order->pay_method = $data['pay_method'];
+      if(isset($data['contacts'])){
+        if(isset($data['contacts']['name'])) $order->name = $data['contacts']['name'];
+        if(isset($data['contacts']['phone'])) $order->phone = $data['contacts']['phone'];
+        if(isset($data['contacts']['email'])) $order->email = $data['contacts']['email'];
+      }
+
 
       // dd($data['address']['addressStreet']);
 

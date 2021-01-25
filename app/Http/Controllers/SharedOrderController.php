@@ -54,7 +54,10 @@ class SharedOrderController extends Controller
       if(!$orderId) return response()->json(false);
     }
 
-
+    //Validate
+    $order = Order::find($orderId);
+    $order = $order->toArray();
+    Order::orderValidate($order);
 
     $meta = DB::table('order_metas')->updateOrInsert(
       [
