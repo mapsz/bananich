@@ -1,6 +1,5 @@
 <template>
-  <div :class="halloween?'halloween':''">
-    <site-header/>
+  <juge-main>
 
     <main class="cart-page">
       <div class="container">
@@ -19,7 +18,7 @@
 
         <div class="row content-page checkout-data">
 
-          <div class="col-lg-7">
+          <div class="col-lg-6">
             <div class="content">
               <checkout-contact class="checkout-div " v-model="data.contacts" />
 
@@ -32,7 +31,7 @@
               <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
 
               <div class="row checkout-div">
-                <checkout-container v-model="data.container"/>
+                <checkout-container v-if="!isX" v-model="data.container"/>
                 <checkout-paymethod v-model="data.paymethod"/>
               </div>
               
@@ -42,19 +41,32 @@
 
             </div>
           </div>
-          <checkout-checkout :errors="errors" @do-order="doOrder()"/>
+          <div class="col-lg-5 offset-lg-1">
+            <div v-if="isX">
+              <shared-order-numbers class="mb-4"/>
+              <!-- Aggrees -->
+              <checkout-agreements />
+              <juge-errors :errors="errors"/>
+              <div class="d-flex justify-content-center">
+                <button class="x-btn" @click="doOrder('x')">Оформить заказ</button>
+              </div>              
+            </div>
+            <div v-else>
+              <checkout-checkout :errors="errors" @do-order="doOrder()"/>
+            </div>            
+          </div>
         </div>
       </div>
     </main>
 
-    <site-footer/>
-  </div>
+  </juge-main>
 </template>
 
 <script>
 import {mapGetters,mapActions} from 'vuex';
 export default {
   data(){return{    
+    isX:isX,
     halloween:halloween,
     data:{},
     errors:[],
@@ -71,7 +83,7 @@ export default {
   },
   methods:{    
     ...mapActions({'clean':'checkout/clean'}),
-    async doOrder(){
+    async doOrder(type=false){
       //Refresh errors
       if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
       this.errors = [];
@@ -82,7 +94,7 @@ export default {
       if(!r) return;
 
       //Put      
-      r = await ax.fetch('/order/put', {data:this.checkout,'cartId':this.cart.id}, 'put');
+      r = await ax.fetch('/order/put', {data:this.checkout,'cartId':this.cart.id,type}, 'put');
 
       //Catch errors
       if(!r){      
@@ -125,6 +137,9 @@ export default {
     margin-bottom: 0px;
     padding-bottom: 0px;
   }
+  .page-x .checkout-div{
+    border-color:#8ac2a7;
+  }
 
   .title-page{
     margin-bottom: 20px !important;
@@ -138,5 +153,7 @@ export default {
     background-repeat: no-repeat;
     background-position: bottom right 20px;
   }
-
+  .checkout-address, .checkout-form {
+    max-width: inherit;
+  }
 </style>

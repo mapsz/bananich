@@ -86,7 +86,7 @@ methods:{
   body{
     font-family: "Open Sans", "Roboto";
   }
-
+  
   .page-x{
     background: #f3ebe8;      
   }
@@ -98,6 +98,18 @@ methods:{
     background: #8AC2A7;
     border-color: #8AC2A7;
   }
+  /* x-or */
+  .x-or{
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .x-or-or{
+    align-self: center;
+    margin: 0 5px;
+    font-size: 12px;
+    color: #757575;
+  }
+  /* x-button */
   .x-btn{    
     font-size: 16px;
     border-radius: 50px;
@@ -180,6 +192,9 @@ methods:{
   }
   .breadcrumb-item.active {
     font-weight: 600;
+  }
+  .page-x .custom-checkbox:checked + label:before {
+    background-color: #8ac2a7;
   }
 
   /* Desktop */

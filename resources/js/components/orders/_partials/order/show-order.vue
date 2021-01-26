@@ -204,7 +204,7 @@
       </div>
     </div>
     <!-- Logistics -->
-    <div class="col-12 col-md-4 order-container">   
+    <div class="col-12 col-md-4 order-container">
       <div class="order-inner-container">  
         <h4>Логистика</h4>
         <order-logistic />

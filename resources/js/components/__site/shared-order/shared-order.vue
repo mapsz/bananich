@@ -84,7 +84,7 @@
           <!-- Sould do -->
           <div v-if="0" class="col-12 col-lg-6 d-flex justify-content-center  justify-content-lg-start" style="display: flex !important;align-items: flex-end;">
             <button @click="goToGallery()" class="button x-btn">
-              Начать оформлять заказ
+              Начать собирать заказ
             </button>
           </div>
         </div>
@@ -424,7 +424,7 @@
                 @click="goToGallery()" 
                 class="x-btn"
               >
-                Начать оформлять заказ
+                Начать собирать заказ
               </button>
 
               <!-- <button v-if="userIn && !confirmable && memberWeight > 0 && !confirm"

@@ -107,7 +107,7 @@ Vue.directive('click-outside', {
 });
 
 window.halloween = false;
-window.localServer = (window.location.hostname.indexOf('bananich.loc') > -1) ? true : false;
+window.localServer = (window.location.hostname.indexOf('.loc') > -1) ? true : false;
 
 
 

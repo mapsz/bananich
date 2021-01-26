@@ -57,20 +57,45 @@
                 <!-- To checkout -->
                 <template>
                   <!-- X bananich -->
-                  <template v-if="isX">                    
-                    <span v-if="order.confirmable">
-                      Вы можете вносить изменения в корзину до {{moment(myOrder.order_close).locale("ru").format('LLL')}}
-                    </span>
-                    <a v-if="myOrder.id == undefined" href="/shared/order">                    
-                      <button class="x-btn">Оформить коллективную закупку</button>                    
-                    </a>
-                    <span v-else-if="order && order.confirmable"></span>
-                    <a v-else :href="'/shared/order/checkout/'+myOrder.link">
-                      <button class="x-btn">Оформить заказ</button>                    
-                    </a>
-                  </template>
+                  <template v-if="isX">
+                    <!-- No order -->
+                    <template v-if="myOrder == undefined || myOrder.id == undefined">
+                      
+                      <div class="x-cart-do-button">
+                        <a href="/checkout">
+                          <button class="x-btn">👤 Оформить Заказ</button>                    
+                        </a>
+                        <div>
+                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, temporibus.
+                        </div>
+                      </div>
+
+                      <div class="x-or my-3">
+                        <span class="x-or-line"><hr></span>
+                        <span class="x-or-or">ИЛИ</span>
+                        <span class="x-or-line"><hr></span>
+                      </div>
+
+                      <div class="x-cart-do-button">
+                        <a href="/shared/order">                    
+                          <button class="x-btn" style="padding:0 10px; margin: 0 -10px;">👥 Оформить коллективную закупку</button>                    
+                        </a>
+                        <div>
+                          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deserunt, aliquid!
+                        </div>
+                      </div>
+
+                    </template>
+                    <!-- is Order -->
+                    <template v-else>
+                      
+                      <button @click="goToOrder()" class="x-btn">
+                        К моей закупке
+                      </button>
+                    </template>
+                  </template>                  
                   <!-- Normal bananich -->
-                  <template v-else>
+                  <template v-if="!isX">
                     <!-- Min price -->
                     <span v-if="cart.min_summ > cart.pre_price"
                       style="    
@@ -106,6 +131,8 @@
         <div v-if="isX && myOrder.id == undefined" class="row my-5">
 
           <div v-if="cart && cart.items != undefined && cart.items.length > 0" class="announce-block mb-5">
+            <div style="color:#da00ff">Что с этим блоком?</div>
+             <!-- todo @@@ -->
             <b>Поздравляем!</b>
             <div>
               Вы собрали свой заказ на Neolavka, чтобы купить все по супер-ценам необходимо открыть закупку. Выберете план закупки:
@@ -207,7 +234,10 @@ export default {
     }),  
     getItem(id){
       return this.cart.items.find(x => x.product_id == id);
-    }
+    },
+    goToOrder(){
+      location.href = '/shared/order/' + this.myOrder.link;
+    },
   },
 }
 </script>
@@ -257,18 +287,16 @@ export default {
     background-position: bottom right, bottom center;
   }
 
-  .halloween .content-page{
-    background-image: url(/halloween/kotel.png);
-    background-size: 75px;
-    background-repeat: no-repeat;
-    background-position: bottom 0px left 20px;
+  .x-cart-do-button{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  @media screen and (max-width: 768px){
+  /* Desktop */
+  @media screen and (min-width: 992px){
 
-    .halloween .content-page{
-      background-size: 25px !important;
-    }
+
   }
 
 </style>

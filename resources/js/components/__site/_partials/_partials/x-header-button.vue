@@ -3,8 +3,12 @@
   <button v-if="myOrder.id == undefined && invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)" @click="goToInvite()" class="x-btn">
     Присоединиться к закупке
   </button>
-  <button v-else-if="myOrder && myOrder.id != undefined" @click="goToOrder()" class="x-btn">К моей закупке</button>
-  <button v-else @click="goToOpen()" class="x-btn">Открыть закупку</button>
+  <button v-else-if="myOrder && myOrder.id != undefined" @click="goToOrder()" class="x-btn">
+    К моей закупке
+  </button>
+  <!-- <button v-else @click="goToOpen()" class="x-btn">
+    Открыть закупку
+  </button> -->
 </div>  
 </template>
 

@@ -71,7 +71,11 @@ class OrderController extends Controller
       $data = $request->all();
       $data = $data['data'];
       //Get Cart
-      $cart = Cart::getCart(['presentProduct' => true]);
+      if($request->type == 'x'){
+        $cart = Cart::getCart(['type' => 'x']);
+      }else{
+        $cart = Cart::getCart(['presentProduct' => true]);
+      }      
       //Get Settings
       $settings = new Setting(); $settings = $settings->getList(1);
     }
@@ -83,11 +87,13 @@ class OrderController extends Controller
       {//Validate Cart
         $cartValidate = [
           'items'           => ['bail','min:1'],
-          'pre_price'      => ['bail','required','numeric','max:200000', 'min:'.$cart['min_summ']],
+          'pre_price'      => ['bail','required','numeric','max:200000' ],
         ];
+        if($request->type == false) array_push($cartValidate['pre_price'],'min:'.$cart['min_summ']);
+
         $cartMessages = [
           'required'               => 'ошибка!',
-          'pre_price.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['phone_number'],
+          'pre_price.max'         => 'Для больших заказов обратитесь по номеру ' . $settings['x_phone_number'],
           'pre_price.min'         => 'Минимальная сумма заказа ' . $cart['min_summ'] . 'р',
           'items.min'              => 'Корзина пуста!'
         ];
@@ -127,7 +133,9 @@ class OrderController extends Controller
         }   
 
         $messages = [
+          'aggreOffer.required'         => 'Необходимо согласие на договор оферты',
           'aggreOffer.accepted'         => 'Необходимо согласие на договор оферты',
+          'aggrePersonal.required'      => 'Необходимо согласие на обработку персональных данных',
           'aggrePersonal.accepted'      => 'Необходимо согласие на обработку персональных данных',
           'toOtherComment.max'          => 'Количество символов в поле "Текст получателю" не должно превышать :max',
           'toOtherPhone.required'       => 'Необходимо заполнить поле "Телефон другого человека"',
@@ -191,20 +199,29 @@ class OrderController extends Controller
             $order = Order::getWithOptions(['id'=>$orderId]);        
             $email = $order->email;
             $data = ["email" => $email, "orderId" => $orderId];
+            $data['from'] = 'no-reply@bananich.ru';
+            $data['subject'] = 'Бананыч заказ №'.$data['orderId'].' получен!';
+
+            if($request->type == 'x'){
+              $data['from'] = 'no-reply@neolavka.ru';
+              $data['subject'] = 'Neolavka заказ №'.$data['orderId'].' получен!';
+            } 
   
             //Client send
-            $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($data){
+            $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $request->type], function($m)use($data){
               $m->to($data['email'],'to');
-              $m->from('no-reply@bananich.ru');
-              $m->subject('Бананыч заказ №'.$data['orderId'].' получен!');
+              $m->from($data['from']);
+              $m->subject($data['subject']);
             });
   
             //Dasha Send
-            $send = Mail::send('mail.mailOrder', ['order' => $order->toarray()], function($m)use($orderId){
-              $m->to('bbananich@yandex.ru','to');
-              $m->from('no-reply@bananich.ru');
-              $m->subject('Бананыч заказ №'.$orderId.' получен!');
-            });
+            if(ENV('APP_ENV') != 'local'){
+              $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $request->type], function($m)use($data){
+                $m->to('bbananich@yandex.ru','to');
+                $m->from($data['from']);
+                $m->subject($data['subject']);
+              });
+            }
           }
 
           JugeLogs::log(9, json_encode(['model' => 'orderController', 'user' => $userId]));

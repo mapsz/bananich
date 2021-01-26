@@ -14,6 +14,7 @@ class CreateProductMetasTable extends Migration
     public function up()
     {
         Schema::create('product_metas', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->bigInteger('product_id')->unsigned();
             $table->char('name',50);
             $table->char('value',250);

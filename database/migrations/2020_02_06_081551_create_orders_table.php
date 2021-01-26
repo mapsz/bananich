@@ -27,8 +27,8 @@ class CreateOrdersTable extends Migration
       $table->char('phone',30);
       $table->string('email');
       $table->string('address');
-      $table->char('appart',50);
-      $table->char('porch',50);
+      $table->char('appart',50)->nullable();
+      $table->char('porch',50)->nullable();
       $table->decimal('subtotal', 8, 2)->default(0);
       $table->decimal('total', 8, 2)->default(0);
       $table->decimal('shipping', 8, 2)->default(0);

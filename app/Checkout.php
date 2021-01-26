@@ -120,6 +120,9 @@ class Checkout extends Model
     
       //Set bonus
       $cart->bonus = intval($cart->max_bonus_summ >= $bonus ? $bonus : $cart->max_bonus_summ);
+
+      //X no bonus
+      if($cart->type == 2) $cart->bonus = 0;
     }
     
     {//Shipping
@@ -129,6 +132,9 @@ class Checkout extends Model
         (($cart->pre_price < $settings['first_order_free_shipping']) ? intval($price_shipping) : 0) :
         (($cart->pre_price < $settings['free_shipping']) ? intval($price_shipping) : 0)      
       );
+
+      //X no shipping
+      if($cart->type == 2) $cart->shipping = 0;
     }
         
     {// X Data
@@ -285,6 +291,7 @@ class Checkout extends Model
   }
 
   public static function xdata($items, $order = false, $sOrder = false){
+    
 
     $xData = [
       'participation_price' => 0,
@@ -297,7 +304,6 @@ class Checkout extends Model
       'order_id' => false,
       's_order_id' => false,
     ];
-
     //Full Weight
     foreach ($items as $key => $item) {
       $xData['fullWeight'] += $item->full_weight;
@@ -307,14 +313,15 @@ class Checkout extends Model
     
     {//Get order
       //Shared order
-      if(!$sOrder){      
+      if($sOrder && isset($sOrder[0])) $sOrder = $sOrder[0];
+      if(!$sOrder){
         $sOrder = SharedOrder::byAuth(false);
         if(!$sOrder) return $xData;
         if(!isset($sOrder->orders)) return $xData;
-      }
+      }     
 
       //Order
-      if(!$order){      
+      if(!$order){
         $order = false;
         foreach ($sOrder->orders as $key => $v) {
           if($v->customer_id == $user->id) {
@@ -330,16 +337,25 @@ class Checkout extends Model
 
     $settings = (new Setting)->getList(1);
   
-    $xData['order_id'] = $order->id;
-    $xData['s_order_id'] = $sOrder->id;
+    {//Ids
+      $xData['order_id'] = $order->id;
+      $xData['s_order_id'] = $sOrder == 'solo' ? 'solo' : $sOrder->id;      
+    }
+        
+    
+    {//Set member count
+      if($sOrder == 'solo') $memberCount = 1;
+      else $memberCount = $sOrder->member_count;
+    }
+
 
     {//Participation
-      if($sOrder->member_count == 0) return $xData;
-      $xData['participation_price'] = $settings['x_order_price'] / $sOrder->member_count;
+      if($memberCount == 0) return $xData;
+      $xData['participation_price'] = $settings['x_order_price'] / $memberCount;
     }
 
     {//Over weight
-      $personKg = ($settings['x_order_weight'] / $sOrder->member_count);
+      $personKg = ($settings['x_order_weight'] / $memberCount);
       $xData['maxFreeWeight'] = $personKg;
 
       $overKg = round($xData['fullWeight'] - $personKg, 3);
@@ -362,8 +378,11 @@ class Checkout extends Model
     }
 
     {//Personal address
-      $sameAddress = ($sOrder->address->street . ' ' . $sOrder->address->number) == $order->address;
-      $xData['personalAddress'] = $sameAddress ? 0 : 50; 
+      if($sOrder != 'solo'){      
+        $sameAddress = ($sOrder->address->street . ' ' . $sOrder->address->number) == $order->address;
+        $xData['personalAddress'] = $sameAddress ? 0 : 50; 
+      }
+
     }
 
     return $xData;

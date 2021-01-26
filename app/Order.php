@@ -58,13 +58,13 @@ class Order extends Model
       'name'                => ['required', 'string', 'max:190'],
       'email'               => ['required', 'string', 'email', 'max:190'],
       'phone'               => ['required', 'regex:/^8(\d){10}?$/', ],
-      'appart'        => ['max:20' ],
-      'porch'        => ['max:20' ],
-      'address'       => ['required', 'string', 'max:170' ],
-      'delivery_date'        => ['required'],
-      'delivery_time_from'        => ['required'],
-      'delivery_time_to'        => ['required'],
-      'pay_method'           => ['required','not_in:0'],
+      'appart'              => ['max:20' ],
+      'porch'               => ['max:20' ],
+      'address'             => ['required', 'string', 'max:170' ],
+      'delivery_date'       => ['required'],
+      'delivery_time_from'  => ['required'],
+      'delivery_time_to'    => ['required'],
+      'pay_method'          => ['required','not_in:0'],
       'comment'             => ['max:1000'],
     ];  
 
@@ -131,7 +131,8 @@ class Order extends Model
     {//Get orders
       $orders = self::jugeGet([
         'deliveryDate' => json_encode(['from' => $from, 'to' => $to]),
-        'status'  => [950,900,850,800,700,600,500,400,300]
+        'status'  => [950,900,850,800,700,600,500,400,300],
+        'noSharedOrder' => true,
       ])->toArray();
     }
 
@@ -252,6 +253,7 @@ class Order extends Model
         array_push($rDate,$day);
       }
     }
+
 
     return $rDate;
 
@@ -394,6 +396,8 @@ class Order extends Model
       $bonus = $cart['bonus'];
       //Shipping
       $shipping = $cart['shipping'];
+      //Is x
+      $data['type'] = $cart['type'] == 2 ? 'x' : false;
       //Put
       $order = Order::putOrder($data, $bonus, $shipping);
 
@@ -454,7 +458,12 @@ class Order extends Model
     }
     
     //Delete Cart
-    Cart::where('user_id',$customer_id)->where('type',1)->delete();
+    if($cart['type'] == 2){
+      Cart::where('user_id',$customer_id)->where('type',2)->delete();
+    }else{
+      Cart::where('user_id',$customer_id)->where('type',1)->delete();
+    }
+    
 
     JugeLogs::log(14, json_encode(['model' => 'order', 'user' => $customer_id]));
 
@@ -489,7 +498,6 @@ class Order extends Model
         $randomId = self::generateRandomId();
       }
       
-
       JugeLogs::log(3, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
       
       {//Save order
@@ -514,7 +522,7 @@ class Order extends Model
         $order->bonus = $bonus;
         $order->shipping = $shipping;
         if(!$order->save()) return false;
-      }  
+      }
       
       JugeLogs::log(4, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
 
@@ -676,8 +684,10 @@ class Order extends Model
       //Metas
       $query = $query->with('metas');
       //Shared Order
-      $query = $query->with('sharedOrder');
-      $query = $query->with('sharedOrder.address');
+      if(!isset($request['noSharedOrder'])){
+        $query = $query->with('sharedOrder');
+        $query = $query->with('sharedOrder.address');        
+      }
       //Pay method
       $query = $query->with('pays.method');
       //Coupons
@@ -1083,9 +1093,15 @@ class Order extends Model
           }
           
           {//X
-            if(isset($order->type) && $order->type == 'x' ){
-              if(!isset($order->sharedOrder) || count($order->sharedOrder) == 0) continue;
-              $order->xData = Checkout::xdata($order->items, $order, $order->sharedOrder[0]);              
+            if(isset($order->type) && $order->type == 'x' && !isset($request['noSharedOrder'])){
+
+              if(!isset($order->sharedOrder) || count($order->sharedOrder) == 0){
+                $xDataSharedOrder = 'solo';
+              }else{
+                $xDataSharedOrder = $order->sharedOrder;
+              }
+
+              $order->xData = Checkout::xdata($order->items, $order, $xDataSharedOrder);              
               {//Items
                 $order->x_items_total = 0;
                 foreach ($order->items as $key => $item) {
@@ -1204,8 +1220,10 @@ class Order extends Model
 
   }
 
-  public static function syncCartOrder($cart = false, $order = false, $user = false){    
+  public static function syncCartOrder($cart = false, $order = false, $user = false){ 
     
+    // dd(555);
+        
     {//Data
       {//User
         $user = Auth::user();

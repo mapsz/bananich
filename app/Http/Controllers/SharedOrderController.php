@@ -18,7 +18,6 @@ use Carbon\Carbon;
 class SharedOrderController extends Controller
 {
   public function open(Request $request){
-
     //Open
     $sOrder = SharedOrder::open($request->all());
 

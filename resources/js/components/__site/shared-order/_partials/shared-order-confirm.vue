@@ -1,10 +1,10 @@
 <template>
 <div v-if="fast">
-  <div class="">
-    <button @click="active=doConfirm();" class="x-btn"><b>Завершить оформление заказа</b></button>
-  </div>
   <div>
     <juge-errors :errors="errors" />
+  </div>
+  <div class="">
+    <button @click="active=doConfirm();" class="x-btn"><b>Завершить оформление заказа</b></button>
   </div>
 </div>
 

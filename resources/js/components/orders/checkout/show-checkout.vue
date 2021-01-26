@@ -41,7 +41,7 @@
     </div>
   </div> 
   <!-- X -->
-  <template v-if="this.order.type == 'x' &&order.xData != undefined">
+  <template v-if="this.order.type == 'x' && order.xData != undefined">
   <h5  style="color:#8ac2a7">X</h5>
     <div class="mb-2" style="border-top:2px dashed #8ac2a7;">
       <div class="d-flex justify-content-between border-bottom">

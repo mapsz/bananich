@@ -17,8 +17,6 @@ class Cart extends Model
   //Get actual cart
   public static function getCart($request = []){
 
-
-
     {//Get user, session
       $user = Auth::User();
       $userId = $user ? $user->id : 0;
@@ -33,7 +31,7 @@ class Cart extends Model
           $request['type'] = 1;
         }
       }
-    }  
+    }
 
     {//Exists
       //Session
@@ -42,7 +40,7 @@ class Cart extends Model
       if($user) $userExists = Cart::where('type',$request['type'])->where('user_id',$user->id)->exists();
       else $userExists = false;
     }
-
+    
     {//Set request
       $request['single'] = 1;
       //Session
@@ -86,6 +84,7 @@ class Cart extends Model
     //Checkout
     $cart = Checkout::addToCart($cart);
 
+    // dump(22);
     return $cart;   
   
   }

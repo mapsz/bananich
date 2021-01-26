@@ -19,8 +19,11 @@ class SharedOrder extends Model
 
   public static function open($data){
 
+    //Cart
+    $cart = Cart::getCart(['type' => 'x']);
+
     //Validate
-    SharedOrder::validate($data, true);
+    SharedOrder::validate($data, true, $cart);
 
     {//Data
       $user = Auth::user();
@@ -63,11 +66,11 @@ class SharedOrder extends Model
           }
   
           //Attach status
-          SharedOrder::changeStatus($sOrder,200,$user->id);
+          SharedOrder::changeStatus($sOrder, 200, $user->id);
   
           //Attach owner    
           $neighbor = isset($data['neighbor']) && $data['neighbor'] ? true : false;
-          SharedOrder::join($user, false, $sOrder, $neighbor);
+          SharedOrder::join($user, false, $sOrder, $neighbor, $cart);
   
         }DB::commit();    
       } catch (Exception $e){
@@ -76,6 +79,7 @@ class SharedOrder extends Model
         return response(['code' => 'so1','text' => 'error open shared order'], 512)->header('Content-Type', 'text/plain');
       }
     }
+    
     
     return $sOrder;
   }
@@ -146,7 +150,7 @@ class SharedOrder extends Model
 
   }
   
-  public static function validate($data, $put=false){
+  public static function validate($data, $put=false, $cart=false){
 
     {//Params
       //Settings
@@ -229,7 +233,7 @@ class SharedOrder extends Model
 
       {//Validate available product
         if($put){
-          $cart = Cart::getCart(['presentProduct' => true, 'type' => 'x']);
+          if(!$cart) $cart = Cart::getCart(['type' => 'x']);          
           Order::validateAvailableProducts($cart);
         }       
       }
@@ -237,8 +241,8 @@ class SharedOrder extends Model
     }
   }
 
-  public static function join($user, $link = false, $sOrder = false, $neighbor = false){
-
+  public static function join($user, $link = false, $sOrder = false, $neighbor = false, $cart = false){
+    
     //Get order
     if(!$sOrder) $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1, 'noHandle' => true]);
     $slot = count($sOrder->users) + 1;
@@ -298,18 +302,19 @@ class SharedOrder extends Model
       return response(['code' => 'so2','text' => 'error attach user'], 512)->header('Content-Type', 'text/plain');
     }
 
-    //Announce
-    $sOrder = (new SharedOrder)->jugeGet(['link' => $link,'single' => 1,'noHandle' => true]);
-    if(count($sOrder->users) > 1){
-      foreach ($sOrder->users as $key => $oUser) {
-        if($user->id == $oUser->id) continue;
-        Announce::add($oUser->id,'join',[['tag'=> 'order_link','value'=>$sOrder->link]]);
+    
+    {//Announces
+      $sOrder = (new SharedOrder)->with('users')->where('link', $link)->first();    
+      if(count($sOrder->users) > 1){
+        foreach ($sOrder->users as $key => $oUser) {
+          if($user->id == $oUser->id) continue;
+          Announce::add($oUser->id,'join',[['tag'=> 'order_link','value'=>$sOrder->link]]);
+        }
       }
     }
-
     
     //Sync order
-    Order::syncCartOrder();
+    Order::syncCartOrder($cart);
 
     return true;
   }
@@ -531,7 +536,7 @@ class SharedOrder extends Model
 
   public static function byAuth($handle = true){
 
-    $user = Auth::user();
+    $user = Auth::user();    
 
     if(!$user) return false;
 

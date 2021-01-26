@@ -127,7 +127,7 @@ let routes = [];
   //Checkout
   import siteCheckout from './components/__site/checkout/checkout.vue';
   routes.push(
-    {path: '/checkout',    component:siteCheckout},
+    {path: '/checkout',    component:siteCheckout, name:'soloCheckout'},
   );
 
 //DRIVER
