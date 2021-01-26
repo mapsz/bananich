@@ -15,7 +15,7 @@ class SharedOrder extends Model
 {
 
   public $guarded = [];
-  public $test = false;
+  public $test = true;
 
   public static function open($data){
 
