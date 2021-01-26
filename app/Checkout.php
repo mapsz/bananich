@@ -313,7 +313,7 @@ class Checkout extends Model
     
     {//Get order
       //Shared order
-      if($sOrder && isset($sOrder[0])) $sOrder = $sOrder[0];
+      if($sOrder && isset($sOrder[0]) && isset($sOrder[0]['id'])) $sOrder = $sOrder[0];
       if(!$sOrder){
         $sOrder = SharedOrder::byAuth(false);
         if(!$sOrder) return $xData;
@@ -336,7 +336,7 @@ class Checkout extends Model
     if(!$order) return $xData;
 
     $settings = (new Setting)->getList(1);
-  
+      
     {//Ids
       $xData['order_id'] = $order->id;
       $xData['s_order_id'] = $sOrder == 'solo' ? 'solo' : $sOrder->id;      

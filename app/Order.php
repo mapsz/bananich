@@ -1101,7 +1101,8 @@ class Order extends Model
                 $xDataSharedOrder = $order->sharedOrder;
               }
 
-              $order->xData = Checkout::xdata($order->items, $order, $xDataSharedOrder);              
+              $order->xData = Checkout::xdata($order->items, $order, $xDataSharedOrder);       
+              
               {//Items
                 $order->x_items_total = 0;
                 foreach ($order->items as $key => $item) {
@@ -1221,9 +1222,7 @@ class Order extends Model
   }
 
   public static function syncCartOrder($cart = false, $order = false, $user = false){ 
-    
-    // dd(555);
-        
+            
     {//Data
       {//User
         $user = Auth::user();
@@ -1254,14 +1253,20 @@ class Order extends Model
             // if(!$sOrder || !isset($sOrder->id)) 
             return false;
           }
+
+        }        
+        if(isset($order->id)){
+          $order = $order->id;
         }
 
         if(!$order) return false;
 
+        
+
         {//Sync          
           {//Delete old
             Item::where('order_id', $order)->delete();
-          }
+          }         
           
           {//Put new
             $putItems = [];
@@ -1283,6 +1288,8 @@ class Order extends Model
           }
         }
 
+
+        
         return false;
         
       }
