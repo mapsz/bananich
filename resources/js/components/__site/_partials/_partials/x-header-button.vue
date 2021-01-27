@@ -1,15 +1,33 @@
 <template>
-<div v-if="$route.name != 'sharedOrder' && $route.name != 'sharedOrderOpen'">
-  <button v-if="myOrder.id == undefined && invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)" @click="goToInvite()" class="x-btn">
-    Присоединиться к закупке
-  </button>
-  <button v-else-if="myOrder && myOrder.id != undefined" @click="goToOrder()" class="x-btn">
-    К моей закупке
-  </button>
-  <!-- <button v-else @click="goToOpen()" class="x-btn">
-    Открыть закупку
-  </button> -->
-</div>  
+<div>
+  <!-- Not Shared order page -->
+  <template v-if="$route.name != 'sharedOrder' && $route.name != 'sharedOrderOpen'">    
+    <!-- My order exists -->
+    <template v-if="myOrder && myOrder.id != undefined"> 
+      <!-- Order Confirm -->
+      <template v-if="confirm">
+        <button @click="goToOrder()" class="x-btn">
+          К моей закупке
+        </button>
+      </template>
+      <!-- Order not confirm -->
+      <template v-else>
+        <button @click="goToOrder()" class="x-btn">
+          подтвердить закупку
+        </button>
+      </template>
+    </template>
+    <!-- My order Not exists -->
+    <template v-else>
+      <!-- Invite -->
+      <template v-if="invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)">
+        <button @click="goToInvite()" class="x-btn">
+          Присоединиться к закупке
+        </button>
+      </template>
+    </template>
+  </template>
+</div>
 </template>
 
 <script>
@@ -23,6 +41,14 @@ computed:{
     inviteOrder:    'sharedOrder/getInviteOrder',
     invite:    'sharedOrder/getInviteLink',
   }),
+  confirm(){
+    if(this.user == undefined && !this.user) return false;
+    if(!this.myOrder || this.myOrder.orders == undefined || this.myOrder.orders.length <= 0) return false;
+
+    let order = this.myOrder.orders.find(x => x.customer_id == this.user.id);
+    if(!order || order.x_confirm == undefined) return false
+    return order.x_confirm;    
+  },
 },
 async mounted() {
   this.getInviteOrder();

@@ -15,15 +15,19 @@
             </div>
             <div class="col-12 col-lg-6">
               <div class="ml-lg-4">
-                <input v-model="data.memberCount" type="range" class="form-control-range custom-range" id="memberCount" min="1" :max="maxMemberCount">
+                <input v-model="data.memberCount" type="range" class="form-control-range custom-range" id="memberCount" min="2" :max="maxMemberCount">
                 <div class="mx-1 d-flex justify-content-between">
-                  <span 
-                    @click="data.memberCount = n"
-                    v-for="(n, i) in maxMemberCount" :key="i" 
-                    :style="data.memberCount == n ? 'font-weight: 600;' : ''"
-                  >
-                    {{n}}
-                  </span>
+                  <template v-for="(n, i) in maxMemberCount">
+                    <span
+                      v-if="n > 1"
+                      :key="i"
+                      @click="data.memberCount = n"
+                      :style="data.memberCount == n ? 'font-weight: 600;' : ''"
+                    >
+                      {{n}}
+                    </span>
+                  </template>
+
                 </div>
               </div>
             </div>

@@ -159,7 +159,7 @@ export default {
     }
   },
   async mounted() {
-    // return;
+    window.location.href = '/shared/order/'+this.link;
 
     await this.fetchOrder(this.link);
 

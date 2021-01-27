@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-6 mb-4">
+<div class="col-md-12">
   <div class="checkout-title">Выбор упаковки</div>  
   <div class="form-group">
     <div v-for='(input,i) in list' :key='i' class="form-radio">

@@ -29,7 +29,7 @@
             </div>
           </div>
         </template>
-        
+      
         <!-- Invite -->
         <div v-if="isAdmin && !isFull && isOpen" class="row">
           <!-- Button -->
@@ -330,7 +330,7 @@
             </div>
 
             <!-- Pay method -->
-            <div>
+            <div style="position:relative;">              
               <hr class="my-30">
               <div>
                 <span class="label" style="">способ оплаты</span>
@@ -338,6 +338,7 @@
                   <span v-if="!order || order.pay_method == undefined || order.pay_method == 0" 
                     style="color: rgb(235, 87, 87);text-decoration-color: red; text-decoration-line: underline;"
                   >
+                    <a name="no-data" class="juge-anchor"/>
                     указать
                   </span>
                   <span v-else>
@@ -388,7 +389,6 @@
           </div>
         </div>
 
-
         <!-- Actions -->
         <div class="row" v-if="sOrder">
           <div class="col-12 col-lg-6 offset-lg-6">
@@ -419,26 +419,25 @@
             </div>
 
             <!-- Big Action -->
-            <div v-if="isOpen">
-              <button v-if="userIn && items <= 0" 
+            <div v-if="isOpen && userIn" class="mb-5">
+              <button v-if="items <= 0"
                 @click="goToGallery()" 
                 class="x-btn"
               >
                 Начать собирать заказ
               </button>
-
-              <!-- <button v-if="userIn && !confirmable && memberWeight > 0 && !confirm"
-                @click="goToCheckout()"  
-                class="x-btn"
-              >
-                Оформить заказ
-              </button> -->
-
-              <div v-if="userIn && memberWeight > 0 && confirm != 1">
+              <div v-if="items > 0 && confirm != 1">
                 <shared-order-confirm :fast="true"/>
               </div>
-              <div v-if="confirm">
-                <span ><b style="color: limegreen!important; font-size: 22px;">Заказ оформлен!</b></span>
+              <div v-if="items > 0 && confirm">
+                <div class="shared-order-confirmed">
+                  <span class="shared-order-confirmed-check">✔️</span>
+                  <span>
+                    <span class="shared-order-confirmed-success">Ваш заказ оформлен.</span>
+                    Вы можете внести изменения до
+                    {{moment(sOrder.order_close).locale("ru").format('LLL')}}
+                  </span>
+                </div>  
               </div>
             </div>
           </div>

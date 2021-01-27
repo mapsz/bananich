@@ -63,10 +63,10 @@
                       
                       <div class="x-cart-do-button">
                         <a href="/checkout">
-                          <button class="x-btn">👤 Оформить Заказ</button>                    
+                          <button class="x-btn" style="padding:0 9px; margin: 0 -10px;">👤 Оформить индивидуальный заказ</button>                    
                         </a>
-                        <div>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, temporibus.
+                        <div v-if="settings && settings.x_order_price != undefined && settings.x_order_price > 0">
+                          Организационный взнос {{settings.x_order_price}}p.
                         </div>
                       </div>
 
@@ -88,10 +88,21 @@
                     </template>
                     <!-- is Order -->
                     <template v-else>
-                      
-                      <button @click="goToOrder()" class="x-btn">
-                        К моей закупке
-                      </button>
+                      <template v-if="confirm">
+                        <div class="shared-order-confirmed">
+                          <span class="shared-order-confirmed-check">✔️</span>
+                          <span>
+                            <span class="shared-order-confirmed-success">Ваш заказ оформлен.</span>
+                            Вы можете внести изменения в корзину до
+                            {{moment(myOrder.order_close).locale("ru").format('LLL')}}
+                          </span>
+                        </div>                          
+                      </template>
+                      <template v-else>
+                        <button @click="goToOrder()" class="x-btn">
+                          Оформить
+                        </button>
+                      </template>
                     </template>
                   </template>                  
                   <!-- Normal bananich -->
@@ -130,7 +141,7 @@
 
         <div v-if="isX && myOrder.id == undefined" class="row my-5">
 
-          <div v-if="cart && cart.items != undefined && cart.items.length > 0" class="announce-block mb-5">
+          <div v-if="0 && cart && cart.items != undefined && cart.items.length > 0" class="announce-block mb-5">
             <div style="color:#da00ff">Что с этим блоком?</div>
              <!-- todo @@@ -->
             <b>Поздравляем!</b>
@@ -185,6 +196,14 @@ export default {
       if(!order || order.id == undefined) return false
       return order;
 
+    },
+    confirm(){
+      if(this.user == undefined && !this.user) return false;
+      if(!this.myOrder || this.myOrder.orders == undefined || this.myOrder.orders.length <= 0) return false;
+
+      let order = this.myOrder.orders.find(x => x.customer_id == this.user.id);
+      if(!order || order.x_confirm == undefined) return false
+      return order.x_confirm;    
     },
   },
   watch: {

@@ -33,7 +33,7 @@
           Заказ оформлен
         </template>
         <template v-else>
-          <a :href="meh ? ('/shared/order/checkout/'+link) : '/rules#notconfirm'">
+          <a :href="meh ? ('#no-data') : '/rules#notconfirm'">
             <span class="info-icon mr-2"  style="color:black; text-decoretion:none" />
           </a>
           Заказ не оформлен

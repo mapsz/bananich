@@ -1042,6 +1042,8 @@ Route::group(['middleware' => ['HttpsRR'
     Route::post('/user', 'UserController@post');
     Route::post('/user/address', 'UserController@postAddress');
     Route::post('/user/main/photo', 'UserController@editMainPhoto');
+    //User Addresses
+    Route::any('/user/address', 'UserController@addAddress');
 
     //Product
     Route::get('/product/last/update', 'ProductController@lastUpdate'); 

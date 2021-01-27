@@ -15,6 +15,11 @@ use App\FileUpload;
 class UserController extends Controller
 {
 
+  public function addAddress(){
+    
+    User::addAddress();
+  }
+
   public function comments(Request $request){
     
     //validation
@@ -144,7 +149,7 @@ class UserController extends Controller
     return response()->json(1);
   }
 
-  public function postAddress (Request $request){
+  public function postAddress(Request $request){
 
     if(!Auth::user()) return false;
     if(!isset($request->data)) return false;

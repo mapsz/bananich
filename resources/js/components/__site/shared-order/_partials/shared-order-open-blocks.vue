@@ -18,7 +18,7 @@
           <div>
             <!-- Members -->
             <div class="member-count">
-              на <b>{{n}}</b> участника закупки
+              на <b>{{n}}</b> участника
             </div>
             <!-- Wight -->
             <div class="max-weight">
@@ -38,11 +38,11 @@
             </button>
           </a>
 
-          <a v-else :href="'/shared/order?pre='+n">
+          <a v-else :href="n > 1 ? '/shared/order?pre='+n : 'checkout'">
             <button 
               class="x-btn"
             >
-              Открыть закупку
+              {{n > 1 ? 'Открыть закупку' : 'Оформить заказ'}}
             </button>
           </a>
         </div>

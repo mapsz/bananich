@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-12">
       <div v-if="design != 'x'" class="checkout-title">Комментарий к заказу</div>
       <div class="form-group">
         <checkout-input :name="'comment'" :placeholder="'Ваш комментарий'" :type="'textarea'" :no-cache="noCache" v-model="value"/>

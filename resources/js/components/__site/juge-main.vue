@@ -62,11 +62,11 @@ async mounted() {
     }
 
     //Fist Time
-    if(!Cookies.get('x_not_first_time') && this.myOrder.id == undefined && this.$route.name != 'welcome'){
-      window.location.href = '/welcome';
-    }else{
-      Cookies.set('x_not_first_time');
-    }
+    // if(!Cookies.get('x_not_first_time') && this.myOrder.id == undefined && this.$route.name != 'welcome'){
+    //   window.location.href = '/welcome';
+    // }else{
+    //   Cookies.set('x_not_first_time');
+    // }
 
   }
 
@@ -90,13 +90,26 @@ methods:{
   .page-x{
     background: #f3ebe8;      
   }
+  .page-x .custom-radio + label:before {
+    min-width: 17px;
+  }
   .page-x .custom-radio:checked + label:before {
-      background-color: #8AC2A7;
-      border: 1px solid #8AC2A7;
+    background-color: #8AC2A7;
+    border: 1px solid #8AC2A7;
+    min-width: 17px;
   }
   .page-x .btn-yellow{
     background: #8AC2A7;
     border-color: #8AC2A7;
+  }
+  /* Checkbox */
+  .page-x .checkbox:checked + .checkbox-box:after, .checkbox:not(:checked) + .checkbox-box:after {
+    background-color: #8ac2a7 !important;
+  }
+  /* Anchor */
+  .juge-anchor{
+    position: absolute;
+    top: -80px;
   }
   /* x-or */
   .x-or{
@@ -123,6 +136,10 @@ methods:{
   }
   .x-btn-red{
     background: #EB5757;
+  }
+  .x-btn-sm{
+    height: 30px !important;
+    padding: 0px 10px !important;
   }
   .announce-block{
     font-size: 16px;
@@ -195,6 +212,19 @@ methods:{
   }
   .page-x .custom-checkbox:checked + label:before {
     background-color: #8ac2a7;
+  }
+  .shared-order-confirmed{
+    display: flex;    
+    line-height: 120%;
+  }
+  .shared-order-confirmed .shared-order-confirmed-check{
+    font-size: 40px;    
+    align-self: center;
+    margin-right: 10px;
+  }
+  .shared-order-confirmed .shared-order-confirmed-success{
+    color: #16c60c;
+    font-weight: 600;
   }
 
   /* Desktop */

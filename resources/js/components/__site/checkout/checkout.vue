@@ -31,8 +31,12 @@
               <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
 
               <div class="row checkout-div">
-                <checkout-container v-if="!isX" v-model="data.container"/>
-                <checkout-paymethod v-model="data.paymethod"/>
+                <div class="col-12 col-lg-6">
+                  <checkout-container v-if="!isX" v-model="data.container"/>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <checkout-paymethod v-model="data.paymethod"/>
+                </div>
               </div>
               
               <checkout-confirm class="checkout-div" v-model="data.confirm"/>

@@ -10,6 +10,15 @@
           <div class="col-lg-4">            
             <profile-navbar></profile-navbar>
           </div>
+
+
+          <!-- <div class="col-12">
+
+            <user-addresses />
+
+          </div> -->
+
+
           
           <div class="col-lg-8">
             <div class="title-wrap title-page">

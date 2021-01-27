@@ -1,5 +1,5 @@
 <template>
-<div class="col-md-6 mb-4">
+<div class="col-md-12">
   <div class="checkout-title">Способ оплаты</div>
   <checkout-input :name="'payMethod'" :type="'radio'"  :no-cache="noCache" v-model="value" 
     :list="[

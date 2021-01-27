@@ -64,6 +64,25 @@ class User extends Authenticatable
 
   ];
 
+  public static function addAddress(){
+
+    Address::validate([],1);
+
+    $user = User::find(6);
+
+    {//Attach Address
+      $address = [
+        'street' => 'asdasd'
+        // 'number' => isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : null,
+        // 'appart' => isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null,
+        // 'porch' => isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null,
+        // 'stage' => isset($data['address']['addressStage']) ? $data['address']['addressStage'] : null,
+      ];
+      $user->address()->save(new Address($address));
+    }
+  }
+
+
   public function isAdmin(){
     $roles = $this->getRoleNames();
     foreach ($roles as $key => $role) {
@@ -201,8 +220,11 @@ class User extends Authenticatable
   public function comment(){
     return $this->hasOne('App\UserComment');
   }
-  public function addresses(){
-    return $this->hasMany('App\UserAddress');
+  // public function addresses(){
+  //   return $this->hasMany('App\UserAddress');
+  // }
+  public function address(){
+    return $this->morphMany('App\Address', 'addressable');
   }
   public function referal(){
     return $this->hasOne('App\UserReferal');
