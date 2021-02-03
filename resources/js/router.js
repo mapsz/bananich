@@ -25,7 +25,7 @@ let routes = [];
   import sharedOrderOpen from './components/__site/shared-order/open/shared-order-open.vue';
   import sharedOrderCheckout from './components/__site/shared-order/checkout/shared-order-checkout.vue';
   routes.push(
-    {path: '/shared/order',                         component:sharedOrderOpen, name:'sharedOrderOpen'},
+    {path: '/shared/order',                         component:sharedOrderOpen},
     {path: '/shared/order/edit/:order_link',        component:sharedOrderOpen},
     {path: '/shared/order/open',                    component:sharedOrderOpen, name:'sharedOrderOpen'},
     {path: '/shared/order/:order_link',             component:sharedOrder, name:'sharedOrder'},
@@ -35,12 +35,12 @@ let routes = [];
   //Catalogue 
   import siteProducts from './components/__site/products/products.vue';
   routes.push(
-    {path: '/category/:cat_id',    component:siteProducts, name:'catalogue'},
-    {path: '/category/:parent_cat_id/category/:cat_id',    component:siteProducts, name:'catalogue'},
-    {path: '/catalogue',    component:siteProducts, name:'catalogue'},
-    {path: '/discounts',    component:siteProducts, name:'catalogue'},
-    {path: '/popular',    component:siteProducts, name:'catalogue'},
-    {path: '/',             component:siteProducts, name:'catalogue'},
+    {path: '/',                                             component:siteProducts, name:'catalogue'},
+    {path: '/catalogue',                                    component:siteProducts},    
+    {path: '/discounts',                                    component:siteProducts},
+    {path: '/popular',                                      component:siteProducts},
+    {path: '/category/:cat_id',                             component:siteProducts},
+    {path: '/category/:parent_cat_id/category/:cat_id',     component:siteProducts},
   );
 
   //Profile
@@ -116,6 +116,7 @@ let routes = [];
     {path: '/category/:catId/product/:id',    component:siteProduct},
     {path: '/category/:parent_cat_id/category/:catId/product/:id',    component:siteProduct},
     {path: '/discounts/product/:id',    component:siteProduct},
+    {path: '/popular/product/:id',    component:siteProduct},
   );
 
   //Cart

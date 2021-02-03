@@ -1,110 +1,113 @@
 <template>
-<div :class="halloween?'halloween':''">
-  <juge-main>
-    
+<juge-main :class="halloween?'halloween':''">
+  
+  <!-- Catalogue -->
+  <a name="catalogue"></a>
+  <main class="home">
+    <div class="container">
+      <!-- breadcrumb-sads -->
+      <nav v-if="$route.path != '/'" aria-label="breadcrumb-sad">
+        <ol class="breadcrumb-sad">
+          <li class="breadcrumb-sad-item"><a href="/">Каталог</a></li>
+          <li v-if="parentCategory.id > 0" class="breadcrumb-sad-item"><a :href="'/category/'+parentCategory.id">{{parentCategory.name}}</a></li>
+          <li v-if="currentCategory.id > 0" class="breadcrumb-sad-item active">{{currentCategory.name}}</li>
+        </ol>
+      </nav>
 
-    <a name="catalogue"></a>
-    <main class="home">
-      <div class="container">
-        <!-- breadcrumb-sads -->
-        <nav v-if="$route.path != '/'" aria-label="breadcrumb-sad">
-          <ol class="breadcrumb-sad">
-            <li class="breadcrumb-sad-item"><a href="/">Каталог</a></li>
-            <li v-if="parentCategory.id > 0" class="breadcrumb-sad-item"><a :href="'/category/'+parentCategory.id">{{parentCategory.name}}</a></li>
-            <li v-if="currentCategory.id > 0" class="breadcrumb-sad-item active">{{currentCategory.name}}</li>
-          </ol>
-        </nav>
+      <!-- Header -->
+      <h1 v-if="!isMobile || $route.path == '/'" class="title-h1">
+        <template v-if="isX">
+          <div class="moto">
+            <b>NEOLAVKA</b> - это продукты по закупочным ценам с оплатой только фиксированной суммы сервисного сбора (включает доставку)
+          </div>            
+        </template>
+        <template v-else>
+          <span>ЭКОдоставка</span> 
+          по выгодным ценам
+        </template>
+      </h1>
+
+      <!-- To top -->
+      <a v-if="showUp" href="#catalogue" 
+        :style="isX ? 'background-color: rgb(138 194 167);' : 'background-color: #fbe21485;'"
+        style="
+          position: fixed;
+          z-index: 9999;
+          right: 20px;
+          bottom: 50px;
+          border: 1px solid black;
+          padding: 5px;
+          border-radius: 10px;
+          color: black;
+      ">Наверх ⇑</a>
+      <div class="row content-page">          
 
 
-        <h1 v-if="!isMobile || $route.path == '/'" class="title-h1">
-          <template v-if="isX">
-            <div class="moto">
-              <b>NEOLAVKA</b> - это продукты по закупочным ценам с оплатой только фиксированной суммы сервисного сбора (включает доставку)
-            </div>            
-          </template>
-          <template v-else>
-            <span>ЭКОдоставка</span> 
-            по выгодным ценам
-          </template>
-        </h1>
+        <!-- Desktop menu -->
+        <div v-if="!isMobile" class="col-lg-4">
+          <categories-menu v-scroll="handleScroll" />
+        </div>
 
-        <!-- To top -->
-        <a v-if="showUp" href="#catalogue" 
-          :style="isX ? 'background-color: rgb(138 194 167);' : 'background-color: #fbe21485;'"
-          style="
-            position: fixed;
-            z-index: 9999;
-            right: 20px;
-            bottom: 50px;
-            border: 1px solid black;
-            padding: 5px;
-            border-radius: 10px;
-            color: black;
-        ">Наверх ⇑</a>
-        <div class="row content-page">          
-
-
-          <!-- Desktop menu -->
-          <div v-if="!isMobile" class="col-lg-4">
-            <categories-menu v-scroll="handleScroll" />
+        <div  class="col-12 col-lg-8 d-sm-block product-list-wrapper" :class="currentCategory.id === false ? 'd-none' : ''">
+          
+          <div class="title-wrap title-page">
+            <h2 class="title-h2">{{active.name}}</h2>
+            <!-- Фильтр и сортировка -->
+            <div class="filter">            
+              <!-- Sort -->
+              <product-sorts />
+              <!-- Filters -->
+              <product-filters />
+            </div>
           </div>
 
-          <div  class="col-12 col-lg-8 d-sm-block product-list-wrapper" :class="currentCategory.id === false ? 'd-none' : ''">
-            
-            <div class="title-wrap title-page">
-              <h2 class="title-h2">{{active.name}}</h2>
-              <!-- Фильтр и сортировка -->
-              <div class="filter">            
-                <!-- Sort -->
-                <product-sorts />
-                <!-- Filters -->
-                <product-filters />
-              </div>
+          <!-- Moblie menu -->
+          <categories-menu-mobile v-if="isMobile" />
+
+          <!-- Product list -->
+          <div class="row" v-if="!isMobile || active || isSearch">
+            <!-- Карточка товара -->
+            <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 " style="padding-left: 5px; padding-right: 5px;">
+              <product-gallery-card :product="product" />
             </div>
-
-            <!-- Moblie menu -->
-            <categories-menu-mobile v-if="isMobile" />
-
-            <!-- Product list -->
-            <div class="row" v-if="!isMobile || active || isSearch">
-              <!-- Карточка товара -->
-              <div v-for='(product,i) in products' :key='i' class="col-6 col-lg-4 " style="padding-left: 5px; padding-right: 5px;">
-                <product-gallery-card :product="product" />
-              </div>
-            </div>
-
-            <!-- Nothing Found -->
-            <span v-if="products.length < 1 && isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
-              <b>Ничего не найдено</b>
-            </span>            
-            
-            <!-- Loading -->
-            <div v-if="(!isMobile || active) && (isWaterfalling || !isFetched)" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
-              <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
-            </div>
-
-            <!-- Not found -->
-            <div v-if="!isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">              
-              <a href="/" v-if="isMobile && $route.path == '/discounts'"><button class="btn-yellow btn-thick">Перейти в каталог магазина</button></a>
-              <product-not-found v-else />   
-            </div>   
-                  
-
           </div>
 
+          <!-- Nothing Found -->
+          <span v-if="products.length < 1 && isFetched && !isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
+            <b>Ничего не найдено</b>
+          </span>            
+          
+          <!-- Loading -->
+          <div v-if="(!isMobile || active) && (isWaterfalling || !isFetched)" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
 
-          <!-- <categories-slider /> -->
+          <!-- Not found -->
+          <div v-if="!isWaterfalling" style="display: flex;justify-content: center;  width: 100%;  margin: 20px 0;">              
+            <a href="/" v-if="isMobile && $route.path == '/discounts'"><button class="btn-yellow btn-thick">Перейти в каталог магазина</button></a>
+            <product-not-found v-else />   
+          </div>   
+                
 
         </div>
+
+
+        <!-- <categories-slider /> -->
+
       </div>
-    </main>
+    </div>
+  </main>
 
+  <!-- Invite popup -->
+  <x-popup v-if="showInvitePopup" :title="'Вы приглашены в закупку!'" :active="showInvitePopup" @close="showInvitePopup=false" id="share-order-neighbor-modal">
+    <div class="m-3">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. At suscipit atque officiis beatae fuga ipsa debitis neque similique voluptas nemo.
+    </div>
+  </x-popup>
 
-  </juge-main>
-
-</div>
+</juge-main>
 </template>
 
 <script>
@@ -115,6 +118,7 @@ export default {
     busy:false,
     categoriesActive:false,
     showUp:false,
+    showInvitePopup:false,
   }},
   computed:{
     ...mapGetters({
@@ -155,6 +159,13 @@ export default {
     }
   },
   async mounted(){
+
+    //Show invite popup
+    if(this.$route.query != undefined && this.$route.query.invited){
+      this.showInvitePopup = true;
+      this.$router.push('/');
+    }
+
     this.fetchFavorites();
     this.setWaterfall(1);
   },

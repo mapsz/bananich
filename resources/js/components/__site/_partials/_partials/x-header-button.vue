@@ -13,7 +13,7 @@
       <!-- Order not confirm -->
       <template v-else>
         <button @click="goToOrder()" class="x-btn">
-          подтвердить закупку
+          Завершить оформление заказа
         </button>
       </template>
     </template>

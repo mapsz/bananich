@@ -78,12 +78,16 @@ class OrderController extends Controller
       }      
       //Get Settings
       $settings = new Setting(); $settings = $settings->getList(1);
+      //Site
+      $site = false;
+      if(strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false){
+        $site = 'x';
+      }
     }
     
     JugeLogs::log(2, json_encode(['model' => 'orderController', 'user' => $userId]));
     
     {//Validate
-      
       {//Validate Cart
         $cartValidate = [
           'items'           => ['bail','min:1'],
@@ -166,7 +170,7 @@ class OrderController extends Controller
       JugeLogs::log(4, json_encode(['model' => 'orderController', 'user' => $userId]));
 
       {//Validate available days
-        Order::validateAvailableDays($data['deliveryDate'],$data['deliveryTime']);
+        Order::validateAvailableDays($data['deliveryDate'], $data['deliveryTime'], $cart);
       }
 
       JugeLogs::log(5, json_encode(['model' => 'orderController', 'user' => $userId]));

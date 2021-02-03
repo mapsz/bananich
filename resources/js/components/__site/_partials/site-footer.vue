@@ -11,8 +11,17 @@
                 <div v-else class="m-0 pb-lg-2 phone"><a :href="'tel:'+settings.phone_number">{{settings.phone_number}}</a></div>
               </template>
               <div class="m-0 footer-soc d-flex ">
-                <!-- <a href="https://instagram.com/bananich.ru" target="_blank" class="footer-soc-link"><img src="/image/insta.svg" alt="Мы в instagram"></a> -->
-                <!-- <a href="https://vk.com/bananichru" target="_blank" class="footer-soc-link"><img src="/image/vk.svg" alt="Мы в контакте"></a> -->
+                <!-- socials -->
+                <template v-if="isX && settings">
+                  <!-- instagram -->
+                  <a v-if="settings.x_instagram != undefined" :href="settings.x_instagram" target="_blank" class="footer-soc-link">
+                    <img src="/image/insta.svg" alt="Мы в instagram">
+                  </a>
+                  <!-- vkontakte -->
+                  <a v-if="settings.x_vkontakte != undefined" :href="settings.x_vkontakte" target="_blank" class="footer-soc-link">
+                    <img src="/image/vk.svg" alt="Мы в контакте">
+                  </a>
+                </template>
               </div>
             </div>
           </div>

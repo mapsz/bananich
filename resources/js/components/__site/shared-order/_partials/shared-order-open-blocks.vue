@@ -1,54 +1,50 @@
 <template>
   <div>
     <div v-if="maxCount" class="shared-order-open-container">      
-      <div v-for="(n, i) in maxCount" :key="i" class="shared-order-open-block mb-3">
-
-        <div v-if="(inviteSOrder && inviteSOrder.member_count > 0) && inviteSOrder.member_count == n" class="shared-order-open-announce">
-          <span class="info-icon"></span> 
-          <span class="shared-order-open-announce-text ml-2">Вы приглашены в эту закупку</span>        
-        </div>
-
-        <div class="d-flex d-lg-block">
-
-          <!-- Price -->
-          <div class="price">
-            {{(price / n).toFixed(0)}}p
+      <template v-for="(n) in maxCount">
+        <div v-if="!isOpenPage || n > 1" :key="n" class="shared-order-open-block mb-3">
+          <div v-if="(inviteSOrder && inviteSOrder.member_count > 0) && inviteSOrder.member_count == n" class="shared-order-open-announce">
+            <span class="info-icon"></span> 
+            <span class="shared-order-open-announce-text ml-2">Вы приглашены в эту закупку</span>        
           </div>
 
-          <div>
-            <!-- Members -->
-            <div class="member-count">
-              на <b>{{n}}</b> участника
+          <div class="d-flex d-lg-block">
+
+            <!-- Price -->
+            <div class="price">
+              {{(price / n).toFixed(0)}}p
             </div>
-            <!-- Wight -->
-            <div class="max-weight">
-              <b>макс. вес</b> - {{(weight / n).toFixed(2).replace('.00', "")}} кг. 
-            </div>     
-          </div>   
+
+            <div>
+              <!-- Members -->
+              <div class="member-count">
+                на <b>{{n}}</b> участника
+              </div>
+              <!-- Wight -->
+              <div class="max-weight">
+                <b>макс. вес</b> - {{(weight / n).toFixed(2).replace('.00', "")}} кг. 
+              </div>     
+            </div>   
+          </div>
+          
+          <!-- Button -->
+          <div v-if="!isOpenPage" class="d-flex justify-content-center shared-order-open-button">
+
+            <a v-if="(invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)) && inviteOrder.member_count == n" :href="'/shared/order/' + inviteSOrder.link">
+              <button class="x-btn">
+                Присоединиться к закупке
+              </button>
+            </a>
+
+            <a v-else :href="n > 1 ? '/shared/order?pre='+n : 'checkout'">
+              <button class="x-btn">
+                {{n > 1 ? 'Открыть закупку' : 'Оформить заказ'}}
+              </button>
+            </a>
+          </div>
         </div>
-        
-        <!-- Button -->
-        <div class="d-flex justify-content-center shared-order-open-button">
-
-          <a v-if="(invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)) && inviteOrder.member_count == n" :href="'/shared/order/' + inviteSOrder.link">
-            <button   
-              class="x-btn"
-            >
-              Присоединиться к закупке
-            </button>
-          </a>
-
-          <a v-else :href="n > 1 ? '/shared/order?pre='+n : 'checkout'">
-            <button 
-              class="x-btn"
-            >
-              {{n > 1 ? 'Открыть закупку' : 'Оформить заказ'}}
-            </button>
-          </a>
-        </div>
-
-      </div>  
-    </div>
+      </template>    
+    </div>  
     <div class="d-flex justify-content-center">
       *Организационный сбор будет включен в вашу накладную, которую можно оплатить по факту доставки
     </div>
@@ -84,6 +80,10 @@ computed:{
   weight(){
     if(this.settings == undefined || this.settings.x_order_weight  == undefined) return false;
     return this.settings.x_order_weight;
+  },
+  isOpenPage(){
+    if(this.$route.name == 'sharedOrderOpen') return true;
+    return;
   }
 },
 watch:{

@@ -18,8 +18,9 @@
 
         <div class="row content-page checkout-data">
 
+          <!-- Inputs -->
           <div class="col-lg-6">
-            <div class="content">
+            <div class="content pb-0 mb-3">
               <checkout-contact class="checkout-div " v-model="data.contacts" />
 
               <checkout-login class="checkout-div" />
@@ -31,8 +32,8 @@
               <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
 
               <div class="row checkout-div">
-                <div class="col-12 col-lg-6">
-                  <checkout-container v-if="!isX" v-model="data.container"/>
+                <div v-if="!isX" class="col-12 col-lg-6">
+                  <checkout-container v-model="data.container"/>
                 </div>
                 <div class="col-12 col-lg-6">
                   <checkout-paymethod v-model="data.paymethod"/>
@@ -45,19 +46,23 @@
 
             </div>
           </div>
+          <!-- Numbers -->
           <div class="col-lg-5 offset-lg-1">
             <div v-if="isX">
-              <shared-order-numbers class="mb-4"/>
-              <!-- Aggrees -->
+              <shared-order-numbers class="mb-3"/>
               <checkout-agreements />
+            </div>            
+            <div v-if="!isX">
               <juge-errors :errors="errors"/>
-              <div class="d-flex justify-content-center">
-                <button class="x-btn" @click="doOrder('x')">Оформить заказ</button>
-              </div>              
-            </div>
-            <div v-else>
               <checkout-checkout :errors="errors" @do-order="doOrder()"/>
             </div>            
+          </div>          
+          <!-- Buttons -->
+          <div v-if="isX"  class="col-lg-12 mb-5">
+            <juge-errors :errors="errors"/>
+            <div class="d-flex justify-content-center">
+              <button class="x-btn" @click="doOrder('x')">Оформить заказ</button>
+            </div>              
           </div>
         </div>
       </div>

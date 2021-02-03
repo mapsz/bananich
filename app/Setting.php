@@ -26,6 +26,8 @@ class Setting extends Model
     'x_pay_close_hours'         => 6,
     'x_weight_step_kg'          => 5,
     'x_weight_step_price'       => 50,
+    'x_instagram'               => 'https://www.instagram.com/neolavka_spb/',
+    'x_vkontakte'               => 'https://vk.com/neolavka',
   ];
 
 

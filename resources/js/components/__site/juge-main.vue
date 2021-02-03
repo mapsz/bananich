@@ -42,24 +42,14 @@ async mounted() {
     //Get my shared order
     await this.fetchMySharedOrder();
 
-    //Shared order
-    if(this.$route.name != undefined && this.$route.name == 'sharedOrder'){
-
+    
+    {//Shared order
       {//Get shared order
         await this.filter({'link':this.link});
         await this.get();
       }
-      
-      //Set invite
-      if(
-        this.myOrder.id == undefined && 
-        this.sOrder.link != undefined &&
-        this.sOrder.joinable
-      ){
-        Cookies.set('x_invite', this.sOrder.link);
-      }
-
     }
+      
 
     //Fist Time
     // if(!Cookies.get('x_not_first_time') && this.myOrder.id == undefined && this.$route.name != 'welcome'){

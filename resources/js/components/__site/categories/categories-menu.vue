@@ -114,14 +114,14 @@ export default {
       }
     },
     async setPopular(){
-      this.$router.push('/');
+      if(this.$route.path != '/') this.$router.push('/');
       this.setActive(false);
       await this.addFilter({'category':0});  
       await this.addFilter({'popular':1}) ; 
       this.fetchProducts();    
     },
     async setDiscounts(){
-      this.$router.push('/');
+      if(this.$route.path != '/') this.$router.push('/');
       this.setActive(false);
       await this.addFilter({'category':0});
       await this.addFilter({'only_discounts':1});

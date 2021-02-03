@@ -2,7 +2,7 @@
   <div>
     <juge-main>
     
-      <div class="container my-3">
+      <div v-if="show" class="container my-3">
 
         <!-- Header -->
         <div v-if="sOrder" class="my-5">
@@ -330,7 +330,7 @@
             </div>
 
             <!-- Pay method -->
-            <div style="position:relative;">              
+            <div style="position:relative;">
               <hr class="my-30">
               <div>
                 <span class="label" style="">способ оплаты</span>
@@ -402,7 +402,7 @@
                   Редактировать 
                 </button>
                 <span style="font-size:16px;color: rgba(0, 0, 0, 0.6);">
-                  (Вы можете вносить изменения в дату и время закупки пока к ней никто еще не присоединился)
+                  (Вы можете вносить изменения в дату и время закупки пока к ней никто не присоединился)
                 </span>                
               </div>
               <!-- Cancel order -->
@@ -433,7 +433,7 @@
                 <div class="shared-order-confirmed">
                   <span class="shared-order-confirmed-check">✔️</span>
                   <span>
-                    <span class="shared-order-confirmed-success">Ваш заказ оформлен.</span>
+                    <div class="shared-order-confirmed-success">Ваш заказ оформлен.</div>
                     Вы можете внести изменения до
                     {{moment(sOrder.order_close).locale("ru").format('LLL')}}
                   </span>
@@ -445,10 +445,8 @@
 
 
         <!-- Confirm -->
-        <!-- <div class="row">
-          
-        </div> -->
-        
+        <!-- <div class="row">          
+        </div> -->       
         
 
         <div v-if="0">
@@ -641,8 +639,6 @@
 
         </div>
 
-
-
       </div>
 
 
@@ -707,6 +703,8 @@ data(){return{
   neighborAnnouceShow:0,
   errors:[],
   time:1,
+  show:false,
+  redirectQuery:false,
 }},
 computed:{
   ...mapGetters({
@@ -843,6 +841,9 @@ computed:{
     if(!this.sOrder || this.sOrder.status_id == undefined) return false;
     if(!(this.sOrder.status_id == 100 || this.sOrder.status_id == 200)) return false;
     return true;
+  },
+  invite(){
+    return Cookies.get('x_invite');
   }
 
 },
@@ -851,6 +852,40 @@ watch:{
     if(!this.sOrder || this.sOrder.member_count == undefined) return;
     this.changeMemberCount = this.sOrder.member_count;    
     this.getWeights();
+
+    //Redirect
+    if(this.redirectQuery) return;
+
+    let toGallery = false;
+    let show = false;
+    
+    //Sorder open?
+    if(this.sOrder.open){
+      //User in?
+      if(this.userIn){
+        show = true;
+      }else{
+        //Got invite?
+        if(this.invite != this.link){
+          this.addInvite();
+          toGallery = true;
+        }else{
+          show = true;
+        }
+      }
+    }else{
+      //User in?
+      if(this.userIn){
+        show = true;
+      }else{
+        toGallery = true;
+      }
+    }
+
+    //Redirect
+    if(toGallery) location.href = '/?invited=true';
+    if(show) this.show = true;
+
     return;
   },    
   showModalContacts: function (val, oldVal) {
@@ -864,20 +899,19 @@ watch:{
 },
 async mounted(){
 
+  //Update
   if(this.sOrder){
     await this.update();
   }  
-
-
   
   //Neighbor accounce
   if(this.$route != undefined && this.$route.query != undefined  && this.$route.query.neighbor != undefined && this.$route.query.neighbor){
     this.neighborAnnouceShow = 1;
     this.$router.replace({});
   }
-
+  
+  //Trigger timer
   this.timerTrigger();
-
 
 },
 methods:{
@@ -886,6 +920,11 @@ methods:{
     'get':'sharedOrder/fetchData',
     'update':'sharedOrder/update',
   }),
+  addInvite(){
+    if(this.link){
+      Cookies.set('x_invite', this.sOrder.link);
+    }    
+  },
   timerTrigger(){
     setTimeout(() => { 
       this.timerTrigger();

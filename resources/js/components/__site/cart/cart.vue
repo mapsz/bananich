@@ -2,7 +2,7 @@
 <juge-main>
   <div :class="halloween?'halloween':''">   
 
-    <main class="cart-page">
+    <main class="cart-page mb-5">
       <div class="container">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
@@ -58,52 +58,7 @@
                 <template>
                   <!-- X bananich -->
                   <template v-if="isX">
-                    <!-- No order -->
-                    <template v-if="myOrder == undefined || myOrder.id == undefined">
-                      
-                      <div class="x-cart-do-button">
-                        <a href="/checkout">
-                          <button class="x-btn" style="padding:0 9px; margin: 0 -10px;">👤 Оформить индивидуальный заказ</button>                    
-                        </a>
-                        <div v-if="settings && settings.x_order_price != undefined && settings.x_order_price > 0">
-                          Организационный взнос {{settings.x_order_price}}p.
-                        </div>
-                      </div>
-
-                      <div class="x-or my-3">
-                        <span class="x-or-line"><hr></span>
-                        <span class="x-or-or">ИЛИ</span>
-                        <span class="x-or-line"><hr></span>
-                      </div>
-
-                      <div class="x-cart-do-button">
-                        <a href="/shared/order">                    
-                          <button class="x-btn" style="padding:0 10px; margin: 0 -10px;">👥 Оформить коллективную закупку</button>                    
-                        </a>
-                        <div>
-                          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deserunt, aliquid!
-                        </div>
-                      </div>
-
-                    </template>
-                    <!-- is Order -->
-                    <template v-else>
-                      <template v-if="confirm">
-                        <div class="shared-order-confirmed">
-                          <span class="shared-order-confirmed-check">✔️</span>
-                          <span>
-                            <span class="shared-order-confirmed-success">Ваш заказ оформлен.</span>
-                            Вы можете внести изменения в корзину до
-                            {{moment(myOrder.order_close).locale("ru").format('LLL')}}
-                          </span>
-                        </div>                          
-                      </template>
-                      <template v-else>
-                        <button @click="goToOrder()" class="x-btn">
-                          Оформить
-                        </button>
-                      </template>
-                    </template>
+                    <cart-buttons />
                   </template>                  
                   <!-- Normal bananich -->
                   <template v-if="!isX">
@@ -139,7 +94,7 @@
           </div>
         </div>
 
-        <div v-if="isX && myOrder.id == undefined" class="row my-5">
+        <div v-if="0 && isX && myOrder.id == undefined" class="row my-5">
 
           <div v-if="0 && cart && cart.items != undefined && cart.items.length > 0" class="announce-block mb-5">
             <div style="color:#da00ff">Что с этим блоком?</div>

@@ -36,8 +36,8 @@
           <checkout-contact class="checkout-div " :design="'x'" v-model="data.contacts"  :no-cache="true"/>
 
           <div class="row checkout-div">
+            <checkout-paymethod v-model="payMethod" :no-cache="true"/>            
             <!-- <checkout-container v-model="data.container"  :no-cache="true"/> -->
-            <checkout-paymethod v-model="payMethod" :no-cache="true"/>
           </div>
           
           <checkout-comment class="checkout-div" v-model="data.comment" :no-cache="true"/>

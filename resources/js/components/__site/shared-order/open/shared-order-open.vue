@@ -6,6 +6,10 @@
         <div v-if="!isEdit" class="x-header">Формирование коллективной закупки</div>
         <div v-if="isEdit" class="x-header">Редактирование коллективной закупки</div>
 
+        <!-- Open blocks -->
+        <shared-order-open-blocks class="mt-5" v-if="!isEdit"/>
+
+        <!-- Inputs -->
         <div class="inputs">
 
           <!-- Member count -->
@@ -20,7 +24,7 @@
                   <template v-for="(n, i) in maxMemberCount">
                     <span
                       v-if="n > 1"
-                      :key="i"
+                      :key="n"
                       @click="data.memberCount = n"
                       :style="data.memberCount == n ? 'font-weight: 600;' : ''"
                     >
@@ -93,7 +97,7 @@
           </template>
 
           <!-- Comment -->
-          <template>
+          <template v-if="0">
             <hr class="my-30">
             <div class="row">
               <div class="col-12 col-lg-6 mb-3 label">
@@ -221,7 +225,7 @@ export default {
 components: {Datepicker},
 data(){return{
   data:{
-    memberCount:1,
+    memberCount:2,
     address:null,
     date:null,
     time:null,
@@ -414,6 +418,10 @@ watch:{
   }
 },
 async mounted(){
+
+  
+  if(this.$route.path == '/shared/order') this.$router.push('/shared/order/open');
+
   await this.handle();
 
   //Check edit
@@ -446,6 +454,8 @@ methods:{
     'update':'sharedOrder/update',
   }),  
   async open(neighbor = false){
+    if(!this.user){this.showLogin = true;return}
+    
     //Refresh errors
     this.errors = [];
     if(this.data.dateTime != undefined){
@@ -520,7 +530,7 @@ methods:{
     font-size: 30px;
   }
   .inputs{
-    margin-top:200px;
+    margin-top:100px;
   }
   .actions{
     margin-top:50px;

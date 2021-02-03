@@ -2,6 +2,12 @@
 
 @section('content')
 
+<?php
+
+if(!isset($site)) $site = false;
+
+?>
+
 
 {{-- в данных отдельно примененный прромокод выведи плиз, коммент, реферала, спсоб оплаты и упаковки, остальное по данным норм. ТЕкст вот так правим: --}}
 
@@ -65,7 +71,7 @@
             @break  
 
           @default
-            {{dd($order['pay_method'])}}
+            Не указано
 
         @endswitch            
       </b>
@@ -136,14 +142,24 @@
       <tr>
         <td></td>
         <td>Подытог:</td>
-        <td align="right">{{$order['items_total']}} {{$c}}</td>
+        <td align="right">@if($site == 'x') {{$order['x_items_total']}} @else {{$order['items_total']}} @endif {{$c}}</td>
       </tr>
       {{-- Shipping --}}
-      <tr>
-        <td></td>
-        <td>Доставка:</td>
-        <td align="right">{{$order['shipping']}} {{$c}}</td>
-      </tr>
+      @if($site != 'x')
+        <tr>
+          <td></td>
+          <td>Доставка:</td>
+          <td align="right">{{$order['shipping']}} {{$c}}</td>
+        </tr>
+      @endif
+      {{-- Participation --}}
+      @if($site == 'x')
+        <tr>
+          <td></td>
+          <td>Орг. взнос:</td>
+          <td align="right">{{$order['xData']['participation_price']}} {{$c}}</td>
+        </tr>
+      @endif
       {{-- Bonus --}}
       @if ($order['bonus'] != 0)
         <tr>

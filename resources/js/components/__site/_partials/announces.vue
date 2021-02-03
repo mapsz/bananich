@@ -37,7 +37,7 @@ computed:{
     cart:       'cart/getCart',
     sOrders:    'sharedOrder/get',
     myOrder:    'sharedOrder/getMyOrder',
-    inviteOrder:    'sharedOrder/getInviteOrder',
+    inviteOrder:'sharedOrder/getInviteOrder',
     invite:     'sharedOrder/getInviteLink',
     settings:   'settings/beautyGet',
     user:       'user/get',
@@ -103,12 +103,24 @@ computed:{
 
     if(
       (this.$route.name != 'sharedOrder') &&
-      (this.invite != undefined && this.invite) && 
-      (inviteOrder.status_id == 100 || inviteOrder.status_id == 200) && 
+      (this.invite != undefined && this.invite) &&       
+      (this.inviteOrder != undefined && this.inviteOrder.joinable) && 
       !this.myOrder
     ){
       statics.push(
         {'_body':'Вы приглашены принять участие в <a href="/shared/order/'+this.invite+'">совместной закупке</a> на Neo Lavka'}
+      );
+    }
+
+    if(
+      (this.$route.name != 'sharedOrderOpen') &&
+      (this.invite != undefined && this.invite) &&       
+      (this.inviteOrder != undefined) && 
+      (this.inviteOrder.member_count <= this.inviteOrder.users.length) && 
+      !this.myOrder
+    ){
+      statics.push(
+        {'_body':'К сожалению, в закупке, в которую вы были приглашены, уже нет мест. Вы можете <a href="/shared/order/open">создать свою закупку</a>'}
       );
     }
 

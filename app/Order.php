@@ -106,10 +106,12 @@ class Order extends Model
 
   }
 
-  public static function getAvailableDays($type = 1){
+  public static function getAvailableDays($type = 1, $cart = false){
     
     //Get Cart
-    $cart = Cart::getCart(['type' => $type]);
+    if(!$cart){
+      $cart = Cart::getCart(['type' => $type]);
+    }    
 
     {//Get settings
       $settings = self::getLimitSettings();
@@ -259,11 +261,23 @@ class Order extends Model
 
   }
 
-  public static function validateAvailableDays($_date, $_time, $type = false){
+  public static function validateAvailableDays($_date, $_time, $cart){
 
-    $availableDay     = false;
-    $availableTime    = false;
-    $days = Order::getAvailableDays($type);
+    
+    {//Cart
+      if(isset($cart['type'])){
+        $type = $cart['type'];
+      }else{
+        $type = $cart;
+        $cart = false;
+      }
+    }
+
+    {//Data
+      $availableDay     = false;
+      $availableTime    = false;
+      $days = Order::getAvailableDays($type, $cart);
+    }
     
     //Check availables
     foreach ($days as $key => $day) {
@@ -432,6 +446,12 @@ class Order extends Model
       ]);
     }
 
+    //Add x prices
+    if($order->type == 'x'){
+      DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'participation_price', 'value'=>$order->xData['participation_price']]);
+      DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'over_weight_price', 'value'=>$order->xData['overWeightPrice']]);
+    }
+
     JugeLogs::log(8, json_encode(['model' => 'order', 'user' => $customer_id]));
 
     //Coupon
@@ -491,11 +511,13 @@ class Order extends Model
 
       JugeLogs::log(2, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
 
-      //Random id
-      if(isset($data['id']) && $data['id'] > 0){
-        $randomId = $data['id'];
-      }else{
-        $randomId = self::generateRandomId();
+      
+      {//Random id
+        if(isset($data['id']) && $data['id'] > 0){
+          $randomId = $data['id'];
+        }else{
+          $randomId = self::generateRandomId();
+        }
       }
       
       JugeLogs::log(3, json_encode(['model' => 'putOrder', 'user' => $customer_id]));
@@ -559,6 +581,11 @@ class Order extends Model
         }
       }
 
+      //Price x
+      if($cart['type'] == 2){
+        $price = $item['final_price_x'];
+      }
+
       {//Save item
         $putItem = new Item;
         $putItem->order_id    = $orderId;
@@ -574,6 +601,7 @@ class Order extends Model
       //Save status
       Item::find($putItem->id)->statuses()->attach(100);
 
+      
       //Price  TODO @@@ херня какая-то
       if(isset($item['discount']) && isset($item['discount']->discount_price) && $item['discount']->discount_price > 0){
         self::putDiscount((object)[
@@ -1123,13 +1151,10 @@ class Order extends Model
             $order->items_total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total : $order->x_items_subtotal;
             $order->items_total_result = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total_result : $order->x_items_total_result;
           }
-
             
         }
       
       }
-
-
 
       // Gruzka_priority
       if(isset($request['gruzka_priority'])){
@@ -1259,11 +1284,9 @@ class Order extends Model
           $order = $order->id;
         }
 
-        if(!$order) return false;
+        if(!$order) return false;      
 
-        
-
-        {//Sync          
+        {//Sync
           {//Delete old
             Item::where('order_id', $order)->delete();
           }         
@@ -1287,8 +1310,6 @@ class Order extends Model
             return $insert;
           }
         }
-
-
         
         return false;
         

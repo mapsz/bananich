@@ -885,18 +885,35 @@
     dd(10);
     
   });
-  
+
+}
+
+{//Mail test
   Route::get('/mail/preview/{id}', function($id){
+
+
+
+
+
+    $order = App\Order::getWithOptions(['id'=>$id]);
+
+
+    return view('mail.mailOrder', ['order' => $order, 'site' => 'x']);
+
+
+
+
+
   
   
     // $order = App\Order::getWithOptions(['id'=>$id]);
   
     // dump(  $order->toarray());
   
-    $user = App\User::find(751);
-    $email = App\Email::jugeGet(['id'=>$id]);
+    // $user = App\User::find(751);
+    // $email = App\Email::jugeGet(['id'=>$id]);
   
-    $html = App\Email::customTags($email->html,$user);
+    // $html = App\Email::customTags($email->html,$user);
   
     // dump($html);
   
@@ -919,9 +936,10 @@
   
   
     // return view('mail.test');
-    return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
+    // return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
   });
 }
+
 
 {//crone
   //Logistic

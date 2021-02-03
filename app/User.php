@@ -220,12 +220,12 @@ class User extends Authenticatable
   public function comment(){
     return $this->hasOne('App\UserComment');
   }
-  // public function addresses(){
-  //   return $this->hasMany('App\UserAddress');
-  // }
-  public function address(){
-    return $this->morphMany('App\Address', 'addressable');
+  public function addresses(){
+    return $this->hasMany('App\UserAddress');
   }
+  // public function address(){
+  //   return $this->morphMany('App\Address', 'addressable');
+  // }
   public function referal(){
     return $this->hasOne('App\UserReferal');
   }

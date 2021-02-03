@@ -483,6 +483,8 @@ class SharedOrder extends Model
         }
         $statusId = $order->x_confirm ? 900 : 0;
         Order::changeStatus($order->id, $statusId);
+        DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'participation_price', 'value'=>$order->xData['participation_price']]);
+        DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'over_weight_price', 'value'=>$order->xData['overWeightPrice']]);
       }
     }    
 
@@ -674,16 +676,22 @@ class SharedOrder extends Model
             }
           }
         }
+        {//Open
+          $row['open'] = false;
+          if($row->status_id == 100 || $row->status_id == 200){
+            $row['open'] = true;
+          }
+        }
         {//Editable
           $row['editable'] = false;
-          if(count($row->users) < 2 && ($row->status_id == 100 || $row->status_id == 200)){
+          if(count($row->users) < 2 && $row['open']){
             $row['editable'] = true;
           }
         }
         {//Joinable
           $row['joinable'] = false;
           if(
-            ($row->status_id == 100 || $row->status_id == 200) && 
+            $row['open'] && 
             (count($row->users) < $row->member_count)
           ){
             $row['joinable'] = true;

@@ -36,9 +36,9 @@
             {{product.short_info}}
           </div>  
           <!-- Shelf Life -->  
-          <div v-if="product.shelf_life && product.shelf_life != ''">
+          <!-- <div v-if="product.shelf_life && product.shelf_life != ''">
             {{product.shelf_life}}
-          </div>
+          </div> -->
         </div>
         <!-- Not available -->
         <div v-if="notAloved" class="juge-catalogue-item-not-available" />
