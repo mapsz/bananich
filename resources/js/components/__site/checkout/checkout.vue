@@ -116,8 +116,8 @@ export default {
       if(r > 0){
         await ax.fetch('/order/log/success', {}, 'put');
         //Trackers
-        if(!localServer){
-          ym(54670840,'reachGoal','ordered')
+        if(!localServer && ym != undefined){
+          ym(54670840,'reachGoal','ordered');
           fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
         } 
         this.clean();
