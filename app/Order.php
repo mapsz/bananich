@@ -448,8 +448,10 @@ class Order extends Model
 
     //Add x prices
     if($order->type == 'x'){
-      DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'participation_price', 'value'=>$order->xData['participation_price']]);
-      DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'over_weight_price', 'value'=>$order->xData['overWeightPrice']]);
+     
+      $fullOrder = Order::jugeGet(['id'=> $order->id]);
+      DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'participation_price', 'value'=>$fullOrder->xData['participation_price']]);
+      DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'over_weight_price', 'value'=>$fullOrder->xData['overWeightPrice']]);
     }
 
     JugeLogs::log(8, json_encode(['model' => 'order', 'user' => $customer_id]));
