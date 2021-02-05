@@ -801,7 +801,7 @@ class Order extends Model
 
       //Site
       if(isset($request['site'])){
-        $query = $query->where('type', '=', 'x');
+        $query = $query->where('type', '=', $request['site']);
       }
 
       //Shared order
