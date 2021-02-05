@@ -11,7 +11,7 @@
           {{order.id}}
         </div>
         
-        <div class="order-status m-0" 
+        <div v-if="order != undefined && order.statuses != undefined && order.statuses[0] != undefined" class="order-status m-0" 
           :style="
             //Red
             (order.statuses[0].id == 0 || order.statuses[0].id == 100 || order.statuses[0].id == 150 ? 'color:#EB5757;' : '') + 
