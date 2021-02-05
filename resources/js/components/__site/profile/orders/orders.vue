@@ -45,6 +45,9 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
+  data(){return{
+    isX:isX,
+  }},
   computed:{
     ...mapGetters({orders:'order/get',user:'user/get'}), 
   },
@@ -52,6 +55,7 @@ export default {
     user: {
       handler: async function (val, oldVal) {
         if(this.user){
+          if(this.isX) await this.addFilter({site:'x'})
           await this.addFilter({customerId:this.user.id})
           await this.addFilter({with_logistic:true})
           await this.fetch();
@@ -61,7 +65,10 @@ export default {
     }
   },
   methods:{    
-    ...mapActions({'addFilter':'order/addFilter','fetch':'order/fetchData'}),
+    ...mapActions({
+      'addFilter':'order/addFilter',
+      'fetch':'order/fetchData'
+    }),
   },
 }
 

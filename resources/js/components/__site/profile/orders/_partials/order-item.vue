@@ -17,6 +17,15 @@
         </div>
       </div>
 
+      <!-- Shared order -->
+      <div v-if="sOrder" class="mb-2">
+        <span class="sad-order-value-text m-0" style="font-weight: 400;">
+          Закупка <a :href="'/shared/order/'+sOrder.link" style="color: black; text-decoration: underline;">№{{sOrder.id}}</a> 
+        </span>
+        
+
+      </div>
+
       <!-- Delivery Date Time -->
       <div v-if="order.logistics == undefined || order.logistics[0] == undefined" class="d-flex justify-content-between w-100 mb-3">
         <div class="sad-order-value-text m-0" style="font-weight: 400;">Доставка:</div>
@@ -190,32 +199,39 @@
     
       <!-- Checkout -->
       <div class="row mx-2">
+
         <!-- Pre -->
         <div class="col-6 col-md-4 offset-md-4 col-xl-3 offset-xl-6 order-checkout-data">
           <!-- Subtotal -->
           <div v-if="order.items_total != order.total">Подытог: {{order.items_total}}</div>
-          <!-- Delivery -->
-          <div v-if="order.shipping != 0">Доставка: {{order.shipping}}</div>
-          <!-- Bonus -->
-          <div v-if="order.bonus != 0">Бонусы: {{order.bonus}}</div>
-          <!-- Coupon -->
-          <div v-if="coupon">{{coupon.code}}: {{coupon.discount}}</div>
-
-          <!-- Total -->
-          <div style="font-weight: 600;">Всего: {{order.total}}</div>
         </div>
 
         <!-- Result -->
         <div class="col-6 col-md-4 col-xl-3 order-checkout-data" v-if="order.total_result != undefined && order.total_result > 0">
           <!-- Subtotal -->
           <div v-if="order.items_total_result != order.total_result">Подытог: {{order.items_total_result}}</div>
+        </div>
+
+        <!-- Both -->
+        <div class="col-12 col-md-8 offset-md-4 col-xl-6 offset-xl-6 order-checkout-data px-1 px-md-3">
           <!-- Delivery -->
           <div v-if="order.shipping != 0">Доставка: {{order.shipping}}</div>
           <!-- Bonus -->
           <div v-if="order.bonus != 0">Бонусы: {{order.bonus}}</div>
           <!-- Coupon -->
           <div v-if="coupon">{{coupon.code}}: {{coupon.discount}}</div>
+          <!-- Participation -->
+          <div v-if="isX">Сервисный взнос: {{order.xData.participation_price}}</div>
+        </div>
 
+        <!-- Pre -->
+        <div class="col-6 col-md-4 offset-md-4 col-xl-3 offset-xl-6 order-checkout-data">
+          <!-- Total -->
+          <div style="font-weight: 600;">Всего: {{order.total}}</div>
+        </div>
+
+        <!-- Result -->
+        <div class="col-6 col-md-4 col-xl-3 order-checkout-data" v-if="order.total_result != undefined && order.total_result > 0">
           <!-- Total -->
           <div style="font-weight: 600;">Всего: {{order.total_result}}</div>
         </div>
@@ -230,6 +246,7 @@
 export default {
 props: ['order'],
 data(){return{  
+  isX:isX,
   moment:moment,
   showMore:false,
 }},
@@ -246,6 +263,10 @@ computed:{
       code:       this.order.coupons[0].code,
       discount:   discount
     }
+  },
+  sOrder(){
+    if(this.order == undefined || this.order.shared_order == undefined || this.order.shared_order.length < 0) return false;
+    return this.order.shared_order[0];
   }
 },
 }

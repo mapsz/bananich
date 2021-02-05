@@ -799,6 +799,11 @@ class Order extends Model
     
     {//Where
 
+      //Site
+      if(isset($request['site'])){
+        $query = $query->where('type', '=', 'x');
+      }
+
       //Shared order
       if(isset($request['sharedOrder']) && $request['sharedOrder'] > 0){
         $sharedOrderId = $request['sharedOrder'];
@@ -847,7 +852,6 @@ class Order extends Model
           $query = $query->where('delivery_date', '<=', $deliveryDate->to);
         }      
       }
-
       
       //Id
       if(isset($request['id']) && $request['id']){
@@ -1186,7 +1190,7 @@ class Order extends Model
           {//By type
             $order->total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_total : $order->x_total;
             $order->total_result = !(isset($order->type) && $order->type == 'x' ) ? $order->n_total_result : $order->x_total_result;
-            $order->items_total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total : $order->x_items_subtotal;
+            $order->items_total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total : $order->x_items_total;
             $order->items_total_result = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total_result : $order->x_items_total_result;
           }
             

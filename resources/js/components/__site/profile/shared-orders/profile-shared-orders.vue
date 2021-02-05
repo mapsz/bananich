@@ -35,26 +35,29 @@ data(){return{
   
 }},
 watch:{
-  user: function (val, oldVal) {
+  user: async function (val, oldVal) {
     if(!val) return false;
     if(this.sOrders.length > 0) return false;
 
-    this.filter({'member':val.id});
-    this.get();
+    await this.addFilter({customerId:this.user.id})
+    await this.addFilter({with_logistic:true})
+    await this.fetch();
   },
 },
 
 computed:{
   ...mapGetters({
     sOrders:    'sharedOrder/get',
+    orders:     'order/get',
     user:       'user/get',
   }),
 },
-
 methods:{
   ...mapActions({
-    'filter':'sharedOrder/addFilter',
-    'get':'sharedOrder/fetchData',
+    // 'filter':'sharedOrder/addFilter',
+    // 'get':'sharedOrder/fetchData',
+    'addFilter':'order/addFilter',
+    'fetch':'order/fetchData'
   }),
 }
 }
