@@ -25,7 +25,8 @@ async mounted() {
   this.links.push({link:'/profile/favorites',caption:'Избранное',});
 
   if(isX){
-    this.links.push({link:'/profile/shared/orders',caption:'Мои закупки',});
+    // this.links.push({link:'/profile/shared/orders',caption:'Мои закупки',});
+    this.links.push({link:'/profile/orders',caption:'Мои заказы',});
   }else{
     this.links.push({link:'/profile/bonus',caption:'Бонусы',});
     this.links.push({link:'/profile/orders',caption:'Мои заказы',});

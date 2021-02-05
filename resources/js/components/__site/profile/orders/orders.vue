@@ -56,6 +56,7 @@ export default {
       handler: async function (val, oldVal) {
         if(this.user){
           if(this.isX) await this.addFilter({site:'x'})
+          else await this.addFilter({site:0})
           await this.addFilter({customerId:this.user.id})
           await this.addFilter({with_logistic:true})
           await this.fetch();

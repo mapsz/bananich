@@ -44,6 +44,9 @@ watch:{
     await this.fetch();
   },
 },
+async mounted() {
+  location.href= '/profile/orders'
+},
 
 computed:{
   ...mapGetters({
