@@ -40,6 +40,8 @@
             <!-- <checkout-container v-model="data.container"  :no-cache="true"/> -->
           </div>
           
+          <checkout-confirm class="checkout-div" v-model="data.confirm" :no-cache="true"/>
+
           <checkout-comment class="checkout-div" v-model="data.comment" :no-cache="true"/>
 
 
@@ -59,7 +61,7 @@
           <!-- Errors -->
           <div class="col-12 mb-3"><div v-for='(errorz,z) in errors' :key='z+"d"'><span v-for='(error,j) in errorz' :key='j' style="color:tomato;">❗{{error}}</span></div></div>      
 
-          <shared-order-confirm class="mt-3" @confirm="doConfirm()" v-if="confirmable && confirm != 1"/>
+          <shared-order-confirm class="mt-3"  @confirm="doConfirm()" v-if="confirmable && confirm != 1"/>
           <!-- <div v-if="confirmable && confirm" class="d-flex justify-content-center mt-3">
             <button @click="edit()" class="x-btn">
               {{'Внести изменения'}}
@@ -130,6 +132,7 @@ export default {
       console.log(this.load);
       console.log(val);
       if(!val) return false;
+      if(val.confirm != undefined) this.data.confirm = val.confirm;
       if(val.name != undefined) this.data.contacts.name = val.name;
       if(val.email != undefined) this.data.contacts.email = val.email;
       if(val.phone != undefined) this.data.contacts.phone = val.phone;

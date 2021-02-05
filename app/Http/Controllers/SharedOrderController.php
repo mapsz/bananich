@@ -55,9 +55,12 @@ class SharedOrderController extends Controller
 
     //Validate
     $order = Order::find($orderId);
-    $order = $order->toArray();
-    Order::orderValidate($order);
+    $orderArray = $order->toArray();
+    //pay method временный
+    $orderArray['pay_method'] = 1; 
+    Order::orderValidate($orderArray);
 
+    //Write
     $meta = DB::table('order_metas')->updateOrInsert(
       [
         'order_id' => $orderId,
@@ -67,6 +70,12 @@ class SharedOrderController extends Controller
         'value' => 1,
       ]    
     );
+
+    //Change status
+    Order::changeStatus($orderId, 900);
+
+    //Email
+    Order::email($order);
 
     return response()->json(true);
 
@@ -116,9 +125,18 @@ class SharedOrderController extends Controller
         Validator::make(['isOpen' => $isOpen], ['isOpen' => 'required|accepted'], ['isOpen.accepted' => 'Закупка недоступна!'])->validate();    
       }
 
-      {//Full        
+      {//Full
         $isFull = count($sOrder->users) < $sOrder->member_count ? true : false;
         Validator::make(['isFull' => $isFull], ['isFull' => 'required|accepted'], ['isFull.accepted' => 'Закупка сформирована!'])->validate();        
+      }
+
+      {//Product not available
+        $productNotAvailable = false;
+        
+        $products = Order::getBadProducts(Cart::getCart(['type' => 2]), $sOrder->delivery_date);
+        if(count($products) > 0){
+          return response()->json($products, 423);
+        }        
       }
     }    
 

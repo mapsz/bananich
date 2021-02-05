@@ -27,8 +27,8 @@
       <!-- Not confirm -->
       <template v-else>
           <div class="x-cart-do-button">
-            <a :href="'/shared/order/'+link">                    
-              <button class="x-btn" style="">Завершить оформление заказ</button>                    
+            <a :href="'/shared/order/'+link+'#confirm'">                    
+              <button class="x-btn" style="">Завершить оформление заказа</button>                    
             </a>
           </div>
       </template>
@@ -42,7 +42,7 @@
           <button class="x-btn" style="padding:0 9px; margin: 0 -10px;">👤 Оформить индивидуальный заказ</button>
         </a>
         <div v-if="settings && settings.x_order_price != undefined && settings.x_order_price > 0">
-          Организационный взнос {{settings.x_order_price}}p.
+          Сервисный сбор {{settings.x_order_price}}p.
         </div>
       </div>
       
@@ -89,7 +89,7 @@
             <button class="x-btn" style="padding:0 9px; margin: 0 -10px;">👤 Оформить индивидуальный заказ</button>
           </a>
           <div v-if="settings && settings.x_order_price != undefined && settings.x_order_price > 0">
-            Организационный взнос {{settings.x_order_price}}p.
+            Сервисный сбор {{settings.x_order_price}}p.
           </div>
         </div>
 
@@ -165,7 +165,7 @@ export default {
       if(
         (this.invite != undefined && this.invite) &&       
         (this.inviteOrder != undefined && this.inviteOrder.joinable) && 
-        !this.myOrder
+        (!this.myOrder || this.myOrder.length == 0)
       ){
         return true;
       }

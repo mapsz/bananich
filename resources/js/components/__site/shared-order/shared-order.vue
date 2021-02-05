@@ -210,7 +210,7 @@
                 {{sOrder.user_price}}р
               </div> 
               <div class="value">
-                Финальная стоимость организационного сбора для вас будет рассчитана исходя из количества участников закупки. Итоговая стоимость организационного сбора {{sOrder.full_price}}р на всех
+                Финальная стоимость сервисного сбора для вас будет рассчитана исходя из количества участников закупки. Итоговая стоимость сервисного сбора {{sOrder.full_price}}р на всех
               </div>
             </div>
 
@@ -330,7 +330,7 @@
             </div>
 
             <!-- Pay method -->
-            <div style="position:relative;">
+            <div v-if="0" style="position:relative;">
               <hr class="my-30">
               <div>
                 <span class="label" style="">способ оплаты</span>
@@ -377,7 +377,7 @@
               <hr class="my-30">
               <div>
                 <span class="label" style="color: #eb5757;">сумма вашего заказа</span>
-                <button v-if="isAdmin && editable" @click="goToGallery()" class="edit float-right d-lg-none">изменить</button>
+                <button v-if="isOpen" @click="goToCart()" class="edit float-right">изменить</button>
               </div>
               <div>
                 <span class="value">{{orderSum == false ? '' : orderSum+'p'}}</span>
@@ -390,6 +390,7 @@
         </div>
 
         <!-- Actions -->
+        <a name="confirm" ref="confirmAnchor"/>
         <div class="row" v-if="sOrder">
           <div class="col-12 col-lg-6 offset-lg-6">
             <!-- Actions -->
@@ -418,7 +419,7 @@
               </div>
             </div>
 
-            <!-- Big Action -->
+            <!-- Big Action -->            
             <div v-if="isOpen && userIn" class="mb-5">
               <button v-if="items <= 0"
                 @click="goToGallery()" 
@@ -434,8 +435,10 @@
                   <span class="shared-order-confirmed-check">✔️</span>
                   <span>
                     <div class="shared-order-confirmed-success">Ваш заказ оформлен.</div>
-                    Вы можете внести изменения до
-                    {{moment(sOrder.order_close).locale("ru").format('LLL')}}
+                    <div style="color: rgba(0, 0, 0, 0.6);font-size: 14px;">
+                      Вы можете внести изменения в корзину, комментарий к заказу, контактные данные до
+                      <span style="font-weight: 600;">{{moment(sOrder.order_close).locale("ru").format('LLL')}}</span>
+                    </div>                     
                   </span>
                 </div>  
               </div>
@@ -443,207 +446,12 @@
           </div>
         </div>
 
-
-        <!-- Confirm -->
-        <!-- <div class="row">          
-        </div> -->       
-        
-
-        <div v-if="0">
-
-          <h1 class="m-3">Формирование коллективной закупки</h1>
-
-          <!-- Loading -->
-          <div v-if="!sOrder" class="d-flex m-5" style="justify-content: center;">
-            <span style="font-size: 48pt;">🍌🍌</span>
-          </div>
-          
-          <div v-if="sOrder" class="row">
-            <!-- Pay -->
-            <!-- <div class="col-4">
-              <h4>Оплата</h4>
-              <div>К оплате: {{sOrder.full_price}} </div>
-              <div>Оплачено: {{sOrder.payed}}</div>
-            </div> -->
-            
-            <!-- Invite -->
-            <div v-if="shareLink" class="col-4 border">
-              <h4>Пригласить</h4>
-
-              
-              <div>
-                <span class="text-primary">{{shareLink}}</span>
-              </div>
-              
-              <div>
-                <telegram-button
-                  :shareUrl="shareLink"
-                  :description="shareDescription"
-                />
-                <whatsapp-button
-                  :shareUrl="shareLink"
-                  :description="shareDescription"
-                />
-                <vkontakte-button
-                  :shareUrl="shareLink"
-                  :description="shareDescription"
-                />
-                <div>
-                  https://github.com/Alexandrshy/vue-share-buttons
-                </div>
-              </div>
-            </div>
-
-            <!-- Info -->
-            <div v-if="sOrder.status != undefined" class="col-4 border">
-              <h4>Данные заказа</h4>
-              <!-- Status -->
-              <div>
-                <h5>Статус</h5>
-                <div>
-                  <span :class="sOrder.status.id == 0 ? 'text-danger' : ''">{{sOrder.status.name}}</span>              
-                </div>
-              </div>
-              <!-- Address -->
-              <div>
-                <h5>Адрес</h5>
-                <div>{{sOrder.address.street}} {{sOrder.address.appart}}</div>
-              </div>
-              <!-- Time Date -->
-              <div>
-                <h5>Доставка</h5>
-                <div>{{moment(sOrder.delivery_date).locale("ru").format('LL')}}</div>
-                <div>{{sOrder.delivery_time_from}} - {{sOrder.delivery_time_to}}</div>
-              </div>
-            </div>
-
-            <!-- Timers -->
-            <div class="col-4 border">
-              <!-- Pay -->
-              <!-- <div v-if="sOrder.status != undefined" >
-                <h5>Оплата до</h5>
-                <div>{{moment(sOrder.pay_close).locale("ru").format('LLLL')}}</div>
-              </div> -->
-              <!-- Close -->
-              <div v-if="sOrder.status != undefined">
-                <h5>Закрытие</h5>
-                <div>{{moment(sOrder.order_close).locale("ru").format('LLLL')}}</div>
-              </div>
-              <!-- Test time -->
-              <div v-if="sOrder.status != undefined" class="border p-2" style="background-color: #fb00ff40;">
-                <h5>Test time</h5>
-                <div><b>now:  </b>{{moment().locale("ru").format('LLLL')}}</div>
-                <div><b>fake: </b>{{moment(sOrder.test_time).locale("ru").format('LLLL')}}</div>
-                <div class="d-flex">
-                  <label for="t-h">Hours: </label><input v-model="test.hours"  type="number" name="hour" id="t-h" style="width:60px">
-                  <label for="t-m" class="ml-3">Minutes: </label><input v-model="test.minutes"  type="number" name="minute" id="t-m"  style="width:60px">
-                  <button @click="updateTestTime()" class="btn btn-primary ml-3">add</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Weight -->
-            <div class="col-4 border">
-              <h4>Вес</h4>
-              <div v-if="weights">
-                <div><b>Общий</b></div>
-                <div>Доступно: {{sOrder.full_weight}}кг</div>
-                <div>Использовано: {{weights.overall}}кг</div>
-                <div><b>Мой</b></div>
-                <div>Доступно: {{sOrder.user_weight}}кг</div>
-                <div>Использовано: {{weights[user.id]}}кг</div>
-                <!-- <div>не использовано: {{25 - weights.overall}}кг</div> -->
-              </div>
-            </div>
-
-            <!-- Details -->
-            <div class="col-4 border">
-              <h4>Личнные данные</h4>
-              <checkout-contact class="checkout-div " v-model="data.contacts" />
-            </div>
-            
-            <!-- Users -->
-            <div class="col-4 border">
-              <div v-if="sOrder && userIn">
-                <h4>Участники</h4>
-
-                <hr>
-
-                <!-- Members -->
-                <template v-if="slots">
-                  <div v-for="(n, i) in sOrder.member_count" :key="i">
-                    <!-- Member -->
-                    <div>
-                      <div v-if="slots[n].user != undefined">
-                        <!-- Name -->
-                        <span :class="slots[n].user.id == user.id  ? 'text-info' : ''">
-                          <span v-if="slots[n].user.id == sOrder.owner_id">👑</span> {{slots[n].user.name}} {{slots[n].user.email}}
-                        </span>
-                        <!-- kick -->
-                        <span v-if="isAdmin">
-                          <button v-if="slots[n].user.id != user.id" @click="kick(slots[n].user.id)" class="btn btn-danger btn-sm">
-                            выкинуть 🥾
-                          </button>
-                        </span>
-                        <!-- Weight -->
-                        <div v-if="weights">
-                          Вес: {{weights[slots[n].user.id]}}
-                        </div>  
-                      </div>
-                      <!-- Invite -->
-                      <div v-else>
-                        <i style="font-style: italic;">Invite!</i> 
-                      </div>
-                    </div>
-
-                    <!-- Pay -->
-                    <div>
-                      <!-- <div v-if="slots[n].pay == undefined">
-                        <button 
-                          @click="pay(user.id, n)" 
-                          class="btn btn-info"
-                        >
-                          Оплатить {{sOrder.user_price}}p
-                        </button>
-                      </div> -->
-                      <!-- Pay -->
-                      <!-- <div v-else>
-                        <span class="text-success">Оплачено</span>
-                        <span>
-                          {{slots[n].pay.user.name}} {{slots[n].pay.user.email}}
-                        </span>
-                      </div> -->
-                    </div>
-
-                    <hr>
-                  </div>
-                </template>
-
-                <!-- Change member count -->
-                <div v-if="isAdmin" class="form-group">
-                  <label for="member-count">Количество участников: <b>{{changeMemberCount}}</b></label>
-                  <input v-model="changeMemberCount" type="range" class="form-control" id="member-count" min="1" max="5">
-                  <button @click="post({'member_count':changeMemberCount})" class="btn btn-sm btn-success">Сохранить</button>
-                </div>
-
-              </div>
-              <button v-if="!userIn" @click="join()" class="btn btn-primary">Присоединиться</button>
-            </div>   
-
-            <!-- Cancel -->
-            <div v-if="isAdmin && sOrder.status.id > 0" class="col-4 border">
-              <button @click="sOrderCancel()" class="btn btn-danger m-3">Отменить закупку</button>
-            </div>       
-
-          </div>
-
-        </div>
-
       </div>
 
 
       <!-- Other -->
       <template>
+        <!-- Open success -->
         <login-modal :p-show="showLogin" :p-show-type="'signup'" @close="showLogin=false" />
         <x-popup :title="'Спасибо, что открыли закупку!'" :active="0">
           Мы предложим вашим соседям присоединиться к вашей закупке. Участников закупки вы сможете увидеть в вашем личном кабинете в разделе закупки
@@ -667,11 +475,29 @@
             <button @click="kickUserShow=false" class="x-btn x-btn-trans">Отмена</button>
             <button @click="kick(kickUserShow);kickUserShow=false" class="x-btn x-btn-red">Исключить</button>
           </div>
-        </x-popup>        
+        </x-popup>
         <!-- Neighbor -->
         <x-popup v-if="neighborAnnouceShow" :title="'Спасибо, ваша заявка принята!'" :active="neighborAnnouceShow" @close="neighborAnnouceShow=false" id="share-order-neighbor-modal">
           <div class="m-3">
             Мы постараемся найти того, кто присоединится к вашей закупке. После присоединения к вашей закупке других участников, вы узнаете об этом на странице закупки
+          </div>
+        </x-popup>
+        <!-- Not available -->
+        <x-popup v-if="productNotAvailableShow" :title="'Товар недоступен!'" :active="productNotAvailableShow" @close="productNotAvailableShow=false" id="product-not-available-modal">
+          <div class="">
+
+            <div class="mb-3">Часть товара в корзине не доступно к доставке в выбранную дату</div>
+
+            <div  v-for="(product, index) in productNotAvailableList" :key="index" class="d-flex mb-3 align-items-center">
+              <img :src="product.mainImage" alt="" style="width: 50px; margin-right:10px">
+              {{product.name}}
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <button class="x-btn x-btn-trans" style="width:125px;padding:0 10px">Отмена</button>
+              <button class="x-btn product-not-available-modal-join" style="width:125px;padding:0 10px">Исключить и вступить</button>              
+            </div>
+
           </div>
         </x-popup>
       </template>
@@ -701,6 +527,8 @@ data(){return{
   cancelOrderShow:0,
   kickUserShow:0,
   neighborAnnouceShow:0,
+  productNotAvailableShow:0,
+  productNotAvailableList:[],
   errors:[],
   time:1,
   show:false,
@@ -844,49 +672,15 @@ computed:{
   },
   invite(){
     return Cookies.get('x_invite');
-  }
+  },
 
 },
 watch:{
   sOrder: function (val, oldVal) {
-    if(!this.sOrder || this.sOrder.member_count == undefined) return;
-    this.changeMemberCount = this.sOrder.member_count;    
-    this.getWeights();
-
-    //Redirect
-    if(this.redirectQuery) return;
-
-    let toGallery = false;
-    let show = false;
-    
-    //Sorder open?
-    if(this.sOrder.open){
-      //User in?
-      if(this.userIn){
-        show = true;
-      }else{
-        //Got invite?
-        if(this.invite != this.link){
-          this.addInvite();
-          toGallery = true;
-        }else{
-          show = true;
-        }
-      }
-    }else{
-      //User in?
-      if(this.userIn){
-        show = true;
-      }else{
-        toGallery = true;
-      }
-    }
-
-    //Redirect
-    if(toGallery) location.href = '/?invited=true';
-    if(show) this.show = true;
-
-    return;
+    this.redirect();
+  },    
+  user: function (val, oldVal) {
+    this.redirect();
   },    
   showModalContacts: function (val, oldVal) {
     if(!val) return;
@@ -898,7 +692,6 @@ watch:{
   },
 },
 async mounted(){
-
   //Update
   if(this.sOrder){
     await this.update();
@@ -912,6 +705,11 @@ async mounted(){
   
   //Trigger timer
   this.timerTrigger();
+
+  //Get anchor
+  if(this.$route.hash == "#confirm"){
+    this.goToConfirmAnchor();
+  }
 
 },
 methods:{
@@ -964,7 +762,14 @@ methods:{
       return;
     }
     let r = await ax.fetch('/shared/order/join',{'link':this.link},'post');
+    //Errors
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
+    //Not available
+    if(!r){if(ax.lastResponse.status == 423){
+      this.productNotAvailableShow = true;
+      this.productNotAvailableList = ax.lastResponse.data;
+
+    }}
     if(r){window.location.reload();}
   },
   async pay(userId,slot){
@@ -1006,6 +811,56 @@ methods:{
     this.showModalContacts = false;
     
     this.get(this.link);
+  },
+  redirect(){
+    if(!this.sOrder || this.sOrder.member_count == undefined) return;
+    if(this.user == undefined) return;
+    this.changeMemberCount = this.sOrder.member_count;    
+    this.getWeights();
+
+    //Redirect
+    if(this.redirectQuery) return;
+
+    let toGallery = false;
+    let show = false;
+    
+    //Shared order open?
+    if(this.sOrder.open){
+      //User in?
+      if(this.userIn){
+        show = true;
+      }else{
+        //Got invite?
+        if(this.invite != this.link){
+          this.addInvite();
+          toGallery = true;
+        }else{
+          show = true;
+        }
+      }
+    }else{
+      //User in?
+      if(this.userIn){
+        show = true;
+      }else{
+        toGallery = true;
+      }
+    }
+
+    //Redirect
+    if(toGallery) location.href = '/?invited=true';
+    if(show) this.show = true;
+
+    return;
+  },
+  goToConfirmAnchor(){
+    setTimeout(() => { 
+      if(this.$refs.confirmAnchor != null){
+        this.$refs.confirmAnchor.scrollIntoView();
+        return;
+      }
+      this.goToConfirmAnchor();
+    }, 250);    
   },
 
   //TEST
@@ -1087,6 +942,10 @@ methods:{
 
   /* Desktop */
   @media screen and (min-width: 992px){
+
+    .product-not-available-modal-join{
+      width: 175px!important;
+    }
     
     .shared-order-timer{  
       font-size: 50px;

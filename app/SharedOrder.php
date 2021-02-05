@@ -481,10 +481,12 @@ class SharedOrder extends Model
         }else{
           $statusId = 0;
         }
-        $statusId = $order->x_confirm ? 900 : 0;
-        Order::changeStatus($order->id, $statusId);
+        if(!$order->x_confirm){
+          Order::changeStatus($order->id, 0);
+        }        
         DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'participation_price', 'value'=>$order->xData['participation_price']]);
         DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'over_weight_price', 'value'=>$order->xData['overWeightPrice']]);
+
       }
     }    
 

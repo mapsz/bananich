@@ -84,6 +84,11 @@ class OrderController extends Controller
         $site = 'x';
       }
     }
+
+    //Remove oay method
+    if($cart['type'] == 2){
+      $data['payMethod'] = 1;
+    }
     
     JugeLogs::log(2, json_encode(['model' => 'orderController', 'user' => $userId]));
     
@@ -198,34 +203,7 @@ class OrderController extends Controller
           JugeLogs::log(8, json_encode(['model' => 'orderController', 'user' => $userId]));
   
           {//Mail
-            //Set data
-            $orderId = $order->id;
-            $order = Order::getWithOptions(['id'=>$orderId]);        
-            $email = $order->email;
-            $data = ["email" => $email, "orderId" => $orderId];
-            $data['from'] = 'no-reply@bananich.ru';
-            $data['subject'] = 'Бананыч заказ №'.$data['orderId'].' получен!';
-
-            if($request->type == 'x'){
-              $data['from'] = 'no-reply@neolavka.ru';
-              $data['subject'] = 'Neolavka заказ №'.$data['orderId'].' получен!';
-            } 
-  
-            //Client send
-            $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $request->type], function($m)use($data){
-              $m->to($data['email'],'to');
-              $m->from($data['from']);
-              $m->subject($data['subject']);
-            });
-  
-            //Dasha Send
-            if(ENV('APP_ENV') != 'local'){
-              $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $request->type], function($m)use($data){
-                $m->to('bbananich@yandex.ru','to');
-                $m->from($data['from']);
-                $m->subject($data['subject']);
-              });
-            }
+            Order::email($order);
           }
 
           JugeLogs::log(9, json_encode(['model' => 'orderController', 'user' => $userId]));
@@ -238,7 +216,7 @@ class OrderController extends Controller
       }
     }
 
-    return response()->json($orderId);
+    return response()->json($order->id);
 
   }
 

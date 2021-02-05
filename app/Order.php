@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Item;
+use Illuminate\Support\Facades\Mail;
 use App\Bonus;
 use Carbon\Carbon;
 
@@ -258,6 +259,41 @@ class Order extends Model
 
 
     return $rDate;
+
+  }
+
+  public static function getBadProducts($cart, $date){
+
+    $deliveryDateTimestamp    = Carbon::createFromFormat('Y-m-d H:i',$date .' 00:00')->timestamp;
+    $deliveryDateDay          = Carbon::createFromIsoFormat('YYYY-MM-DD',$date)->isoFormat('d');
+    $deliveryDateDay          = $deliveryDateDay == 0 ? 7 : $deliveryDateDay;
+
+    $badProducts = [];
+    foreach ($cart['items'] as $key => $item) {
+      // Time
+      if(isset($item['product']) && isset($item['product']['deliveryTime'])){
+        $minProductDeliveryDateTimestamp = now()->add($item['product']['deliveryTime'],'hour')->timestamp;
+        if(($deliveryDateTimestamp - $minProductDeliveryDateTimestamp) < 0){
+          array_push($badProducts,$item['product']);
+        }        
+      }
+      // Day
+      if(isset($item['product']) && isset($item['product']['deliveryDays'])){
+          $pDays = json_decode($item['product']['deliveryDays']);
+          $available = false;
+          foreach ($pDays as $k => $pDay) {
+            if($pDay == $deliveryDateDay){
+              $available = true;
+              break;
+            }
+          }
+          if(!$available){
+            array_push($badProducts,$item['product']);
+          }
+      }
+    }
+
+    return $badProducts;
 
   }
 
@@ -1317,6 +1353,40 @@ class Order extends Model
         
       }
     }
+  }
+
+  public static function email($order){
+
+    //Set data
+    $orderId = $order->id;
+    $order = Order::getWithOptions(['id'=>$orderId]);        
+    $email = $order->email;
+    $data = ["email" => $email, "orderId" => $orderId];
+    $data['from'] = 'no-reply@bananich.ru';
+    $data['subject'] = 'Бананыч заказ №'.$data['orderId'].' получен!';
+
+    if($order->type == 'x'){
+      $data['from'] = 'no-reply@neolavka.ru';
+      $data['subject'] = 'Neolavka заказ №'.$data['orderId'].' получен!';
+    } 
+
+    //Client send
+    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $order->type], function($m)use($data){
+      $m->to($data['email'],'to');
+      $m->from($data['from']);
+      $m->subject($data['subject']);
+    });
+
+    //Dasha Send
+    if(ENV('APP_ENV') != 'local'){
+      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $order->type], function($m)use($data){
+        $m->to('bbananich@yandex.ru','to');
+        $m->from($data['from']);
+        $m->subject($data['subject']);
+      });
+    }
+
+    return true;    
   }
 
 

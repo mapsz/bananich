@@ -103,7 +103,7 @@
   <!-- Invite popup -->
   <x-popup v-if="showInvitePopup" :title="'Вы приглашены в закупку!'" :active="showInvitePopup" @close="showInvitePopup=false" id="share-order-neighbor-modal">
     <div class="m-3">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. At suscipit atque officiis beatae fuga ipsa debitis neque similique voluptas nemo.
+      Вы приглашены в совместную закупку продуктов по оптовым ценам! Вы можете присоединиться к закупке как после того как соберете свой заказ, так и до этого, нажав кнопку "Присоединиться к закупке" в шапке профиля.
     </div>
   </x-popup>
 

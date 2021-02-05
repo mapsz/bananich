@@ -12,9 +12,11 @@
       </template>
       <!-- Order not confirm -->
       <template v-else>
-        <button @click="goToOrder()" class="x-btn">
-          Завершить оформление заказа
-        </button>
+        <a :href="'/shared/order/'+myOrder.link+'#confirm'">  
+          <button class="x-btn">
+            Завершить оформление заказа
+          </button>
+        </a>
       </template>
     </template>
     <!-- My order Not exists -->

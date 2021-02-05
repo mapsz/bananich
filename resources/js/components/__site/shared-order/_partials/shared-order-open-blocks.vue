@@ -28,7 +28,7 @@
           </div>
           
           <!-- Button -->
-          <div v-if="!isOpenPage" class="d-flex justify-content-center shared-order-open-button">
+          <div v-if="!isOpenPage && !isRules" class="d-flex justify-content-center shared-order-open-button">
 
             <a v-if="(invite && (inviteOrder.status_id == 100 || inviteOrder.status_id == 200)) && inviteOrder.member_count == n" :href="'/shared/order/' + inviteSOrder.link">
               <button class="x-btn">
@@ -46,7 +46,7 @@
       </template>    
     </div>  
     <div class="d-flex justify-content-center">
-      *Организационный сбор будет включен в вашу накладную, которую можно оплатить по факту доставки
+      *сервисный сбор будет включен в вашу накладную, которую можно оплатить по факту доставки, cервисный сбор включает доставку до организатора закупки.
     </div>
   </div>
 </template>
@@ -66,8 +66,15 @@ computed:{
     inviteOrder:    'sharedOrder/getInviteOrder',
   }),
   inviteSOrder(){
-    if(this.sOrders == undefined || this.sOrders.length < 1) return false;
-    return this.sOrders[0];
+    if(
+      (this.invite != undefined && this.invite) &&       
+      (this.inviteOrder != undefined && this.inviteOrder.joinable) && 
+      (!this.myOrder || this.myOrder.length == 0)
+    ){
+      return this.inviteOrder;
+    }
+
+    return false;
   },
   maxCount(){
     if(this.settings == undefined || this.settings.x_max_member_count  == undefined) return false;
@@ -84,6 +91,10 @@ computed:{
   isOpenPage(){
     if(this.$route.name == 'sharedOrderOpen') return true;
     return;
+  },
+  isRules(){
+    if(this.$route.name == 'rules') return true;
+    return false;
   }
 },
 watch:{

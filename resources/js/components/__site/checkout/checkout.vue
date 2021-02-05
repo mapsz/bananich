@@ -31,11 +31,11 @@
 
               <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
 
-              <div class="row checkout-div">
+              <div v-if="!isX" class="row checkout-div">
                 <div v-if="!isX" class="col-12 col-lg-6">
                   <checkout-container v-model="data.container"/>
                 </div>
-                <div class="col-12 col-lg-6">
+                <div v-if="!isX" class="col-12 col-lg-6">
                   <checkout-paymethod v-model="data.paymethod"/>
                 </div>
               </div>
