@@ -1,5 +1,5 @@
 <template>
-  <div class="order-item">
+  <div v-if="order != undefined && order.id != undefined" class="order-item">
 
     <!-- Date / ID / Status / Cart count / Cart summ-->
     <div class="">
