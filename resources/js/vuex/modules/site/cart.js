@@ -116,7 +116,7 @@ let cart = {
       dispatch('fetch');
       return r;
     },    
-    async cartReset({dispatch},){      
+    async cartReset({dispatch},){
       //Set type
       let type = 1;
       if(isX) type = 'x';

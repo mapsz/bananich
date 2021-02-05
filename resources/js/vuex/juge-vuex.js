@@ -81,7 +81,7 @@ class jugeVuex {
     }
     this.actions = {
       //SINGLE
-      async fetchOne({state,commit},id = false){          
+      async fetchOne({state,commit},id = false){
         if(id){
           commit('mId',id);
         }else{

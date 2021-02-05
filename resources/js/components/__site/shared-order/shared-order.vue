@@ -494,8 +494,8 @@
             </div>
 
             <div class="d-flex justify-content-between">
-              <button class="x-btn x-btn-trans" style="width:125px;padding:0 10px">Отмена</button>
-              <button class="x-btn product-not-available-modal-join" style="width:125px;padding:0 10px">Исключить и вступить</button>              
+              <button @click="productNotAvailableShow=false" class="x-btn x-btn-trans" style="width:125px;padding:0 10px">Отмена</button>
+              <button @click="clearJoin(productNotAvailableList)" class="x-btn product-not-available-modal-join" style="width:125px;padding:0 10px">Исключить и вступить</button>              
             </div>
 
           </div>
@@ -717,6 +717,7 @@ methods:{
     'filter':'sharedOrder/addFilter',
     'get':'sharedOrder/fetchData',
     'update':'sharedOrder/update',
+    'removeItem':'cart/removeItem',
   }),
   addInvite(){
     if(this.link){
@@ -861,6 +862,12 @@ methods:{
       }
       this.goToConfirmAnchor();
     }, 250);    
+  },
+  async clearJoin(products){
+    //Loop products
+    for (const product of products) {await this.removeItem(product.id);}
+    //Join
+    this.join();
   },
 
   //TEST
