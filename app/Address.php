@@ -10,6 +10,9 @@ class Address extends Model
   protected $guarded = [];
 
   public static function validate($data, $put = false){
+
+    //TODO max user addresses 5
+
     $validate = [
       'street'       => ['string', 'min:5', 'max:170'],
       'number'       => ['max:20' ],
@@ -36,7 +39,7 @@ class Address extends Model
     Validator::make($data, $validate,$messages)->validate();
 
     
-    dd($validate['street']);
+    return true;
   }
 
   public function addressable(){

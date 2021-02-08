@@ -12,15 +12,18 @@
           </div>
 
 
-          <!-- <div class="col-12">
-
-            <user-addresses />
-
-          </div> -->
-
 
           
           <div class="col-lg-8">
+            
+            <div class="row">
+              <div class="col-12 my-5">
+
+                <user-addresses />
+
+              </div>
+            </div>
+
             <div class="title-wrap title-page">
               <h2 class="title-h2">Личные данные</h2>
             </div>          
@@ -84,7 +87,19 @@
                 </div>
 
                 <!-- Address -->
-                <div class="col-12 col-lg-6">
+                <div v-if="isX" class="col-12 col-lg-6">
+                  <h4>Адрес</h4>
+
+                  <!-- Show -->
+                  <div class="">
+                    <show-address v-if="defaultAddress" :address="defaultAddress" />
+                    <button v-if="showAddresses==false" @click.prevent="showAddresses=true" class="form-url mt-2" style="margin-top:0px">Редактировать адрес</button>
+                    <user-addresses :active="showAddresses" @close="showAddresses=false" />
+                  </div>
+                </div>
+
+                <!-- Address-old -->
+                <div v-if="0" class="col-12 col-lg-6">
                   <h4 class="mb-3">Адрес</h4>
 
                   <form class="profile-form"  style="border-bottom:0px">
@@ -106,23 +121,10 @@
                 </div>
 
               </div>
-
-              <!-- Password todo ###--> 
-              <!-- <div class="row">
-                <div class="col-lg-12">                  
-                  <form action="" class="profile-password" style="margin-bottom: 40px;">
-                    Изменить пароль
-                    <div class="row profile-password-wrap">
-                      <div class="col-md-4 profile-password-group"><input type="text" class="form-input" placeholder="Старый пароль"></div>
-                      <div class="col-md-4 profile-password-group"><input type="text" class="form-input" placeholder="Новый пароль"></div>
-                      <div class="col-md-4 profile-password-group"><button class="btn-yellow btn-empty">Подтвердить</button></div>
-                    </div>                    
-                  </form>
-                </div>
-              </div> -->
               
               <!-- Logout -->
               <logout />
+
             </div>
           </div>
         </div>
@@ -134,6 +136,8 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
+    isX:isX,
+    showAddresses:false,
     contactInputs:[
       {caption:'Ваше имя',name:'name'},
       {caption:'Ваша фамилия',name:'surname'},
@@ -154,7 +158,15 @@ export default {
     avatarUploadShow:false,
   }},
   computed:{
-    ...mapGetters({user:'user/get'}), 
+    ...mapGetters({user:'user/get'}),
+    defaultAddress(){
+      if(!this.user == undefined || !this.user.addresses == undefined) return false; 
+      if(!this.user.addresses || this.user.addresses.length < 1) return false;
+      let d = this.user.addresses.find(x => x.default == 1);      
+      if(d) return d;
+      //No default
+      return this.user.addresses[1]; 
+    },
   },
   watch: {
     avatarFile: function (val, oldVal) {

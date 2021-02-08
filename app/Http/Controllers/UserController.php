@@ -11,13 +11,80 @@ use App\User;
 use App\UserAddress;
 use App\UserComment;
 use App\FileUpload;
+use App\Address;
 
 class UserController extends Controller
 {
 
-  public function addAddress(){
+  public function deleteAddress(Request $request){
+
+    //Get user
+    $auth = Auth::user();
+    if(!$auth){
+      return response()->json(false);
+    }
+      
+    //Get address
+    $address = Address::find($request->id);
+    if($address->addressable_type == "App\User" && $address->addressable_id == $auth->id){
+      return response()->json($address->delete());
+    }
+
+    return response()->json(false);
+  }
+
+  public function setDefaultAddress(Request $request){
+
+    //TODO validate
+
     
-    User::addAddress();
+    User::setDefaultAddress($request->id);
+    
+    return response()->json(1);
+
+  }
+
+  public function addAddress(Request $request){
+    
+    //Validate
+    Address::validate($request->all(),1);
+ 
+    //Get user
+    $auth = Auth::user();
+    if(!$auth){
+      return response()->json(false);
+    }   
+    
+    return response()->json(User::addAddress($request->all(), $auth->id));
+  }
+
+  public function postAddress(Request $request){
+
+    
+ 
+    //Get user
+    $auth = Auth::user();
+    if(!$auth){
+      return response()->json(false);
+    }   
+
+    if(!$request->id){
+      return response()->json(false);
+    }  
+
+    //Validate user
+    $address = Address::find($request->id);
+    if($address->addressable_type != "App\User" || $address->addressable_id != $auth->id){
+      return response()->json(false);
+    }
+    
+    //Validate
+    Address::validate($request->all(),0);
+
+    
+    return response()->json(User::postAddress($request->all()));
+
+
   }
 
   public function comments(Request $request){
@@ -149,42 +216,42 @@ class UserController extends Controller
     return response()->json(1);
   }
 
-  public function postAddress(Request $request){
+  // public function postAddress(Request $request){
 
-    if(!Auth::user()) return false;
-    if(!isset($request->data)) return false;
-    $data = $request->data;
+  //   if(!Auth::user()) return false;
+  //   if(!isset($request->data)) return false;
+  //   $data = $request->data;
 
-    //Validate Cart
-    $validate = [
-      'street'    => ['required','max:250'],
-      'number'    => ['max:50'],
-      'apart'     => ['max:50'],
-      'porch'     => ['max:50'],
-    ];
-    $messages = [
-      'street.required'   => 'Поле Улица обязательно для заполнения.',
-      'street.max'        => "Количество символов в поле Улица не может превышать :max",
-      'number.max'        => "Количество символов в поле Дом не может превышать :max",
-      'apart.max'         => "Количество символов в поле Квартира не может превышать :max",
-      'porch.max'         => "Количество символов в поле Подъезд не может превышать :max",
-    ];
-    Validator::make($data, $validate, $messages)->validate();
+  //   //Validate Cart
+  //   $validate = [
+  //     'street'    => ['required','max:250'],
+  //     'number'    => ['max:50'],
+  //     'apart'     => ['max:50'],
+  //     'porch'     => ['max:50'],
+  //   ];
+  //   $messages = [
+  //     'street.required'   => 'Поле Улица обязательно для заполнения.',
+  //     'street.max'        => "Количество символов в поле Улица не может превышать :max",
+  //     'number.max'        => "Количество символов в поле Дом не может превышать :max",
+  //     'apart.max'         => "Количество символов в поле Квартира не может превышать :max",
+  //     'porch.max'         => "Количество символов в поле Подъезд не может превышать :max",
+  //   ];
+  //   Validator::make($data, $validate, $messages)->validate();
 
-    //Post Address
-    UserAddress::updateOrCreate(
-      ['user_id' => Auth::user()->id],
-      [
-        'street' => $data['street'],
-        'number' => $data['number'],
-        'appart' => $data['appart'],
-        'porch' => $data['porch'],
-      ]
-    );
+  //   //Post Address
+  //   UserAddress::updateOrCreate(
+  //     ['user_id' => Auth::user()->id],
+  //     [
+  //       'street' => $data['street'],
+  //       'number' => $data['number'],
+  //       'appart' => $data['appart'],
+  //       'porch' => $data['porch'],
+  //     ]
+  //   );
 
-    return response()->json(User::jugeGet(['id' => Auth::user()->id]));
+  //   return response()->json(User::jugeGet(['id' => Auth::user()->id]));
 
-  }
+  // }
 
   public function editMainPhoto(Request $request){
 
@@ -201,7 +268,7 @@ class UserController extends Controller
 
   }
 
-  public function loginAsUser(Request $request){    
+  public function loginAsUser(Request $request){
     Auth::loginUsingId($request->id);
     return redirect('/profile');
   }

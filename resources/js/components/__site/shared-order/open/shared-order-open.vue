@@ -89,8 +89,11 @@
                 <span><b>Адрес</b> доставки</span>            
               </div>
               <div class="col-12 col-lg-6">
-                <div class="ml-lg-4">                  
-                  <checkout-address class="checkout-div" :design="'x'" v-model="data.address"/>
+                <div class="ml-lg-4">     
+                  <!-- Show -->
+                  <choose-address />
+
+                  <!-- <checkout-address class="checkout-div" :design="'x'" v-model="data.address"/> -->
                 </div>
               </div>
             </div>
@@ -157,56 +160,6 @@
         </div>
 
 
-        <div v-if="loaded && 0" class="row">
-          <div class="col-6">
-            <!-- Member count -->
-            <div class="form-group">
-              <label for="memberCount">Количество учатников: {{data.memberCount}}</label>
-              <input v-model="data.memberCount" type="range" class="form-control-range" id="memberCount" min="1" :max="maxMemberCount">
-            </div>
-
-            <!-- Address -->
-            <div>
-              <checkout-address v-model="data.address" />
-            </div>
-
-            <!-- Date -->
-            <div v-if="datePickerConfig">
-              <h5>Дата</h5>
-              <datepicker v-model="data.date" 
-                :language="datePickerConfig.ru" 
-                :monday-first="true" 
-                :disabled-dates="datePickerConfig.disabledDates" 
-              />
-            </div>
-
-            <!-- Time -->
-            <div v-if="availableTimes" class="col-lg-6">
-              <div class="checkout-title">Время доставки</div>
-              <checkout-input v-model="data.time" :name="'deliveryTime'" :type="'radio'" 
-                :list="availableTimes" 
-              />
-            </div>
-
-            <!-- Comment -->
-            <div class="mt-3">
-              <checkout-comment class="checkout-div" v-model="data.comment"/>
-            </div>
-
-            <!-- Errors -->
-            <div v-for='(errorz,z) in errors' :key='z+"d"'>
-              <span v-for='(error,j) in errorz' :key='j'>
-                {{error}}
-              </span>    
-            </div>            
-
-            <!-- Open -->
-            <div class="mt-3">
-              <button @click="open()" class="btn btn-success">открыть</button>
-            </div>
-
-          </div>
-        </div>
 
       </div>
 

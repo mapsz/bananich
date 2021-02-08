@@ -1058,10 +1058,13 @@ Route::group(['middleware' => ['HttpsRR'
     //User
     Route::get('/auth/user', 'UserController@getAuthUser');
     Route::post('/user', 'UserController@post');
-    Route::post('/user/address', 'UserController@postAddress');
     Route::post('/user/main/photo', 'UserController@editMainPhoto');
-    //User Addresses
-    Route::any('/user/address', 'UserController@addAddress');
+    //User Addresses    
+    Route::get('/user/addresses', 'UserController@getAddresses');
+    Route::post('/user/address', 'UserController@postAddress');
+    Route::put('/user/address', 'UserController@addAddress');
+    Route::delete('/user/address', 'UserController@deleteAddress');
+    Route::post('/user/address/default', 'UserController@setDefaultAddress');
 
     //Product
     Route::get('/product/last/update', 'ProductController@lastUpdate'); 

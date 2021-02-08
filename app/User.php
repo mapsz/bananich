@@ -64,24 +64,72 @@ class User extends Authenticatable
 
   ];
 
-  public static function addAddress(){
+  public static function addAddress($data, $userId){
 
-    Address::validate([],1);
-
-    $user = User::find(6);
+    //Get user
+    $user = User::find($userId);
 
     {//Attach Address
       $address = [
-        'street' => 'asdasd'
-        // 'number' => isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : null,
-        // 'appart' => isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null,
-        // 'porch' => isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null,
-        // 'stage' => isset($data['address']['addressStage']) ? $data['address']['addressStage'] : null,
+        'street' => $data['street'],
+        'number' => isset($data['number']) ? $data['number'] : null,
+        'appart' => isset($data['appart']) ? $data['appart'] : null,
+        'porch' => isset($data['porch']) ? $data['porch'] : null,
+        'stage' => isset($data['stage']) ? $data['stage'] : null,
+        'intercom' => isset($data['intercom']) ? $data['intercom'] : null,
+        'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
       ];
-      $user->address()->save(new Address($address));
+      $user->addresses()->save(new Address($address));
     }
+
+    // Set dufault
+    if($data['default']){
+      $address = Address::where('addressable_type', "App\User")->where('addressable_id', $userId)->orderBy('id', 'desc')->first();
+      User::setDefaultAddress($address->id);
+    }
+
+    return true;
   }
 
+  public static function postAddress($data){
+
+    $address = Address::find($data['id']);
+
+    $address->update( [
+      'street' => $data['street'],
+      'number' => isset($data['number']) ? $data['number'] : null,
+      'appart' => isset($data['appart']) ? $data['appart'] : null,
+      'porch' => isset($data['porch']) ? $data['porch'] : null,
+      'stage' => isset($data['stage']) ? $data['stage'] : null,
+      'intercom' => isset($data['intercom']) ? $data['intercom'] : null,
+      'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
+    ] );
+
+    return true;
+  }
+
+  
+  public static function setDefaultAddress($id){  
+    {//Get addresses
+      //Single
+      $address = Address::find($id);
+      //User addresses
+      $addresses = Address::where('addressable_type', "App\User")->where('addressable_id', $address->addressable_id)->get();
+    }
+
+    $address->default = 1;
+    $address->save();
+
+    //Remove defaults
+    foreach ($addresses as $k => $a) {
+      if($a->id != $id){
+        $a->default = 0;
+        $a->save();
+      }
+    }
+    
+    return true;
+  }
 
   public function isAdmin(){
     $roles = $this->getRoleNames();
@@ -220,12 +268,12 @@ class User extends Authenticatable
   public function comment(){
     return $this->hasOne('App\UserComment');
   }
-  public function addresses(){
-    return $this->hasMany('App\UserAddress');
-  }
-  // public function address(){
-  //   return $this->morphMany('App\Address', 'addressable');
+  // public function addresses(){
+  //   return $this->hasMany('App\UserAddress');
   // }
+  public function addresses(){
+    return $this->morphMany('App\Address', 'addressable');
+  }
   public function referal(){
     return $this->hasOne('App\UserReferal');
   }
