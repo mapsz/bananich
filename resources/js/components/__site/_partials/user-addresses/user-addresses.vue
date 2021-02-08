@@ -96,6 +96,7 @@ props: ['active','choose'],
 data(){return{
   //Choose
   choosedAddress:false,
+  defautSet:false,
   //Show
   showAddresses:false,
   showDelete:false,
@@ -145,12 +146,26 @@ watch:{
   },
   addresses: function(){
     if(this.addresses && this.addresses.length == 0) this.showAdd = true;
-  }
+  },
+  user: function (val, oldVal) {
+    this.watchUserLoad();
+  },
+},
+async mounted() {
+  this.watchUserLoad();
 },
 methods:{
   ...mapActions({
     'getUser':'user/fetch',
   }),
+  watchUserLoad(){
+    if(!this.choose) return;
+    if(this.defautSet) return;
+    if(this.user == undefined || this.user.id == undefined) return;
+    let d = this.addresses.find(x => x.default == 1);
+    if(d) this.doChoose(d.id);
+    this.defautSet = true;
+  },
   async setDefault(id){
     await ax.fetch('/user/address/default', {id}, 'post');
     this.getUser();

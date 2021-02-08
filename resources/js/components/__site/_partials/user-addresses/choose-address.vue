@@ -13,7 +13,6 @@ import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
   choosedAddress:false,
-  defautSet:false,
 
   showAddresses:false,
 }},
@@ -25,21 +24,12 @@ computed:{
   },
 },
 watch:{
-  user: function (val, oldVal) {
-    this.watchUserLoad();
-  },
+  //
 },
 async mounted() {
-  this.watchUserLoad();
+  // this.watchUserLoad();
 },
 methods:{
-  watchUserLoad(){
-    if(this.defautSet) return;
-    if(this.user == undefined || this.user.id == undefined) return;
-    let d = this.addresses.find(x => x.default == 1);
-    if(d) this.choosedAddress = d;
-    this.defautSet = true;
-  },
   doChoose(id){
     this.choosedAddress = this.addresses.find(x => x.id == id);
   }
