@@ -5,6 +5,7 @@ namespace App\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 
 class BananichResetPasswordNotification extends Notification
 {
@@ -56,9 +57,15 @@ class BananichResetPasswordNotification extends Notification
             return call_user_func(static::$toMailCallback, $notifiable, $this->token);
         }
 
-        return (new MailMessage)
-            ->view('mail.resetPassword', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()])
-            ->subject(Lang::get('Reset Password Notification'));
+        $site = strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'x' : false;        
+        $data['from'] = $site == 'x' ? 'no-reply@neolavka.ru' : 'no-reply@bananich.ru';
+
+
+         return (new MailMessage)
+             ->view('mail.resetPassword', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()])
+             ->subject('Обновление пароля')
+             ->from($data['from'])
+             ;
     }
 
     /**

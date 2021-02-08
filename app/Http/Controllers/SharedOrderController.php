@@ -127,7 +127,11 @@ class SharedOrderController extends Controller
 
       {//Full
         $isFull = count($sOrder->users) < $sOrder->member_count ? true : false;
-        Validator::make(['isFull' => $isFull], ['isFull' => 'required|accepted'], ['isFull.accepted' => 'Закупка сформирована!'])->validate();        
+        Validator::make(
+          ['isFull' => $isFull],
+          ['isFull' => 'required|accepted'],
+          ['isFull.accepted' => 'К сожалению, в закупке, в которую вы были приглашены, уже нет мест. Вы можете создать свою закупку!']
+        )->validate();        
       }
 
       {//Product not available

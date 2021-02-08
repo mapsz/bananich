@@ -417,6 +417,12 @@ class Product extends Model
     }
     
     {//Wheres
+
+      //no Libras
+      if(isset($request['noLibras'])){
+        $products = $products->orWhereDoesntHave('libras');
+      }    
+
       //Id
       if(isset($request['id'])){
         $products = $products->where('id', $request['id']);
@@ -1281,6 +1287,9 @@ class Product extends Model
   }
   public function goods(){
       return $this->hasMany('App\Goods');
+  }  
+  public function libras(){
+      return $this->hasMany('App\Libra');
   }   
   public function suppliers(){
     return $this->belongsToMany('App\Supplier')

@@ -133,7 +133,9 @@
           </div>
           <!-- Cart summ -->
           <div class="order-values">
-            <div class="order-value-img"><img src="/image/order/money.svg" alt="Сумма"></div>
+            <div class="order-value-img" style="position:relative;">
+              <span style="font-size: 40px;position: absolute;top: -11px;left: 10px;">₽</span>
+            </div>
             <div class="sad-order-value-text">
               {{(order.total_result == undefined || !(order.total_result > 0)) ? order.total : order.total_result}} руб
             </div>

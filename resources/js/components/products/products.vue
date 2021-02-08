@@ -13,7 +13,9 @@
         <button class="btn-success btn">Добавить</button>
       </router-link>
 
+      <!-- Custom filters -->
       <div>
+        <button @click="noLibras()" class="btn-secondary btn">Без весов</button>
         <button @click="shtuki()" class="btn-secondary btn">Штуки</button>
         <button @click="noWeight()" class="btn-secondary btn">Без полного веса</button>
         <button @click="noType()" class="btn-secondary btn">Без типа единицы</button>
@@ -25,8 +27,10 @@
 
     <!-- List -->
     <div>
+      <!-- Filters -->
       <div class="d-flex" style="justify-content: flex-end;">
-        <product-category-filter :model="'product'"/>
+        <product-category-filter :model="'product'" class="mx-3"/>
+        <suppliers-filter :model="'product'" />
       </div>      
       <juge-list :data="'product'" :pages="true"></juge-list>
     </div>
@@ -42,6 +46,9 @@ export default {
     this.$store.dispatch('product/addFilter',{get_all:1});
   },
   methods:{
+    noLibras(){   
+      this.$store.dispatch('product/addFilter',{noLibras:1});      
+    },
     shtuki(){
       this.$store.dispatch('product/clearFilters');      
       this.$store.dispatch('product/addFilter',{shtuki:1});      
