@@ -252,7 +252,7 @@ class Order extends Model
     
     //Custom remove
     if($cart['type'] == 2){
-      $min = Carbon::parse("2021-02-12")->timestamp;
+      $min = Carbon::parse("2021-02-13")->timestamp;
       
       $cd = $days;
       foreach ($cd as $key => $day) {

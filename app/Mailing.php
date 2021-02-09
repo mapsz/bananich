@@ -252,10 +252,8 @@ class Mailing extends Model
         ['email' => 'pavlov.avdei@gmail.com', 'name'=>'Павел'],
         ['email' => 'whitekey103@gmail.com', 'name'=>'Ольга'],
       ];
-      
-      // dd($users);
-                  
-      if($test){  
+                        
+      if($test){
           $users = array(
             array(
               "id" => 4,

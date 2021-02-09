@@ -18,7 +18,7 @@
       <h1 v-if="!isMobile || $route.path == '/'" class="title-h1">
         <template v-if="isX">
           <div class="moto">
-            <b>NEOLAVKA</b> - это продукты по закупочным ценам с оплатой только фиксированной суммы сервисного сбора (включает доставку)
+            <b>NEOLAVKA</b> - новый подход к рациональным покупкам
           </div>            
         </template>
         <template v-else>
