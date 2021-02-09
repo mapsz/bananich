@@ -792,7 +792,7 @@ class Order extends Model
     }
         
     {//Sort
-      $sort = ['col' => 'id','order' => 'DESC'];
+      $sort = ['col' => 'delivery_date','order' => 'DESC'];
       if(isset($request['sort'])) $sort = (array) json_decode($request['sort']);   
       $query = $query->orderBy($sort['col'],$sort['order']);
     }

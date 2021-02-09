@@ -378,8 +378,13 @@ class Checkout extends Model
     }
 
     {//Personal address
-      if($sOrder != 'solo'){      
-        $sameAddress = ($sOrder->address->street . ' ' . $sOrder->address->number) == $order->address;
+      if($sOrder != 'solo'){
+        if(!isset($sOrder->address->street)){
+          $sameAddress = true;
+        }else{
+          $sameAddress = ($sOrder->address->street . ' ' . $sOrder->address->number) == $order->address;
+        }
+        
         $xData['personalAddress'] = $sameAddress ? 0 : $settings['x_personal_address']; 
       }
 

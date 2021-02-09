@@ -14,7 +14,7 @@
 
 
 {//VEsi
-
+/*
   Route::get('/vesi', 'LibraController@list');
 
   {//Vesi shit
@@ -885,58 +885,56 @@
     dd(10);
     
   });
-
+*/
 }
 
 {//Mail test
   Route::get('/mail/preview/{id}', function($id){
 
+    $user = App\User::find(751);
+    $email = App\Email::jugeGet(['id'=>$id]);
+    $html = App\Email::customTags($email->html,$user);
+
+    
+    return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
 
 
-
-
-    $order = App\Order::getWithOptions(['id'=>$id]);
-
-
-    return view('mail.mailOrder', ['order' => $order, 'site' => 'x']);
-
-
-
-
-
-  
-  
     // $order = App\Order::getWithOptions(['id'=>$id]);
+
+
+    // return view('mail.mailOrder', ['order' => $order, 'site' => 'x']);
+ 
   
-    // dump(  $order->toarray());
+  //   // $order = App\Order::getWithOptions(['id'=>$id]);
   
-    // $user = App\User::find(751);
-    // $email = App\Email::jugeGet(['id'=>$id]);
+  //   // dump(  $order->toarray());
   
-    // $html = App\Email::customTags($email->html,$user);
+  //   // $user = App\User::find(751);
+  //   // $email = App\Email::jugeGet(['id'=>$id]);
   
-    // dump($html);
+  //   // $html = App\Email::customTags($email->html,$user);
   
-  
-    // Mail::send('mail.customEmail', ['user' => $user->toarray(),'html' => $html], function($m){
-    //   // $m->to('aslanovadaria@yandex.ru','to');
-    //   // $m->to('mapss@inbox.lv','to');
-    //   $m->to('jurijsgergelaba@yandex.ru','to');
-    //   $m->from('no-reply@bananich.ru');
-    //   $m->subject('Дегустационный сет от Бананыча');
-    // });
-  
-    // Mail::send('mail.customEmail', ['user' => $user->toarray(),'html' => $html], function($m){
-    //   $m->to('aslanovadaria@yandex.ru','to');
-    //   // $m->to('mapss@inbox.lv','to');
-    //   // $m->to('jurijsgergelaba@yandex.ru','to');
-    //   $m->from('no-reply@bananich.ru');
-    //   $m->subject('Дегустационный сет от Бананыча');
-    // });
+  //   // dump($html);
   
   
-    // return view('mail.test');
-    // return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
+  //   // Mail::send('mail.customEmail', ['user' => $user->toarray(),'html' => $html], function($m){
+  //   //   // $m->to('aslanovadaria@yandex.ru','to');
+  //   //   // $m->to('mapss@inbox.lv','to');
+  //   //   $m->to('jurijsgergelaba@yandex.ru','to');
+  //   //   $m->from('no-reply@bananich.ru');
+  //   //   $m->subject('Дегустационный сет от Бананыча');
+  //   // });
+  
+  //   // Mail::send('mail.customEmail', ['user' => $user->toarray(),'html' => $html], function($m){
+  //   //   $m->to('aslanovadaria@yandex.ru','to');
+  //   //   // $m->to('mapss@inbox.lv','to');
+  //   //   // $m->to('jurijsgergelaba@yandex.ru','to');
+  //   //   $m->from('no-reply@bananich.ru');
+  //   //   $m->subject('Дегустационный сет от Бананыча');
+  //   // });
+  
+  
+  //   // return view('mail.test');
   });
 }
 
