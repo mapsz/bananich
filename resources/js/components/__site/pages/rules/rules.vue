@@ -91,6 +91,7 @@
       </div>
     </div> 
 
+    <a name="delivery"></a>
     <div class="row mb-lg-100 mb-5 mb-lg-100">
       <div class="col-12 col-lg-6">
         <div class="header mb-4">

@@ -282,27 +282,36 @@
 
               <!-- Address -->
               <div class="value">
-                {{order.address}} {{order.appart}}
-                <span v-if="(sOrder.address.street + ' ' + sOrder.address.number != order.address)" >
-                  (+{{settings.x_personal_address}}p)
-                </span>
+                <template v-if="userIn">
+                  {{order.address}} {{order.appart}}
 
-                <div v-if="(sOrder.address.street + ' ' + sOrder.address.number != order.address)" >
-                  <choose-address 
-                    :show="false" :no-pre="true" 
-                    :buttonBody="'Изменить адрес'"
-                    v-model="personalAddress"
-                  />
-                </div>
+                  <span v-if="(sOrder.address.street + ' ' + sOrder.address.number != order.address)" >
+                    (+{{settings.x_personal_address}}p)
+                  </span>
+
+                  <div v-if="(sOrder.address.street + ' ' + sOrder.address.number != order.address)" >
+                    <choose-address 
+                      :show="false" :no-pre="true" 
+                      :buttonBody="'Изменить адрес'"
+                      v-model="personalAddress"
+                    />
+                  </div>
+                </template>
+                <template v-else>
+                  {{sOrder.address.street}} {{sOrder.address.number}}
+                </template>
               </div> 
 
               <!-- Personal Address -->
-              <div v-if="(!isAdmin && userIn && isOpen) && (sOrder.address.street + ' ' + sOrder.address.number == order.address)" class="mt-3">
+              <div v-if="(!isAdmin && userIn && isOpen) && (sOrder.address.street + ' ' + sOrder.address.number == order.address)" class="mt-3 d-flex">
                 <choose-address 
                   :show="false" :no-pre="true" 
                   :buttonBody="'Донести до двери (+'+settings.x_personal_address+'р)'"
                   v-model="personalAddress"
-                />
+                />            
+                <a href="/rules#delivery">
+                  <span class="mt-2 ml-3 info-icon" style="color:black; text-decoretion:none"></span>
+                </a>
               </div>
 
             </div>
