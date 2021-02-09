@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class Address extends Model
 {
@@ -40,6 +41,35 @@ class Address extends Model
 
     
     return true;
+  }
+
+  public static function orderValidate($id){
+    
+    {//id
+      $isId = $id > 0 ? true : false;
+      Validator::make(['id' => $isId], ['id' => 'required|accepted'], ['id.accepted' => 'Укажите адрес!'])->validate();
+    }
+
+    //Get address
+    $address = Address::find($id);
+
+    {//Exists
+      $exists = isset($address) && isset($address->id) ? true : false;
+      Validator::make(['exists' => $exists], ['exists' => 'required|accepted'], ['exists.accepted' => 'Адрес недоступен!!'])->validate();
+    }
+    
+    {//User id
+      $user = Auth::user();
+      $userId = isset($user) && isset($user->id) ? $user->id : 0;
+    }
+    
+    {//Allowed
+      $allowed = $address->addressable_type == "App\User" && $address->addressable_id == $userId ? true : false;
+      Validator::make(['allowed' => $allowed], ['allowed' => 'required|accepted'], ['allowed.accepted' => 'Адрес недоступен!'])->validate();
+    }
+    
+    return true;
+
   }
 
   public function addressable(){

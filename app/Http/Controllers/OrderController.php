@@ -16,6 +16,7 @@ use App\Discount;
 use App\Cart;
 use App\Setting;
 use App\JugeLogs;
+use App\Address;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -83,6 +84,22 @@ class OrderController extends Controller
       if(strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false){
         $site = 'x';
       }
+
+      //Address
+      {
+        //Validate juge Address
+        if(isset($data['jugeAddress']) && $data['jugeAddress']){
+          Address::orderValidate( $data['jugeAddress'] );
+        } 
+        
+        //Set address
+        $jugeAddress = Address::find($data['jugeAddress']);
+        $data["addressStreet"] = $jugeAddress->street;
+        $data["addressNumber"] = $jugeAddress->number;
+        $data["addressApart"] = $jugeAddress->appart;
+        $data["addressPorch"] = $jugeAddress->porch;
+
+      }
     }
 
     //Remove oay method
@@ -93,6 +110,8 @@ class OrderController extends Controller
     JugeLogs::log(2, json_encode(['model' => 'orderController', 'user' => $userId]));
     
     {//Validate
+
+
       {//Validate Cart
         $cartValidate = [
           'items'           => ['bail','min:1'],

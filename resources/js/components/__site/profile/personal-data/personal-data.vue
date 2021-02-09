@@ -9,21 +9,9 @@
           <!-- Navbar -->
           <div class="col-lg-4">            
             <profile-navbar></profile-navbar>
-          </div>
-
-
-
-          
+          </div>          
           <div class="col-lg-8">
-            
-            <div class="row">
-              <div class="col-12 my-5">
-
-                <user-addresses />
-
-              </div>
-            </div>
-
+  
             <div class="title-wrap title-page">
               <h2 class="title-h2">Личные данные</h2>
             </div>          
@@ -87,7 +75,7 @@
                 </div>
 
                 <!-- Address -->
-                <div v-if="isX" class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6">
                   <h4>Адрес</h4>
 
                   <!-- Show -->

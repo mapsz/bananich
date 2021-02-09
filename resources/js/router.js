@@ -75,7 +75,7 @@ let routes = [];
         },        
         {
           path: '/profile/shared/orders', component:siteProfilesharedOrder,
-          name: 'Мои закупки', meta: {breadcrumb: 'Мои закупки'}
+          name: 'История заказов', meta: {breadcrumb: 'История заказов'}
         },
       ]
     }

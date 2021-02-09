@@ -277,10 +277,17 @@
               <hr class="my-30">
               <div class="label">
                 Адрес доставки
+                <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
               <div class="value">
                 {{sOrder.address.street}} {{sOrder.address.appart}}
               </div> 
+              <!-- <div class="mt-3">
+                <choose-address v-if="!isAdmin && userIn && isOpen" 
+                  :show="false" :no-pre="true" 
+                  :buttonBody="'Заказать линую доставку (+'+settings.x_personal_address+'р)'"
+                />
+              </div> -->
             </div>
 
             <!-- Checkout -->
@@ -539,6 +546,7 @@ computed:{
     cart:'cart/getCart',
     sOrders:    'sharedOrder/get',
     user:       'user/get',
+    settings:       'settings/beautyGet',
   }),
   shareLink(){
     if(!this.link) return false;

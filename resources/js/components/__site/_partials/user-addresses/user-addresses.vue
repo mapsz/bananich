@@ -1,5 +1,5 @@
 <template>
-<div class="user-addresses">
+<div v-if="user" class="user-addresses">
 
   
   <!-- List -->
@@ -92,11 +92,11 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {
-props: ['active','choose'],
+props: ['active','choose','no-pre'],
 data(){return{
   //Choose
   choosedAddress:false,
-  defautSet:false,
+  preChoosed:false,
   //Show
   showAddresses:false,
   showDelete:false,
@@ -148,23 +148,36 @@ watch:{
     if(this.addresses && this.addresses.length == 0) this.showAdd = true;
   },
   user: function (val, oldVal) {
-    this.watchUserLoad();
+    this.doPreChoose();
   },
 },
 async mounted() {
-  this.watchUserLoad();
+  this.doPreChoose();
 },
 methods:{
   ...mapActions({
     'getUser':'user/fetch',
   }),
-  watchUserLoad(){
+  doPreChoose(){
+    if(this.noPre) return;
     if(!this.choose) return;
-    if(this.defautSet) return;
+    if(this.preChoosed) return;
     if(this.user == undefined || this.user.id == undefined) return;
+    //Set local storage
+    if(localStorage.jugeAddress != undefined){
+      let l = this.addresses.find(x => x.id == localStorage.jugeAddress);
+      if(l){
+        this.doChoose(l.id, 1);
+        this.preChoosed = true;
+        return;
+      } 
+    }
+
+    //Set default
     let d = this.addresses.find(x => x.default == 1);
-    if(d) this.doChoose(d.id);
-    this.defautSet = true;
+    if(d) this.doChoose(d.id, 1);
+    this.preChoosed = true;
+    return;
   },
   async setDefault(id){
     await ax.fetch('/user/address/default', {id}, 'post');
@@ -185,10 +198,15 @@ methods:{
     this.showEdit = false;
     this.showAdd = false;
   },
-  doChoose(id){
-    this.choosedAddress = id;
+  doChoose(id,noCache = false){
+    //Set local storage
+    if(!noCache) localStorage.jugeAddress = id;
+    //Set current var
+    this.choosedAddress = id;    
+    //Set parent
     this.$emit('choose', id);
-    this.showAddresses = false
+    //Hide modal
+    this.showAddresses = false;
   }
 },
 }

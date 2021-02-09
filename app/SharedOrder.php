@@ -49,14 +49,24 @@ class SharedOrder extends Model
           }
           
           {//Attach Address
-            $address = [
-              'street' => $data['address']['addressStreet'],
-              'number' => isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : null,
-              'appart' => isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null,
-              'porch' => isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null,
-              'stage' => isset($data['address']['addressStage']) ? $data['address']['addressStage'] : null,
-            ];
-            $sOrder->address()->save(new Address($address));
+            {//old
+              // $address = [
+              //   'street' => $data['address']['addressStreet'],
+              //   'number' => isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : null,
+              //   'appart' => isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null,
+              //   'porch' => isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null,
+              //   'stage' => isset($data['address']['addressStage']) ? $data['address']['addressStage'] : null,
+              // ];            
+              // $sOrder->address()->save(new Address($address));
+            }
+            //Get Address
+            $jugeAddress = Address::find($data["jugeAddress"]);
+            //Clone
+            $attachJugeAddress = $jugeAddress->replicate();
+            //Attach
+            $attachJugeAddress->addressable_type = 'App\SharedOrder';
+            $attachJugeAddress->addressable_id = $sOrder->id;
+            $attachJugeAddress->save();
           }
                   
           {//Attach Comment
@@ -85,6 +95,7 @@ class SharedOrder extends Model
   }
 
   public static function edit($data){
+    
 
     //is editable    
     $sOrder = (new SharedOrder)->jugeGet(['id' => $data['id']]);
@@ -108,25 +119,39 @@ class SharedOrder extends Model
       }
 
       {//Address
-        if(isset($data['address']) && is_array($data['address'])){
-          $addressData = [];
-          if(array_key_exists('addressStreet', $data['address'])) $addressData['street'] = $data['address']['addressStreet'];
-          if(array_key_exists('addressNumber', $data['address'])) $addressData['number'] = $data['address']['addressNumber'];
-          if(array_key_exists('addressApart', $data['address'])) $addressData['appart'] = $data['address']['addressApart'];
-          if(array_key_exists('addressPorch', $data['address'])) $addressData['porch'] = $data['address']['addressPorch'];
-        }
+        // if(isset($data['address']) && is_array($data['address'])){
+        //   $addressData = [];
+        //   if(array_key_exists('addressStreet', $data['address'])) $addressData['street'] = $data['address']['addressStreet'];
+        //   if(array_key_exists('addressNumber', $data['address'])) $addressData['number'] = $data['address']['addressNumber'];
+        //   if(array_key_exists('addressApart', $data['address'])) $addressData['appart'] = $data['address']['addressApart'];
+        //   if(array_key_exists('addressPorch', $data['address'])) $addressData['porch'] = $data['address']['addressPorch'];
+        // }        
       }
 
     }
 
     {//Update
-      {//Address
-        if(count($addressData) > 0){
-          //Delete old
-          Address::where('addressable_type', 'App\SharedOrder')->where('addressable_id', $data['id'])->delete();
-          //Add new
-          $sOrder->address()->save(new Address($addressData));          
-        }
+      // {//Address
+      //   if(count($addressData) > 0){
+      //     //Delete old
+      //     Address::where('addressable_type', 'App\SharedOrder')->where('addressable_id', $data['id'])->delete();
+      //     //Add new
+      //     $sOrder->address()->save(new Address($addressData));          
+      //   }
+      // }
+
+      
+      if(isset($data['jugeAddress'])){
+        //Delete old
+        Address::where('addressable_id',$data['id'])->where('addressable_type', 'App\SharedOrder')->delete();
+        //Get Address
+        $jugeAddress = Address::find($data["jugeAddress"]);
+        //Clone
+        $attachJugeAddress = $jugeAddress->replicate();
+        //Attach
+        $attachJugeAddress->addressable_type = 'App\SharedOrder';
+        $attachJugeAddress->addressable_id = $data['id'];
+        $attachJugeAddress->save();
       }
 
 
@@ -160,18 +185,23 @@ class SharedOrder extends Model
     {//Validate
 
       {//Validate Shared Order
+        {//Address
+          if(!($put == false && array_key_exists('jugeAddress',$data) && $data['jugeAddress'] == null)){
+            Address::orderValidate( isset($data['jugeAddress']) ? $data['jugeAddress'] : false) ;
+          }  
+        }
         
         {//Required
           if($put){
             $validate = [
-              'address.addressStreet'       => ['required'],          
+              // 'address.addressStreet'       => ['required'],          
               'memberCount'                 => ['required'],
               'date'                        => ['required'],
               'time'                        => ['required'],
             ];
 
             $messages = [
-              'address.addressStreet.required'      => 'Необходимо заполнить поле "Адрес"',
+              // 'address.addressStreet.required'      => 'Необходимо заполнить поле "Адрес"',
               'memberCount.required'                => 'Необходимо выбрать количество участников',
               'date.required'                       => 'Необходимо выбрать время доставки',
               'time.required'                       => 'Необходимо выбрать дату доставки',
@@ -183,21 +213,21 @@ class SharedOrder extends Model
 
         {//Other
           $validate = [
-            'address.addressStreet'       => 'bail|string|min:5|max:170',
             'memberCount'                 => ['min:1', "max:{$settings['x_max_member_count']}"],
-            'address.addressApart'        => ['max:20' ],
-            'address.addressNumber'       => ['max:20' ],
-            'address.addressPorch'        => ['max:20' ],
             'comment'                     => ['max:1000'],
+            // 'address.addressStreet'       => 'bail|string|min:5|max:170',
+            // 'address.addressApart'        => ['max:20' ],
+            // 'address.addressNumber'       => ['max:20' ],
+            // 'address.addressPorch'        => ['max:20' ],
           ];
 
           $messages = [
-            'address.addressStreet.string'        => 'Необходимо заполнить поле "Адрес"',
-            'address.addressStreet.min'           => 'Количество символов в поле "Адрес" не должно быть меньше :min',
-            'address.addressStreet.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
-            'address.addressPorch.max'            => 'Количество символов в поле "Этаж" не должно превышать :max',
-            'address.addressNumber.max'           => 'Количество символов в поле "Дом" не должно превышать :max',
-            'address.addressApart.max'            => 'Количество символов в поле "Квартира" не должно превышать :max',
+            // 'address.addressStreet.string'        => 'Необходимо заполнить поле "Адрес"',
+            // 'address.addressStreet.min'           => 'Количество символов в поле "Адрес" не должно быть меньше :min',
+            // 'address.addressStreet.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
+            // 'address.addressPorch.max'            => 'Количество символов в поле "Этаж" не должно превышать :max',
+            // 'address.addressNumber.max'           => 'Количество символов в поле "Дом" не должно превышать :max',
+            // 'address.addressApart.max'            => 'Количество символов в поле "Квартира" не должно превышать :max',
             'comment.max'                         => 'Количество символов в поле "Комментарий" не должно превышать :max',
           ];
 

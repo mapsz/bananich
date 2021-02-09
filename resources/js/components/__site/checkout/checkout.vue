@@ -3,19 +3,22 @@
 
     <main class="cart-page">
       <div class="container">
+        <!-- Bread -->
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Главная</a></li>
-            <li class="breadcrumb-item"><a href="#">Корзина</a></li>
+            <li class="breadcrumb-item"><a href="/cart">Корзина</a></li>
             <li class="breadcrumb-item active">Оформление заказа</li>
           </ol>
         </nav>
 
-          <div class="d-flex mt-4 mt-sm-0 title-page-wrapper">
-            <a href="/cart" class="arrow-back"><img src="image/arrow.svg" alt="arrow"></a>
-            <h1 class="title-page">Оформление заказа</h1>
-          </div>
+        <!-- Title -->
+        <div class="d-flex mt-4 mt-sm-0 title-page-wrapper">
+          <a href="/cart" class="arrow-back"><img src="image/arrow.svg" alt="arrow"></a>
+          <h1 class="title-page">Оформление заказа</h1>
+        </div>
 
+        <!-- Content -->
         <div class="row content-page checkout-data">
 
           <!-- Inputs -->
@@ -26,8 +29,19 @@
               <checkout-login class="checkout-div" />
 
               <checkout-toother class="checkout-div" v-model="data.toOther" />
-
-              <checkout-address class="checkout-div"/>
+              
+              <!-- Address -->
+              <template>
+                <div v-if="user" class="checkout-div">
+                  <div class="row checkout-address checkout-address-gift m-0">
+                    <div class="col-12">
+                      <div class="checkout-title">Адрес</div>
+                      <choose-address v-model="data.jugeAddress"/>
+                    </div>
+                  </div>
+                </div>
+                <checkout-address v-else class="checkout-div"/>
+              </template>
 
               <checkout-date-time class="checkout-div" v-model="data.dateTime"/>
 
@@ -81,7 +95,11 @@ export default {
     errors:[],
   }},
   computed:{
-    ...mapGetters({cart:'cart/getCart',checkout:'checkout/get'}),
+    ...mapGetters({
+      cart:'cart/getCart',
+      checkout:'checkout/get',      
+      user:       'user/get',
+    }),
   },
   mounted(){
     //Trackers
@@ -91,7 +109,9 @@ export default {
     } 
   },
   methods:{    
-    ...mapActions({'clean':'checkout/clean'}),
+    ...mapActions({
+      'clean':'checkout/clean',
+    }),
     async doOrder(type=false){
       //Refresh errors
       if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
@@ -102,8 +122,11 @@ export default {
 
       if(!r) return;
 
+      let data = this.checkout;
+      data.jugeAddress = this.data.jugeAddress;
+
       //Put      
-      r = await ax.fetch('/order/put', {data:this.checkout,'cartId':this.cart.id,type}, 'put');
+      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type}, 'put');
 
       //Catch errors
       if(!r){      
@@ -123,13 +146,7 @@ export default {
         this.clean();
         ax.fetch('/order/update/available', {id:r});
         location.href ='/order-thanks';
-      }
-        
-
-      // //Check signin
-      // await this.getUser();
-      // if(this.user.id != undefined) location.reload();
-      // }
+      }        
     },
   }
 }

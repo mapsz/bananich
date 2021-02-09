@@ -10,7 +10,7 @@
         <shared-order-open-blocks class="mt-5" v-if="!isEdit"/>
 
         <!-- Inputs -->
-        <div class="inputs">
+        <div class="inputs" v-if="loaded">
 
           <!-- Member count -->
           <div class="row">
@@ -91,7 +91,7 @@
               <div class="col-12 col-lg-6">
                 <div class="ml-lg-4">     
                   <!-- Show -->
-                  <choose-address />
+                  <choose-address :pre-show="preShowAddress" :no-pre="isEdit" v-model="data.jugeAddress"/>
 
                   <!-- <checkout-address class="checkout-div" :design="'x'" v-model="data.address"/> -->
                 </div>
@@ -178,13 +178,16 @@ export default {
 components: {Datepicker},
 data(){return{
   data:{
+    jugeAddress:null,
     memberCount:2,
     address:null,
     date:null,
     time:null,
     comment:"",
-  },  
-  isEdit:false,
+  },
+  preShowAddress:false,
+
+  isEdit:location.href.includes('/shared/order/edit') ? true : false,
   errors:[],
   showLogin:false,
 }},
@@ -340,8 +343,12 @@ watch:{
       this.data.memberCount = val.member_count;
 
     //address
-    if(val.address != undefined)
-      this.data.address = val.address;
+    if(val.address != undefined){
+      // this.data.address = val.address;
+      this.preShowAddress = val.address;
+      // this.data.jugeAddress = val.address.id;
+    }
+      
 
     //comment
     if(val.comment != undefined)
@@ -360,9 +367,6 @@ watch:{
       this.data.date = val.delivery_date;
     }
 
-    // delivery_time_from: (...)
-    // delivery_time_to: (...)
-
 
   },
   user: function (val, oldVal) {
@@ -379,7 +383,6 @@ async mounted(){
 
   //Check edit
   if(location.href.includes('/shared/order/edit')){
-    this.isEdit = true;
     //Get order
     await this.filter({'link':this.link});
     await this.get();
@@ -429,7 +432,10 @@ methods:{
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
 
     //Success
-    if(r){window.location.href = '/shared/order/'+r.link + (neighbor ? '?neighbor=true' : '')};
+    if(r){
+      localStorage.jugeAddress = 0;
+      window.location.href = '/shared/order/'+r.link + (neighbor ? '?neighbor=true' : '')
+    };
 
   },
   async edit(){
@@ -444,7 +450,10 @@ methods:{
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
 
     //Success
-    if(r){window.location.href = '/shared/order/'+this.sOrder.link};
+    if(r){
+      localStorage.jugeAddress = 0;
+      window.location.href = '/shared/order/'+this.sOrder.link
+    };
 
     console.log(r);
   }
