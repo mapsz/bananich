@@ -1237,7 +1237,7 @@ class Order extends Model
     }
 
     //Single order by id
-    if(isset($request['id']) && $request['id']){
+    if(isset($orders[0]) && (isset($request['id']) && $request['id']) || (isset($request['single']) && $request['single'])){
       $orders = $orders[0];      
     }
 

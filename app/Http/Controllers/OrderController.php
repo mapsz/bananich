@@ -318,6 +318,7 @@ class OrderController extends Controller
   }
 
   public function post(Request $request){
+
     if(!isset($request->id)) {
       return response(['code' => 'a1','text' => 'Post order'], 512)->header('Content-Type', 'text/plain');
     }
@@ -392,18 +393,31 @@ class OrderController extends Controller
         if(isset($data['contacts']['email'])) $order->email = $data['contacts']['email'];
       }
 
-
-      // dd($data['address']['addressStreet']);
-
       {//Address
         if(isset($data['personalAddress']) && $data['personalAddress'] == 1){
+          // dd($data);
           $order->address  = ($data['address']['addressStreet']) . ' ' . (isset($data['address']['addressNumber']) ? $data['address']['addressNumber'] : '');
           $order->appart   = isset($data['address']['addressApart']) ? $data['address']['addressApart'] : null;
           $order->porch    = isset($data['address']['addressPorch']) ? $data['address']['addressPorch'] : null;
         }
-        if(isset($data['personalAddress']) && $data['personalAddress'] == 0){
-          //Get shared Order    
-          // $sOrder = SharedOrder::jugeGet(['orderId' => $data['id']]);
+
+        //Juge Address
+        if(isset($data['jugeAddress']) && $data['jugeAddress'] > 0){          
+          //Todo validate
+          // dd($data['jugeAddress']);
+          //
+
+          //Set address
+          $jugeAddress = Address::find($data['jugeAddress']);
+          $data["addressStreet"] = $jugeAddress->street;
+          $data["addressNumber"] = $jugeAddress->number;
+          $data["addressApart"] = $jugeAddress->appart;
+          $data["addressPorch"] = $jugeAddress->porch;
+
+          $order->address  = ($data['addressStreet']) . ' ' . (isset($data['addressNumber']) ? $data['addressNumber'] : '');
+          $order->appart   = isset($data['addressApart']) ? $data['addressApart'] : null;
+          $order->porch    = isset($data['addressPorch']) ? $data['addressPorch'] : null;
+
         }
         
 

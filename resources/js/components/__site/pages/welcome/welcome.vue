@@ -64,6 +64,7 @@
             
           </div>          
           <div class="col-12  mb-5">
+            <a name="prices"></a>
             <shared-order-open-blocks />
           </div>
         </div>
@@ -171,6 +172,12 @@ data(){return{
   isX:isX,
 }},
 async mounted() {
+
+  if(this.$route.hash != ""){
+    setTimeout(function() { 
+      scrollBy(0,-100);
+    },250);
+  }
 
   Cookies.set('x_not_first_time');
 

@@ -95,7 +95,6 @@ class SharedOrder extends Model
   }
 
   public static function edit($data){
-    
 
     //is editable    
     $sOrder = (new SharedOrder)->jugeGet(['id' => $data['id']]);
@@ -103,9 +102,16 @@ class SharedOrder extends Model
 
     //Validate
     SharedOrder::validate($data, false);
+    
+    //Get user
+    $user = Auth::user();
+    if(!$user) return false;
+
+    //Get shared order
+    $sOrder = SharedOrder::find($data['id']);
 
     //Get order
-    $sOrder = SharedOrder::find($data['id']);   
+    $order = Order::jugeGet(['sharedOrder' => $data['id'], 'customer_id' => $user->id, 'single' => 1]);
 
     {//Set data
       {//Shared order
@@ -140,6 +146,7 @@ class SharedOrder extends Model
       //   }
       // }
 
+
       
       if(isset($data['jugeAddress'])){
         //Delete old
@@ -152,6 +159,17 @@ class SharedOrder extends Model
         $attachJugeAddress->addressable_type = 'App\SharedOrder';
         $attachJugeAddress->addressable_id = $data['id'];
         $attachJugeAddress->save();
+      }
+    
+      
+      {//Order Address
+        if(isset($data['jugeAddress'])){
+          $order = Order::find($order->id);
+          $order->address = $jugeAddress->street .' '. $jugeAddress->number;
+          $order->appart = $jugeAddress->appart;
+          $order->porch = $jugeAddress->porch;
+          $order->save();
+        }
       }
 
 
@@ -402,6 +420,9 @@ class SharedOrder extends Model
 
     foreach ($sOrder->orders as $key => $order) {
       Order::changeStatus($order->id,0);
+      if($order->customer_id != $sOrder->owner_id){
+        Announce::add($order->customer_id,'closed');
+      } 
     }
 
     self::changeStatus($id,0);

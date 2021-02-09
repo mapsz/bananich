@@ -26,7 +26,7 @@
         </div>
         
         
-      </div>          
+      </div>
       <div class="col-12  my-5">
         <shared-order-open-blocks />
       </div>

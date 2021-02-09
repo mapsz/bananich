@@ -279,15 +279,32 @@
                 Адрес доставки
                 <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
+
+              <!-- Address -->
               <div class="value">
-                {{sOrder.address.street}} {{sOrder.address.number}} {{sOrder.address.appart}}
+                {{order.address}} {{order.appart}}
+                <span v-if="(sOrder.address.street + ' ' + sOrder.address.number != order.address)" >
+                  (+{{settings.x_personal_address}}p)
+                </span>
+
+                <div v-if="(sOrder.address.street + ' ' + sOrder.address.number != order.address)" >
+                  <choose-address 
+                    :show="false" :no-pre="true" 
+                    :buttonBody="'Изменить адрес'"
+                    v-model="personalAddress"
+                  />
+                </div>
               </div> 
-              <!-- <div class="mt-3">
-                <choose-address v-if="!isAdmin && userIn && isOpen" 
+
+              <!-- Personal Address -->
+              <div v-if="(!isAdmin && userIn && isOpen) && (sOrder.address.street + ' ' + sOrder.address.number == order.address)" class="mt-3">
+                <choose-address 
                   :show="false" :no-pre="true" 
-                  :buttonBody="'Заказать линую доставку (+'+settings.x_personal_address+'р)'"
+                  :buttonBody="'Донести до двери (+'+settings.x_personal_address+'р)'"
+                  v-model="personalAddress"
                 />
-              </div> -->
+              </div>
+
             </div>
 
             <!-- Checkout -->
@@ -523,6 +540,8 @@ data(){return{
   checkout:{},
   showModal:{},
   showModalContacts:false,
+  //Personal address
+  personalAddress:false,
   //
   changeMemberCount:1,
   test:{},
@@ -698,6 +717,11 @@ watch:{
     this.checkout.contacts.phone = this.order.phone;
     this.checkout.contacts.email = this.order.email;
   },
+  personalAddress: function (val, oldVal) {
+    if(val > 0){
+      this.checkoutEdit();
+    }
+  },
 },
 async mounted(){
   //Update
@@ -810,6 +834,8 @@ methods:{
     console.log(this.checkout);
     let data = this.checkout;
     data.id = this.order.id;
+    if(this.personalAddress)
+      data.jugeAddress = this.personalAddress;
     let r = await ax.fetch('/order/customer',data,'post');
 
     //Catch errors
@@ -818,6 +844,7 @@ methods:{
     //Success
     this.showModal = {};
     this.showModalContacts = false;
+    location.reload();
     
     this.get(this.link);
   },
