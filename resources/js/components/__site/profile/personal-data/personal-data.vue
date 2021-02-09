@@ -111,7 +111,7 @@
               </div>
               
               <!-- Logout -->
-              <logout />
+              <logout class="mt-5"/>
 
             </div>
           </div>

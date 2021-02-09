@@ -250,12 +250,26 @@ class Order extends Model
       }
     }
     
+    //Custom remove
+    if($cart['type'] == 2){
+      $min = Carbon::parse("2021-02-12")->timestamp;
+      
+      $cd = $days;
+      foreach ($cd as $key => $day) {
+        if(Carbon::parse($day['date'])->timestamp < $min){
+          unset($days[$key]);
+        }
+          
+      }
+    }
+    
     {//Return format
       $rDate = [];
       foreach ($days as $key => $day) {
         array_push($rDate,$day);
       }
     }
+
 
 
     return $rDate;

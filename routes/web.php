@@ -889,7 +889,7 @@
 }
 
 {//Mail test
-  Route::get('/mail/preview/{id}', function($id){
+  Route::get('/mail//test/preview', function($id){
 
     $user = App\User::find(751);
     $email = App\Email::jugeGet(['id'=>$id]);
@@ -946,6 +946,16 @@
   Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
 }
 
+//Mail
+Route::get('/mail/preview/{id}', function($id){
+
+  $user = App\User::find(751);
+  $email = App\Email::jugeGet(['id'=>$id]);
+  $html = App\Email::customTags($email->html,$user);
+
+  
+  return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
+});
 
 Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
   Route::get('/', function(){
