@@ -280,7 +280,7 @@
                 <button v-if="isAdmin && editable" @click="goToEdit()" class="edit float-right">изменить</button>
               </div>
               <div class="value">
-                {{sOrder.address.street}} {{sOrder.address.appart}}
+                {{sOrder.address.street}} {{sOrder.address.number}} {{sOrder.address.appart}}
               </div> 
               <!-- <div class="mt-3">
                 <choose-address v-if="!isAdmin && userIn && isOpen" 

@@ -48,7 +48,7 @@
               <template v-if="isX">
                 <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
                 <li class="m-2"><a href="/profile/favorites" class="nav-link-sad" style="font-size:12pt">Избранное</a> </li>
-                <li class="m-2"><a href="/profile/shared/orders" class="nav-link-sad" style="font-size:12pt">Мои закупки</a> </li>
+                <li class="m-2"><a href="/profile/shared/orders" class="nav-link-sad" style="font-size:12pt">История заказов</a> </li>
               </template>
               <template v-else>
                 <li class="m-2"><a href="/profile" class="nav-link-sad" style="font-size:12pt">Личные данные</a> </li>
