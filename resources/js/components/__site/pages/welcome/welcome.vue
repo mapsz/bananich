@@ -7,7 +7,7 @@
 
         <!-- Name moto -->
         <div class="header my-5">
-          <b>NEOLAVKA</b> - все товары по себестоимости
+          <b>NEOLAVKA</b> - новый подход к рациональным покупкам
         </div>
 
         <!-- Desciprion -->
