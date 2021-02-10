@@ -62,6 +62,14 @@ class PurchaseController extends Controller
 
       //Update Available
       Product::updateAvailable($data['product_id']);
+
+      
+      {//Update product supply price
+        //Delete old
+        DB::table('product_metas')->where('name', 'supply_price')->where('product_id',$data['product_id'])->delete();
+        //Insert
+        DB::table('product_metas')->insert(['name' => 'supply_price', 'product_id' => $data['product_id'], 'value' => $data['price']]);
+      }
       
       //Store to DB
       DB::commit();    
