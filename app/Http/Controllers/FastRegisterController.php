@@ -70,12 +70,19 @@ class FastRegisterController extends Controller
             'surname'   => ['max:190'],
             'email'     => ['required', 'email', 'max:190'],
             'password'  => ['required', 'min:6', 'confirmed'],
-            'phone'     => ['required', 'regex:/^8(\d){10}?$/', 'unique:users'],
+            'phone'     => ['required', 'regex:/^8(\d){10}?$/'],
           ],
           [
             'regex'      => 'Пожалуйста, введите номер телефона в формате 8ХХХХХХХХХХ',
           ] 
         )->validate();
+       
+        //Check old phone
+        $user = User::where('email', $link->email)->first();
+        if($user == null || $user->phone != $data['phone']){
+          Validator::make($data, ['phone' => ['required', 'unique:users'],])->validate();
+        }
+        
       }
     }
 

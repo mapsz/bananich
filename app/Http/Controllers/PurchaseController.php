@@ -72,7 +72,7 @@ class PurchaseController extends Controller
       }
       
       //Store to DB
-      DB::commit();    
+      DB::commit();
     } catch (Exception $e) {          
       // Rollback from DB
       DB::rollback();
