@@ -143,6 +143,9 @@ export default {
           ym(54670840,'reachGoal','ordered');
           fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
         } 
+        if(!localServer && isX && ym != undefined){
+          ym(72176563,'reachGoal','orderplaced');
+        } 
         this.clean();
         ax.fetch('/order/update/available', {id:r});
         location.href ='/order-thanks';

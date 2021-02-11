@@ -62,7 +62,7 @@ class OrderController extends Controller
 
   public function put(Request $request){
     
-    JugeLogs::log(1, json_encode(['model' => 'orderController', 'user' => '?']));
+    JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
     
     {//Data
       //Get user
@@ -85,29 +85,34 @@ class OrderController extends Controller
         $site = 'x';
       }
 
-      //Address
-      {
-        //Validate juge Address
+      JugeLogs::log(11, json_encode(['model' => 'orderController', 'user' => '?']));
+
+      
+      {//Address        
         if(isset($data['jugeAddress']) && $data['jugeAddress']){
+          //Validate juge Address
           Address::orderValidate( $data['jugeAddress'] );
+
+          //Set address
+          $jugeAddress = Address::find($data['jugeAddress']);
+          $data["addressStreet"] = $jugeAddress->street;
+          $data["addressNumber"] = $jugeAddress->number;
+          $data["addressApart"] = $jugeAddress->appart;
+          $data["addressPorch"] = $jugeAddress->porch;
         } 
         
-        //Set address
-        $jugeAddress = Address::find($data['jugeAddress']);
-        $data["addressStreet"] = $jugeAddress->street;
-        $data["addressNumber"] = $jugeAddress->number;
-        $data["addressApart"] = $jugeAddress->appart;
-        $data["addressPorch"] = $jugeAddress->porch;
 
       }
     }
+
+    JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
 
     //Remove oay method
     if($cart['type'] == 2){
       $data['payMethod'] = 1;
     }
     
-    JugeLogs::log(2, json_encode(['model' => 'orderController', 'user' => $userId]));
+    JugeLogs::log(20, json_encode(['model' => 'orderController', 'user' => $userId]));
     
     {//Validate
 
@@ -128,7 +133,7 @@ class OrderController extends Controller
         Validator::make($cart, $cartValidate, $cartMessages)->validate();
       }
 
-      JugeLogs::log(3, json_encode(['model' => 'orderController', 'user' => $userId]));
+      JugeLogs::log(30, json_encode(['model' => 'orderController', 'user' => $userId]));
       
       {//Validate order
         
@@ -191,19 +196,19 @@ class OrderController extends Controller
         Validator::make($data, $validate,$messages)->validate();
       }
 
-      JugeLogs::log(4, json_encode(['model' => 'orderController', 'user' => $userId]));
+      JugeLogs::log(40, json_encode(['model' => 'orderController', 'user' => $userId]));
 
       {//Validate available days
         Order::validateAvailableDays($data['deliveryDate'], $data['deliveryTime'], $cart);
       }
 
-      JugeLogs::log(5, json_encode(['model' => 'orderController', 'user' => $userId]));
+      JugeLogs::log(50, json_encode(['model' => 'orderController', 'user' => $userId]));
       
       {//Validate available product
         Order::validateAvailableProducts($cart);
       }
 
-      JugeLogs::log(6, json_encode(['model' => 'orderController', 'user' => $userId]));
+      JugeLogs::log(60, json_encode(['model' => 'orderController', 'user' => $userId]));
       
     }
           
@@ -214,18 +219,18 @@ class OrderController extends Controller
           //Place order
           $order = Order::placeOrder($data, $cart);
 
-          JugeLogs::log(7, json_encode(['model' => 'orderController', 'user' => $userId]));
+          JugeLogs::log(70, json_encode(['model' => 'orderController', 'user' => $userId]));
   
           //Check order success
           if(!$order || !isset($order->id)) throw new Exception('order error');
 
-          JugeLogs::log(8, json_encode(['model' => 'orderController', 'user' => $userId]));
+          JugeLogs::log(80, json_encode(['model' => 'orderController', 'user' => $userId]));
   
           {//Mail
             Order::email($order);
           }
 
-          JugeLogs::log(9, json_encode(['model' => 'orderController', 'user' => $userId]));
+          JugeLogs::log(90, json_encode(['model' => 'orderController', 'user' => $userId]));
               
         }DB::commit();    
       } catch (Exception $e) {

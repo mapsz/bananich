@@ -434,6 +434,9 @@ methods:{
     //Success
     if(r){
       localStorage.jugeAddress = 0;
+      if(!localServer){
+        ym(72176563,'reachGoal','purchaseopen');
+      } 
       window.location.href = '/shared/order/'+r.link + (neighbor ? '?neighbor=true' : '')
     };
 

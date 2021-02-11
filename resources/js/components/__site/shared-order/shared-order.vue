@@ -40,7 +40,7 @@
           </div>
           <!-- Copied -->
           <div class="col-12 col-lg-3 mt-lg-3" style="color: #eb5757;">
-            <div v-if="copied">
+            <div v-if="copied" @click="ym(72176563,'reachGoal','justshare')" color="color:#8ac2a7">
               Ссылка на закупку скопирована в буфер обмена, теперь вы можете поделиться ей с друзьями
             </div>              
           </div>
@@ -812,7 +812,10 @@ methods:{
       this.productNotAvailableList = ax.lastResponse.data;
 
     }}
-    if(r){window.location.reload();}
+    if(r){      
+      if(!localServer){ym(72176563,'reachGoal','joinpurchase');} 
+      window.location.reload();
+    }
   },
   async pay(userId,slot){
     let r = await ax.fetch('/shared/order/pay',{'order_id':this.sOrder.id, 'user_id':userId, 'slot':slot},'put');

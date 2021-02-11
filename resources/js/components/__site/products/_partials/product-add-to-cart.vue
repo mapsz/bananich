@@ -83,16 +83,18 @@ export default {
       //Edit cart
       let r = await this.editItem({id:this.product.id,'count':this.count});
 
-     if(!r && ax.lastResponse.status == 422 && ax.lastResponse.data == "not available"){
-       this.notAloved = true;
-       this.count = 0;
-       this.$emit('notAloved')
-       return;
+      if(!r && ax.lastResponse.status == 422 && ax.lastResponse.data == "not available"){
+        this.notAloved = true;
+        this.count = 0;
+        this.$emit('notAloved')
+        return;
       }
 
-      //Pixel
-      if(typeof fbq === 'function')
-        fbq('track', 'AddToCart');
+      if(r){
+        if(!localServer){
+          if(isX) ym(72176563,'reachGoal','addtocart'); else ym(54670840,'reachGoal','addtocart');   
+        } 
+      }
     },
   },
 }

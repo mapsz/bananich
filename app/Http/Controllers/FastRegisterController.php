@@ -79,7 +79,7 @@ class FastRegisterController extends Controller
        
         //Check old phone
         $user = User::where('email', $link->email)->first();
-        if($user == null || $user->phone != $data['phone']){
+        if(!isset($user->id) || $user->phone != $data['phone']){
           Validator::make($data, ['phone' => ['required', 'unique:users'],])->validate();
         }
         
@@ -87,7 +87,6 @@ class FastRegisterController extends Controller
     }
 
     //Put/Post user
-    $user = User::where('email', $data['email'])->first();
     if(!isset($user->id)){
       $user = new user();
     }

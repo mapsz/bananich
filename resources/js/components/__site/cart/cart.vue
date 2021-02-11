@@ -192,7 +192,7 @@ export default {
   mounted(){
     //Trackers
     if(!localServer){
-      ym(54670840,'reachGoal','opencart');
+      if(isX) ym(72176563,'reachGoal','opencart'); else ym(54670840,'reachGoal','opencart');   
     } 
     // this.getSettings();
   },
