@@ -275,7 +275,6 @@ class Checkout extends Model
 
     foreach ($items as $key => $item) {
 
-      // dd( $item);
       {//Weights
         $item->weight = $item->unit * $item->count;
       }

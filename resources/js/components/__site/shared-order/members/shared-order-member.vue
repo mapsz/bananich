@@ -20,11 +20,11 @@
       </div>
       <!-- Email -->
       <div class="user-email">
-        {{user.email != undefined ? user.email : 'E-mail'}}
+        <!-- {{user.email != undefined ? user.email : 'E-mail'}} -->
       </div>
       <!-- Phone -->
       <div class="user-phone">
-        {{user.phone != undefined ? user.phone : 'Телефон'}}
+        <!-- {{user.phone != undefined ? user.phone : 'Телефон'}} -->
       </div>
       <!-- Comfirm -->
       <div v-if="user" class="member-confirm mt-2 d-flex align-items-center">

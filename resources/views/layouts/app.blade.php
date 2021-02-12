@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-
     {{-- Vendors --}}
     @if (ENV('APP_ENV') != 'local' && strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false)
         <!-- Yandex.Metrika counter -->
@@ -16,6 +15,7 @@
                 accurateTrackBounce:true,
                 webvisor:true,
                 ecommerce:"dataLayer"
+                userParams:333,
             });
         </script>
         <noscript><div><img src="https://mc.yandex.ru/watch/72176563" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
