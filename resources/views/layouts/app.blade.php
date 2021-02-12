@@ -15,7 +15,11 @@
                 accurateTrackBounce:true,
                 webvisor:true,
                 ecommerce:"dataLayer"
-                userParams:{{Auth::user() ? Auth::user()->id : 0}},
+            });
+            ym(72176563, 'userParams', {
+                id: {{Auth::user() ? Auth::user()->id : 0}},
+                name : {{Auth::user() ? Auth::user()->name : 0}},
+                phone: {{Auth::user() ? Auth::user()->phone : 0}},
             });
         </script>
         <noscript><div><img src="https://mc.yandex.ru/watch/72176563" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
