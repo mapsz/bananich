@@ -46,11 +46,15 @@
     <div class="mb-2" style="border-top:2px dashed #8ac2a7;">
       <div class="d-flex justify-content-between border-bottom">
         <span>Участие:</span>
-        <span>{{parseInt(order.xData.participation_price)}}</span>
+        <span>{{order.participation_price != undefined ? parseInt(order.participation_price) : ''}}</span>
       </div>
       <div class="d-flex justify-content-between border-bottom">
         <span>Перевес:</span>
-        <span>{{parseInt(order.xData.overWeightPrice)}}</span>
+        <span>{{order.over_weight_price != undefined ? parseInt(order.over_weight_price) : ''}}</span>
+      </div>
+      <div class="d-flex justify-content-between border-bottom">
+        <span>До двери:</span>
+        <span>{{order.xData.personalAddress != undefined ? parseInt(order.xData.personalAddress) : ''}}</span>
       </div>
     </div> 
   </template>

@@ -270,8 +270,6 @@ class Order extends Model
       }
     }
 
-
-
     return $rDate;
 
   }
@@ -912,10 +910,8 @@ class Order extends Model
         $orders = $query->paginate($limit);
       }  
     }
-  
-
-    //Postedit data
-    if("EDIT" == "EDIT"){
+    
+    {//Postedit data
 
       //More info
       foreach ($orders as $ok => $order) {
@@ -1026,7 +1022,6 @@ class Order extends Model
           $order->items = Checkout::itemsWeight($order->items);
         }
       }
-
       
       {//Checkout
         $round = 0;
@@ -1101,27 +1096,30 @@ class Order extends Model
                 }   
               }
             }
-            
-            //Final item price
-            //pre
-            $item->price_final = round($item->price + $item->discount_final,$round);
-            if($item->price_final < 0) $item->price_final = 0;
-            //res
-            if($item->quantity_result){
-              $item->price_final_result = round($item->price_result + $item->discount_final_result,$round);
-              if($item->price_final_result < 0) $item->price_final_result = 0;
+
+            {//Final item price
+              {//Pre
+                $item->price_final = round($item->price + $item->discount_final,$round);
+                if($item->price_final < 0) $item->price_final = 0;
+              }
+              {//Result
+                if($item->quantity_result){
+                  $item->price_final_result = round($item->price_result + $item->discount_final_result,$round);
+                  if($item->price_final_result < 0) $item->price_final_result = 0;
+                }
+              }              
             }
   
             //Items Totals        
             //pre
-            $order->items_subtotal += $item->price;
-            $order->items_discounts += $item->discount_final;
-            $order->items_total += $item->price_final;
+            $order->items_subtotal    += $item->price;
+            $order->items_discounts   += $item->discount_final;
+            $order->items_total       += $item->price_final;
             //res
             if($item->quantity_result){
-              $order->items_subtotal_result += $item->price_result;
-              $order->items_discounts_result += $item->discount_final_result;
-              $order->items_total_result += $item->price_final_result;
+              $order->items_subtotal_result     += $item->price_result;
+              $order->items_discounts_result    += $item->discount_final_result;
+              $order->items_total_result        += $item->price_final_result;
             }
   
           }  
@@ -1141,8 +1139,7 @@ class Order extends Model
               $order->bonus = $order->bonus - ($order->bonus * 2);
             }
           }   
-  
-          
+            
           {//Normal Totals
             $order->n_total = (
               $order->items_total + 
@@ -1159,22 +1156,6 @@ class Order extends Model
             $order->n_items_total = $order->items_total;
             $order->n_items_total_result = $order->items_total_result;
           }
-
-  
-          {//Round values
-            $order->bonus = round($order->bonus,$round);
-            $order->shipping= round($order->shipping,$round);
-            $order->discounts_total = round($order->discounts_total,$round);
-            $order->discounts_total_result = round($order->discounts_total_result,$round);
-            $order->items_subtotal = round($order->items_subtotal,$round);
-            $order->items_subtotal_result = round($order->items_subtotal_result,$round);
-            $order->items_discounts = round($order->items_discounts,$round);
-            $order->items_discounts_result = round($order->items_discounts_result,$round);
-            $order->items_total = round($order->items_total,$round);
-            $order->items_total_result = round($order->items_total_result,$round);
-            $order->total = round($order->total,$round);
-            $order->total_result = round($order->total_result,$round);
-          }
           
           {//X
             if(isset($order->type) && $order->type == 'x' && !isset($request['noSharedOrder'])){
@@ -1188,18 +1169,45 @@ class Order extends Model
               $order->xData = Checkout::xdata($order->items, $order, $xDataSharedOrder);       
               
               {//Items
-                $order->x_items_total = 0;
-                foreach ($order->items as $key => $item) {
-                  $order->x_items_total += $item->price_final;
-                }                
+                $order->x_items_total = 0;               
                 $order->x_items_total_result = 0;
-              }         
+                foreach ($order->items as $key => $item) {
+                  {//Pre
+                    //Remove discount
+                    if(isset($item->discount_final)){$item->price_final -= $item->discount_final;} 
+                    //add
+                    $order->x_items_total += $item->price_final;
+                  }
+                  {//Result                    
+                    //Remove discount                    
+                    if(isset($item->discount_final_result)){ $item->price_final_result -= $item->discount_final_result; } 
+                    //add
+                    $order->x_items_total_result += $item->price_final_result;
+                  }
+                }
+              }
+
+              {//Remove discounts
+                $order->items_discounts = 0;
+                $order->items_discounts_result = 0;
+                $order->discounts_total = 0;
+                $order->discounts_total_result = 0;
+              }   
+
               {//Total
-                $order->x_total = Checkout::x_final_price($order->x_items_total, $order->xData);
-                $order->x_total_result = 0;              
+                $order->x_total         = 0;
+                $order->x_total_result  = 0;
+                {//Add Bonus
+                  $order->x_total         += $order->bonus;
+                  $order->x_total_result  += $order->bonus;
+                }                
+                {//Checkout
+                  $order->x_total         += Checkout::x_final_price($order->x_items_total,         $order->xData);
+                  $order->x_total_result  += Checkout::x_final_price($order->x_items_total_result,  $order->xData);
+                }
               }
             }
-          }
+          }     
 
           {//By type
             $order->total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_total : $order->x_total;
@@ -1207,6 +1215,21 @@ class Order extends Model
             $order->items_total = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total : $order->x_items_total;
             $order->items_total_result = !(isset($order->type) && $order->type == 'x' ) ? $order->n_items_total_result : $order->x_items_total_result;
           }
+             
+          {//Round values
+            $order->bonus = round($order->bonus,$round);
+            $order->shipping= round($order->shipping,$round);
+            $order->items_subtotal = round($order->items_subtotal,$round);
+            $order->items_subtotal_result = round($order->items_subtotal_result,$round);
+            $order->items_discounts = round($order->items_discounts,$round);
+            $order->items_discounts_result = round($order->items_discounts_result,$round);
+            $order->discounts_total = round($order->discounts_total,$round);
+            $order->discounts_total_result = round($order->discounts_total_result,$round);
+            $order->items_total = round($order->items_total,$round);
+            $order->items_total_result = round($order->items_total_result,$round);
+            $order->total = round($order->total,$round);
+            $order->total_result = round($order->total_result,$round);
+          }   
             
         }
       
@@ -1249,10 +1272,11 @@ class Order extends Model
       }    
 
     }
-
-    //Single order by id
-    if(isset($orders[0]) && (isset($request['id']) && $request['id']) || (isset($request['single']) && $request['single'])){
-      $orders = $orders[0];      
+    
+    {//Single order by id
+      if(isset($orders[0]) && (isset($request['id']) && $request['id']) || (isset($request['single']) && $request['single'])){
+        $orders = $orders[0];      
+      }
     }
 
     //Test

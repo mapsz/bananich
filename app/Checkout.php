@@ -213,7 +213,7 @@ class Checkout extends Model
 
   }
 
-  public static function items($items, $products){    
+  public static function items($items, $products){
     //Items
     foreach ($items as $key => $item) {
       foreach ($products as $product) {        
@@ -232,14 +232,14 @@ class Checkout extends Model
     }
 
     //Price Weight
-    $items = Checkout::itemsPirce($items);
+    $items = Checkout::itemsPrice($items);
     $items = Checkout::itemsWeight($items);
 
     return $items;
 
   }
 
-  public static function itemsPirce($items){
+  public static function itemsPrice($items){
 
     foreach ($items as $key => $item) {
 
@@ -271,7 +271,7 @@ class Checkout extends Model
 
   }
 
-  public static function itemsWeight($items){  
+  public static function itemsWeight($items){
 
     foreach ($items as $key => $item) {
 
@@ -340,14 +340,12 @@ class Checkout extends Model
     {//Ids
       $xData['order_id'] = $order->id;
       $xData['s_order_id'] = $sOrder == 'solo' ? 'solo' : $sOrder->id;      
-    }
-        
+    }        
     
     {//Set member count
       if($sOrder == 'solo') $memberCount = 1;
       else $memberCount = $sOrder->member_count;
     }
-
 
     {//Participation
       if($memberCount == 0) return $xData;

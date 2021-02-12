@@ -35,14 +35,12 @@
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Наименование</th>
+                        <th :colspan="order.type != 'x' ? '' : '3'" scope="col">Наименование</th>
                         <th scope="col">Цена за кг\шт</th>
                         <th scope="col">Количество</th>
-                        <th scope="col">Цена без скидки</th>
-                        <th scope="col">Скидка</th>
+                        <th v-if="order.type != 'x'" scope="col">Цена без скидки</th>
+                        <th v-if="order.type != 'x'" scope="col">Скидка</th>
                         <th scope="col">Цена</th>
-                        <!-- <th scope="col">Time</th>
-                        <th scope="col">Status</th> -->
                       </tr>                    
                     </thead>
                     <tbody>
@@ -53,23 +51,52 @@
                         :key="item.id" 
                       >
                         <td >{{item.product_id}}</td>
-                        <td >{{item.name}}</td>
+                        <td :colspan="order.type != 'x' ? '' : '3'">{{item.name}}</td>
                         <td >{{r(item.price_one)}}</td>
                         <td >{{r3(item.quantity_result)}}</td>
-                        <td >{{r(item.price_result)}}</td>                      
-                        <td >{{r(item.discount_final_result != undefined ? item.discount_final_result : 0)}}</td>                      
+                        <td v-if="order.type != 'x'">{{r(item.price_final_result) + (item.discount_final_result != undefined ? r(item.discount_final_result) : 0)}}</td>                      
+                        <td v-if="order.type != 'x'">{{r(item.discount_final_result != undefined ? item.discount_final_result : 0)}}</td>                      
                         <td >{{r(item.price_final_result)}}</td>                      
                       </tr>
                     </tbody>
                     <tfoot class="checkout">
+                      
+                      <!-- Subtotal -->
+                      <tr v-if="order.type == 'x'">
+                        <td></td><td></td><td></td><td></td><td></td>
+                        <th >Подытог:</th>
+                        <td >{{r(order.items_subtotal_result)}}</td>
+                      </tr>
                       <tr>
                         <td></td><td></td><td></td>
                         <!-- Subtotal -->
-                        <th>Подытог:</th>
-                        <td>{{r(order.items_subtotal_result)}}</td>
+                        <th >{{order.type != 'x' ? 'Подытог:' : ''}}</th>
+                        <td >{{order.type != 'x' ? r(order.items_subtotal_result) : ''}}</td>
                         <!-- Shipping -->
-                        <th>Доставка:</th>
-                        <td>{{r(order.shipping)}}</td>
+                        <template>
+                          <th >Доставка:</th>
+                          <td>
+                            {{
+                              order.type == 'x' 
+                              ?   
+                              (order.xData.personalAddress != undefined ? r(order.xData.personalAddress) : 0)    
+                              : 
+                              r(order.shipping)
+                            }}                            
+                          </td>
+                        </template>
+                      </tr>
+                      <!-- Participation price -->
+                      <tr v-if="order.type == 'x' && order.participation_price != undefined && order.participation_price != 0">
+                        <td></td><td></td><td></td><td></td><td></td>
+                        <th>Сервисный взнос:</th>
+                        <td>{{r(order.participation_price)}}</td>
+                      </tr>
+                      <!-- Over weight -->
+                      <tr v-if="order.type == 'x' && order.over_weight_price != undefined && order.over_weight_price != 0">
+                        <td></td><td></td><td></td><td></td><td></td>
+                        <th>Дополнительный вес:</th>
+                        <td>{{r(order.over_weight_price)}}</td>
                       </tr>
                       <!-- Discounts -->
                       <tr v-if="order.discounts_total_result != 0">
@@ -84,7 +111,7 @@
                         <td>{{r(order.coupons_total)}}</td>
                       </tr>
                       <!-- Bonus -->
-                      <tr>
+                      <tr v-if="order.bonus != undefined && order.bonus != 0">
                         <td></td><td></td><td></td><td></td><td></td>
                         <th>Бонусы:</th>
                         <td>{{r(order.bonus)}}</td>
