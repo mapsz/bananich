@@ -11,34 +11,36 @@ class jugeMoreAxios{
   async delete(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
 
   async fetch(url,params = {},method = 'get',loader = true){
-      this.lastQuery = {url,params,method};
-      //Start loading
-      let l; if(loader){l = load.start();}
-      //Axios
-      let r = false;
-      switch (method) {
-        case 'get' || 'GET':
-          r = await this.getFetch(url, params);
-          break;
-        case 'put' || 'PUT':
-          r = await axios.put(url, params)
-            .then((r) => {return {e:0,r:r.data};})
-            .catch((error) => {this.catch(error);return {e:1,r:error.response};});
-          break;
-        case 'post' || 'POST':
-          r = await axios.post(url, params)
-            .then((r) => {return {e:0,r:r.data};})
-            .catch((error) => {this.catch(error);return {e:1,r:error.response};});
-          break;
-        case 'delete' || 'DELETE':
-          r = await axios.delete(url, {data:params})
-            .then((r) => {return {e:0,r:r.data};})
-            .catch((error) => {this.catch(error);return {e:1,r:error.response};});
-          break;
-        default:
-          return false;
-      }
 
+    
+
+    this.lastQuery = {url,params,method};
+    //Start loading
+    let l; if(loader){l = load.start();}
+    //Axios
+    let r = false;
+    switch (method) {
+      case 'get' || 'GET':
+        r = await this.getFetch(url, params);
+        break;
+      case 'put' || 'PUT':
+        r = await axios.put(url, params)
+          .then((r) => {return {e:0,r:r.data};})
+          .catch((error) => {this.catch(error);return {e:1,r:error.response};});
+        break;
+      case 'post' || 'POST':
+        r = await axios.post(url, params)
+          .then((r) => {return {e:0,r:r.data};})
+          .catch((error) => {this.catch(error);return {e:1,r:error.response};});
+        break;
+      case 'delete' || 'DELETE':
+        r = await axios.delete(url, {data:params})
+          .then((r) => {return {e:0,r:r.data};})
+          .catch((error) => {this.catch(error);return {e:1,r:error.response};});
+        break;
+      default:
+        return false;
+    }
 
       //Stop loading
       if(loader) load.stop(l);
