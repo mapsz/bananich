@@ -15,7 +15,7 @@
                 accurateTrackBounce:true,
                 webvisor:true,
                 ecommerce:"dataLayer"
-                userParams:333,
+                userParams:{{Auth::user() ? Auth::user()->id : 0}},
             });
         </script>
         <noscript><div><img src="https://mc.yandex.ru/watch/72176563" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
@@ -54,6 +54,7 @@
     
 </head>
 <body>
+    
 
     {{-- Vendors --}}
     @if (ENV('APP_ENV') != 'local' )
