@@ -108,7 +108,9 @@ computed:{
       !this.myOrder
     ){
       statics.push(
-        {'_body':'Вы приглашены принять участие в <a href="/shared/order/'+this.invite+'">совместной закупке</a> на Neo Lavka'}
+        {'_body':
+        'Вы приглашены принять участие в <a href="/shared/order/'+this.invite+'">совместной закупке</a> на Neo Lavka. '+
+        '<a href="?removeInvite=1">Не участвовать в закупке</a>'}
       );
     }
 
@@ -164,6 +166,15 @@ computed:{
   },
 },
 async mounted() {
+
+  if(this.$route.query.removeInvite != undefined && this.$route.query.removeInvite){
+    Cookies.set('x_invite', false);
+    let query = Object.assign({}, this.$route.query);
+    delete query.removeInvite;
+    this.$router.replace({ query });
+    location.reload();
+  }
+
   this.get();
 },
 methods:{
@@ -174,6 +185,10 @@ methods:{
   async doDelete(id){
     let r = await ax.fetch('/announce',{id},'delete');
     this.get();
+  },
+  removeInvite(){
+    
+    location.reload();
   },
 },
 }

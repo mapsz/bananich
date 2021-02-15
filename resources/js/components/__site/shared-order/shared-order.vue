@@ -450,6 +450,12 @@
               >
                 <span  @click="kick(user.id)" style="cursor: pointer;">Выйти из закупки</span>                  
               </div>
+              <!-- Exit invite -->
+              <div v-if="invite == link" 
+                class="member-kick ml-0"
+              >
+                <span  @click="removeInvite()" style="cursor: pointer;">Не участвовать в закупке</span>                  
+              </div>
             </div>
 
             <!-- Big Action -->            
@@ -544,6 +550,7 @@ import {mapGetters, mapActions} from 'vuex';
 import copy from 'copy-to-clipboard';
 export default {
 data(){return{
+  Cookies:Cookies,
   moment:moment,
   //Checkout
   checkout:{},
@@ -915,6 +922,10 @@ methods:{
     for (const product of products) {await this.removeItem(product.id);}
     //Join
     this.join();
+  },
+  removeInvite(){
+    Cookies.set('x_invite', false);
+    location.href = '/';
   },
 
   //TEST
