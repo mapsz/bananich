@@ -20,7 +20,12 @@ class Item extends Model
     
     public static function getWithOptions($request){
 
-      $test = false;       
+      $test = false;
+      if(isset($request['parvinBuild']) && $request['parvinBuild'] == 1){
+        $request["status"] = ["300","400","500","600","700","900"];
+        $today = now()->format('Y-m-d');
+        $request["deliveryDate"] = json_encode(["from" => $today, "to" => $today]);
+      }
       
       {//Items In Reserve
         if(isset($request['ItemsInReserve'])){

@@ -1202,8 +1202,12 @@ class Order extends Model
                   $order->x_total_result  += $order->bonus;
                 }                
                 {//Checkout
-                  $order->x_total         += Checkout::x_final_price($order->x_items_total,         $order->xData);
-                  $order->x_total_result  += Checkout::x_final_price($order->x_items_total_result,  $order->xData);
+                  $xData = $order->xData;
+                  if(isset($order->participation_price)) $xData['participation_price'] = $order->participation_price;
+                  if(isset($order->over_weight_price)) $xData['overWeightPrice'] = $order->over_weight_price;
+
+                  $order->x_total         += Checkout::x_final_price($order->x_items_total,         $xData);
+                  $order->x_total_result  += Checkout::x_final_price($order->x_items_total_result,  $xData);
                 }
               }
             }

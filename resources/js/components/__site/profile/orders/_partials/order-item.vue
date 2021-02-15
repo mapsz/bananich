@@ -134,7 +134,7 @@
           <!-- Cart summ -->
           <div class="order-values">
             <div class="order-value-img" style="position:relative;">
-              <span style="font-size: 40px;position: absolute;top: -11px;left: 10px;">₽</span>
+              <span class="cur-ru">₽</span>
             </div>
             <div class="sad-order-value-text">
               {{(order.total_result == undefined || !(order.total_result > 0)) ? order.total : order.total_result}} руб
@@ -372,7 +372,21 @@ computed:{
     margin-left: 8px;
   }
 
+  .order-value-img cur-ru{
+    font-size: 40px;
+    position: absolute;
+    top: -11px;
+    left: 10px;
+  }
+
   @media (max-width: 768px){
+    
+    .order-value-img cur-ru{
+      font-size: 30px;
+      position: absolute;
+      top: -11px;
+      left: 7px;
+    }
     .sad-order-value-text{
       font-size: 10pt !important;
       margin-left: 4px;

@@ -534,13 +534,10 @@ class SharedOrder extends Model
         }
         if(!$order->x_confirm){
           Order::changeStatus($order->id, 0);
-        }        
-        DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'participation_price', 'value'=>$order->xData['participation_price']]);
-        DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'over_weight_price', 'value'=>$order->xData['overWeightPrice']]);
+        }
 
       }
-    }    
-
+    }
     
     {//Update member count
       $member_count = count($sOrder->users);
@@ -552,6 +549,11 @@ class SharedOrder extends Model
         Cart::where('user_id',$user->id)->where('type',2)->delete();
       }
     }  
+
+
+    DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'participation_price', 'value'=>$order->xData['participation_price']]);
+    DB::table('order_metas')->insert(['order_id'=>$order->id, 'name'=>'over_weight_price', 'value'=>$order->xData['overWeightPrice']]);
+
   }
 
   public static function updateOrders($id){
