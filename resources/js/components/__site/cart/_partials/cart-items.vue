@@ -49,7 +49,7 @@
             <!-- X -->
             <template v-if="isX">
               <!-- Weight -->
-              <span >{{item.full_weight_view}} кг</span>              
+              <span >{{Math.round(item.full_weight_view*1000)/1000}} кг</span>              
               <!-- Price -->
               <span class="font-weight-bold pr-lg-3 cart-item-price" >{{item.final_price_x+'р'}}</span>
             </template>
