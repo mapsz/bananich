@@ -513,7 +513,6 @@ class SharedOrder extends Model
       // //Change status
       SharedOrder::changeStatus($id,500);
     }
-
     
     {//Personal
       $member_count = 0;
@@ -648,7 +647,6 @@ class SharedOrder extends Model
     }
   
     {//Where
-      // dd($request);
       if(isset($request['link'])){
         $query = $query->where('link',$request['link']);
       }
@@ -671,9 +669,15 @@ class SharedOrder extends Model
       if(isset($request['actual']) && $request['actual']){
         $query = $query->where('delivery_date','>',now());
       }
+      //Open
+      if(isset($request['open']) && $request['open']){
+        $query = $query->whereIn('status_id',[100,200,300]);        
+        $query = $query->where('delivery_date','>',now());
+      }
 
     }
 
+    //Sort
     $query = $query->orderBy('id','DESC');
   
     //Get

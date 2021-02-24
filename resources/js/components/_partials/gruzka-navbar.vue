@@ -106,6 +106,10 @@ export default {
         link: this.adminPrefix+"/emails",
         caption:"emails",
       },
+      {
+        link: this.adminPrefix+"/maps",
+        caption:"maps",
+      },
     ];
   },
   methods:{    
@@ -124,7 +128,7 @@ export default {
 <style scoped>
 
 .navbar-nav{  
-  font-size: 12pt;
+  font-size: 9pt;
 }
 
 </style>

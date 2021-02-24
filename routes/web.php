@@ -1156,6 +1156,10 @@ Route::group(['middleware' => ['HttpsRR'
   //Admin
   Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
 
+    //Polygons
+    Route::put('/admin/polygons', 'PolygonController@put');
+    Route::get('/admin/polygons', 'PolygonController@get');
+
     //Libaras
     Route::put('/admin/libra', 'LibraController@put');
     Route::post('/admin/libra/sort', 'LibraController@sortByName');

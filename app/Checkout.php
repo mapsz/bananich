@@ -226,7 +226,7 @@ class Checkout extends Model
           $item->unit_digit       = $product->unit_digit;
           $item->unit_name        = $product->unit_name;
           $item->unit_type        = isset($product->unit_type) && $product->unit_type ? $product->unit_type : 'kg';
-          $item->unit_full        = isset($product->unit_full) && $product->unit_full ? $product->unit_full : 1;
+          $item->unit_full        = isset($product->unit_full) && $product->unit_full ? $product->unit_full : $product->unit;
           $item->bonus            = isset($product->bonus) && $product->bonus ? true : false;
         }
 

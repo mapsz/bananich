@@ -10,9 +10,7 @@ class jugeMoreAxios{
   async put(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
   async delete(url,params = {},loader = true){this.fetch(url,params,'get',loader)};
 
-  async fetch(url,params = {},method = 'get',loader = true){
-
-    
+  async fetch(url,params = {},method = 'get',loader = true,anyResult = false){
 
     this.lastQuery = {url,params,method};
     //Start loading
@@ -44,9 +42,9 @@ class jugeMoreAxios{
 
       //Stop loading
       if(loader) load.stop(l);
-
+      
       //Get bad string error
-      if(typeof(r.r) == 'string'){
+      if(anyResult == false && typeof(r.r) == 'string'){
         if(
           r.r != 1 &&
           url != '/file/upload'

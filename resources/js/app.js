@@ -111,7 +111,6 @@ window.localServer = (window.location.hostname.indexOf('.loc') > -1) ? true : fa
 
 
 
-
 import TelegramButton from "vue-share-buttons/src/components/TelegramButton";
 Vue.component('telegram-button', TelegramButton);
 import WhatsApp from "vue-share-buttons/src/components/WhatsAppButton";

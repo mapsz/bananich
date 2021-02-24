@@ -2,6 +2,12 @@ let routes = [];
 
 //__site
 
+  //Test  
+  import yandexMapTest from './components/_test/yandex-map.vue';
+  routes.push(
+    {path: '/test/yandex',    component:yandexMapTest},
+  );
+
   //Interview
   // import interview from './components/interview/interview.vue';
   // routes.push(
@@ -373,6 +379,14 @@ let routes = [];
     {path: '/gruzka',        component: gruzkas},
     {path: '/admin/gruzkas',        component: gruzkas},
     {path: '/admin/gruzkas',        component: gruzkas},
+  );
+
+  //Maps
+  import maps from './components/maps/maps.vue';
+  import mapOrder from './components/maps/orders/map-orders.vue';
+  routes.push(
+    {path: '/admin/maps',        component: maps},
+    {path: '/admin/maps/orders',        component: mapOrder},
   );
 
   ///^^ Admin
