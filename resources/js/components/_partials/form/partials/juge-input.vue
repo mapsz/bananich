@@ -12,7 +12,11 @@
       v-model="value" 
       class="juge-form-input"
     >
-      <option v-for='(item,x) in input.list' :key='x' :value="item.id">{{item.name}}</option>
+      <option v-for='(item,i) in input.list' :key='i' 
+        :value="item.id"
+      >
+        {{item.name}}
+      </option>
     </select> 
 
     <!-- Date -->

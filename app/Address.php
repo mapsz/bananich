@@ -23,7 +23,10 @@ class Address extends Model
       'intercom'     => ['max:20' ],
     ];
     
-    array_push($validate['street'], 'required');
+    if($put){
+      array_push($validate['street'], 'required');
+    }
+    
 
     $messages = [
       'street.required'      => 'Необходимо заполнить поле "Адрес"',

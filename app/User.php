@@ -95,15 +95,23 @@ class User extends Authenticatable
 
     $address = Address::find($data['id']);
 
-    $address->update( [
-      'street' => $data['street'],
-      'number' => isset($data['number']) ? $data['number'] : null,
-      'appart' => isset($data['appart']) ? $data['appart'] : null,
-      'porch' => isset($data['porch']) ? $data['porch'] : null,
-      'stage' => isset($data['stage']) ? $data['stage'] : null,
-      'intercom' => isset($data['intercom']) ? $data['intercom'] : null,
-      'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
-    ] );
+    $update = [];
+
+    if(isset($data['street']) && $data['street']) $update['street'] = $data['street'];
+    if(isset($data['number']) && $data['number']) $update['number'] = $data['number'];
+    if(isset($data['appart']) && $data['appart']) $update['appart'] = $data['appart'];
+    if(isset($data['porch']) && $data['porch']) $update['porch'] = $data['porch'];
+    if(isset($data['stage']) && $data['stage']) $update['stage'] = $data['stage'];
+    if(isset($data['intercom']) && $data['intercom']) $update['intercom'] = $data['intercom'];
+    if(isset($data['default']) && $data['default']) $update['default'] = $data['default'] ? 1 : 0;
+    if(isset($data['x']) && $data['x']) $update['x'] = $update['x'] = $data['x'];
+    if(isset($data['y']) && $data['y']) $update['y'] = $update['y'] = $data['y'];
+    
+
+    dd($update);
+    
+
+    $address->update($update);
 
     return true;
   }

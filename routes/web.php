@@ -1062,7 +1062,6 @@ Route::group(['middleware' => ['HttpsRR'
       Route::put('/fast/register/user', 'FastRegisterController@fastRegisterUser');
     }
     
-
     //User
     Route::get('/auth/user', 'UserController@getAuthUser');
     Route::post('/user', 'UserController@post');
@@ -1159,6 +1158,9 @@ Route::group(['middleware' => ['HttpsRR'
     //Polygons
     Route::put('/admin/polygons', 'PolygonController@put');
     Route::get('/admin/polygons', 'PolygonController@get');
+    //Polygons price
+    Route::put('/admin/polygons/price', 'PolygonController@putPrice');
+    Route::delete('/admin/polygons/price', 'PolygonController@deletePrice');
 
     //Libaras
     Route::put('/admin/libra', 'LibraController@put');

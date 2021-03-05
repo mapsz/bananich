@@ -24,9 +24,12 @@
       <label for="user-addresses-default">
         <input v-model="data.default" name="$default" id="user-addresses-default" type="checkbox" class="checkbox"> 
         <div class="checkbox-box"></div>
-        <span style="padding-left:25px">Сделать адресом по умолчанию</span>
+        <span style="padding-left:25px; font-size:10pt">Сделать адресом по умолчанию</span>
       </label>
     </div>
+
+    <!-- <address-decoder-input /> -->
+
 
     <!-- Errors -->
     <juge-errors :errors="errors"/>

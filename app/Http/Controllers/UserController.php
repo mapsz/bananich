@@ -59,32 +59,40 @@ class UserController extends Controller
   }
 
   public function postAddress(Request $request){
-
     
- 
     //Get user
     $auth = Auth::user();
     if(!$auth){
       return response()->json(false);
     }   
 
+    //Validate id
     if(!$request->id){
       return response()->json(false);
-    }  
+    }
+
+    //Validate admin
+    if(isset($request->admin) && $request->admin){
+      $user = User::jugeGet(['id' => $auth->id]);
+      $isAdmin = $user->isAdmin();
+      if(!$isAdmin){
+        return response()->json(false);
+      }
+    }
 
     //Validate user
     $address = Address::find($request->id);
-    if($address->addressable_type != "App\User" || $address->addressable_id != $auth->id){
-      return response()->json(false);
+
+    if(!$isAdmin){
+      if($address->addressable_type != "App\User" || $address->addressable_id != $auth->id){
+        return response()->json(false);
+      }
     }
     
     //Validate
     Address::validate($request->all(),0);
-
     
     return response()->json(User::postAddress($request->all()));
-
-
   }
 
   public function comments(Request $request){

@@ -133,8 +133,10 @@ let routes = [];
 
   //Checkout
   import siteCheckout from './components/__site/checkout/checkout.vue';
+  import siteCheckoutTest from './components/__site/checkout/checkout-test.vue';
   routes.push(
     {path: '/checkout',    component:siteCheckout, name:'soloCheckout'},
+    {path: '/checkout/zzzx',    component:siteCheckoutTest},
   );
 
 //DRIVER
@@ -384,9 +386,11 @@ let routes = [];
   //Maps
   import maps from './components/maps/maps.vue';
   import mapOrder from './components/maps/orders/map-orders.vue';
+  import mapPrices from './components/maps/prices/map-prices.vue';
   routes.push(
-    {path: '/admin/maps',        component: maps},
+    {path: '/admin/maps',               component: maps},
     {path: '/admin/maps/orders',        component: mapOrder},
+    {path: '/admin/maps/prices',        component: mapPrices},
   );
 
   ///^^ Admin

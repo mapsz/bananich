@@ -4,7 +4,7 @@
   
   <!-- List -->
   <x-popup  :title="title" :active="showAddresses" @close="showAddresses=false" id="user-addresses-list-modal">
-    <div class="my-3">
+    <div class="mb-3">
 
       <!-- Add new button -->
       <div v-if="!isAction">
@@ -112,7 +112,7 @@ computed:{
   title(){
     if(this.showDelete) return 'Удаление адреса';
     if(this.showAdd) return 'Добавление адреса';
-    if(this.showEdit) return 'Редактирование адреса';
+    if(this.showEdit) return 'Редактирование';
     
     return 'Список ваших адресов';
   },

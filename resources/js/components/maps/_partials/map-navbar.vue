@@ -33,6 +33,10 @@ export default {
         link:"/admin/maps/orders",
         caption:"Закупки",
       },
+      {
+        link:"/admin/maps/prices",
+        caption:"Цены",
+      },
     ];
   }
 }

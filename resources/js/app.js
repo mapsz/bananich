@@ -109,7 +109,14 @@ Vue.directive('click-outside', {
 window.halloween = false;
 window.localServer = (window.location.hostname.indexOf('.loc') > -1) ? true : false;
 
+//Yandex map Api key
+window.yandexMapApiKey = '9b3f880f-4fa6-4d11-a75a-91e52eb23314';
+// Components
+// const mapComponents = require.context('./components/maps', true, /\.vue$/i); 
+// mapComponents.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+import zzz from './components/maps/_partials/address-decoder-input.vue';
+Vue.component('address-decoder-input', zzz);
 
 import TelegramButton from "vue-share-buttons/src/components/TelegramButton";
 Vue.component('telegram-button', TelegramButton);

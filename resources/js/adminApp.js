@@ -136,6 +136,10 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 window.currency = 'в‚Ѕ';
 
+
+//Yandex map Api key
+window.yandexMapApiKey = '9b3f880f-4fa6-4d11-a75a-91e52eb23314';
+
 import vSelect from "vue-select"; 
 import "vue-select/dist/vue-select.css";
 Vue.component("v-select", vSelect);
