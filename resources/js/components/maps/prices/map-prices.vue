@@ -104,6 +104,7 @@ data(){return{
       value:0,
       list:[
         {name:'Any', id:0, selected:true},
+        {name:'11-23', id:'11-23'},
         {name:'11-15', id:'11-15'},
         {name:'15-19', id:'15-19'},
         {name:'19-23', id:'19-23'},

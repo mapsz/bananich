@@ -33,7 +33,7 @@ export default {
   computed:{
     ...mapGetters({
       'availableDays': 'orderLimits/getAvailableDays',
-    }),   
+    }),
     days:function(){
       if(this.availableDays[0] == undefined) return false;
 
