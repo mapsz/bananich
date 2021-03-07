@@ -24,9 +24,9 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-export default {
+export default {  
+  props: ['polygons'],
   data(){return{
-    polygons:[],
     day:false,
     time:false,    
   }},
@@ -86,14 +86,13 @@ export default {
   },
   watch:{
     polygons: function (val, oldVal) {
-      if(this.polygons.length > 0){
-        this.fetch(this.polygons);
+      if(this.polygons !== null){
+        this.fetch(this.polygons.length == 0 ? [0] : this.polygons);
       }
     },
   },
   mounted(){
     //
-    this.polygons = [32];
   },
   methods:{
     ...mapActions({

@@ -19,7 +19,7 @@ data(){return{
 }},
 computed:{
   selectedPolygonesIds (){
-    if(!this.selectedPolygones || this.selectedPolygones.length < 1) return false;
+    if(!this.selectedPolygones) return false;
     let ids = [];
     this.selectedPolygones.forEach(v => {
       ids.push(v.id);
@@ -32,10 +32,8 @@ watch:{
     if(val.x == undefined || val.y == undefined) return false;
     this.doSetMarker(val.x, val.y);
   },
-  ids: function (val, oldVal) {
-    if(val.length > 0){
-      this.$emit('polygonsFind',val);
-    }
+  selectedPolygonesIds: function (val, oldVal) {
+    this.$emit('polygonsFind',val);
   },
 },
 async mounted() {

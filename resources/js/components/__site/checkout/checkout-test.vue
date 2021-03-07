@@ -41,12 +41,14 @@
                   </div>
                 </div>
                 <checkout-address v-else class="checkout-div"/>
+
+                <!-- <polygons @polygonsFind="setPolygons" :setMarker="choosedCoords" /> -->
               </template>
 
-              <polygons @polygonsFind="setPolygons" :setMarker="choosedCoords" />
+              
             
               <!-- Date / Time -->
-              <checkout-x-date-time class="checkout-div" v-model="data.dateTime"/>
+              <checkout-x-date-time class="checkout-div" v-model="data.dateTime" :polygons="choosedPolygons"/>
 
               <div v-if="!isX" class="row checkout-div">
                 <div v-if="!isX" class="col-12 col-lg-6">
@@ -96,7 +98,7 @@ export default {
     halloween:halloween,
     data:{},
     errors:[],
-    choosedPolygons:[],
+    choosedPolygons:null,
   }},
   computed:{
     ...mapGetters({

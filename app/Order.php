@@ -271,7 +271,7 @@ class Order extends Model
       }
     }
 
-    if($polygons){
+    if(is_array($polygons)){
       $rDate = Polygon::getPrices($polygons, $rDate);
     }
 
