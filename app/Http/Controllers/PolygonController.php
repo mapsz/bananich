@@ -13,30 +13,54 @@ class PolygonController extends Controller
 
   public function put(Request $request){ 
     
-    //Find ids
-    $noId = "";
-    $polygons = $request->polygons;
-    foreach ($request->polygons as $key => $polygon) {
-      $match = 0;
-      $content =  $polygon['name'];
-      $pattern = '/<[0-9]+>/';
-      $didMatch = preg_match ($pattern, $content, $match, PREG_OFFSET_CAPTURE);
-      if($didMatch == 1){
-        $match = $match[0][0];
-        $match = str_replace('<','',$match);
-        $match = str_replace('>','',$match);
-        $id = intval($match);
-        //Add id
-        $polygons[$key]['id'] = $id;
-        //Remove from name
-        $polygons[$key]['name'] = str_replace('<'.$id.'>','',$polygons[$key]['name']);
-      }else{
-        $noId .= '"' . $content . '"  ';
+    
+    {//Find ids
+      $noId = "";
+      $polygons = $request->polygons;
+      foreach ($request->polygons as $key => $polygon) {
+        $match = 0;
+        $content =  $polygon['name'];
+        $pattern = '/<[0-9]+>/';
+        $didMatch = preg_match ($pattern, $content, $match, PREG_OFFSET_CAPTURE);
+        if($didMatch == 1){
+          $match = $match[0][0];
+          $match = str_replace('<','',$match);
+          $match = str_replace('>','',$match);
+          $id = intval($match);
+          //Add id
+          $polygons[$key]['id'] = $id;
+          //Remove from name
+          $polygons[$key]['name'] = str_replace('<'.$id.'>','',$polygons[$key]['name']);
+        }else{
+          $noId .= '"' . $content . '"  ';
+        }      
       }
-
-      
     }
 
+    
+    {//Find multy
+    
+      foreach ($polygons as $key => $polygon) {
+        $match = 0;
+        $content =  $polygon['name'];
+        $pattern = '/<multy>/';
+        $didMatch = preg_match ($pattern, $content, $match, PREG_OFFSET_CAPTURE);
+        $polygons[$key]['multy'] = false;
+        if($didMatch == 1){
+          $match = $match[0][0];
+          $match = str_replace('<','',$match);
+          $match = str_replace('>','',$match);
+          $id = intval($match);
+          //Add multy
+          $polygons[$key]['multy'] = 1;
+          //Remove from name
+          $polygons[$key]['name'] = str_replace('<multy>','',$polygons[$key]['name']);
+        }     
+      }
+    }
+
+    
+    
     
     {//Validate
       {//No ids
@@ -76,6 +100,7 @@ class PolygonController extends Controller
         $polygon->id  = $v['id'];
         $polygon->name  = isset($v['name']) ? $v['name'] : '?';
         $polygon->color = $v['color'];
+        $polygon->multy = $v['multy'];
         $polygon->save();
       }
       //Coords

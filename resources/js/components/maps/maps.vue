@@ -25,9 +25,7 @@
                 {{polygon.name}}
               </div>
             </div>
-
           </div>
-
 
           <!-- Map -->
           <div class="mt-3">

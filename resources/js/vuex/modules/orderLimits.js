@@ -26,12 +26,12 @@ let orderLimits = {
       let r = await ax.fetch('/order/limit/settings');
       commit('mSettings',r); 
     },
-    async fetchAvailableDays({commit}){      
+    async fetchAvailableDays({commit},polygons = false){
       //Set type
       let type = false;
       if(isX) type = 'x';
       //Fetch
-      let r = await ax.fetch('/order/available/days',{type});
+      let r = await ax.fetch('/order/available/days',{type,polygons});
       commit('mAvailableDays',r); 
     },
   },  

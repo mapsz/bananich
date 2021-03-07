@@ -72,6 +72,7 @@ class UserController extends Controller
     }
 
     //Validate admin
+    $isAdmin = false;
     if(isset($request->admin) && $request->admin){
       $user = User::jugeGet(['id' => $auth->id]);
       $isAdmin = $user->isAdmin();

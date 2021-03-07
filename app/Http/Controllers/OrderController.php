@@ -37,7 +37,8 @@ class OrderController extends Controller
     }
     
     //Get days
-    $days = Order::getAvailableDays($type);
+    $polygons = isset($request->polygons) ? $request->polygons : false;
+    $days = Order::getAvailableDays($type, false, $polygons);
 
 
     return response()->json($days);

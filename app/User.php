@@ -106,18 +106,13 @@ class User extends Authenticatable
     if(isset($data['default']) && $data['default']) $update['default'] = $data['default'] ? 1 : 0;
     if(isset($data['x']) && $data['x']) $update['x'] = $update['x'] = $data['x'];
     if(isset($data['y']) && $data['y']) $update['y'] = $update['y'] = $data['y'];
-    
-
-    dd($update);
-    
-
+       
     $address->update($update);
 
     return true;
   }
-
   
-  public static function setDefaultAddress($id){  
+  public static function setDefaultAddress($id){
     {//Get addresses
       //Single
       $address = Address::find($id);
@@ -212,6 +207,7 @@ class User extends Authenticatable
       $query = $query->with('referal');
       //Addresses
       $query = $query->with('addresses');
+      // $query = $query->with('addresses.coords');
     }
 
     //Where

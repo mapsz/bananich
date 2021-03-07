@@ -4,17 +4,20 @@
     <!-- Delivery Date -->
     <div class="col-lg-6">
       <div class="checkout-title">Дата доставки</div>
-      <checkout-input v-model="day" :name="'deliveryDate'" :type="'radio'" 
-        :list="days" 
-      />
+      <template v-if="polygons">
+        <checkout-input v-model="day" :name="'deliveryDate'" :type="'radio'" :list="days" />
+      </template>
+      <template v-else>
+        Укажите адрес!
+      </template>      
     </div>
     <!-- Delivery Time -->
-    <div v-if="day" class="col-lg-6">
+    <div v-if="day && polygons" class="col-lg-6">
       <div class="checkout-title">Время доставки</div>
       <checkout-input v-model="time" :name="'deliveryTime'" :type="'radio'" 
         :list="times" 
       />
-    </div>
+    </div>        
   </div>
 </div>  
 </template>
@@ -23,7 +26,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
   data(){return{
-    polygon:false,
+    polygons:[],
     day:false,
     time:false,    
   }},
@@ -37,12 +40,23 @@ export default {
       let days=[];
       $.each(this.availableDays , ( k, v ) => {
         if(v.slots < 1) return;
+
+        // Price
+        let min = v.times[0].price;
+        let max = v.times[0].price;
+        v.times.forEach(time => {
+          if(min > time.price) min = time.price;
+          if(max < time.price) max = time.price;
+        });
+
         days.push(
           {
-            // {from:'01:00:00',to:'12:00:00'}
             'value':v.date,
-            'caption':moment(v.date).locale('ru').format('D MMMM')
-        });
+            'caption':(
+              moment(v.date).locale('ru').format('D MMMM') + " " +
+              "("+currencySymbol+(min==max ? max : (min + "-" + max))+")"
+            )
+          });
       });
       return days;
     },
@@ -59,7 +73,10 @@ export default {
         times.push(
           {
             'value':v.time,
-            'caption':'с '+ v.time.from + ' до '+v.time.to,
+            'caption':(
+              'с '+ v.time.from + ' до '+v.time.to +
+              ' ('+currencySymbol+v.price+')'
+            ),
         });
       });
 
@@ -67,8 +84,16 @@ export default {
 
     }
   },
+  watch:{
+    polygons: function (val, oldVal) {
+      if(this.polygons.length > 0){
+        this.fetch(this.polygons);
+      }
+    },
+  },
   mounted(){
-    this.fetch();
+    //
+    this.polygons = [32];
   },
   methods:{
     ...mapActions({

@@ -1,15 +1,22 @@
 <template>  
-  <div>
+  <div style="display:block!important">
     <input id="address-decoder-suggest-input" type="text" style="width:100%">
   </div>
 </template>
 
 <script>
 export default {
+model: {prop:'hidden', event:'blur'},
 data(){return{
+  input:null,
   geo:null,
   address: null,
 }},
+watch:{
+  geo: function (val, oldVal) {
+    this.$emit('blur', val);
+  },
+},
 async mounted() {
   // Include yandex maps
   if(!('ymaps' in window && ymaps)){
@@ -36,11 +43,6 @@ methods:{
       return true;
     }
 
-    return new Promise(resolve => {
-      setTimeout(resolve, ms);
-    });
-
-
     await this.sleep(100);
     await this.waitInit();
 
@@ -52,7 +54,7 @@ methods:{
     await this.input.events.add("select", async (e) => {
       this.address = e.get('item').value;
       //Get address
-      await this.geoDecoder(this.address);      
+      await this.geoDecoder(this.address);
     });
 
     return true;
@@ -82,6 +84,11 @@ methods:{
     }
 
     return false;
+  },  
+  async sleep(ms) {
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
+    });
   },
 },
 }

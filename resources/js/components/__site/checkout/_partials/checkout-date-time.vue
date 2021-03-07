@@ -42,7 +42,6 @@ export default {
         if(v.slots < 1) return;
         days.push(
           {
-            // {from:'01:00:00',to:'12:00:00'}
             'value':v.date,
             'caption':moment(v.date).locale('ru').format('D MMMM')
         });

@@ -6,31 +6,67 @@
       <!-- Polygons -->
       <h2>Полигоны</h2>
       <!-- List -->
-      <div class="mt-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
-        <div v-for="(polygon, i) in polygons" :key="i" class="m-1">
-          <div style="border:1px solid black; background-color: white; padding: 5px;" :style="'border-color:'+polygon.border">
-            <div :style="'color:'+polygon.color" class="justify-content-between d-flex">
-              <!-- Id -->
-              <span><b>{{polygon.id}}</b></span>
-              <!-- Edit -->
-              <button class="btn btn-warning btn-sm" @click="showEdit = polygon.id">✏️</button>
-            </div>            
-            <div :style="'color:'+polygon.color">{{polygon.name}}</div>
-            <!-- Dots -->
-            <span>
-              dots: {{polygon.coords.length}}
-            </span>
-            <!-- Prices -->
-            <template v-if="polygon.prices.length > 0">
-              <div v-for="(price, i) in polygon.prices" :key="i" class="mt-2">
-                <span>day: <b>{{price.day == 0 ? 'any' : price.day}}</b></span> 
-                <span>time: <b>{{price.time == 0 ? 'any' : price.time}}</b></span>
-                <span>Price: <b>{{price.price}}</b></span> 
-              </div>              
+      <template>
+        <!-- Multy -->    
+        <div>
+          <h4>Multy</h4>
+          <div class="mt-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+            <template v-for="(polygon, i) in polygons">
+              <div v-if="polygon.multy == 1" :key="i" class="m-1" style="border:1px solid black; background-color: white; padding: 5px;" :style="'border-color:'+polygon.border">
+                <div :style="'color:'+polygon.color" class="justify-content-between d-flex">
+                  <!-- Id -->
+                  <span><b>{{polygon.id}}</b></span>
+                  <!-- Edit -->
+                  <button class="btn btn-warning btn-sm" @click="showEdit = polygon.id">✏️</button>
+                </div>            
+                <div :style="'color:'+polygon.color">{{polygon.name}}</div>
+                <!-- Dots -->
+                <span>
+                  dots: {{polygon.coords.length}}
+                </span>
+                <!-- Prices -->
+                <template v-if="polygon.prices.length > 0">
+                  <div v-for="(price, i) in polygon.prices" :key="i" class="mt-2">
+                    <span>day: <b>{{price.day == 0 ? 'any' : price.day}}</b></span> 
+                    <span>time: <b>{{price.time == 0 ? 'any' : price.time}}</b></span>
+                    <span>Price: <b>{{price.price}}</b></span> 
+                  </div>              
+                </template>
+              </div>                
             </template>
-          </div>                
+          </div>
         </div>
-      </div>
+        <!-- Single -->
+        <div class="mt-5">
+          <h4>Single</h4>
+          <div class="mt-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">          
+            <template v-for="(polygon, i) in polygons" >
+              <div v-if="polygon.multy == 0"  :key="i"  class="m-1" style="border:1px solid black; background-color: white; padding: 5px;" :style="'border-color:'+polygon.border">
+                <div :style="'color:'+polygon.color" class="justify-content-between d-flex">
+                  <!-- Id -->
+                  <span><b>{{polygon.id}}</b></span>
+                  <!-- Edit -->
+                  <button class="btn btn-warning btn-sm" @click="showEdit = polygon.id">✏️</button>
+                </div>            
+                <div :style="'color:'+polygon.color">{{polygon.name}}</div>
+                <!-- Dots -->
+                <span>
+                  dots: {{polygon.coords.length}}
+                </span>
+                <!-- Prices -->
+                <template v-if="polygon.prices.length > 0">
+                  <div v-for="(price, i) in polygon.prices" :key="i" class="mt-2">
+                    <span>day: <b>{{price.day == 0 ? 'any' : price.day}}</b></span> 
+                    <span>time: <b>{{price.time == 0 ? 'any' : price.time}}</b></span>
+                    <span>Price: <b>{{price.price}}</b></span> 
+                  </div>              
+                </template>
+              </div>                
+            </template>
+          </div>
+        </div>
+      </template>
+
       <!-- Edit -->
       <x-popup :title="'edit '+showEdit" :active="showEdit" @close="showEdit=false">
         <h3>{{toEditPolygon.name}}</h3>

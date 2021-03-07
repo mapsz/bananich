@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Item;
 use Illuminate\Support\Facades\Mail;
 use App\Bonus;
+use App\Polygon;
 use Carbon\Carbon;
 
 class Order extends Model
@@ -107,7 +108,7 @@ class Order extends Model
 
   }
 
-  public static function getAvailableDays($type = 1, $cart = false){
+  public static function getAvailableDays($type = 1, $cart = false, $polygons = false){
     
     //Get Cart
     if(!$cart){
@@ -268,6 +269,10 @@ class Order extends Model
       foreach ($days as $key => $day) {
         array_push($rDate,$day);
       }
+    }
+
+    if($polygons){
+      $rDate = Polygon::getPrices($polygons, $rDate);
     }
 
     return $rDate;

@@ -14,7 +14,7 @@
 
         <!-- Title -->
         <div class="d-flex mt-4 mt-sm-0 title-page-wrapper">
-          <a href="/cart" class="arrow-back"><img src="image/arrow.svg" alt="arrow"></a>
+          <a href="/cart" class="arrow-back"><img src="/image/arrow.svg" alt="arrow"></a>
           <h1 class="title-page">Оформление заказа</h1>
         </div>
 

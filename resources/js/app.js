@@ -117,6 +117,8 @@ window.yandexMapApiKey = '9b3f880f-4fa6-4d11-a75a-91e52eb23314';
 
 import zzz from './components/maps/_partials/address-decoder-input.vue';
 Vue.component('address-decoder-input', zzz);
+import polygons from './components/maps/polygons/polygons.vue';
+Vue.component('polygons', polygons);
 
 import TelegramButton from "vue-share-buttons/src/components/TelegramButton";
 Vue.component('telegram-button', TelegramButton);
@@ -125,6 +127,9 @@ Vue.component('whatsapp-button', WhatsApp);
 import VkontakteButton from "vue-share-buttons/src/components/VkontakteButton";
 Vue.component('vkontakte-button', VkontakteButton);
 // Vue.component('twitter-button', TwitterButton);
+
+window.currency = 'в‚Ѕ';
+window.currencySymbol = '₽';
 
 const app = new Vue({
     el: '#app',

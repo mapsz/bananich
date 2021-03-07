@@ -14,7 +14,7 @@
 
         <!-- Title -->
         <div class="d-flex mt-4 mt-sm-0 title-page-wrapper">
-          <a href="/cart" class="arrow-back"><img src="image/arrow.svg" alt="arrow"></a>
+          <a href="/cart" class="arrow-back"><img src="/image/arrow.svg" alt="arrow"></a>
           <h1 class="title-page">Оформление заказа</h1>
         </div>
 
@@ -42,6 +42,8 @@
                 </div>
                 <checkout-address v-else class="checkout-div"/>
               </template>
+
+              <polygons @polygonsFind="setPolygons" :setMarker="choosedCoords" />
             
               <!-- Date / Time -->
               <checkout-x-date-time class="checkout-div" v-model="data.dateTime"/>
@@ -94,13 +96,34 @@ export default {
     halloween:halloween,
     data:{},
     errors:[],
+    choosedPolygons:[],
   }},
   computed:{
     ...mapGetters({
-      cart:'cart/getCart',
-      checkout:'checkout/get',      
-      user:       'user/get',
+      cart:     'cart/getCart',
+      checkout: 'checkout/get',      
+      user:     'user/get',
     }),
+    addresses(){
+      if(this.user == undefined || this.user.addresses == undefined) return false;
+      return this.user.addresses;
+    },
+    choosedAddress(){
+      if(this.data == undefined || this.data.jugeAddress == undefined) return false;
+      if(this.addresses == undefined || this.addresses.length < 1) return false;
+
+      let address = this.addresses.find(x => x.id == this.data.jugeAddress);
+      return address;
+    },
+    choosedCoords(){
+      if(this.choosedAddress.x == undefined || this.choosedAddress.y == undefined) return false;
+      return {x:this.choosedAddress.x, y:this.choosedAddress.y};
+    },
+  },
+  watch:{
+    choosedAddress: function (val, oldVal) {
+      console.log(val);
+    },
   },
   mounted(){
     //Trackers
@@ -109,7 +132,7 @@ export default {
       fbq('track', 'InitiateCheckout');
     } 
   },
-  methods:{    
+  methods:{
     ...mapActions({
       'clean':'checkout/clean',
     }),
@@ -152,6 +175,9 @@ export default {
         location.href ='/order-thanks';
       }        
     },
+    setPolygons(ids){
+      this.choosedPolygons = ids;
+    }
   }
 }
 </script>

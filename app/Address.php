@@ -25,12 +25,14 @@ class Address extends Model
     
     if($put){
       array_push($validate['street'], 'required');
+      array_push($validate['number'], 'required');
     }
     
 
     $messages = [
-      'street.required'      => 'Необходимо заполнить поле "Адрес"',
-      'street.string'        => 'Необходимо заполнить поле "Адрес"',
+      'number.required'        => 'Необходимо указать номер дома',
+      'street.required'      => 'Необходимо указать улицу',
+      'street.string'        => 'Необходимо указать улицу',
       'street.min'           => 'Количество символов в поле "Адрес" не должно быть меньше :min',
       'street.max'           => 'Количество символов в поле "Адрес" не должно превышать :max',
       'number.max'           => 'Количество символов в поле "Номер дома" не должно превышать :max',
@@ -78,4 +80,7 @@ class Address extends Model
   public function addressable(){
     return $this->morphTo();
   }
+  // public function coords(){
+  //   return $this->hasOne('App\PolygonCoord');
+  // }
 }
