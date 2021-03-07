@@ -78,7 +78,9 @@ class User extends Authenticatable
         'stage' => isset($data['stage']) ? $data['stage'] : null,
         'intercom' => isset($data['intercom']) ? $data['intercom'] : null,
         'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
-      ];
+      ];      
+      if(isset($data['x']) && $data['x']) $address->x = $data['x'];
+      if(isset($data['y']) && $data['y']) $address->y = $data['y'];
       $user->addresses()->save(new Address($address));
     }
 
