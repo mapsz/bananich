@@ -42,7 +42,18 @@
                 </div>
                 <checkout-address v-else class="checkout-div"/>
 
-                <polygons v-show="0" @polygonsFind="setPolygons" :setMarker="choosedCoords" />
+                <p>
+                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Map
+                  </button>
+                </p>
+                <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+                    <polygons v-show="1" @polygonsFind="setPolygons" :setMarker="choosedCoords" />
+                  </div>
+                </div>
+
+                
               </template>
 
               
