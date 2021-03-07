@@ -42,7 +42,7 @@
                 </div>
                 <checkout-address v-else class="checkout-div"/>
 
-                <!-- <polygons @polygonsFind="setPolygons" :setMarker="choosedCoords" /> -->
+                <polygons v-show="0" @polygonsFind="setPolygons" :setMarker="choosedCoords" />
               </template>
 
               
