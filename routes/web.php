@@ -972,515 +972,517 @@ Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->gr
 // });
 
 Route::group(['middleware' => ['HttpsRR'
-// ,'under-construction'
-]], function () {
-    
-  Route::get('/home', function(){
-    return redirect('/');
-  });
-
-  Route::get('/test/test', function(){
-      //
-  });
-
-
-  //All
-  Route::group(['middleware' => []], function (){
-
-    {//Shared Order
-      Route::post('/shared/order/test/time', 'SharedOrderController@testTime');
-      Route::put('/shared/order/open', 'SharedOrderController@open');
-      Route::post('/shared/order', 'SharedOrderController@post');
-      Route::delete('/shared/order', 'SharedOrderController@delete');
-      Route::post('/shared/order/join', 'SharedOrderController@join');
-      Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
-      Route::get('/shared/order/auth', 'SharedOrderController@byAuth');
-      Route::delete('/shared/order/kick', 'SharedOrderController@kick');
-      Route::any('/shared/order/handle', 'SharedOrderController@handle');
-      Route::any('/shared/order/update', 'SharedOrderController@update');
-      Route::any('/shared/order/order', 'SharedOrderController@getOrder');
-      Route::post('/shared/order/confirm', 'SharedOrderController@confirm');
+  ,'under-construction'
+  ]], 
+  function () {
       
-      {//Shared Order Pay
-        // Route::get('/shared/order/pays', 'SharedOrderPayController@get');
-        Route::put('/shared/order/pay', 'SharedOrderPayController@pay');
-      }
-    }
-    
-    {//Order
-      Route::put('/order/log', 'JugeLogsController@orderButton');
-      Route::put('/order/log/success', 'JugeLogsController@orderSuccess');
-      Route::put('/order/put', 'OrderController@put');
-      Route::post('/order/customer', 'OrderController@customerPost');
-      Route::any('/order/update/available', 'OrderController@updateAvailable');
-    }
+    Route::get('/home', function(){
+      return redirect('/');
+    });
+
+    Route::get('/test/test', function(){
+        //
+    });
+
+
+    //All
+    Route::group(['middleware' => []], function (){
+
+      {//Shared Order
+        Route::post('/shared/order/test/time', 'SharedOrderController@testTime');
+        Route::put('/shared/order/open', 'SharedOrderController@open');
+        Route::post('/shared/order', 'SharedOrderController@post');
+        Route::delete('/shared/order', 'SharedOrderController@delete');
+        Route::post('/shared/order/join', 'SharedOrderController@join');
+        Route::get('/shared/order/weights', 'SharedOrderController@getWeights');
+        Route::get('/shared/order/auth', 'SharedOrderController@byAuth');
+        Route::delete('/shared/order/kick', 'SharedOrderController@kick');
+        Route::any('/shared/order/handle', 'SharedOrderController@handle');
+        Route::any('/shared/order/update', 'SharedOrderController@update');
+        Route::any('/shared/order/order', 'SharedOrderController@getOrder');
+        Route::post('/shared/order/confirm', 'SharedOrderController@confirm');
         
-    {//Anounces
-      Route::get('/announce/auth', 'AnnounceController@byAuth');
-      Route::delete('/announce', 'AnnounceController@delete');
-    }
-    
-    {//Cart
-      Route::get('/json/cart', 'CartController@get');
-      Route::post('/cart/edit/item', 'CartController@editItem');
-      Route::post('/cart/session', 'CartController@changeSession');
-      Route::delete('/cart/remove/item', 'CartController@removeItem'); 
-      Route::delete('/cart/reset', 'CartController@resetItems');
-      Route::post('/cart/container', 'CartController@editContainer');
-      Route::delete('/cart/container', 'CartController@removeContainer');
-      Route::put('/cart/from/local', 'CartController@cartFromLocal');
-    }
-
-    //Coupon
-    Route::any('/coupon/cart', 'CouponController@cartAttach');
-
-    //Session
-    Route::get('/json/session', 'SessionController@get');
-
-    //Categories
-    Route::get('/json/categories', 'CategoryController@getAll');
-
-    //Interview
-    Route::get('/interview/{id}', function($id){
-        return view('interview',['id' => $id]);
-    });
-    Route::put('/put/interviews', 'InterviewController@put');
-
-    //SMS
-    Route::get('/sms/to/send', 'SmsController@toSend');
-    Route::get('/sms/send/confirm', 'SmsController@sendConfirm');
-    Route::put('/sms/add/send', 'SmsController@sendAdd');
-    Route::any('/sms/add/input', 'SmsController@smsAddInput');
-
-    //Errors
-    Route::put('/error', 'ErrorController@put');
-
-    
-    {//Auth
-      Auth::routes();
-      Route::put('/fast/register', 'FastRegisterController@fastRegister');
-      Route::put('/fast/register/user', 'FastRegisterController@fastRegisterUser');
-    }
-    
-    //User
-    Route::get('/auth/user', 'UserController@getAuthUser');
-    Route::post('/user', 'UserController@post');
-    Route::post('/user/main/photo', 'UserController@editMainPhoto');
-    //User Addresses    
-    Route::get('/user/addresses', 'UserController@getAddresses');
-    Route::post('/user/address', 'UserController@postAddress');
-    Route::put('/user/address', 'UserController@addAddress');
-    Route::delete('/user/address', 'UserController@deleteAddress');
-    Route::post('/user/address/default', 'UserController@setDefaultAddress');
-
-    //Product
-    Route::get('/product/last/update', 'ProductController@lastUpdate'); 
-
-    //Present
-    Route::get('/present/settings', 'PresentController@getSettings'); 
-    Route::get('/product/present', 'PresentController@getProduct'); 
-    Route::put('/present/cart', 'PresentController@addPresentToCart'); 
-
-    //Settings
-    Route::get('/json/settings', 'SettingController@get'); 
-
-    //Order Limits
-    Route::get('/order/available/days', 'OrderController@getAvailableDays');
-
-    //Not found
-    Route::put('/not/found', 'NotFoundController@put'); 
-
-  });
-
-  //Gruzka
-  Route::group(['middleware' => ['auth', 'can:gruzka_panel']], function (){
-
-    //Gruzka
-    Route::middleware([])->group(function (){
-      Route::put('/gruzka/confirm', 'GruzkaController@confirm');
-      Route::put('/gruzka/noitem', 'GruzkaController@noItem');
-      Route::put('/gruzka/done', 'GruzkaController@done');
-    });
-
-    //Gruzka
-    Route::middleware([])->group(function (){  
-      Route::get('/json/orders', 'OrderController@jsonGet');
-      //Order Status
-      Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
-      Route::put('/order/status', 'OrderStatusController@putStatus');  
-    });
-
-    Route::prefix('gruzka')->group(function (){
-
-      //Vue
-      Route::get('/{vue_capture?}', function () {
-          return view('admin');
-      })->where('vue_capture', '[\/\w\.-]*');    
-    });
-
-  });
-
-  //Driver
-  Route::group(['middleware' => ['auth', 'can:driver_panel']], function (){
-
-    //User
-    Route::get('/user/comments', 'UserController@comments');
-    Route::put('/add/comment', 'UserController@addComment');
-    Route::delete('/delete/comment', 'UserController@deleteComment');
-
-    //Delivery    
-    Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
-    Route::put('/put/delivery', 'DeliveryController@put');      
-    Route::delete('/delivery', 'DeliveryController@delete');
-
-
-    //Pay
-    Route::get('/json/pay/methods', 'PayController@getMethods');
-    //Return Item
-    Route::put('/return/item', 'ReturnItemController@put');      
-    Route::delete('/return/item', 'ReturnItemController@delete');        
-
-    Route::prefix('driver')->group(function (){
-
-      //Logistic    
-      Route::get('/logistic/keys', 'LogisticController@getDriverLogisticKeys');
-
-      //Vue
-      Route::get('/{vue_capture?}', function () {
-          return view('admin');
-      })->where('vue_capture', '[\/\w\.-]*');    
-    });
-  });
-
-  //Admin
-  Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
-
-    //Polygons
-    Route::put('/admin/polygons', 'PolygonController@put');
-    Route::get('/admin/polygons', 'PolygonController@get');
-    //Polygons price
-    Route::put('/admin/polygons/price', 'PolygonController@putPrice');
-    Route::delete('/admin/polygons/price', 'PolygonController@deletePrice');
-
-    //Libaras
-    Route::put('/admin/libra', 'LibraController@put');
-    Route::post('/admin/libra/sort', 'LibraController@sortByName');
-    Route::post('/admin/libra/update', 'LibraController@update');
-    Route::get('/admin/libra/logs', 'LibraController@getLogs');
-    Route::get('/admin/libra/last/product/update', 'LibraController@lastProductUpdate');
-    Route::get('/admin/libra/last/update', 'LibraController@lastLibraUpdate');
-    Route::get('/admin/libra/vesi/odin', function(){return Storage::download('/vesi/odin.txt');});
-
-    //Logs
-    Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-    
-    //Email
-    Route::put('/admin/email', 'EmailController@put');
-    Route::post('/admin/email', 'EmailController@post');
-    Route::put('/admin/test/mail', 'EmailController@testMail');
-
-    //TEST
-    Route::get('/admin/test', function(){
-      echo 'Здесь происходит, что-то очень важное 🎩🎩';
-    });
-
-    //Confirm
-    Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
-
-    //Logistic
-    Route::middleware([])->group(function (){
-      Route::post('/logistic/change/driver', 'LogisticController@changeDriver');
-    });   
-
-    //Bonus
-    Route::middleware([])->group(function (){
-      Route::put('/bonus/add', 'BonusController@add');
-    });
-
-    //User
-    Route::middleware([])->group(function (){
-      Route::get('/login/as/user', 'UserController@loginAsUser');  
-      Route::post('/user/to/driver', 'UserController@toDriver');  
-      Route::post('/user/to/collector', 'UserController@toСollector');  
-      Route::get('/json/drivers', 'UserController@getDrivers'); 
-    }); 
-
-    //Items
-    Route::middleware([])->group(function (){
-      Route::get('/json/items', 'ItemController@jsonGet');    //  
-      Route::get('/json/item/statuses', 'ItemStatusController@jsonGetStatuses');
-      Route::delete('/item', 'ItemController@delete');
-      Route::post('/item', 'ItemController@post');
-    });
-    
-    //Menus\Pages
-    Route::middleware([])->group(function (){
-      Route::put('/page', 'PageController@put');
-      Route::post('/page', 'PageController@post');
-      Route::post('/page/menu/attach', 'PageController@attach');
-      Route::post('/page/menu/detach', 'PageController@detach');
-      Route::post('/page/site/attach', 'PageController@attachSite');
-      Route::post('/page/site/detach', 'PageController@detachSite');
-      Route::put('/menu', 'MenuController@put');
-    });
-
-    //Coupons
-    Route::middleware([])->group(function (){
-      Route::post('/coupon', 'CouponController@post');
-      Route::put('/coupon', 'CouponController@put');
-      // Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
-    });
-
-    //Order Limits
-    Route::middleware([])->group(function (){
-      Route::get('/orders/calendar', 'OrderController@getCalendarOrders');
-      Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
-    });
-
-    //Category
-    Route::middleware([])->group(function (){
-      Route::put('/category', 'CategoryController@put');
-      Route::post('/category', 'CategoryController@post');
-      Route::post('/categoty/main/photo', 'CategoryController@editMainPhoto');
-      Route::post('/category/product/detach', 'CategoryController@detachProduct');
-      Route::post('/category/product/attach', 'CategoryController@attachProduct');
-      Route::post('/category/category/detach', 'CategoryController@detachCategory');
-      Route::post('/category/category/attach', 'CategoryController@attachCategory');
-    });
-    
-    //Settings
-    Route::middleware([])->group(function (){
-      Route::post('/settings', 'SettingController@post');  
-      Route::delete('/settings', 'SettingController@delete');  
-    });
-
-    //Present
-    Route::middleware([])->group(function (){
-      Route::put('/admin/product/present', 'PresentController@putProduct'); 
-      Route::delete('/admin/product/present', 'PresentController@deleteProduct'); 
-    });
-
-    //File upload
-    Route::middleware([])->group(function (){
-      Route::post('/file/upload', 'FileUploadController@fileUpload');
-      Route::delete('/file/delete', 'FileUploadController@fileDelete');
-    });
-
-    //Order
-    Route::middleware([])->group(function (){
-      //Order
-      Route::post('/order', 'OrderController@post');
-      Route::put('/order/item', 'OrderController@addItem');
-
-    });
-
-    //Product
-    Route::middleware([])->group(function (){
-      Route::put('/product', 'ProductController@put');
-      Route::post('/product', 'ProductController@post');
-      Route::get('/json/products', 'ProductController@get');
-      Route::get('/base64/preloaded/images', 'ProductController@getBase64PreloadedImages');
-
-      //Product Published
-      Route::post('/product/publish', 'ProductController@publish');
-
-      //Delivery days
-      Route::post('/product/delivery/limits', 'ProductController@editDeliveryLimits');
-
-      //Main photo
-      Route::post('/product/main/photo', 'ProductController@editMainPhoto');
+        {//Shared Order Pay
+          // Route::get('/shared/order/pays', 'SharedOrderPayController@get');
+          Route::put('/shared/order/pay', 'SharedOrderPayController@pay');
+        }
+      }
       
-      //Config List
-      Route::get('/config', 'ListConfigController@get');
-      Route::post('/config/post', 'ListConfigController@post');
+      {//Order
+        Route::put('/order/log', 'JugeLogsController@orderButton');
+        Route::put('/order/log/success', 'JugeLogsController@orderSuccess');
+        Route::put('/order/put', 'OrderController@put');
+        Route::post('/order/customer', 'OrderController@customerPost');
+        Route::any('/order/update/available', 'OrderController@updateAvailable');
+      }
+          
+      {//Anounces
+        Route::get('/announce/auth', 'AnnounceController@byAuth');
+        Route::delete('/announce', 'AnnounceController@delete');
+      }
+      
+      {//Cart
+        Route::get('/json/cart', 'CartController@get');
+        Route::post('/cart/edit/item', 'CartController@editItem');
+        Route::post('/cart/session', 'CartController@changeSession');
+        Route::delete('/cart/remove/item', 'CartController@removeItem'); 
+        Route::delete('/cart/reset', 'CartController@resetItems');
+        Route::post('/cart/container', 'CartController@editContainer');
+        Route::delete('/cart/container', 'CartController@removeContainer');
+        Route::put('/cart/from/local', 'CartController@cartFromLocal');
+      }
 
-      //Product discount
-      Route::post('/product/discount/set', 'ProductController@postPrice');
-      // Route::post('/product/discount/set', 'ProductController@setDiscount');
-      Route::delete('/product/discount/remove', 'ProductController@removeDiscount');
+      //Coupon
+      Route::any('/coupon/cart', 'CouponController@cartAttach');
 
-      //Discount
-      Route::delete('/discount/remove', 'DiscountController@remove');
-      Route::put('/discount/add', 'DiscountController@add');
+      //Session
+      Route::get('/json/session', 'SessionController@get');
+
+      //Categories
+      Route::get('/json/categories', 'CategoryController@getAll');
+
+      //Interview
+      Route::get('/interview/{id}', function($id){
+          return view('interview',['id' => $id]);
+      });
+      Route::put('/put/interviews', 'InterviewController@put');
+
+      //SMS
+      Route::get('/sms/to/send', 'SmsController@toSend');
+      Route::get('/sms/send/confirm', 'SmsController@sendConfirm');
+      Route::put('/sms/add/send', 'SmsController@sendAdd');
+      Route::any('/sms/add/input', 'SmsController@smsAddInput');
+
+      //Errors
+      Route::put('/error', 'ErrorController@put');
+
+      
+      {//Auth
+        Auth::routes();
+        Route::put('/fast/register', 'FastRegisterController@fastRegister');
+        Route::put('/fast/register/user', 'FastRegisterController@fastRegisterUser');
+      }
+      
+      //User
+      Route::get('/auth/user', 'UserController@getAuthUser');
+      Route::post('/user', 'UserController@post');
+      Route::post('/user/main/photo', 'UserController@editMainPhoto');
+      //User Addresses    
+      Route::get('/user/addresses', 'UserController@getAddresses');
+      Route::post('/user/address', 'UserController@postAddress');
+      Route::put('/user/address', 'UserController@addAddress');
+      Route::delete('/user/address', 'UserController@deleteAddress');
+      Route::post('/user/address/default', 'UserController@setDefaultAddress');
+
+      //Product
+      Route::get('/product/last/update', 'ProductController@lastUpdate'); 
+
+      //Present
+      Route::get('/present/settings', 'PresentController@getSettings'); 
+      Route::get('/product/present', 'PresentController@getProduct'); 
+      Route::put('/present/cart', 'PresentController@addPresentToCart'); 
+
+      //Settings
+      Route::get('/json/settings', 'SettingController@get'); 
+
+      //Order Limits
+      Route::get('/order/available/days', 'OrderController@getAvailableDays');
+
+      //Not found
+      Route::put('/not/found', 'NotFoundController@put'); 
+
     });
 
-    //Report
-    Route::middleware([])->group(function (){
+    //Gruzka
+    Route::group(['middleware' => ['auth', 'can:gruzka_panel']], function (){
+
+      //Gruzka
+      Route::middleware([])->group(function (){
+        Route::put('/gruzka/confirm', 'GruzkaController@confirm');
+        Route::put('/gruzka/noitem', 'GruzkaController@noItem');
+        Route::put('/gruzka/done', 'GruzkaController@done');
+      });
+
+      //Gruzka
+      Route::middleware([])->group(function (){  
+        Route::get('/json/orders', 'OrderController@jsonGet');
+        //Order Status
+        Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
+        Route::put('/order/status', 'OrderStatusController@putStatus');  
+      });
+
+      Route::prefix('gruzka')->group(function (){
+
+        //Vue
+        Route::get('/{vue_capture?}', function () {
+            return view('admin');
+        })->where('vue_capture', '[\/\w\.-]*');    
+      });
+
+    });
+
+    //Driver
+    Route::group(['middleware' => ['auth', 'can:driver_panel']], function (){
+
+      //User
+      Route::get('/user/comments', 'UserController@comments');
+      Route::put('/add/comment', 'UserController@addComment');
+      Route::delete('/delete/comment', 'UserController@deleteComment');
+
+      //Delivery    
+      Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
+      Route::put('/put/delivery', 'DeliveryController@put');      
+      Route::delete('/delivery', 'DeliveryController@delete');
+
+
+      //Pay
+      Route::get('/json/pay/methods', 'PayController@getMethods');
+      //Return Item
+      Route::put('/return/item', 'ReturnItemController@put');      
+      Route::delete('/return/item', 'ReturnItemController@delete');        
+
+      Route::prefix('driver')->group(function (){
+
+        //Logistic    
+        Route::get('/logistic/keys', 'LogisticController@getDriverLogisticKeys');
+
+        //Vue
+        Route::get('/{vue_capture?}', function () {
+            return view('admin');
+        })->where('vue_capture', '[\/\w\.-]*');    
+      });
+    });
+
+    //Admin
+    Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){
+
+      //Polygons
+      Route::put('/admin/polygons', 'PolygonController@put');
+      Route::get('/admin/polygons', 'PolygonController@get');
+      //Polygons price
+      Route::put('/admin/polygons/price', 'PolygonController@putPrice');
+      Route::delete('/admin/polygons/price', 'PolygonController@deletePrice');
+
+      //Libaras
+      Route::put('/admin/libra', 'LibraController@put');
+      Route::post('/admin/libra/sort', 'LibraController@sortByName');
+      Route::post('/admin/libra/update', 'LibraController@update');
+      Route::get('/admin/libra/logs', 'LibraController@getLogs');
+      Route::get('/admin/libra/last/product/update', 'LibraController@lastProductUpdate');
+      Route::get('/admin/libra/last/update', 'LibraController@lastLibraUpdate');
+      Route::get('/admin/libra/vesi/odin', function(){return Storage::download('/vesi/odin.txt');});
+
+      //Logs
+      Route::get('/admin/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+      
+      //Email
+      Route::put('/admin/email', 'EmailController@put');
+      Route::post('/admin/email', 'EmailController@post');
+      Route::put('/admin/test/mail', 'EmailController@testMail');
+
+      //TEST
+      Route::get('/admin/test', function(){
+        echo 'Здесь происходит, что-то очень важное 🎩🎩';
+      });
+
+      //Confirm
+      Route::get('/to/confirm/orders', 'OrderController@getToConfirmOrders');
+
+      //Logistic
+      Route::middleware([])->group(function (){
+        Route::post('/logistic/change/driver', 'LogisticController@changeDriver');
+      });   
+
+      //Bonus
+      Route::middleware([])->group(function (){
+        Route::put('/bonus/add', 'BonusController@add');
+      });
+
+      //User
+      Route::middleware([])->group(function (){
+        Route::get('/login/as/user', 'UserController@loginAsUser');  
+        Route::post('/user/to/driver', 'UserController@toDriver');  
+        Route::post('/user/to/collector', 'UserController@toСollector');  
+        Route::get('/json/drivers', 'UserController@getDrivers'); 
+      }); 
+
+      //Items
+      Route::middleware([])->group(function (){
+        Route::get('/json/items', 'ItemController@jsonGet');    //  
+        Route::get('/json/item/statuses', 'ItemStatusController@jsonGetStatuses');
+        Route::delete('/item', 'ItemController@delete');
+        Route::post('/item', 'ItemController@post');
+      });
+      
+      //Menus\Pages
+      Route::middleware([])->group(function (){
+        Route::put('/page', 'PageController@put');
+        Route::post('/page', 'PageController@post');
+        Route::post('/page/menu/attach', 'PageController@attach');
+        Route::post('/page/menu/detach', 'PageController@detach');
+        Route::post('/page/site/attach', 'PageController@attachSite');
+        Route::post('/page/site/detach', 'PageController@detachSite');
+        Route::put('/menu', 'MenuController@put');
+      });
+
+      //Coupons
+      Route::middleware([])->group(function (){
+        Route::post('/coupon', 'CouponController@post');
+        Route::put('/coupon', 'CouponController@put');
+        // Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
+      });
+
+      //Order Limits
+      Route::middleware([])->group(function (){
+        Route::get('/orders/calendar', 'OrderController@getCalendarOrders');
+        Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
+      });
+
+      //Category
+      Route::middleware([])->group(function (){
+        Route::put('/category', 'CategoryController@put');
+        Route::post('/category', 'CategoryController@post');
+        Route::post('/categoty/main/photo', 'CategoryController@editMainPhoto');
+        Route::post('/category/product/detach', 'CategoryController@detachProduct');
+        Route::post('/category/product/attach', 'CategoryController@attachProduct');
+        Route::post('/category/category/detach', 'CategoryController@detachCategory');
+        Route::post('/category/category/attach', 'CategoryController@attachCategory');
+      });
+      
+      //Settings
+      Route::middleware([])->group(function (){
+        Route::post('/settings', 'SettingController@post');  
+        Route::delete('/settings', 'SettingController@delete');  
+      });
+
+      //Present
+      Route::middleware([])->group(function (){
+        Route::put('/admin/product/present', 'PresentController@putProduct'); 
+        Route::delete('/admin/product/present', 'PresentController@deleteProduct'); 
+      });
+
+      //File upload
+      Route::middleware([])->group(function (){
+        Route::post('/file/upload', 'FileUploadController@fileUpload');
+        Route::delete('/file/delete', 'FileUploadController@fileDelete');
+      });
+
+      //Order
+      Route::middleware([])->group(function (){
+        //Order
+        Route::post('/order', 'OrderController@post');
+        Route::put('/order/item', 'OrderController@addItem');
+
+      });
+
+      //Product
+      Route::middleware([])->group(function (){
+        Route::put('/product', 'ProductController@put');
+        Route::post('/product', 'ProductController@post');
+        Route::get('/json/products', 'ProductController@get');
+        Route::get('/base64/preloaded/images', 'ProductController@getBase64PreloadedImages');
+
+        //Product Published
+        Route::post('/product/publish', 'ProductController@publish');
+
+        //Delivery days
+        Route::post('/product/delivery/limits', 'ProductController@editDeliveryLimits');
+
+        //Main photo
+        Route::post('/product/main/photo', 'ProductController@editMainPhoto');
+        
+        //Config List
+        Route::get('/config', 'ListConfigController@get');
+        Route::post('/config/post', 'ListConfigController@post');
+
+        //Product discount
+        Route::post('/product/discount/set', 'ProductController@postPrice');
+        // Route::post('/product/discount/set', 'ProductController@setDiscount');
+        Route::delete('/product/discount/remove', 'ProductController@removeDiscount');
+
+        //Discount
+        Route::delete('/discount/remove', 'DiscountController@remove');
+        Route::put('/discount/add', 'DiscountController@add');
+      });
 
       //Report
-      Route::get('/json/report', 'ReportController@jsonGet');
+      Route::middleware([])->group(function (){
 
-      //Stocktaking
-      Route::get('/json/stocktaking/products', 'StocktakingController@jsonGetProducts');
-      Route::put('/stocktaking', 'StocktakingController@put');
+        //Report
+        Route::get('/json/report', 'ReportController@jsonGet');
 
-      //Writeoff        
-      Route::put('/put/writeoff', 'WriteoffController@put');    
+        //Stocktaking
+        Route::get('/json/stocktaking/products', 'StocktakingController@jsonGetProducts');
+        Route::put('/stocktaking', 'StocktakingController@put');
 
-      //Purchases        
-      Route::put('/put/purchase', 'PurchaseController@put');      
-      //Purchase prices       
-      Route::get('/json/purchase/prices', 'PurchaseController@getPrices');
-      Route::put('/put/purchase/prices', 'PurchaseController@putPrice');
+        //Writeoff        
+        Route::put('/put/writeoff', 'WriteoffController@put');    
 
-      //Goods
-      Route::get('/json/goods', 'GoodsController@jsonGet');
-      Route::put('/put/goods', 'GoodsController@put');
-      Route::post('/post/goods', 'GoodsController@post');
-      Route::delete('/delete/goods', 'GoodsController@delete');
+        //Purchases        
+        Route::put('/put/purchase', 'PurchaseController@put');      
+        //Purchase prices       
+        Route::get('/json/purchase/prices', 'PurchaseController@getPrices');
+        Route::put('/put/purchase/prices', 'PurchaseController@putPrice');
+
+        //Goods
+        Route::get('/json/goods', 'GoodsController@jsonGet');
+        Route::put('/put/goods', 'GoodsController@put');
+        Route::post('/post/goods', 'GoodsController@post');
+        Route::delete('/delete/goods', 'GoodsController@delete');
+
+      });
+
+      //Supplier
+      Route::middleware([])->group(function (){
+        Route::get('/json/suppliers', 'SupplierController@jsonGet');
+        Route::get('/json/suppliers/distinct', 'SupplierController@jsonDistinct');
+        Route::put('/put/supplier', 'SupplierController@put');
+        Route::post('/post/supplier', 'SupplierController@post');
+        Route::delete('/delete/supplier', 'SupplierController@delete');
+        Route::put('/attach/supplier/product', 'SupplierController@addProduct');
+        Route::delete('/remove/supplier/product', 'SupplierController@removeProduct');
+        Route::post('/edit/supplier/product/id', 'SupplierController@editId');
+      });
+
+      //Juge CRUD
+      Route::middleware([])->group(function (){
+        Route::get('/juge', 'JugeCRUDController@get');
+        Route::get('/juge/keys', 'JugeCRUDController@getKeys');
+        Route::get('/juge/inputs', 'JugeCRUDController@getInputs');    
+        Route::get('/juge/post/inputs', 'JugeCRUDController@getPostInputs');    
+        Route::post('/juge', 'JugeCRUDController@post');    
+        Route::delete('/juge', 'JugeCRUDController@delete');    
+      });
+
+      //Admin panel
+      Route::prefix('admin')->group(function (){
+        //Vue
+        Route::get('/{vue_capture?}', function () {
+            return view('admin');
+        })->where('vue_capture', '[\/\w\.-]*');    
+      });
 
     });
 
-    //Supplier
-    Route::middleware([])->group(function (){
-      Route::get('/json/suppliers', 'SupplierController@jsonGet');
-      Route::get('/json/suppliers/distinct', 'SupplierController@jsonDistinct');
-      Route::put('/put/supplier', 'SupplierController@put');
-      Route::post('/post/supplier', 'SupplierController@post');
-      Route::delete('/delete/supplier', 'SupplierController@delete');
-      Route::put('/attach/supplier/product', 'SupplierController@addProduct');
-      Route::delete('/remove/supplier/product', 'SupplierController@removeProduct');
-      Route::post('/edit/supplier/product/id', 'SupplierController@editId');
-    });
+    //Site
+    Route::group(['middleware' => []], function (){
 
-    //Juge CRUD
-    Route::middleware([])->group(function (){
-      Route::get('/juge', 'JugeCRUDController@get');
-      Route::get('/juge/keys', 'JugeCRUDController@getKeys');
-      Route::get('/juge/inputs', 'JugeCRUDController@getInputs');    
-      Route::get('/juge/post/inputs', 'JugeCRUDController@getPostInputs');    
-      Route::post('/juge', 'JugeCRUDController@post');    
-      Route::delete('/juge', 'JugeCRUDController@delete');    
-    });
 
-    //Admin panel
-    Route::prefix('admin')->group(function (){
-      //Vue
+      //Favorites
+      Route::put('/favorite', 'FavoriteController@put');
+      Route::delete('/favorite', 'FavoriteController@remove');
+
+      //Pages
+      Route::middleware([])->group(function (){
+        //Profile
+        Route::middleware(['auth'])->get('/profile', function () {
+          return view('main');
+        })->where('vue_capture', '[\/\w\.-]*');
+      });
+
+      //Vue Pages
       Route::get('/{vue_capture?}', function () {
-          return view('admin');
-      })->where('vue_capture', '[\/\w\.-]*');    
-    });
-
-  });
-
-  //Site
-  Route::group(['middleware' => []], function (){
-
-
-    //Favorites
-    Route::put('/favorite', 'FavoriteController@put');
-    Route::delete('/favorite', 'FavoriteController@remove');
-
-    //Pages
-    Route::middleware([])->group(function (){
-      //Profile
-      Route::middleware(['auth'])->get('/profile', function () {
-        return view('main');
+          return view('main');
       })->where('vue_capture', '[\/\w\.-]*');
+
+      //Juge READ
+      Route::middleware([])->group(function (){
+        Route::get('/juge', 'JugeCRUDController@get');
+        Route::get('/juge/keys', 'JugeCRUDController@getKeys');
+        Route::get('/juge/inputs', 'JugeCRUDController@getInputs');    
+      });
+
     });
 
-    //Vue Pages
-    Route::get('/{vue_capture?}', function () {
-        return view('main');
-    })->where('vue_capture', '[\/\w\.-]*');
 
-    //Juge READ
-    Route::middleware([])->group(function (){
-      Route::get('/juge', 'JugeCRUDController@get');
-      Route::get('/juge/keys', 'JugeCRUDController@getKeys');
-      Route::get('/juge/inputs', 'JugeCRUDController@getInputs');    
-    });
-
-  });
-
-
-      
-
-  Route::get('/404', function(){
-      abort(404);
-  });
-
-
-  //Old admin
-  do{
-    //Admin
-    // Route::middleware(['can:admin panel'])->prefix('admin')->group(function (){
-
-    //     //Settings
-    //     Route::post('/settings', 'SettingController@post');  
-
- 
-
-
-
-
-    //     //Statistics
-    //     Route::get('/json/statistics', 'StatisticController@jsonGet');
-
-
-
-    //     //Permissions
-    //     // Route::get('/', 'PermissionController@redirect');
-
-    //     //User
-    //     Route::put('/user', 'UserController@put');
-    //     Route::get('/json/users', 'UserController@jsonGet');
-    //     Route::post('/user/comment', 'UserController@post');
-
-    //     //Auto gruzka
-    //     Route::get('/gruzka/auto/order', 'OrderController@autoOrder');
-
-    //     //Item quantity update
-    //     Route::post('/item/quantity', 'ItemController@quantityUpdate');
-    //     Route::put('/item/status', 'ItemStatusController@putStatus');
-
-    //     //Parse
-    //     Route::get('/parse/orders', 'ParseController@getOrders');
-    //     Route::get('/parse/product/by/name', 'ParseController@parseProductByName');
-
-    //     //Order
-    //     Route::get('/json/orders', 'OrderController@jsonGet');
-    //     Route::post('/order', 'OrderController@post');
-    //     Route::put('/order/item', 'OrderController@addItem');
-
-    //     //Order Status
-    //     Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
-    //     Route::put('/order/status', 'OrderStatusController@putStatus');
-
-
-
-    //     //Container
-    //     Route::put('/container', 'ContainerController@put');
-    //     Route::delete('/container', 'ContainerController@delete');
-    //     Route::get('/json/containers', 'ContainerController@jsonGet');
-    //     Route::put('/container/attach', 'ContainerController@attach');
         
-    //     //File upload
-    //     Route::post('/file/upload', 'FileUploadController@fileUpload');
-    //     Route::delete('/file/delete', 'FileUploadController@fileDelete');
 
-    //     // Route::get('/home', function(){
-    //     //     return view('main');
-    //     // })->name('home');
+    Route::get('/404', function(){
+        abort(404);
+    });
 
-    //     //Juge CRUD
-    //     Route::get('/juge', 'JugeCRUDController@get');
-    //     Route::get('/juge/keys', 'JugeCRUDController@getKeys');
-    //     Route::get('/juge/inputs', 'JugeCRUDController@getInputs');
 
-    //     Route::get('/{vue_capture?}', function () {
-    //         return view('admin');
-    //     })->where('vue_capture', '[\/\w\.-]*');
+    //Old admin
+    do{
+      //Admin
+      // Route::middleware(['can:admin panel'])->prefix('admin')->group(function (){
 
-    // });
+      //     //Settings
+      //     Route::post('/settings', 'SettingController@post');  
 
-  }while(0);
-
-  Auth::routes();
+  
 
 
 
-});
+
+      //     //Statistics
+      //     Route::get('/json/statistics', 'StatisticController@jsonGet');
+
+
+
+      //     //Permissions
+      //     // Route::get('/', 'PermissionController@redirect');
+
+      //     //User
+      //     Route::put('/user', 'UserController@put');
+      //     Route::get('/json/users', 'UserController@jsonGet');
+      //     Route::post('/user/comment', 'UserController@post');
+
+      //     //Auto gruzka
+      //     Route::get('/gruzka/auto/order', 'OrderController@autoOrder');
+
+      //     //Item quantity update
+      //     Route::post('/item/quantity', 'ItemController@quantityUpdate');
+      //     Route::put('/item/status', 'ItemStatusController@putStatus');
+
+      //     //Parse
+      //     Route::get('/parse/orders', 'ParseController@getOrders');
+      //     Route::get('/parse/product/by/name', 'ParseController@parseProductByName');
+
+      //     //Order
+      //     Route::get('/json/orders', 'OrderController@jsonGet');
+      //     Route::post('/order', 'OrderController@post');
+      //     Route::put('/order/item', 'OrderController@addItem');
+
+      //     //Order Status
+      //     Route::get('/json/order/statuses', 'OrderStatusController@jsonGetStatuses');
+      //     Route::put('/order/status', 'OrderStatusController@putStatus');
+
+
+
+      //     //Container
+      //     Route::put('/container', 'ContainerController@put');
+      //     Route::delete('/container', 'ContainerController@delete');
+      //     Route::get('/json/containers', 'ContainerController@jsonGet');
+      //     Route::put('/container/attach', 'ContainerController@attach');
+          
+      //     //File upload
+      //     Route::post('/file/upload', 'FileUploadController@fileUpload');
+      //     Route::delete('/file/delete', 'FileUploadController@fileDelete');
+
+      //     // Route::get('/home', function(){
+      //     //     return view('main');
+      //     // })->name('home');
+
+      //     //Juge CRUD
+      //     Route::get('/juge', 'JugeCRUDController@get');
+      //     Route::get('/juge/keys', 'JugeCRUDController@getKeys');
+      //     Route::get('/juge/inputs', 'JugeCRUDController@getInputs');
+
+      //     Route::get('/{vue_capture?}', function () {
+      //         return view('admin');
+      //     })->where('vue_capture', '[\/\w\.-]*');
+
+      // });
+
+    }while(0);
+
+    Auth::routes();
+
+
+
+  }
+);
 // });
 
 

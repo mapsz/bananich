@@ -133,10 +133,10 @@ let routes = [];
 
   //Checkout
   import siteCheckout from './components/__site/checkout/checkout.vue';
-  import siteCheckoutTest from './components/__site/checkout/checkout-test.vue';
+  import siteCheckoutX from './components/__site/checkout/xCheckout.vue';
   routes.push(
     {path: '/checkout',    component:siteCheckout, name:'soloCheckout'},
-    {path: '/checkout/zzzx',    component:siteCheckoutTest},
+    {path: '/xcheckout',    component:siteCheckoutX},
   );
 
 //DRIVER

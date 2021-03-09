@@ -40,6 +40,7 @@ export default {
   computed:{
     ...mapGetters({
       cart:'cart/getCart',
+      checkout: 'checkout/get',
       order:'sharedOrder/getOrder',
       settings:   'settings/beautyGet',
     }),

@@ -90,6 +90,17 @@ export default {
         this.fetch(this.polygons.length == 0 ? [0] : this.polygons);
       }
     },
+    time:{
+      deep: true,
+      handler: function (val, oldVal) {
+        if(!this.availableDays || this.availableDays == undefined) return false;        
+        let day = this.availableDays.find(x => x.date == this.day);
+        let time = day.times.find(x => (x.time.from == val.from && x.time.to == val.to));
+        let price = time.price;
+
+        if(!this.noCache) this.set({name:'x_price_from_date', value:price})
+      },
+    },
   },
   mounted(){
     //
@@ -97,6 +108,7 @@ export default {
   methods:{
     ...mapActions({
       'fetch'         :'orderLimits/fetchAvailableDays',
+      'set':'checkout/setValue'
     }),
   } 
 }

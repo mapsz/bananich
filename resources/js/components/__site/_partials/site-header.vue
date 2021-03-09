@@ -35,7 +35,7 @@
         <!-- Presents -->
         
         <template v-if="isX">
-          <x-header-button />
+          <!-- <x-header-button /> -->
         </template>
         <template v-else>
           <present-bar :cart="cart" :settings="presentSettings"/>

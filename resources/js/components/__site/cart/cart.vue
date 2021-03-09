@@ -58,7 +58,8 @@
                 <template>
                   <!-- X bananich -->
                   <template v-if="isX">
-                    <cart-buttons />
+                    <!-- <cart-buttons /> -->
+                    <a href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
                   </template>                  
                   <!-- Normal bananich -->
                   <template v-if="!isX">
@@ -106,7 +107,7 @@
           </div>
 
           <div class="col-12">
-            <shared-order-open-blocks />
+            <!-- <shared-order-open-blocks /> -->
           </div>
         </div>
       </div>

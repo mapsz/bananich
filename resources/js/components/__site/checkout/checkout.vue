@@ -70,7 +70,7 @@
               <juge-errors :errors="errors"/>
               <checkout-checkout :errors="errors" @do-order="doOrder()"/>
             </div>            
-          </div>          
+          </div>
           <!-- Buttons -->
           <div v-if="isX"  class="col-lg-12 mb-5">
             <juge-errors :errors="errors"/>
@@ -102,6 +102,10 @@ export default {
     }),
   },
   mounted(){
+    if(isX){
+      location.href = '/xcheckout'
+    }
+
     //Trackers
     if(!localServer){
       ym(54670840,'reachGoal','opencart');

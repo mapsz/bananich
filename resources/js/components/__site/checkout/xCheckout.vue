@@ -91,7 +91,7 @@
           <div v-if="isX"  class="col-lg-12 mb-5">
             <juge-errors :errors="errors"/>
             <div class="d-flex justify-content-center">
-              <!-- <button class="x-btn" @click="doOrder('x')">Оформить заказ</button> -->
+              <button class="x-btn" @click="doOrder('x')">Оформить заказ</button>
             </div>              
           </div>
         </div>
@@ -190,7 +190,46 @@ export default {
     },
     setPolygons(ids){
       this.choosedPolygons = ids;
-    }
+    },
+    async doOrder(type=false){
+      //Refresh errors
+      if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
+      this.errors = [];
+      
+      //Log
+      let r = await ax.fetch('/order/log', {}, 'put');
+
+      if(!r) return;
+
+      let data = this.checkout;
+      data.jugeAddress = this.data.jugeAddress;
+
+      //Put      
+      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type}, 'put');
+
+      //Catch errors
+      if(!r){      
+        if(ax.lastResponse.status == 422){
+          this.errors = ax.lastResponse.data.errors;
+          return;
+        }
+      }
+
+      if(r > 0){
+        await ax.fetch('/order/log/success', {}, 'put');
+        //Trackers
+        // if(!localServer && !isX && ym != undefined){
+        //   ym(54670840,'reachGoal','ordered');
+        //   fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
+        // } 
+        // if(!localServer && isX && ym != undefined){
+        //   ym(72176563,'reachGoal','orderplaced');
+        // } 
+        this.clean();
+        ax.fetch('/order/update/available', {id:r});
+        location.href ='/order-thanks';
+      }        
+    },
   }
 }
 </script>

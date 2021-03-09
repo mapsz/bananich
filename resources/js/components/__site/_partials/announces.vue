@@ -1,5 +1,5 @@
 <template>
-<div v-if="isX">
+<div v-if="isX && 0">
   <div v-if="announces.length > 0" class="announces-block py-3">
     <div class="container p-0">
       <div v-for="(announce, i) in announces" :key="i"  class="announce mx-3">
