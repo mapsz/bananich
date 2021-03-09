@@ -50,12 +50,11 @@ class UserController extends Controller
     Address::validate($request->all(),1);
  
     //Get user
+    $userId = 0;
     $auth = Auth::user();
-    if(!$auth){
-      return response()->json(false);
-    }   
+    if($auth) $userId = $auth->id;
     
-    return response()->json(User::addAddress($request->all(), $auth->id));
+    return response()->json(User::addAddress($request->all(), $userId));
   }
 
   public function postAddress(Request $request){

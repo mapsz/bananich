@@ -1,18 +1,18 @@
 <template>
 <div>
-          <!-- Test -->
-          <div>
-            <!-- <div>Test address:</div> -->
-            <!-- <div>{{address}}</div> -->
-            <div><input id="suggest" type="text" style="width:100%"></div>
-            <!-- <div v-if="selectedPolygone !== null" class="mt-1">
-              Полигон:
-              {{selectedPolygone ? selectedPolygone.properties.getAll().hintContent : 'nope'}}
-            </div> -->
-          </div>
+  <!-- Test -->
+  <div>
+    <!-- <div>Test address:</div> -->
+    <!-- <div>{{address}}</div> -->
+    <div><input id="suggest" type="text" style="width:100%"></div>
+    <!-- <div v-if="selectedPolygone !== null" class="mt-1">
+      Полигон:
+      {{selectedPolygone ? selectedPolygone.properties.getAll().hintContent : 'nope'}}
+    </div> -->
+  </div>
 
-          <!-- Map -->
-          <div id="map" class="mt-3" style="width: 550px; height: 400px"></div>
+  <!-- Map -->
+  <div id="map" class="mt-3" style="width: 550px; height: 400px"></div>
 </div>
 </template>
 

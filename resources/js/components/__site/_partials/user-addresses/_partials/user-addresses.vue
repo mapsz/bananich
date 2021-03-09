@@ -1,5 +1,5 @@
 <template>
-<div v-if="user" class="user-addresses">
+<div v-if="1" class="user-addresses">
 
   
   <!-- List -->

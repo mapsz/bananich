@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
 use App\JugeCRUD;
@@ -66,25 +67,27 @@ class User extends Authenticatable
 
   public static function addAddress($data, $userId){
 
-    //Get user
-    $user = User::find($userId);
+    dd(session()->getId());
 
     {//Attach Address
-      $address = [
-        'street' => $data['street'],
-        'number' => isset($data['number']) ? $data['number'] : null,
-        'appart' => isset($data['appart']) ? $data['appart'] : null,
-        'porch' => isset($data['porch']) ? $data['porch'] : null,
-        'stage' => isset($data['stage']) ? $data['stage'] : null,
-        'intercom' => isset($data['intercom']) ? $data['intercom'] : null,
-        'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
-      ];      
-      if(isset($data['x']) && $data['x']) $address['x'] = $data['x'];
-      if(isset($data['y']) && $data['y']) $address['y'] = $data['y'];
-      $user->addresses()->save(new Address($address));
+      DB::table('addresses')->insert(
+        [
+          'addressable_id'      => $userId == 0 ? session()->getId() : 'App\User',
+          'addressable_type'    => $userId == 0 ? 'session' : 'App\User',
+          'street' => $data['street'],
+          'number' => isset($data['number']) ? $data['number'] : null,
+          'appart' => isset($data['appart']) ? $data['appart'] : null,
+          'porch' => isset($data['porch']) ? $data['porch'] : null,
+          'stage' => isset($data['stage']) ? $data['stage'] : null,
+          'intercom' => isset($data['intercom']) ? $data['intercom'] : null,
+          'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
+          'x' => isset($data['x']) ? $data['x'] : null,
+          'y' => isset($data['y']) ? $data['y'] : null,
+        ]
+      );
     }
 
-    // Set dufault
+    // Set default
     if($data['default']){
       $address = Address::where('addressable_type', "App\User")->where('addressable_id', $userId)->orderBy('id', 'desc')->first();
       User::setDefaultAddress($address->id);

@@ -32,15 +32,17 @@
               
               <!-- Address -->
               <template>
-                <div v-if="user" class="checkout-div">
-                  <div class="row checkout-address checkout-address-gift m-0">
+                <div class="checkout-div">
+                <!-- <div v-if="user" class="checkout-div"> -->
+                  <div class=" checkout-address checkout-address-gift m-0">
                     <div class="col-12">
                       <div class="checkout-title">Адрес</div>
+                      
                       <choose-address v-model="data.jugeAddress"/>
                     </div>
                   </div>
                 </div>
-                <checkout-address v-else class="checkout-div"/>
+                <!-- <checkout-address v-else class="checkout-div"/> -->
 
                 <p>
                   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
