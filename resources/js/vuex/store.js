@@ -8,6 +8,7 @@ import checkout from './modules/site/checkout'
 import presents from './modules/site/presents'
 import orderLimits from './modules/orderLimits'
 import sharedOrder from './modules/site/sharedOrder'
+import addresses from './modules/site/addresses'
 
 let product = new jugeVuex('product');
 let order = new jugeVuex('order');
@@ -17,7 +18,7 @@ let page = new jugeVuex('page');
 
 let store = {  
   modules:{
-    cart,user,product,settings,category,favorite,order,checkout,bonus,presents,orderLimits,menu,page,sharedOrder
+    cart,user,product,settings,category,favorite,order,checkout,bonus,presents,orderLimits,menu,page,sharedOrder,addresses
   }
 };
 

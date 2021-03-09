@@ -19,11 +19,10 @@ data(){return{
   showAddresses:false,
 }},
 computed:{
-  ...mapGetters({user:'user/get'}),
-  addresses(){
-    if(!this.user == undefined || !this.user.addresses == undefined) return false;
-    return this.user.addresses;
-  },
+  ...mapGetters({
+    user:'user/get',
+    addresses:'addresses/get',
+  }),
 },
 watch:{
   preShow: function(){

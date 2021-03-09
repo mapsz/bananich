@@ -17,17 +17,23 @@ class UserController extends Controller
 {
 
   public function deleteAddress(Request $request){
-
+    
     //Get user
+    $userId = 0;
     $auth = Auth::user();
-    if(!$auth){
-      return response()->json(false);
-    }
+    if($auth) $userId = $auth->id;
       
     //Get address
     $address = Address::find($request->id);
-    if($address->addressable_type == "App\User" && $address->addressable_id == $auth->id){
-      return response()->json($address->delete());
+
+    if($userId){
+      if($address->addressable_type == "App\User" && $address->addressable_id == $auth->id){
+        return response()->json($address->delete());
+      }
+    }else{
+      if($address->addressable_type == "session" && $address->addressable_id == session()->getId()){
+        return response()->json($address->delete());
+      }
     }
 
     return response()->json(false);
@@ -60,10 +66,10 @@ class UserController extends Controller
   public function postAddress(Request $request){
     
     //Get user
+    $userId = 0;
+    $session = session()->getId();
     $auth = Auth::user();
-    if(!$auth){
-      return response()->json(false);
-    }   
+    if($auth) $userId = $auth->id;
 
     //Validate id
     if(!$request->id){
@@ -84,8 +90,14 @@ class UserController extends Controller
     $address = Address::find($request->id);
 
     if(!$isAdmin){
-      if($address->addressable_type != "App\User" || $address->addressable_id != $auth->id){
-        return response()->json(false);
+      if($userId){
+        if($address->addressable_type != "App\User" || $address->addressable_id != $auth->id){
+          return response()->json(false);
+        }
+      }else{
+        if($address->addressable_type != "session" || $address->addressable_id != $session){
+          return response()->json(false);
+        }
       }
     }
     
@@ -222,6 +234,10 @@ class UserController extends Controller
   public function deleteComment(Request $request){
     UserComment::find($request->id)->delete();
     return response()->json(1);
+  }
+
+  public function getAddresses(){
+    return response()->json(Address::where('addressable_type', 'session')->where('addressable_id', session()->getId())->get());
   }
 
   // public function postAddress(Request $request){

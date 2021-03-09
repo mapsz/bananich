@@ -1,6 +1,5 @@
 <template>
 <div v-if="1" class="user-addresses">
-
   
   <!-- List -->
   <x-popup  :title="title" :active="showAddresses" @close="showAddresses=false" id="user-addresses-list-modal">
@@ -108,6 +107,7 @@ data(){return{
 computed:{
   ...mapGetters({
     user:'user/get',
+    addresses:'addresses/get',
   }),
   title(){
     if(this.showDelete) return 'Удаление адреса';
@@ -119,10 +119,6 @@ computed:{
   isAction(){
     if(this.showDelete || this.showAdd || this.showEdit) return true;    
     return false;
-  },
-  addresses(){
-    if(!this.user == undefined || !this.user.addresses == undefined) return false;
-    return this.user.addresses;
   },
   dAddress(){
     if(!this.addresses || this.addresses.length < 1) return false;
@@ -148,6 +144,11 @@ watch:{
     if(this.addresses && this.addresses.length == 0) this.showAdd = true;
   },
   user: function (val, oldVal) {
+    if(val === false){
+      this.getAddressesBySession();
+      return;
+    }
+
     this.doPreChoose();
   },
 },
@@ -157,6 +158,7 @@ async mounted() {
 methods:{
   ...mapActions({
     'getUser':'user/fetch',
+    'getAddressesBySession':'addresses/getAddressesBySession',
   }),
   doPreChoose(){
     if(this.noPre) return;
@@ -180,17 +182,24 @@ methods:{
     return;
   },
   async setDefault(id){
-    await ax.fetch('/user/address/default', {id}, 'post');
-    this.getUser();
+    await ax.fetch('/user/address/default', {id}, 'post');            
+    if(this.user === false){
+      await this.getAddressesBySession();
+    }else{
+      await this.getUser();
+    }
   },
   async deleteAddress(id){
     let r = await ax.fetch('/user/address', {id}, 'delete');
-    if(r) {
-      this.actionSuccess();
-    }    
+    if(r) {this.actionSuccess();}    
   },
   async actionSuccess(){
-    await this.getUser();
+        
+    if(this.user === false){
+      await this.getAddressesBySession();
+    }else{
+      await this.getUser();
+    }
 
     if(this.choose && this.addresses.length == 1 && (this.showAdd || this.showEdit)) this.doChoose(this.addresses[0].id);
     
@@ -207,7 +216,7 @@ methods:{
     this.$emit('choose', id);
     //Hide modal
     this.showAddresses = false;
-  }
+  },
 },
 }
 </script>

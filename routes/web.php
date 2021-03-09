@@ -1068,11 +1068,13 @@ Route::group(['middleware' => ['HttpsRR'
       Route::post('/user', 'UserController@post');
       Route::post('/user/main/photo', 'UserController@editMainPhoto');
       //User Addresses    
-      Route::get('/user/addresses', 'UserController@getAddresses');
       Route::post('/user/address', 'UserController@postAddress');
       Route::put('/user/address', 'UserController@addAddress');
       Route::delete('/user/address', 'UserController@deleteAddress');
       Route::post('/user/address/default', 'UserController@setDefaultAddress');
+      //Session Addresses      
+      Route::get('/session/addresses', 'UserController@getAddresses');
+      
 
       //Product
       Route::get('/product/last/update', 'ProductController@lastUpdate'); 
@@ -1152,6 +1154,10 @@ Route::group(['middleware' => ['HttpsRR'
         })->where('vue_capture', '[\/\w\.-]*');    
       });
     });
+
+
+    //Polygons
+    Route::get('/polygons', 'PolygonController@get');
 
     //Admin
     Route::group(['middleware' => ['auth', 'can:admin_panel']], function (){

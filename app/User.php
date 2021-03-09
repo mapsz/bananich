@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
 use App\JugeCRUD;
@@ -67,12 +68,12 @@ class User extends Authenticatable
 
   public static function addAddress($data, $userId){
 
-    dd(session()->getId());
+    // dd(session()->getId());
 
     {//Attach Address
       DB::table('addresses')->insert(
         [
-          'addressable_id'      => $userId == 0 ? session()->getId() : 'App\User',
+          'addressable_id'      => $userId == 0 ? session()->getId() : $userId,
           'addressable_type'    => $userId == 0 ? 'session' : 'App\User',
           'street' => $data['street'],
           'number' => isset($data['number']) ? $data['number'] : null,
@@ -121,12 +122,28 @@ class User extends Authenticatable
     {//Get addresses
       //Single
       $address = Address::find($id);
-      //User addresses
-      $addresses = Address::where('addressable_type', "App\User")->where('addressable_id', $address->addressable_id)->get();
     }
 
-    $address->default = 1;
-    $address->save();
+    
+    {//Set default
+      $address->default = 1;
+      $address->save();
+    }
+
+
+    {//Get other
+      //Get user
+      $userId = 0;
+      $auth = Auth::user();
+      if($auth) $userId = $auth->id;
+          
+      //User addresses
+      if($userId > 0){
+        $addresses = Address::where('addressable_type', "App\User")->where('addressable_id', $userId)->get();
+      }else{
+        $addresses = Address::where('addressable_type', "session")->where('addressable_id', session()->getId())->get();
+      }
+    }   
 
     //Remove defaults
     foreach ($addresses as $k => $a) {

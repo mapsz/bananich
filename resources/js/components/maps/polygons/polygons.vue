@@ -49,7 +49,7 @@ async mounted() {
 },
 methods:{
   async polygonsGet(){
-    let r = await ax.fetch('/admin/polygons');
+    let r = await ax.fetch('/polygons');
     if(r){this.polygonsDB = r;}
   },
   async doSetMarker(x,y){

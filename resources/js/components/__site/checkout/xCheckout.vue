@@ -118,14 +118,11 @@ export default {
       cart:     'cart/getCart',
       checkout: 'checkout/get',      
       user:     'user/get',
+      addresses:'addresses/get',    
     }),
-    addresses(){
-      if(this.user == undefined || this.user.addresses == undefined) return false;
-      return this.user.addresses;
-    },
     choosedAddress(){
       if(this.data == undefined || this.data.jugeAddress == undefined) return false;
-      if(this.addresses == undefined || this.addresses.length < 1) return false;
+      if(this.addresses == undefined || this.addresses[0] == undefined) return false;
 
       let address = this.addresses.find(x => x.id == this.data.jugeAddress);
       return address;

@@ -74,12 +74,9 @@ data(){return{
 }},
 computed:{
   ...mapGetters({
-    user:'user/get',
+    user:'user/get',    
+    addresses:'addresses/get',
   }),
-  addresses(){
-    if(!this.user == undefined || !this.user.addresses == undefined) return false;
-    return this.user.addresses;
-  },
   activeAddress(){
     if(!this.addresses || this.addresses.length < 1) return false;
     if(!this.id || this.id < 0) return false;
