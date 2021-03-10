@@ -56,7 +56,7 @@ export default {
         let style = "";
         if(this.defaultPrice > 0){
           if(this.defaultPrice > min){
-            style = "color: #8ac2a7;font-weight: 600;"
+            style = "font-weight: 600;"
           }
         }        
 
@@ -87,7 +87,7 @@ export default {
         let style = "";
         if(this.defaultPrice > 0){
           if(this.defaultPrice > v.price){
-            style = "color: #8ac2a7;font-weight: 600;"
+            style = "font-weight: 600;"
           }
         }   
 
