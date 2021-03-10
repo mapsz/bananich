@@ -15,7 +15,8 @@
       </nav>
 
       <!-- Header -->
-      <h1 v-if="!isMobile || $route.path == '/'" class="title-h1">
+      <!-- <h1 v-if="!isMobile || $route.path == '/'" class="title-h1"> -->
+      <h1 class="title-h1">
         <template v-if="isX">
           <div class="moto">
             <b>NEOLAVKA</b> - новый подход к рациональным покупкам

@@ -1218,7 +1218,8 @@ class Order extends Model
                 {//Add Bonus
                   $order->x_total         += $order->bonus;
                   $order->x_total_result  += $order->bonus;
-                }                
+                }
+
                 {//Checkout
                   $xData = $order->xData;
                   if(isset($order->participation_price)) $xData['participation_price'] = $order->participation_price;

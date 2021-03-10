@@ -33,6 +33,7 @@ export default {
   computed:{
     ...mapGetters({
       'availableDays': 'orderLimits/getAvailableDays',
+      'settings':   'settings/beautyGet',
     }),
     days:function(){
       if(this.availableDays[0] == undefined) return false;
@@ -49,13 +50,24 @@ export default {
           if(max < time.price) max = time.price;
         });
 
+        let captionPrice = min == max ? currencySymbol+min :'от '+currencySymbol+min;
+        
+        //Style
+        let style = "";
+        if(this.defaultPrice > 0){
+          if(this.defaultPrice > min){
+            style = "color: #8ac2a7;font-weight: 600;"
+          }
+        }        
+
         days.push(
           {
             'value':v.date,
             'caption':(
               moment(v.date).locale('ru').format('D MMMM') + " " +
-              "("+currencySymbol+(min==max ? max : (min + "-" + max))+")"
-            )
+              "("+captionPrice+")"
+            ),
+            'style':style,
           });
       });
       return days;
@@ -70,6 +82,15 @@ export default {
       let times =[];
       $.each(day.times , ( k, v ) => {
         if(v.slots < 1) return;
+
+        //Style
+        let style = "";
+        if(this.defaultPrice > 0){
+          if(this.defaultPrice > v.price){
+            style = "color: #8ac2a7;font-weight: 600;"
+          }
+        }   
+
         times.push(
           {
             'value':v.time,
@@ -77,11 +98,16 @@ export default {
               'с '+ v.time.from + ' до '+v.time.to +
               ' ('+currencySymbol+v.price+')'
             ),
+            'style':style,
         });
       });
 
       return times;
 
+    },
+    defaultPrice:function(){
+      if(this.settings == undefined && this.settings.x_order_price == undefined) return false;
+      return this.settings.x_order_price;
     }
   },
   watch:{

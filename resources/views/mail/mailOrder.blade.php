@@ -157,7 +157,7 @@ if(!isset($site)) $site = false;
         <tr>
           <td></td>
           <td>Орг. взнос:</td>
-          <td align="right">{{$order['xData']['participation_price']}} {{$c}}</td>
+          <td align="right">{{$order['participation_price']}} {{$c}}</td>
         </tr>
       @endif
       {{-- Bonus --}}

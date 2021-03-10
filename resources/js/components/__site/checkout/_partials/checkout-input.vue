@@ -5,7 +5,7 @@
   
   <!-- Radio -->
   <div v-else-if="fType == 'radio'" class="form-group">
-    <div v-for='(input,i) in list' :key='i' class="form-radio">
+    <div v-for='(input,i) in list' :key='i' class="form-radio" :style="input.style">
       <input v-model="value" class="custom-radio" type="radio" :id="name+'-'+i" :value="input.value" :name="inputName">
       <label :for="name+'-'+i">{{input.caption}}</label>
     </div>
