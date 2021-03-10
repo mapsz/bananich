@@ -957,19 +957,13 @@ Route::get('/mail/preview/{id}', function($id){
   return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
 });
 
-Route::domain('x.bananich.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
-  Route::get('/', function(){
-    // return redirect('/');
-    return redirect('/catalogue');
-  });
-});
 
-Route::domain('neolavka.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
-  Route::get('/', function(){
-    // return redirect('/');
-    return redirect('/catalogue');
-  });
-});
+// Route::domain('neolavka.ru')->middleware(['HttpsRR','under-construction'])->group(function () {
+//   Route::get('/', function(){
+//     // return redirect('/');
+//     return redirect('/catalogue');
+//   });
+// });
 
 Route::group(['middleware' => ['HttpsRR'
   // ,'under-construction'
