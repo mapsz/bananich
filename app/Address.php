@@ -64,12 +64,21 @@ class Address extends Model
     }
     
     {//User id
-      $user = Auth::user();
-      $userId = isset($user) && isset($user->id) ? $user->id : 0;
+      //Get user
+      $userId = 0;
+      $session = session()->getId();
+      $auth = Auth::user();
+      if($auth) $userId = $auth->id;
     }
     
     {//Allowed
-      $allowed = $address->addressable_type == "App\User" && $address->addressable_id == $userId ? true : false;
+      $allowed = false;
+      if($userId){
+        $allowed = $address->addressable_type == "App\User" && $address->addressable_id == $userId ? true : false;
+      }else{
+        $allowed = $address->addressable_type == "session" && $address->addressable_id == $session ? true : false;
+      }
+
       Validator::make(['allowed' => $allowed], ['allowed' => 'required|accepted'], ['allowed.accepted' => 'Адрес недоступен!'])->validate();
     }
     
