@@ -248,6 +248,7 @@ class Cart extends Model
       $query = $query->with('presents');
       $query = $query->with('presents.product');
       $query = $query->with('containers');
+      // $query = $query->with('polygons');
       
       if(isset($request['products'])){
         $query = $query->with('items.product.metas');
@@ -321,5 +322,8 @@ class Cart extends Model
   public function coupons(){
     return $this->belongsToMany('App\Coupon','coupon_cart')->latest();
   }    
+  public function polygons(){
+    return $this->belongsToMany('App\Polygon','polygon_cart');
+  }
 
 }

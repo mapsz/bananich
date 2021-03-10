@@ -444,7 +444,7 @@ class Order extends Model
 
   }
 
-  public static function placeOrder($data, $cart){
+  public static function placeOrder($data, $cart, $polygons){
 
     JugeLogs::log(1, json_encode(['model' => 'order', 'user' => '?']));
     
@@ -503,7 +503,20 @@ class Order extends Model
     if($order->type == 'x'){
      
       $fullOrder = Order::jugeGet(['id'=> $order->id]);
-      DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'participation_price', 'value'=>$fullOrder->xData['participation_price']]);
+
+      // dd($data);
+
+      {//Participation price
+        $participation_price = $fullOrder->xData['participation_price'];
+        if(isset($polygons) && isset($polygons[0])){
+          $participation_price = Polygon::getPrice(
+            $polygons,
+            $data['deliveryDate'], 
+            $data['deliveryTime']['from'].'-'.$data['deliveryTime']['to']
+          );
+        }
+      }
+      DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'participation_price', 'value'=>$participation_price]);
       DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'over_weight_price', 'value'=>$fullOrder->xData['overWeightPrice']]);
     }
 

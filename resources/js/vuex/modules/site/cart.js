@@ -126,12 +126,18 @@ let cart = {
       dispatch('fetch');
     },
     async editContainer({commit},id){
-      let r = await ax.fetch('/cart/container',{id},'post',false);
+      //Set type
+      let type = 1;
+      if(isX) type = 'x';
+      let r = await ax.fetch('/cart/container',{id,type},'post',false);
       commit('mCart',r);
       return r;
     },
     async removeContainer({commit}){
-      let r = await ax.fetch('/cart/container',{},'delete',false);
+      //Set type
+      let type = 1;
+      if(isX) type = 'x';
+      let r = await ax.fetch('/cart/container',{type},'delete',false);
       commit('mCart',r); 
       return r;
     }, 

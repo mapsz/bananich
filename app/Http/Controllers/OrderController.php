@@ -62,6 +62,8 @@ class OrderController extends Controller
   }
 
   public function put(Request $request){
+
+    // dd($request);
     
     JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
     
@@ -71,6 +73,7 @@ class OrderController extends Controller
       $userId = $user ? $user->id : 0;
       //Get data
       $data = $request->all();
+      $polygons = isset($data['polygons']) ? $data['polygons'] : false;
       $data = $data['data'];
       //Get Cart
       if($request->type == 'x'){
@@ -85,6 +88,10 @@ class OrderController extends Controller
       if(strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false){
         $site = 'x';
       }
+
+
+      //Phone
+      if(isset($data['phone'])) $data['phone'] = str_replace('+7','8',$data['phone']);
 
       JugeLogs::log(11, json_encode(['model' => 'orderController', 'user' => '?']));
 
@@ -218,7 +225,7 @@ class OrderController extends Controller
         DB::beginTransaction();{
   
           //Place order
-          $order = Order::placeOrder($data, $cart);
+          $order = Order::placeOrder($data, $cart, $polygons);
 
           JugeLogs::log(70, json_encode(['model' => 'orderController', 'user' => $userId]));
   

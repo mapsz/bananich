@@ -23,7 +23,7 @@
         <span>Сервисный взнос</span><b>{{participation_price}} p</b>
       </div>
       <div class="d-flex justify-content-between" v-if="personalAddress"><span>Доставка</span><b>{{personalAddress}} p</b></div>
-      <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight}} кг</b></div>
+      <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight.toFixed(2)}} кг</b></div>
       <div class="d-flex justify-content-between" v-if="overWeightPrice"><span>Доп. вес</span><b>{{overWeightPrice}} p</b></div>
 
       <div class="d-flex justify-content-between mt-3"><span><b>Общая сумма</b></span><b>{{final_summ_x}} p</b></div>
@@ -53,8 +53,8 @@ export default {
         if(!this.cart || this.cart.xData == undefined || this.cart.xData.participation_price == undefined) return false;
         return this.cart.xData.participation_price;
       }else{
-        if(this.settings == undefined || this.settings.x_order_price == undefined || !this.settings.x_order_price) return;
-        return this.settings.x_order_price;
+        if(!this.checkout || this.checkout.x_price_from_date == undefined) return false;
+        return this.checkout.x_price_from_date;
       }
     },
     overWeightPrice (){
@@ -71,9 +71,7 @@ export default {
     },
     final_summ_x(){
       if(!this.cart || this.cart.final_summ_x == undefined) return false;
-      let final_summ_x = this.cart.final_summ_x;
-      if(this.$route.name == 'soloCheckout') final_summ_x += this.participation_price;
-      return final_summ_x;
+      return this.cart.final_summ_x + (this.$route.name == 'soloCheckout' ? this.participation_price : 0);
     }
   },
 }

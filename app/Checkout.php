@@ -317,12 +317,10 @@ class Checkout extends Model
       if($sOrder && isset($sOrder[0]) && isset($sOrder[0]['id'])) $sOrder = $sOrder[0];
       if(!$sOrder){
         $sOrder = SharedOrder::byAuth(false);
-        if(!$sOrder) return $xData;
-        if(!isset($sOrder->orders)) return $xData;
       }     
 
       //Order
-      if(!$order){
+      if(!$order && isset($sOrder->orders)){
         $order = false;
         foreach ($sOrder->orders as $key => $v) {
           if($v->customer_id == $user->id) {
@@ -334,23 +332,30 @@ class Checkout extends Model
 
     }
 
-    if(!$order) return $xData;
-
     $settings = (new Setting)->getList(1);
       
     {//Ids
-      $xData['order_id'] = $order->id;
-      $xData['s_order_id'] = $sOrder == 'solo' ? 'solo' : $sOrder->id;      
+      //Order
+      $xData['order_id'] = isset($order->id) && $order->id > 0 ? $order->id : false;
+      {//Shared order
+        $xData['s_order_id'] = false;
+        if($sOrder == 'solo'){
+          $xData['s_order_id'] == 'solo';
+        }elseif(isset($sOrder->id) && $sOrder->id > 0){
+          $xData['s_order_id'] = $sOrder->id;
+        }  
+      }
     }        
     
     {//Set member count
-      if($sOrder == 'solo') $memberCount = 1;
-      else $memberCount = $sOrder->member_count;
+      $memberCount = 1;
+      if($xData['s_order_id'] != 'solo' && ($sOrder && isset($sOrder->member_count) && $sOrder->member_count > 0)) $memberCount = $sOrder->member_count;
     }
 
     {//Participation
       if($memberCount == 0) return $xData;
-      $xData['participation_price'] = $settings['x_order_price'] / $memberCount;
+      $xData['participation_price'] = 0;
+      if(isset($sOrder->id) && $sOrder->id > 0) $xData['participation_price'] = $settings['x_order_price'] / $memberCount;
     }
 
     {//Over weight
@@ -377,7 +382,7 @@ class Checkout extends Model
     }
 
     {//Personal address
-      if($sOrder != 'solo'){
+      if($sOrder != 'solo' && $xData['s_order_id']){
         if(!isset($sOrder->address->street)){
           $sameAddress = true;
         }else{

@@ -53,21 +53,18 @@
                   <div class="card card-body">
                     <polygons v-show="1" @polygonsFind="setPolygons" :setMarker="choosedCoords" />
                   </div>
-                </div>
-
-                
-              </template>
-
-              
+                </div>                
+              </template>              
             
               <!-- Date / Time -->
               <checkout-x-date-time class="checkout-div" v-model="data.dateTime" :polygons="choosedPolygons"/>
 
-              <div v-if="!isX" class="row checkout-div">
-                <div v-if="!isX" class="col-12 col-lg-6">
+              <!-- Container / Paymethod -->
+              <div class="row checkout-div">
+                <div class="col-12 col-lg-6">
                   <checkout-container v-model="data.container"/>
                 </div>
-                <div v-if="!isX" class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6">
                   <checkout-paymethod v-model="data.paymethod"/>
                 </div>
               </div>
@@ -83,11 +80,7 @@
             <div v-if="isX">
               <shared-order-numbers class="mb-3"/>
               <checkout-agreements />
-            </div>            
-            <div v-if="!isX">
-              <juge-errors :errors="errors"/>
-              <checkout-checkout :errors="errors" @do-order="doOrder()"/>
-            </div>            
+            </div>           
           </div>          
           <!-- Buttons -->
           <div v-if="isX"  class="col-lg-12 mb-5">
@@ -162,49 +155,7 @@ export default {
       data.jugeAddress = this.data.jugeAddress;
 
       //Put      
-      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type}, 'put');
-
-      //Catch errors
-      if(!r){      
-        if(ax.lastResponse.status == 422){
-          this.errors = ax.lastResponse.data.errors;
-          return;
-        }
-      }
-
-      if(r > 0){
-        await ax.fetch('/order/log/success', {}, 'put');
-        //Trackers
-        if(!localServer && !isX && ym != undefined){
-          ym(54670840,'reachGoal','ordered');
-          fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
-        } 
-        if(!localServer && isX && ym != undefined){
-          ym(72176563,'reachGoal','orderplaced');
-        } 
-        this.clean();
-        ax.fetch('/order/update/available', {id:r});
-        location.href ='/order-thanks';
-      }        
-    },
-    setPolygons(ids){
-      this.choosedPolygons = ids;
-    },
-    async doOrder(type=false){
-      //Refresh errors
-      if(ax.lastResponse.data != undefined && ax.lastResponse.data.errors != undefined) ax.lastResponse.data.errors = [];
-      this.errors = [];
-      
-      //Log
-      let r = await ax.fetch('/order/log', {}, 'put');
-
-      if(!r) return;
-
-      let data = this.checkout;
-      data.jugeAddress = this.data.jugeAddress;
-
-      //Put      
-      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type}, 'put');
+      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type,'polygons':this.choosedPolygons}, 'put');
 
       //Catch errors
       if(!r){      
@@ -228,6 +179,9 @@ export default {
         ax.fetch('/order/update/available', {id:r});
         location.href ='/order-thanks';
       }        
+    },
+    setPolygons(ids){
+      this.choosedPolygons = ids;
     },
   }
 }

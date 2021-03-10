@@ -107,7 +107,7 @@ export default {
   },
   methods:{
     ...mapActions({
-      'fetch'         :'orderLimits/fetchAvailableDays',
+      'fetch':'orderLimits/fetchAvailableDays',
       'set':'checkout/setValue'
     }),
   } 
