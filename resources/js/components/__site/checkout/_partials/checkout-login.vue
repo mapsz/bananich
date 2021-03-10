@@ -9,7 +9,8 @@
         <span>или</span>
         <button @click="showLoginModal('signin')" class="btn-signup">Войти</button>
       </div>
-      <div class="text-center">чтобы получить <b>10% кешбэк</b> с этой покупки</div>
+      <div class="text-center" v-if="!isX">чтобы получить <b>10% кешбэк</b> с этой покупки</div>
+      <div class="text-center" v-else>Зарегистрируйтесь чтобы получить возможность оформить следующую доставку за 200 рублей</div>
     </div>
   </div>
 </div>
@@ -19,6 +20,7 @@
 import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{  
+  isX:isX,
   showLogin: false,
   showLoginType: 'signup',  
 }},

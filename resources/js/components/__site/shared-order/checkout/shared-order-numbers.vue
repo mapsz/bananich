@@ -9,7 +9,7 @@
       </div>
       <div class="ml-3">
         <div><b>Вес вашей закупки превышен на {{cart.xData.overWeightKg.toFixed(2)}} кг (+{{cart.xData.overWeightPrice}}р)</b></div>
-        <div>*Для вашей закупки доступно {{cart.xData.maxFreeWeight.toFixed(2)}} кг на человека </div>
+        <div>*Максимальный бесплатный вес заказа {{cart.xData.maxFreeWeight.toFixed(2)}}кг</div>
       </div>
     </div>
   </div>
@@ -25,6 +25,11 @@
       <div class="d-flex justify-content-between" v-if="personalAddress"><span>Доставка</span><b>{{personalAddress}} p</b></div>
       <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight.toFixed(2)}} кг</b></div>
       <div class="d-flex justify-content-between" v-if="overWeightPrice"><span>Доп. вес</span><b>{{overWeightPrice}} p</b></div>
+      <div class="d-flex justify-content-between" 
+        v-if="cart.container != undefined && cart.container.final_price != undefined && cart.container.final_price > 0"
+      >
+        <span>{{cart.container.name}}</span><b>{{cart.container.final_price}} p</b>
+      </div>
 
       <div class="d-flex justify-content-between mt-3"><span><b>Общая сумма</b></span><b>{{final_summ_x}} p</b></div>
     </div>
