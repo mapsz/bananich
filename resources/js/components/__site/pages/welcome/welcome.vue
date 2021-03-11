@@ -12,9 +12,9 @@
 
         <!-- Desciprion -->
         <div class="row">
-          <div class="col-12 col-lg-6 mb-3">
+          <!-- <div class="col-12 col-lg-6 mb-3">
             Вы покупаете абсолютно все товары нашего сайта по цене себестоимости, а платите только небольшую фиксированную сумму за доставку и наш сервис (сервисный сбор).
-          </div>
+          </div> -->
           <div class="col-12 col-lg-6" style="display: flex;align-items: center;">
             <button @click="goToGallery()" class="x-btn">Перейти к каталогу оптовых цен</button>
           </div>
@@ -93,7 +93,8 @@
               В случае, если доступные интервалы/ районы доставок вам не подходят, вы можете создать заявку на доставку за 600 рублей в удобные вам район и временной интервал.
             </div>
             <div class="mb-5">
-              Подробнее с условиями доставки и оплаты вы можете ознакомиться <a href="/delivery_and_price">тут</a>.
+              Подробнее с условиями доставки и оплаты вы можете ознакомиться 
+              <a href="/delivery_and_price" style="color:black;text-decoration: underline;">тут</a>.
             </div>
           
           </div>
