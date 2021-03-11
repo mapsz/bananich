@@ -14,7 +14,6 @@ use App\Order;
 class Checkout extends Model
 {
   public static function addToCart($cart){
-    
     {//Data
 
       {//Get settings
@@ -25,7 +24,7 @@ class Checkout extends Model
       {//Get user
         $user = Auth::user();
       }
-      
+
       {//Is first order
         $cart['firstOrder'] = true;
         if($user){
@@ -33,7 +32,7 @@ class Checkout extends Model
           $cart['firstOrder'] = (count($orders) > 0) ? false : true;
         }
       }
-
+      
       {//Container
         $cart->container = false;
         if(isset($cart->containers) && isset($cart->containers[0])){
@@ -81,7 +80,7 @@ class Checkout extends Model
       }     
 
     }
-    
+
     {//Items
       $cart->items = Checkout::items($cart->items, $products);
     }
@@ -136,8 +135,8 @@ class Checkout extends Model
       //X no shipping
       if($cart->type == 2) $cart->shipping = 0;
     }
-        
-    {// X Data
+
+    {// X Data      
       $cart->xData = Checkout::xdata($cart->items);
     }
 
@@ -263,8 +262,11 @@ class Checkout extends Model
           $item->price_per_unit_x = $item->product->final_price_x;
           $item->price_x          = $item->price_per_unit_x * $item->count;
           $item->final_price_x    = $item->price_x;
+          $item->saved            = $item->price - $item->final_price_x;
+          $item->saved            = ($item->saved < 0) ? 0 : $item->saved;
         }
       }
+
 
     }    
 
@@ -304,10 +306,13 @@ class Checkout extends Model
       'maxFreeWeight' => 0,
       'order_id' => false,
       's_order_id' => false,
+      'saved' => 0,
     ];
+    
     //Full Weight
     foreach ($items as $key => $item) {
       $xData['fullWeight'] += $item->full_weight;
+      $xData['saved'] += isset($item->saved) ? $item->saved : 0;
     }
 
     $user = Auth::user();

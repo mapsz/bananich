@@ -32,8 +32,8 @@ export default {
   }},
   computed:{
     ...mapGetters({
-      'availableDays': 'orderLimits/getAvailableDays',
-      'settings':   'settings/beautyGet',
+      'availableDays':  'orderLimits/getAvailableDays',
+      'settings':       'settings/beautyGet',
     }),
     days:function(){
       if(this.availableDays[0] == undefined) return false;
