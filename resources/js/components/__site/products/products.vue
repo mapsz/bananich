@@ -19,7 +19,7 @@
       <h1 class="title-h1">
         <template v-if="isX">
           <div class="moto">
-            <b>NEOLAVKA</b> - {{settings.x_moto}}
+            {{settings.x_moto}}
           </div>            
         </template>
         <template v-else>
