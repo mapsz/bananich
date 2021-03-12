@@ -19,11 +19,12 @@ let routes = [];
   import rules from './components/__site/pages/rules/rules.vue';
   import service from './components/__site/pages/service/service.vue';
   import payment from './components/__site/pages/payment/payment.vue';
+  import prices from './components/__site/pages/prices/prices.vue';
   routes.push(
     {path: '/welcome',    component:welcome, name:'welcome'},
     {path: '/rules',    component:rules, name:'rules'},
     {path: '/service',    component:service, name:'service'},
-    {path: '/payment',    component:service, name:'payment'},
+    {path: '/prices',    component:prices, name:'prices'},
   );
 
   //Shared Order

@@ -96,6 +96,10 @@
               Подробнее с условиями доставки и оплаты вы можете ознакомиться 
               <a href="/delivery_and_price" style="color:black;text-decoration: underline;">тут</a>.
             </div>
+
+            <div class="mb-5">
+              <a href="/prices" style="color:black;text-decoration: underline;">Проверьте стоимость сервисного сбора для вашего адреса</a>              
+            </div>
           
           </div>
         </div>

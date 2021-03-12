@@ -36,8 +36,7 @@
                 <!-- <div v-if="user" class="checkout-div"> -->
                   <div class=" checkout-address checkout-address-gift m-0">
                     <div class="col-12">
-                      <div class="checkout-title">Адрес</div>
-                      
+                      <div class="checkout-title">Адрес</div>                      
                       <choose-address v-model="data.jugeAddress"/>
                     </div>
                   </div>
