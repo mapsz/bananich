@@ -2,7 +2,7 @@
 <juge-main>
   <div class="container mt-5">
     <h2>Проверьте стоимость сервисного сбора</h2>
-    <div class="row mt-5">
+    <div class="row my-5">
       <div class="col-12 col-lg-6">
         <choose-address v-model="address"/>
         <polygons v-show="0" @polygonsFind="setPolygons" :setMarker="choosedCoords" />
