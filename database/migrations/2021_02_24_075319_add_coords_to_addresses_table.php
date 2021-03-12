@@ -14,8 +14,8 @@ class AddCoordsToAddressesTable extends Migration
     public function up()
     {
         Schema::table('addresses', function (Blueprint $table) {
-            $table->double('x', 200, 8)->unsigned()->nullable();
-            $table->double('y', 200, 8)->unsigned()->nullable();
+            $table->double('x', 200, 8)->nullable();
+            $table->double('y', 200, 8)->nullable();
         });
     }
 

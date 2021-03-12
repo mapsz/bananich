@@ -79,7 +79,7 @@
             <div v-if="isX">
               <shared-order-numbers class="mb-3"/>
               <checkout-agreements />
-            </div>           
+            </div>
           </div>          
           <!-- Buttons -->
           <div v-if="isX"  class="col-lg-12 mb-5">

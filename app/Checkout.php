@@ -278,13 +278,27 @@ class Checkout extends Model
   public static function itemsWeight($items){
 
     foreach ($items as $key => $item) {
+      
+      {//Container
+        $isConainer = false;
+        if(isset($item->product->categories[0])){
+          foreach ($item->product->categories as $key => $category) {
+            if($category->id == 1000){
+              $isConainer = true;
+              break;
+            } 
+          }
+        }        
+      }
 
       {//Weights
-        $item->weight = $item->unit * $item->count;
+        $item->weight = $isConainer ? 0 : $item->unit * $item->count;
       }
       {//Weights Full
-        $item->full_weight = $item->unit_full ? $item->unit_full * $item->count : $item->weight;
-        $item->full_weight_view = $item->full_weight;
+        if(!$isConainer){
+          $item->full_weight = $item->unit_full ? $item->unit_full * $item->count : $item->weight;
+          $item->full_weight_view = $item->full_weight;
+        }
       }
 
     }
