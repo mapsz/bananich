@@ -19,7 +19,7 @@
       <h1 class="title-h1">
         <template v-if="isX">
           <div class="moto">
-            <b>NEOLAVKA</b> - новый подход к рациональным покупкам
+            <b>NEOLAVKA</b> - {{settings.x_moto}}
           </div>            
         </template>
         <template v-else>
@@ -135,6 +135,7 @@ export default {
       isFetched:'product/isFetched',
       isWaterfalling:'product/isWaterfalling',
       active:'category/getActive',
+      settings:       'settings/beautyGet',
       getCurrentFilters:'product/getFilters'
     }), 
     isMobile:function(){return window.screen.width <= 768;},

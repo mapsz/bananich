@@ -7,7 +7,7 @@
 
         <!-- Name moto -->
         <div class="header my-5">
-          <b>NEOLAVKA</b> - новый подход к рациональным покупкам
+          <b>NEOLAVKA</b> - {{settings.x_moto}}
         </div>
 
         <!-- Desciprion -->
@@ -202,10 +202,14 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 export default {
 data(){return{
   isX:isX,
 }},
+...mapGetters({
+  settings:       'settings/beautyGet',
+}),
 async mounted() {
 
   if(this.$route.hash != ""){
