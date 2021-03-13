@@ -134,7 +134,7 @@ export default {
 
 .tap-bar {
   height: inherit!important;
-  z-index: 1060;
+  z-index: 1045;
 }
 
 .page-x .user-btn{
