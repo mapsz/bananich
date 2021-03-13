@@ -22,7 +22,7 @@
       <!-- </div> -->
 
       <!-- Porch \ Stage \ Intercom -->
-      <div class="form-group mb-2 d-flex form-group-multi">        
+      <div class="form-group mb-2 d-flex form-group-multi">
         <input v-model="data.appart" name="appart" class="form-input" placeholder="Квартира" type="text">
         <input v-model="data.porch" name="porch" class="form-input" placeholder="Подъезд" type="text">
         <input v-model="data.stage" name="stage" class="form-input" placeholder="Этаж" type="text">

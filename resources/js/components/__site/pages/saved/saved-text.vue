@@ -1,6 +1,18 @@
 <template>
 <div>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos cumque ducimus commodi rerum, sit voluptas!
+  
+  <div>
+    <b>Мы решили попробовать новую модель:</b>    
+  </div>  
+
+  <div class="mt-3">
+    вы оплачиваете только фиксированный сервисный сбор за наш сервис и доставку, а вся продукция на сайте продается без торговой наценки.
+  </div>
+
+  <div class="mt-3">
+    Ваша экономия рассчитана исходя из усредненных рыночных наценок на рынке на тот или иной продукт
+  </div>
+  
 </div>
 </template>
 

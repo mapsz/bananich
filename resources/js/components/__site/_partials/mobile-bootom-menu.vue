@@ -20,7 +20,7 @@
             </div>
           </div>
           <!-- About Saved -->
-          <x-popup :title="'Saved'" :active="showSaved" @close="showSaved=false" id="about-saved-modal">
+          <x-popup :title="''" :active="showSaved" @close="showSaved=false" id="about-saved-modal">
             <saved-text />
           </x-popup>  
         </div>
