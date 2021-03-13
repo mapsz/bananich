@@ -2,7 +2,28 @@
   <div>
 
 
-      <div class="row" style="max-width: 100%;">
+      <div class="row">
+
+        <!-- Saved -->
+        <div v-if="saved || fullWeight" class="col-12">
+          <div class="mb-2 mx-3 d-flex justify-content-between" style="heigh:20px;color:black;font-size:12px;align-items: center;">
+            <div v-if="saved" style="display: flex;align-items: center;">
+              <div style="display: inline-block;">
+                <span @click="showSaved=true" data-v-2252815c="" class="info-icon info-icon-sm info-icon-gray" style="color: black;"></span>
+              </div>
+              <b style="padding-left: 5px;">Ваша экономия: </b>
+              {{saved}}р
+            </div>
+            <div v-if="fullWeight">
+              <b>Вес: </b>
+              {{fullWeight.toFixed(2)}}кг
+            </div>
+          </div>
+          <!-- About Saved -->
+          <x-popup :title="'Saved'" :active="showSaved" @close="showSaved=false" id="about-saved-modal">
+            <saved-text />
+          </x-popup>  
+        </div>
 
         <!-- Menu -->
         <div class="col-3" v-click-outside="hideMenu">
@@ -10,7 +31,6 @@
             <button @click="menuDrop = !menuDrop" class="navbar-sad-toggler" style="padding: 0px;">
               <span></span><span></span><span></span>
             </button>
-            <!-- <span>Меню</span> -->
           </div>
           <div  v-show="menuDrop" class="mobile-menu" >
             <div class="mobile-only mb-2" style="border-bottom: 1px solid gray;padding: 10px;">
@@ -115,6 +135,7 @@ export default {
       cartDrop:false,
       profileDrop:false,    
       searchShow:false,
+      showSaved:false,
   }},
   watch: {
     menuDrop: function(){
@@ -132,6 +153,14 @@ export default {
       settings:'settings/beautyGet',
       getCurrentFilters:'product/getFilters'
     }),    
+    saved(){      
+      if(!this.cart || this.cart.xData == undefined || this.cart.xData.saved == undefined) return false;
+      return this.cart.xData.saved;
+    },
+    fullWeight (){
+      if(!this.cart || this.cart.xData == undefined || this.cart.xData.fullWeight == undefined) return false;
+      return this.cart.xData.fullWeight;
+    },
     search:function(){
       if(this.getCurrentFilters.search != undefined && this.getCurrentFilters.search !== ""){
         return true;
@@ -162,6 +191,7 @@ export default {
 </script>
 
 <style scoped>
+
 
 .page-x .cart-num-mobile{
   background: #8ac2a7!important;

@@ -6,7 +6,7 @@
 
 
         <!-- Name moto -->
-        <div class="header my-5">
+        <div v-if="settings != undefined && settings.x_moto != undefined" class="header my-5">
           <b>NEOLAVKA</b> - {{settings.x_moto}}
         </div>
 
@@ -202,14 +202,16 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 export default {
 data(){return{
   isX:isX,
 }},
-...mapGetters({
-  settings:       'settings/beautyGet',
-}),
+computed:{
+  ...mapGetters({
+    settings:       'settings/beautyGet',
+  }),  
+},
 async mounted() {
 
   if(this.$route.hash != ""){
@@ -219,9 +221,14 @@ async mounted() {
   }
 
   Cookies.set('x_not_first_time');
+  
+  this.getSettings();
 
 },
 methods:{  
+  ...mapActions({
+    'getSettings':'settings/fetch',
+  }), 
   async goToGallery(){
     location.href = '/';
   },

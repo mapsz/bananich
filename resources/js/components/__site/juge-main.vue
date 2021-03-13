@@ -78,7 +78,7 @@ methods:{
   }
   
   .page-x{
-    background: #f3ebe8;      
+    /* background: #f3ebe8; */
   }
   .page-x .custom-radio + label:before {
     min-width: 17px;
@@ -145,13 +145,26 @@ methods:{
     border-radius: 15px;
     background-color: #EB5757;
   }
+  .info-icon-sm{    
+    width: 20px;
+    height: 20px;
+  }
   .info-icon::after{    
     content: "i";
     font-weight: 600;
     font-size: 21px;
   }
+  .info-icon-sm::after{
+    font-size: 16px;
+  }
   .info-icon-confirm{
     background-color: #8ac2a7;
+  }
+  .info-icon-success{
+    background-color: #8ac2a7;
+  }
+  .info-icon-gray{
+    background-color: #e0e0e0;
   }
   .info-icon-confirm::after{    
     content: "✓";

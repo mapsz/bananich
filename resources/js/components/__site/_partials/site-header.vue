@@ -1,6 +1,6 @@
 <template>
 <div :class="halloween?'halloween':''">
-  <header class="header" style="z-index: 100;" :class="(halloween?'halloween':'') +' '+(isX?'bananich-x':'')">
+  <header class="header" style="z-index: 1045;" :class="(halloween?'halloween':'') +' '+(isX?'bananich-x':'')">
 
     <!-- navbar-sad -->
     <div class="header-nav">
@@ -132,24 +132,29 @@ export default {
 
 <style scoped>
 
+.tap-bar {
+  height: inherit!important;
+  z-index: 1060;
+}
+
 .page-x .user-btn{
   background: #8ac2a7;
 }
 
 .to-checkout {
-    background: #FBE214;
-    border: 1px solid #FBE214 !important;
-    box-sizing: border-box;
-    border-radius: 30px;
-    color: #000000;
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    font-size: 16px;
-    text-align: center;
-    cursor: pointer;
-    display: inline-block;
-    padding: 0 20px;
+  background: #FBE214;
+  border: 1px solid #FBE214 !important;
+  box-sizing: border-box;
+  border-radius: 30px;
+  color: #000000;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 20px;
 }
 
 .dropdown-sad {
@@ -235,6 +240,6 @@ export default {
 
 
 .bananich-x{
-  background-color: #f3ebe8 !important;
+  /* background-color: #f3ebe8 !important; */
 }
 </style>
