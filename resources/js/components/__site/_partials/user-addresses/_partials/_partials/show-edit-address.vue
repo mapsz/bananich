@@ -3,23 +3,24 @@
 
     <!-- Geo Decoder -->
     <div class="mb-3">
-      <address-decoder-input v-model="geoSearch"/>
+      <label for="">Поиск:</label>
+      <address-decoder-input v-model="geoSearch" :search="doGeoSearch" />
     </div>
     
     <template>
       <!-- Address \ House -->
       <div class="form-group mb-2" style="position:relative">
-        <span>{{data.street}}</span>
-        <span>{{data.number}}</span>
+        <!-- <span>{{data.street}}</span> -->
+        <!-- <span>{{data.number}}</span> -->
         <!-- <input v-model="data.street" id="user-addresses-address" class="form-input user-addresses-address" type="text" required="required"> -->
         <!-- <label for="user-addresses-address" class="user-addresses-placeholder"><span style="color:tomato;">*</span>Улица</label> -->
       </div>
 
       <!-- Home \ Appart -->
-      <!-- <div class="form-group mb-2 d-flex form-group-multi"> -->
-        <!-- <input v-model="data.number" name="number" class="form-input" placeholder="Номер дома" type="text"> -->
-        <!-- <input v-model="data.appart" name="appart" class="form-input" placeholder="Квартира" type="text"> -->
-      <!-- </div> -->
+      <div class="form-group mb-2 d-flex form-group-multi">
+        <input v-model="data.street" @change="doChange()" style="width:60%" name="street" class="form-input" placeholder="Улица" type="text">
+        <input v-model="data.number" @change="doChange()" style="width:40%" name="number" class="form-input" placeholder="Номер дома" type="text">
+      </div>
 
       <!-- Porch \ Stage \ Intercom -->
       <div class="form-group mb-2 d-flex form-group-multi">
@@ -57,6 +58,8 @@ props: ['id'],
 data(){return{
   //Search
   geoSearch:null,
+  doGeoSearch:null,
+
   //Address Data
   data:{
     street:null,
@@ -69,6 +72,7 @@ data(){return{
     y:null,
     default:0,
   },
+
   //Other
   errors:[],
 }},
@@ -167,6 +171,11 @@ methods:{
   },
   doCancel(){
     this.$emit('cancel');
+  },
+  doChange(){
+    console.log(this.data.street + ' ' + this.data.number);
+
+    this.doGeoSearch = this.data.number + ' ' + this.data.street;
   }
 },
 }

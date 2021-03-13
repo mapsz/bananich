@@ -11,10 +11,12 @@
             <profile-navbar></profile-navbar>
           </div>          
           <div class="col-lg-8">
-  
+            
+            <!-- Title -->
             <div class="title-wrap title-page">
               <h2 class="title-h2">Личные данные</h2>
-            </div>          
+            </div>   
+
             <div class="content">
 
               <!-- Avatar -->
@@ -46,7 +48,7 @@
                 </div>
               </div>
 
-              
+              <!-- Личные данные / Address -->
               <div class="row">
 
                 <!-- Личные данные -->
@@ -56,7 +58,7 @@
                     <label  class="form-label" for="surname">Ваш e-mail</label>
                     <div class="form-content active">{{user.email}}</div>
                   </div>
-                  <form class="profile-form" action="" style="border-bottom:0px">
+                  <form class="profile-form" action="" style="border-bottom:0px;padding-bottom:0px;">
                     <div class="form-group" v-for='(input,i) in contactInputs' :key='i'>
                       <label  class="form-label" :for="input.name">{{input.caption}}</label>
                       <div v-if="editContact==false" class="form-content active">
@@ -75,7 +77,7 @@
                 </div>
 
                 <!-- Address -->
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6  mt-5 mt-lg-0">
                   <h4>Адрес</h4>
 
                   <!-- Show -->
@@ -111,9 +113,14 @@
               </div>
               
               <!-- Logout -->
-              <logout class="mt-5"/>
+              <div class="row mt-5 mt-lg-0">
+                <div class="col-12">
+                  <logout />
+                </div>
+              </div>
 
             </div>
+              
           </div>
         </div>
       </div>
@@ -122,7 +129,7 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-export default {
+export default {  
   data(){return{
     isX:isX,
     showAddresses:false,

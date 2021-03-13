@@ -7,6 +7,7 @@
 <script>
 export default {
 model: {prop:'hidden', event:'blur'},
+props: ['search'],
 data(){return{
   input:null,
   geo:null,
@@ -15,6 +16,10 @@ data(){return{
 watch:{
   geo: function (val, oldVal) {
     this.$emit('blur', val);
+  },
+  search: function (val) {
+    if(!val) return false;
+    this.geoDecoder(val);
   },
 },
 async mounted() {
