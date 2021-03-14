@@ -5,7 +5,7 @@
       <div class="row">
 
         <!-- Saved -->
-        <div v-if="saved || fullWeight" class="col-12">
+        <div v-if="isX && (saved || fullWeight)" class="col-12">
           <div class="mb-2 mx-3 d-flex justify-content-between" style="heigh:20px;color:black;font-size:12px;align-items: center;">
             <div v-if="saved" style="display: flex;align-items: center;">
               <div style="display: inline-block;">
@@ -14,10 +14,10 @@
               <b style="padding-left: 5px;">Ваша экономия: </b>
               {{saved}}р
             </div>
-            <div v-if="fullWeight">
+            <!-- <div v-if="fullWeight">
               <b>Вес: </b>
               {{fullWeight.toFixed(2)}}кг
-            </div>
+            </div> -->
           </div>
           <!-- About Saved -->
           <x-popup :title="''" :active="showSaved" @close="showSaved=false" id="about-saved-modal-mobile">

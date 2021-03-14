@@ -25,13 +25,13 @@ class Order extends Model
     ['key'    => 'appartPorch','label' => 'кв. п.',"sortable" => false],    
     ['key'    => 'name', 'label' => 'имя'],  
     ['key'    => 'phone', 'label' => 'номер'], 
-    ['key'    => 'email', 'label' => 'емэил'],    
+    ['key'    => 'email', 'label' => 'email'],    
     ['key'    => 'status', 'label' => 'статус'],
     ['key'    => 'comment', 'label' => 'коммент клиент'],
     ['key'    => 'comment_our', 'label' => 'коммент бананыч'],
     ['key'    => 'confirm', 'label' => 'тип потверждение','type' => 'intToStr', 'intToStr' =>[
       1 => 'телефон',
-      0 => 'емэил'
+      0 => 'email'
     ]],
     ['key'    => 'date', 'label' => 'дата'],
     ['key'    => 'delivery_date', 'label' => 'дата доставки'],

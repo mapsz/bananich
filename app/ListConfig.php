@@ -14,13 +14,13 @@ class ListConfig extends Model
     ['name'    => 'porch', 'caption' => 'подъезд'],    
     ['name'    => 'name', 'caption' => 'имя'],  
     ['name'    => 'phone', 'caption' => 'номер'], 
-    ['name'    => 'email', 'caption' => 'емэил'],    
+    ['name'    => 'email', 'caption' => 'email'],    
     ['name'    => 'status', 'caption' => 'статус'],
     ['name'    => 'comment', 'caption' => 'коммент клиент'],
     ['name'    => 'comment_our', 'caption' => 'коммент бананыч'],
     ['name'    => 'confirm', 'caption' => 'тип потверждение','type' => 'intToStr', 'intToStr' =>[
       1 => 'телефон',
-      0 => 'емэил'
+      0 => 'email'
     ]],
     ['name'    => 'date', 'caption' => 'дата'],
     ['name'    => 'delivery_date', 'caption' => 'дата доставки'],

@@ -33,6 +33,7 @@
 
             <!-- Test -->
             <div>
+              <div><a href="https://developer.tech.yandex.ru/services/3/stat" target="_blank">график запросов</a></div>
               <div>Test address:</div>
               <div>{{address}}</div>
               <div><input id="suggest" type="text" style="width:100%"></div>

@@ -70,7 +70,7 @@
     <div v-else>      
       <div v-if="!send">
         <div class="d-flex justify-content-center mb-3">
-          <input v-model="email" type="email" placeholder="Укажите ваш емэил" class="modal-sad-form-input">
+          <input v-model="email" type="email" placeholder="Укажите ваш email" class="modal-sad-form-input">
         </div>
         <div class="d-flex justify-content-center">
           <button class="x-btn" @click="makeLink()">Регистрироваться</button>

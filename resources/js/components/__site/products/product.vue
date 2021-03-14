@@ -74,7 +74,7 @@
 
                   </div>                  
                   <!-- Discount annonce -->  
-                  <div v-if="product.discount && product.discount.quantity >= 1" style="
+                  <div v-if="!isX && product.discount && product.discount.quantity >= 1" style="
                     font-size: 9pt;
                     font-style: italic;
                     color: rgb(255, 92, 0);

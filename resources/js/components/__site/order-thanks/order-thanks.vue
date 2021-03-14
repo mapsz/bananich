@@ -9,7 +9,7 @@
             <div class="thanks-title">Спасибо вам за заказ!</div>
 
             <template v-if="user">
-              <div class="thanks-text">Статус о доставке вы можете отслеживать в <a href="/profile">личном кабинете</a></div>
+              <div class="thanks-text">Статус доставке вы можете отслеживать в <a href="/profile">личном кабинете</a></div>
               <a v-if="isX" href="/profile/shared/orders" class="btn-yellow btn-thick btn-thanks">Перейти в заказы</a>
               <a v-else href="/profile/orders" class="btn-yellow btn-thick btn-thanks">Перейти в заказы</a>
             </template>

@@ -191,7 +191,7 @@ if(!isset($site)) $site = false;
   <hr>
   {{-- Container tip--}}
   @if($order['container'] == 0)
-    <div style="font-size: 8pt;">
+    <div style="font-size: 8pt;background-color: #8ac2a7;">
       <span style="color:red; ">*</span> 
       Выбранный способ упаковки предполагает перекладывание товара из нашей тары в вашу.
     </div>
