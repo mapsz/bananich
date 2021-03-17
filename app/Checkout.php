@@ -216,7 +216,7 @@ class Checkout extends Model
     //Items
     foreach ($items as $key => $item) {
       foreach ($products as $product) {        
-        if($product->id != $item->product_id) continue; //Skip       
+        if($product->id != $item->product_id) continue; //Skip          
         {//Data          
           $item->product          = $product;
           $item->name             = $product->name;
@@ -228,10 +228,10 @@ class Checkout extends Model
           $item->unit_full        = isset($product->unit_full) && $product->unit_full ? $product->unit_full : $product->unit;
           $item->bonus            = isset($product->bonus) && $product->bonus ? true : false;
         }
-
       }
     }
 
+    
     //Price Weight
     $items = Checkout::itemsPrice($items);
     $items = Checkout::itemsWeight($items);
@@ -277,6 +277,8 @@ class Checkout extends Model
 
   public static function itemsWeight($items){
 
+    $full = 0;
+
     foreach ($items as $key => $item) {
       
       {//Container
@@ -299,7 +301,9 @@ class Checkout extends Model
           $item->full_weight = $item->unit_full ? $item->unit_full * $item->count : $item->weight;
           $item->full_weight_view = $item->full_weight;
         }
-      }
+      }   
+      
+      $full+=$item->full_weight;
 
     }
 

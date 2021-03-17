@@ -11,7 +11,7 @@
               <div style="display: inline-block;">
                 <span @click="showSaved=true" data-v-2252815c="" class="info-icon info-icon-sm info-icon-gray" style="color: black;"></span>
               </div>
-              <b style="padding-left: 5px;">Ваша экономия: </b>
+              <b style="padding-left: 5px;padding-right: 5px;">Ваша экономия: </b>
               {{saved}}р
             </div>
             <!-- <div v-if="fullWeight">
@@ -21,7 +21,7 @@
           </div>
           <!-- About Saved -->
           <x-popup :title="''" :active="showSaved" @close="showSaved=false" id="about-saved-modal-mobile">
-            <saved-text />
+            <saved-text style="font-size:12pt"/>
           </x-popup>  
         </div>
 

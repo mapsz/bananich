@@ -57,7 +57,7 @@
 
       <div class="filter-line-end">
         <div class="cart-line-name">Всего:</div>
-        <div class="cart-line-sum">{{summ}}р</div>
+        <div class="cart-line-sum">{{cart.final_summ}}р</div>
       </div>
 
       <a href="/cart"><button class="btn-yellow btn-think">Оформить заказ</button></a>

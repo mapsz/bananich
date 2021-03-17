@@ -1026,7 +1026,6 @@ class Order extends Model
           }          
         }  
         $orders[$ok]['termobox'] = $termobox;
-
       }
       
       {//Items
@@ -1035,7 +1034,12 @@ class Order extends Model
             $item->product = Product::setMetas($item->product);
             $item->unit = $item->gram_sys;
             $item->count = $item->quantity;
-            $item->unit_full = floatval($item->unit_full);
+            $product = $item->product;
+            $item->unit_type        = isset($product->unit_type) && $product->unit_type ? $product->unit_type : 'kg';
+            $item->unit_full        = isset($product->unit_full) && $product->unit_full ? $product->unit_full : $product->unit;
+            $item->unit_view        = $product->unit_view;
+            $item->unit_digit       = $product->unit_digit;
+
           }
           
           $order->items = Checkout::itemsWeight($order->items);
