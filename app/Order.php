@@ -1016,6 +1016,7 @@ class Order extends Model
         //Termobox
         $termobox = "";
         foreach ($order->items as $ik => $item) {
+          if(!isset($item->product->metas)) continue;
           foreach($item->product->metas as $meta){
             if($meta->name == 'termobox' && $meta->value){
               $item->termobox = true;

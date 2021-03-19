@@ -3,14 +3,20 @@
   <gruzka-navbar></gruzka-navbar>
 
   <!-- Order -->
-  <div class="row my-2 justify-content-center text-primary">
+  <div class="row my-2 justify-content-around text-primary">
+    <!-- Site -->
+    <div style="color:black">      
+      <span v-if="site == 'x'">Neolavka.ru 🌿</span>
+      <span v-if="site == 'b'">Bananich.ru 🍌</span>
+    </div>    
+    <!-- Order -->
     <span 
       class="px-2"
       @click="currentItem = -1"
       :style="currentItem >= 0 ? 'border:1px solid;border-radius:5px;' : '' "
     >
       <font-awesome-icon v-if="currentItem >= 0" icon="list" /> 
-      <b>Заказ: {{orderId}}</b>      
+      <b>Заказ: {{orderId}}</b>
     </span>
   </div>
 
@@ -137,6 +143,12 @@ export default {
       // 2 = готово
       // 3 = требует догрузки
       return done;
+    },    
+    site(){
+      if(this.order == undefined || !this.order || this.order.type == undefined) return false;
+
+      if(this.order.type == "x") return "x";
+      else return "b";
     }
   },
   async mounted(){

@@ -167,6 +167,12 @@
         if(this.item.statuses[0] == undefined) return 100;
         if(this.item.statuses[0].id == undefined) return false;
         return this.item.statuses[0];
+      },
+      site(){
+        if(this.order == undefined || !this.order || this.order.type == undefined) return false;
+
+        if(this.order.type == "x") return "x";
+        else return "b";
       }
     },
     watch:{
