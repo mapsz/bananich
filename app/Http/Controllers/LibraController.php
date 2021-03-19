@@ -52,10 +52,35 @@ class LibraController extends Controller
 
   public function list(){
     $libra = Libra::jugeGet();
-    foreach ($libra as $key => $v) {
-      echo $v->button . ' - ' . $v->product->name;
-      echo "<br>";
-    }
+
+
+    echo "<div style='display:flex'>";
+      echo "<div>";
+      echo "<h2>Bananich</h2>";
+        foreach ($libra as $key => $v) {          
+          if($v->site != null) continue;
+          echo "<div style='border: 1px solid black;padding: 10px;margin: 5px;margin-bottom: 20px;'>";
+          echo "<b>".$v->button."</b>";
+          echo "<br>";
+          echo $v->product->name;
+          echo "</div>";
+        }
+      echo "</div>";
+      echo "<div style='margin-left: 20px;'>";
+        echo "<h2>Neolavka</h2>";
+        foreach ($libra as $key => $v) {
+          if($v->site != 'x') continue;
+          echo "<div style='border: 1px solid black;padding: 10px;margin: 5px;margin-bottom: 20px;'>";
+          echo "<b>".$v->button."</b>";
+          echo "<br>";
+          echo $v->product->name;
+          echo "</div>";
+        }
+      echo "</div>";
+    echo "</div>";
+
+
+
   }
 
   public function update(){
