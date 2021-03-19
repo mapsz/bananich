@@ -59,9 +59,9 @@ class LibraController extends Controller
       echo "<h2>Bananich</h2>";
         foreach ($libra as $key => $v) {          
           if($v->site != null) continue;
-          echo "<div style='border: 1px solid black;padding: 10px;margin: 5px;margin-bottom: 20px;'>";
+          echo "<div style='border: 1px solid black;padding: 10px;margin: 5px;'>";
           echo "<b>".$v->button."</b>";
-          echo "<br>";
+          echo "  ";
           echo $v->product->name;
           echo "</div>";
         }
@@ -70,9 +70,9 @@ class LibraController extends Controller
         echo "<h2>Neolavka</h2>";
         foreach ($libra as $key => $v) {
           if($v->site != 'x') continue;
-          echo "<div style='border: 1px solid black;padding: 10px;margin: 5px;margin-bottom: 20px;'>";
+          echo "<div style='border: 1px solid black;padding: 10px;margin: 5px;'>";
           echo "<b>".$v->button."</b>";
-          echo "<br>";
+          echo "  ";
           echo $v->product->name;
           echo "</div>";
         }
