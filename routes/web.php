@@ -14,8 +14,9 @@
 
 
 {//VEsi
-/*
   Route::get('/vesi', 'LibraController@list');
+  /*
+  
 
   {//Vesi shit
     Route::get('make/vesi', function(){
