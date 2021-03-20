@@ -505,17 +505,12 @@ class Order extends Model
      
       $fullOrder = Order::jugeGet(['id'=> $order->id]);
 
-      // dd($data);
-
       {//Participation price
-        $participation_price = $fullOrder->xData['participation_price'];
-        if(isset($polygons) && isset($polygons[0])){
-          $participation_price = Polygon::getPrice(
-            $polygons,
-            $data['deliveryDate'], 
-            $data['deliveryTime']['from'].'-'.$data['deliveryTime']['to']
-          );
-        }
+        $participation_price = Polygon::getPrice(
+          $polygons,
+          $data['deliveryDate'], 
+          $data['deliveryTime']['from'].'-'.$data['deliveryTime']['to']
+        );
       }
       DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'participation_price', 'value'=>$participation_price]);
       DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'over_weight_price', 'value'=>$fullOrder->xData['overWeightPrice']]);
@@ -1224,6 +1219,10 @@ class Order extends Model
                 {//Add Bonus
                   $order->x_total         += $order->bonus;
                   $order->x_total_result  += $order->bonus;
+                }
+                {//Add Coupons
+                  $order->x_total         += $order->coupons_total;
+                  $order->x_total_result  += $order->coupons_total;
                 }
 
                 {//Checkout

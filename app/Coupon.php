@@ -21,6 +21,7 @@ class Coupon extends Model
     ['key'    => 'min_summ','label' => 'Минимальная сумма заказа'],
     ['key'    => 'single_for_user','label' => '1 купон для 1 клиента'],
     ['key'    => 'first_order','label' => 'Только первый заказ'],
+    ['key'    => 'sites','label' => 'Сайты'],
   ];  
   protected $postInputs = [
     [
@@ -51,6 +52,16 @@ class Coupon extends Model
     [
       'name' => 'first_order',
       'caption' => 'Только первый заказ',
+      'type' => 'checkbox',
+    ],
+    [
+      'name' => 'site_bananich',
+      'caption' => 'Bananich',
+      'type' => 'checkbox',
+    ],
+    [
+      'name' => 'site_neolavka',
+      'caption' => 'Neolavka',
       'type' => 'checkbox',
     ],
 
@@ -85,10 +96,19 @@ class Coupon extends Model
       'caption' => 'Только первый заказ',
       'type' => 'checkbox',
     ],
+    [
+      'name' => 'site_bananich',
+      'caption' => 'Bananich',
+      'type' => 'checkbox',
+    ],
+    [
+      'name' => 'site_neolavka',
+      'caption' => 'Neolavka',
+      'type' => 'checkbox',
+    ],
   ];
 
   public static function validateAttach($coupon,$cart,$request = false){
-
 
     {//Coupon
       {//Name
@@ -120,9 +140,10 @@ class Coupon extends Model
       }
         
     }
-    
-    //Cart      
-    $cart = Cart::getCart();
+        
+    //Cart
+    $site = strpos($_SERVER['SERVER_NAME'], 'neolavka') !== false ? 2 : false;
+    $cart = Cart::getCart(['type' => $site]);
         
     {//Validate
       $validate = [
@@ -135,6 +156,7 @@ class Coupon extends Model
       $messages = [
         'code.required'                         => 'Промокод не найден 🙈',
         'code.exists'                           => 'Промокод не найден 🙈',
+        'code.accepted'                           => 'Промокод не найден 🙈',
         'expire_date.after'                     => 'Ууупс... срок действия этого промо кода истек 😞',
         'min_summ.max'                          => "Вы можете применить этот промокод только к покупкам от суммы ".$coupon['min_summ']."p",
         'single_for_user.single_for_user'       => "Ууупс... кажется, вы уже применяли промокод ".$couponName.", а его можно применить только один раз 😞",
@@ -182,10 +204,27 @@ class Coupon extends Model
         return $order;
       });
       Validator::make($coupon, $validate, $messages)->validate();
+
+      {//Site
+        if($cart['type'] == 1){
+          if(!isset($coupon['site_bananich']) || $coupon['site_bananich'] != 1){
+            Validator::make(['code' => false], ['code' => 'required|accepted'], $messages)->validate();
+          }
+        }
+        if($cart['type'] == 2){
+          if(!isset($coupon['site_neolavka']) || $coupon['site_neolavka'] != 1){
+            Validator::make(['code' => false], ['code' => 'required|accepted'], $messages)->validate();
+          }
+        }
+      }
     }
 
     return true;
 
+  }
+
+  public static function detachFromOrder($orderId, $couponId){
+    return DB::table('coupon_order')->where('order_id',$orderId)->where('coupon_id',$couponId)->delete();
   }
   
   //JugeCRUD  
@@ -225,8 +264,16 @@ class Coupon extends Model
     //Set metas
     $coupons = JugeCRUD::setMetas($coupons);
 
+    //Sites
+    foreach ($coupons as $key => $coupon) {
+      $sites = "";
+      if(isset($coupon->site_bananich) && $coupon->site_bananich == 1) $sites .= ($sites == "" ? '' : ', ') . "bananich";
+      if(isset($coupon->site_neolavka) && $coupon->site_neolavka == 1) $sites .= ($sites == "" ? '' : ', ') . "neolavka";
+      $coupon->sites = $sites;
+    }
+
     //Single
-    if(isset($request['id']) || isset($request['code'])){$coupons = $coupons[0];}
+    if((isset($request['id']) || isset($request['code'])) && isset($coupons[0])){$coupons = $coupons[0];}
     
     //Return
     return $coupons;
@@ -267,6 +314,8 @@ class Coupon extends Model
                 case 'first_order':
                 case 'min_summ':
                 case 'single_for_user':
+                case 'site_neolavka':
+                case 'site_bananich':
                   $metas[$k] = $v;
                   break;              
                 default:break;
@@ -329,6 +378,8 @@ class Coupon extends Model
               case 'first_order':
               case 'min_summ':
               case 'single_for_user':
+              case 'site_neolavka':
+              case 'site_bananich':
                 $metas[$k] = $v;
                 break;              
               default:break;

@@ -14,10 +14,12 @@
         </div>
 
         <!-- info -->
-        <div v-if="summ" class="cart-summ ml-2">
-          <span style="font-size:16px;">{{currencySymbol+summ}}</span> 
-          <span style="font-size:12px;font-weight: 400;" v-if="fullWeight" class="d-block">{{fullWeight.toFixed(2)}}кг</span>
-        </div>
+        <a href="/cart">
+          <div v-if="summ" class="cart-summ ml-2">
+            <span style="font-size:16px;">{{currencySymbol+summ}}</span> 
+            <span style="font-size:12px;font-weight: 400;" v-if="fullWeight" class="d-block">{{fullWeight.toFixed(2)}}кг</span>
+          </div>
+        </a>
 
         <!-- Dropdown button -->
         <button 

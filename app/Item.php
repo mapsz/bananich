@@ -22,7 +22,8 @@ class Item extends Model
 
       $test = false;
       if(isset($request['parvinBuild']) && $request['parvinBuild'] == 1){
-        $request["status"] = ["300","400","500","600","700","900"];
+        $request["status"] = ["400","500","600","700"];
+        $request["itemStatus"] = ["100","200"];
         $today = now()->format('Y-m-d');
         $request["deliveryDate"] = json_encode(["from" => $today, "to" => $today]);
       }

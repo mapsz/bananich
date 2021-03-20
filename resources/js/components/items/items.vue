@@ -18,7 +18,7 @@
     </div>
 
     <!-- List -->
-    <juge-list :data="model"></juge-list>
+    <juge-list :data="model" />
 
   </div>
   

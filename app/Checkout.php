@@ -150,8 +150,9 @@ class Checkout extends Model
         $cart->final_summ_n += $cart->container ? $cart->container['price'] : 0;
       }
       {//X bananich
-        $cart->final_summ_x = 0;        
-        $cart->final_summ_x = Checkout::x_final_price($cart->pre_price_x,$cart->xData);        
+        $cart->final_summ_x = 0;
+        $cart->final_summ_x = Checkout::x_final_price($cart->pre_price_x,$cart->xData);
+        $cart->final_summ_x -= $coupon;
         $cart->final_summ_x += $cart->container ? $cart->container['price'] : 0;
       }
       {//Final

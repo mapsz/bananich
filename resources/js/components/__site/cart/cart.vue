@@ -27,71 +27,69 @@
 
           </div>
           <div class="col-lg-4">
-          <!-- <div class="col-lg-4 offset-lg-1"> -->
-            <!-- Sitebar -->
-              <div class="cart-sitebar">
+            <div class="cart-sitebar"> 
+              
+              <!-- Shipping -->
+              <delivery-block v-if="!isX"/>
 
+              <!-- Present -->
+              <div v-if="!isX" class="cart-bonuse">
+                <present-block />
+              </div>
+              
+              <!-- Bonus -->
+              <div v-if="!isX && user" class="cart-bonuse">
+                <bonus-cart-block />
+              </div>
+              
+              <!-- Coupons -->
+              <div class="cart-bonuse">
+                <cart-coupon />
+              </div>
+
+              <!-- Info -->
+              <div>
+                <shared-order-numbers v-if="isX" class="mb-4"/>
+                <buy-info v-else/>
+              </div>
+
+              <!-- To checkout -->
+              <template>
+                <!-- X bananich -->
+                <template v-if="isX">
+                  <!-- <cart-buttons /> -->
+                  <a href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
+                </template>                  
+                <!-- Normal bananich -->
                 <template v-if="!isX">
-                  <!-- Shipping -->
-                  <delivery-block />
-
-                  <!-- Bonuses -->
-                  <div class="cart-bonuse">                  
-                    <present-block />
-                    <hr>
-                    <!-- Bonus -->
-                    <div v-if="user" class="mb-4">
-                      <bonus-cart-block></bonus-cart-block>
-                    </div>
-                    <!-- Coupons -->
-                    <cart-coupon />
-                  </div>
+                  <!-- Min price -->
+                  <span v-if="cart.min_summ > cart.pre_price"
+                    style="    
+                      color: red;
+                      font-size: 14pt;
+                    "
+                  >
+                    Минимальная сумма заказа {{cart.min_summ}}
+                  </span>
+                  <a v-else href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
                 </template>
+              </template>
+              
 
-                <!-- Info -->
-                <div>
-                  <shared-order-numbers class="mb-4" v-if="isX"/>
-                  <buy-info v-else/>
+              <div v-if="!isX && (user && !(settings.min_order > cart.pre_price) && cart.pre_price > 0)" class="cart-message">
+                <div class="cart-message-ico">
+                  <img src="image/icons/bonus.svg" alt="Bonus">
                 </div>
-
-                <!-- To checkout -->
-                <template>
-                  <!-- X bananich -->
-                  <template v-if="isX">
-                    <!-- <cart-buttons /> -->
-                    <a href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
-                  </template>                  
-                  <!-- Normal bananich -->
-                  <template v-if="!isX">
-                    <!-- Min price -->
-                    <span v-if="cart.min_summ > cart.pre_price"
-                      style="    
-                        color: red;
-                        font-size: 14pt;
-                      "
-                    >
-                      Минимальная сумма заказа {{cart.min_summ}}
-                    </span>
-                    <a v-else href="/checkout" class="btn btn-yellow btn-thick">Оформить заказ</a>
-                  </template>
-                </template>
-                
-
-                <div v-if="!isX && (user && !(settings.min_order > cart.pre_price) && cart.pre_price > 0)" class="cart-message">
-                  <div class="cart-message-ico">
-                    <img src="image/icons/bonus.svg" alt="Bonus">
-                  </div>
-                  <div  class="cart-message-text">
-                    <span>За этот заказ вы получите {{bonusesToGet}} бонусов! </span> 
-                    <div class="cart-message-date">
-                      Успейте потратить за 21 день!
-                      <!-- <div class="cart-message-time"><span>01.12.2020</span> I <span>18:10</span></div>
-                      <span style="color:red; font-size:8pt">!!(дата\время неизвестно?)</span> todo @@@ -->
-                    </div>
+                <div  class="cart-message-text">
+                  <span>За этот заказ вы получите {{bonusesToGet}} бонусов! </span> 
+                  <div class="cart-message-date">
+                    Успейте потратить за 21 день!
+                    <!-- <div class="cart-message-time"><span>01.12.2020</span> I <span>18:10</span></div>
+                    <span style="color:red; font-size:8pt">!!(дата\время неизвестно?)</span> todo @@@ -->
                   </div>
                 </div>
               </div>
-            <!-- Sitebar -->
+            </div>
           </div>
         </div>
 

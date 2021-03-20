@@ -84,8 +84,12 @@ class Cart extends Model
     //Checkout
     $cart = Checkout::addToCart($cart);
 
-    // dump(22);
-    return $cart;   
+    //Test
+    if(isset($_GET['test']) && $_GET['test']){
+      dd($cart);
+    }
+
+    return $cart;
   
   }
 

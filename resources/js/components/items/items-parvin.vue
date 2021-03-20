@@ -4,15 +4,9 @@
     <table class="table">
       <thead class="thead-dark">
         <tr>
-          <th>
-            Название
-          </th>
-          <th>
-            Сумма
-          </th>
-          <th>
-            Поставщики
-          </th>
+          <th>Название</th>
+          <th>Сумма</th>
+          <th>Поставщики</th>
         </tr>
       </thead>
       <tbody>
@@ -22,9 +16,7 @@
           <td v-if="item.product != undefined && item.product.suppliers != undefined && item.product.suppliers[0] != undefined">
             <span v-for='(supplier,i) in item.product.suppliers' :key='i'>
               {{supplier.name + ' '}}
-            </span>
-           
-            
+            </span>            
           </td>
         </tr>
       </tbody>

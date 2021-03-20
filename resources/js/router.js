@@ -313,9 +313,11 @@ let routes = [];
   //Items
   import items from './components/items/items.vue';
   import itemsParvin from './components/items/items-parvin.vue';
+  import zakupka from './components/items/zakupka/zakupka.vue';
   routes.push(
     {path: adminPrefix+'/report/items',component: items},
     {path: adminPrefix+'/zakupka',component: itemsParvin},
+    {path: adminPrefix+'/zakupka/2',component: zakupka},
   );
     
   //Strews
