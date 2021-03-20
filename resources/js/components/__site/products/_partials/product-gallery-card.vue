@@ -103,20 +103,28 @@
       <!-- Price -->
       <div class="price">
         <!-- X bananich price -->
-        <template v-if="isX">
-          <span>{{Number(product.final_price_x)}}р</span>
+        <template v-if="isX">          
+          <!-- With Discount -->
+          <span v-if="product.final_price != product.final_price_x" class="sale">
+            <!-- Regular price -->
+            <span class="old">{{Number(product.final_price)}}р</span>
+            <!-- Discount price -->
+            <span ><b style="color: #EB5757;">{{Number(product.final_price_x)}}р</b></span>
+          </span>
+          <!-- No Discount -->
+          <span v-else>{{Number(product.final_price_x)}}р</span>
         </template>
         <!-- Normal bananich price -->
-        <template v-else >       
-
+        <template v-else >
+          <!-- With Discount -->
           <span v-if="product.discount" class="sale">
-            
-            <span class="old">{{Number(product.price)}}р</span>  
+            <!-- Regular price -->
+            <span class="old">{{Number(product.price)}}р</span>
+            <!-- Discount price -->
             <span ><b style="color: #EB5757;">{{Number(product.final_price)}}р</b></span>
           </span>
-
+          <!-- No Discount -->
           <span v-else><b>{{Number(product.final_price)}}р</b></span>
-
         </template>
       </div>
 
