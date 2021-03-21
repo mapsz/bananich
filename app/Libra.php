@@ -131,13 +131,13 @@ class Libra extends Model
     $fLibras = [];
     $previous_button = false;    
     foreach ($libra as $key => $v) {
-      while($previous_button !== false && $previous_button + 1 != $v->button){
-        $previous_button++;
-        $add = json_decode(json_encode($libra[0]));
-        $add->button = $previous_button;
-        array_push($fLibras, $add);      
-        // dd($add->button);
-      }
+      // while($previous_button !== false && $previous_button + 1 != $v->button){
+      //   $previous_button++;
+      //   $add = json_decode(json_encode($libra[0]));
+      //   $add->button = $previous_button;
+      //   array_push($fLibras, $add);      
+      //   // dd($add->button);
+      // }
       
       array_push($fLibras, $v);
       $previous_button = $v->button;
