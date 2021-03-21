@@ -145,10 +145,7 @@ class Libra extends Model
 
     //Make props
     $content = "";
-    $previous_button = false;
     foreach ($fLibras as $key => $v) {
-
-      $row = "";
 
       {//Base props
 
@@ -204,7 +201,7 @@ class Libra extends Model
           $pa7_name = $name;
           $pa8 = "\r\n";
       
-          $row .= $pa1.$pa2_button.$pa3.$pa4_price.$pa5_days.$pa6.$pa7_name.$pa8;
+          $content .= $pa1.$pa2_button.$pa3.$pa4_price.$pa5_days.$pa6.$pa7_name.$pa8;
         }
 
       }
@@ -275,17 +272,13 @@ class Libra extends Model
 
         //Add rows
         foreach ($AddProps as $key => $AddProp) {
-          $row .= $AddProp."";
+          $content .= $AddProp."";
         }
 
-      }                  
+        
 
-      //Set previus
-      $previous_row = $row;
-      $previous_button = $button;
-      
+      }
 
-      $content .= $row;      
       $content .= "\r\n";      
 
     }
