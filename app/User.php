@@ -69,12 +69,14 @@ class User extends Authenticatable
   public static function addAddress($data, $userId){
 
     // dd(session()->getId());
+    $addressable_id = $userId == 0 ? session()->getId() : $userId;
+    $addressable_type = $userId == 0 ? 'session' : 'App\User';
 
     {//Attach Address
       DB::table('addresses')->insert(
         [
-          'addressable_id'      => $userId == 0 ? session()->getId() : $userId,
-          'addressable_type'    => $userId == 0 ? 'session' : 'App\User',
+          'addressable_id'      => $addressable_id,
+          'addressable_type'    => $addressable_type,
           'street' => $data['street'],
           'number' => isset($data['number']) ? $data['number'] : null,
           'appart' => isset($data['appart']) ? $data['appart'] : null,
@@ -90,7 +92,7 @@ class User extends Authenticatable
 
     // Set default
     if($data['default']){
-      $address = Address::where('addressable_type', "App\User")->where('addressable_id', $userId)->orderBy('id', 'desc')->first();
+      $address = Address::where('addressable_type',$addressable_type)->where('addressable_id', $addressable_id)->orderBy('id', 'desc')->first();
       User::setDefaultAddress($address->id);
     }
 
