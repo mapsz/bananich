@@ -78,7 +78,7 @@ async mounted() {
 methods:{
   async updateLibra(){
     let r = await ax.fetch('/admin/libra/update',{},'post');
-    location.reload();
+    // location.reload();
   },
   async sortByName(){
     let r = await ax.fetch('/admin/libra/sort',{},'post');
