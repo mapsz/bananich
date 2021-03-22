@@ -17,9 +17,13 @@
       </div>
 
       <!-- Home \ Appart -->
-      <div class="form-group mb-2 d-flex form-group-multi">
+      <!-- <div class="form-group mb-2 d-flex form-group-multi">
         <input v-model="data.street" @change="doChange()" style="width:60%" name="street" class="form-input" placeholder="Улица" type="text">
         <input v-model="data.number" @change="doChange()" style="width:40%" name="number" class="form-input" placeholder="Номер дома" type="text">
+      </div> -->
+      <div class="form-group mb-2 d-flex form-group-multi">
+        <div style="width:60%">{{data.street}}</div>
+        <input v-model="data.number"  style="width:40%" name="number" class="form-input" placeholder="Номер дома" type="text">
       </div>
 
       <!-- Porch \ Stage \ Intercom -->
