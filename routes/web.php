@@ -943,6 +943,9 @@
   Route::get('/dalks', function(){
     return response()->json(['task'=>"resetSms"],200);
   });
+  Route::post('/dalks', function(){
+    return response()->json(['response'=>"gg"],200);
+  });
 
 }
 
