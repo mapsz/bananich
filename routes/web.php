@@ -939,6 +939,13 @@
   });
 }
 
+{//Sklad
+  Route::get('/dalks', function(){
+    return response()->json(['task'=>"resetSms"],200);
+  });
+
+}
+
 
 {//crone
   //Logistic
