@@ -23,7 +23,7 @@ class Bonus extends Model
     ['key'    => 'user.name','label' => 'пользователь','type' => 'link', 'link' => '/admin/user/{user_id}'],
     ['key'    => 'action_user.name','label' => 'исполнитель'],
     ['key'    => 'created_at','label' => 'дата'],
-    ['key'    => 'order.id','label' => 'заказ'],
+    ['key'    => 'order.id','label' => 'заказ','type' => 'link', 'link' => '/admin/order/{order_id}'],
     ['key'    => 'comment.comment','label' => 'коммент'],
     ['key'    => 'add_bonus.die','label' => 'Сгорят'],
   ];
@@ -346,6 +346,7 @@ class Bonus extends Model
         //Order
         if(isset($v->orders[0])){          
           $v->order = $v->orders[0];          
+          $v->order_id = $v->orders[0]->id;          
         } 
       }
 
