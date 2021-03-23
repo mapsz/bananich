@@ -107,12 +107,19 @@ class Sms extends Model
       //   "Успейте потратить {$bonus->addBonus->left} бонусных рублей до ". Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') ." пока не сгорели"
       // );
 
+      // $body = (
+      //   "{$bonus->user->name}, здравствуйте!" .
+      //   "Напоминалка от Бананыча) ".
+      //   "У вас {$bonus->addBonus->left}р. " .
+      //   "сгорит " . Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') . "." .
+      //   "Еще их можно списать на neolavka.ru (об этом в комменте напишите плиз)"
+      // );
+
       $body = (
         "{$bonus->user->name}, здравствуйте!" .
-        "Напоминалка от Бананыча) ".
         "У вас {$bonus->addBonus->left}р. " .
         "сгорит " . Carbon::parse($bonus->addBonus->die)->format('j.m в G:i') . "." .
-        "Еще их можно списать на neolavka.ru (об этом в комменте напишите плиз)"
+        "Успейте их списать на bananich.ru или neolavka.ru."
       );
 
       
