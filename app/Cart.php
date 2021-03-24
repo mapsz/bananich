@@ -59,7 +59,7 @@ class Cart extends Model
     
     {//Clone Cart
       if($cart && ($session != $cart->session_id || $userId != $cart->user_id)){
-        $cart = self::cloneCart($cart,$user,$session);
+        $cart = self::cloneCart($cart->id,$user,$session);
       }
     }
 
@@ -93,21 +93,18 @@ class Cart extends Model
   
   }
 
-  public static function cloneCart($cart,$user,$session){
+  public static function cloneCart($cartId,$user,$session){
 
     {//Clone Cart
       try{
         DB::beginTransaction();{
 
-          //Clone model
-          try {
-            $cloneCart = $cart->replicate();
-          } catch (Exception $e) {            
-            Log::info($e . $cart);
-          }
+          $cart = Cart::find($cartId);
 
-          if(!$cloneCart) return;
-          
+          if(!$cart) return false;
+
+          //Clone model
+          $cloneCart = $cart->replicate();        
 
           //Save
           foreach ($cloneCart->getAttributes() as $key => $value) {
@@ -118,7 +115,8 @@ class Cart extends Model
           $cloneCart = Cart::create($cloneCart->getAttributes());
 
           {//Relations
-            $relations = $cart->getRelations();
+            $cartFull = Cart::jugeGet(['id' => $cartId]);
+            $relations = $cartFull->getRelations();
             foreach ($relations as $relation) {
               foreach ($relation as $row) {
                 $cloneRow = $row->replicate();

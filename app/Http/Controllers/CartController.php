@@ -25,15 +25,17 @@ class CartController extends Controller
 
   public function cartFromLocal(Request $request){
 
+    if(!isset($request->cart_id)) return response()->json(0);
+
     {//Get user, session
       $user = Auth::User();
       $userId = $user ? $user->id : 0;
       $session = session()->getId();
     }
 
-    $fromCart = Cart::jugeGet(['id' => $request->cart_id]);
 
-    Cart::cloneCart($fromCart,$user,$session);
+    Cart::cloneCart($request->cart_id,$user,$session);
+     
 
     $cart = Cart::getCart();
 

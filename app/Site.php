@@ -19,3 +19,6 @@ class Site extends Model
     return $this->belongsToMany('App\Page','sites_pages');
   }
 }
+
+
+// Имя, neolavka.ru дарит вам 300р за тo, чтo вы зарегистрировались на сайте! Успейте зaкaзaть дoстaвку до 1.04! Промокод Reg300
