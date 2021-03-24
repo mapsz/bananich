@@ -37,6 +37,12 @@
         <span>{{cart.coupon.code}}</span>
         <b>{{cart.coupon.discount-(cart.coupon.discount*2)}} р</b>
       </div>
+
+      <!-- Saved -->
+      <div v-if="saved > 0"class="d-flex justify-content-between mt-3">
+        <span><b>ВАША ЭКОНОМИЯ</b>
+        </span><b>{{saved}} p</b>
+      </div>
       <!-- Final summ -->
       <div class="d-flex justify-content-between mt-3">
         <span><b>Общая сумма</b>
@@ -58,7 +64,11 @@ export default {
       checkout: 'checkout/get',
       order:'sharedOrder/getOrder',
       settings:   'settings/beautyGet',
-    }),
+    }), 
+    saved(){      
+      if(!this.cart || this.cart.xData == undefined || this.cart.xData.saved == undefined) return false;
+      return this.cart.xData.saved;
+    },
     fullWeight (){
       if(!this.cart || this.cart.xData == undefined || this.cart.xData.fullWeight == undefined) return false;
       return this.cart.xData.fullWeight;

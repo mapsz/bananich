@@ -184,11 +184,11 @@
               От этого всем будет только хорошо
             </div>    
 
-            <div class="mb-5 d-flex justify-content-center justify-content-lg-start">
+            <!-- <div class="mb-5 d-flex justify-content-center justify-content-lg-start">
               <a href="/rules">
                 <button class="x-btn">Правила проведения закупок</button>  
               </a>              
-            </div> 
+            </div>  -->
           </div>
         </div>
 

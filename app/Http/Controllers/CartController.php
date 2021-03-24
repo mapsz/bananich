@@ -31,7 +31,6 @@ class CartController extends Controller
       $session = session()->getId();
     }
 
-
     $fromCart = Cart::jugeGet(['id' => $request->cart_id]);
 
     Cart::cloneCart($fromCart,$user,$session);

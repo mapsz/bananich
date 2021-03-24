@@ -51,6 +51,10 @@ class Order extends Model
     ['key'    => 'total_result', 'label' => 'Итог(Погружено)'],
     ['key'    => 'pay_method', 'label' => 'Метод оплаты',"sortable" => false],
     ['key'    => 'termobox', 'label' => 'termobox'],
+    ['key'    => 'type', 'label' => 'сайт','type' => 'intToStr', 'intToStr' =>[
+      'x' => 'neolavka',
+      0 => 'bananich'
+    ]],
   ];  
 
   public static function orderValidate($data){

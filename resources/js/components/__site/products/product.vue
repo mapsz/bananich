@@ -53,7 +53,7 @@
                         <!-- Regular price -->
                         <span style="color: black;">{{Number(product.final_price_x)}}р</span> 
                         <!-- Discount price -->
-                        <span class="product-old-price">-{{Number(product.final_price)}}р</span>                        
+                        <span class="product-old-price" style="color: #8ac2a7;">-{{Number(product.final_price)}}р</span>                        
                       </span>
                       <!-- No Discount -->
                       <span v-else class="product-price">{{Number(product.final_price_x)}}р</span>

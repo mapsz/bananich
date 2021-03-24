@@ -100,7 +100,14 @@ class Cart extends Model
         DB::beginTransaction();{
 
           //Clone model
-          $cloneCart = $cart->replicate();
+          try {
+            $cloneCart = $cart->replicate();
+          } catch (Exception $e) {            
+            Log::info($e . $cart);
+          }
+
+          if(!$cloneCart) return;
+          
 
           //Save
           foreach ($cloneCart->getAttributes() as $key => $value) {

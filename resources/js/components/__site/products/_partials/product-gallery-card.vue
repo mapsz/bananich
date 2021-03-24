@@ -107,7 +107,7 @@
           <!-- With Discount -->
           <span v-if="product.final_price != product.final_price_x" class="sale">
             <!-- Regular price -->
-            <span class="old">{{Number(product.final_price)}}р</span>
+            <span class="old" style="color: #8ac2a7;">{{Number(product.final_price)}}р</span>
             <!-- Discount price -->
             <span ><b style="color: black;">{{Number(product.final_price_x)}}р</b></span>
           </span>
