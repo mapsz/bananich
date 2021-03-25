@@ -90,11 +90,7 @@ export default {
         return;
       }
 
-      if(r){
-        if(!localServer){
-          if(isX) ym(72176563,'reachGoal','addtocart'); else ym(54670840,'reachGoal','addtocart');   
-        } 
-      }
+      if(r && !localServer){ym(isX ? 72176563 : 54670840,'reachGoal','addtocart');}
     },
   },
 }

@@ -136,7 +136,7 @@ let routes = [];
   import siteCheckout from './components/__site/checkout/checkout.vue';
   import siteCheckoutX from './components/__site/checkout/xCheckout.vue';
   routes.push(
-    {path: '/checkout',    component:siteCheckout},
+    {path: '/checkout',    component:siteCheckout, name:'checkout'},
     {path: '/xcheckout',    component:siteCheckoutX, name:'soloCheckout'},
   );
 

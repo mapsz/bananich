@@ -1041,7 +1041,6 @@ Route::group(['middleware' => ['HttpsRR'
         Route::post('/cart/container', 'CartController@editContainer');
         Route::delete('/cart/container', 'CartController@removeContainer');
         Route::put('/cart/from/local', 'CartController@cartFromLocal');
-        Route::get('/cart/from/local', 'CartController@cartFromLocal');
       }
 
       //Coupon

@@ -22,6 +22,10 @@
         </script>
         <noscript><div><img src="https://mc.yandex.ru/watch/72176563" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
         <!-- /Yandex.Metrika counter -->
+
+        <!-- /Yandex.Pixel -->
+        <script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?168",t.onload=function(){VK.Retargeting.Init("VK-RTRG-878297-fMsbn"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-878297-fMsbn" style="position:fixed; left:-999px;" alt=""/></noscript>
+    
     @endif
 
     <meta charset="utf-8">

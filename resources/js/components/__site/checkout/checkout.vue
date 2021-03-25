@@ -142,15 +142,16 @@ export default {
 
       if(r > 0){
         await ax.fetch('/order/log/success', {}, 'put');
+        this.clean();
         //Trackers
         if(!localServer && !isX && ym != undefined){
           ym(54670840,'reachGoal','ordered');
           fbq('track', 'Purchase', {value: this.cart.final_summ, currency: 'RUB'});
+        }
+        if(!localServer && isX){
+          ym(72176563,'reachGoal','orderplaced')
         } 
-        if(!localServer && isX && ym != undefined){
-          ym(72176563,'reachGoal','orderplaced');
-        } 
-        this.clean();
+        
         ax.fetch('/order/update/available', {id:r});
         location.href ='/order-thanks';
       }        
