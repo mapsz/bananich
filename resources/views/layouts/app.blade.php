@@ -25,7 +25,23 @@
 
         <!-- /Yandex.Pixel -->
         <script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?168",t.onload=function(){VK.Retargeting.Init("VK-RTRG-878297-fMsbn"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-878297-fMsbn" style="position:fixed; left:-999px;" alt=""/></noscript>
-    
+    <!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '128300155829263');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=128300155829263&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
     @endif
 
     <meta charset="utf-8">
@@ -35,9 +51,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>    
-        {{ strpos($_SERVER['SERVER_NAME'], '.loc') !== false ? 'üé¢LOCALüé¢' : '' }}
-        {{ strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'Bananich üçå' : '' }}
-        {{ strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'Neolavka üåø' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], '.loc') !== false ? 'Ì†ºÌæ¢LOCALÌ†ºÌæ¢' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], 'bananich.') !== false ? 'Bananich Ì†ºÌΩå' : '' }}
+        {{ strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'Neolavka Ì†ºÌºø' : '' }}
     </title>
 
     <!-- Scripts -->
@@ -58,6 +74,7 @@
     ?>
     <link rel="icon" href="{{$favicon}}" type="image/x-icon">
     
+  
 </head>
 <body>
     

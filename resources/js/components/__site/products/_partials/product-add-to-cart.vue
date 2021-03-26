@@ -90,7 +90,10 @@ export default {
         return;
       }
 
-      if(r && !localServer){ym(isX ? 72176563 : 54670840,'reachGoal','addtocart');}
+      if(r && !localServer){
+        ym(isX ? 72176563 : 54670840,'reachGoal','addtocart');
+        if(isX) fbq('track', 'AddToCart');      
+      }
     },
   },
 }

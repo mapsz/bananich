@@ -135,7 +135,10 @@ methods:{
     if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
 
     //Success
-    if(r) location.reload();
+    if(r){
+      if(!localServer) fbq('track', 'CompleteRegistration');
+      location.reload();
+    } 
   }
 },
 }
