@@ -133,7 +133,7 @@ export default {
     //Trackers
     if(!localServer){
       ym(54670840,'reachGoal','opencart');
-      // fbq('track', 'InitiateCheckout');
+      fbq('track', 'InitiateCheckout');
     } 
   },
   methods:{
