@@ -11,6 +11,7 @@ use App\Notifications\BananichResetPasswordNotification;
 use App\Parse;
 use App\JugeCRUD;
 use App\Bonus;
+use App\JugeLogs;
 
 
 use Spatie\Permission\Traits\HasRoles;
@@ -68,12 +69,13 @@ class User extends Authenticatable
 
   public static function addAddress($data, $userId){
 
-    // dd(session()->getId());
     $addressable_id = $userId == 0 ? session()->getId() : $userId;
     $addressable_type = $userId == 0 ? 'session' : 'App\User';
+    
+    JugeLogs::log(1011, "user - {$userId} | " . json_encode(['model' => 'address', 'data' => $data]));
 
     {//Attach Address
-      DB::table('addresses')->insert(
+      $insert = DB::table('addresses')->insert(
         [
           'addressable_id'      => $addressable_id,
           'addressable_type'    => $addressable_type,
@@ -88,7 +90,11 @@ class User extends Authenticatable
           'y' => isset($data['y']) ? $data['y'] : null,
         ]
       );
+
+      if($insert !== true) return false;
     }
+
+    JugeLogs::log(1012, "user - {$userId} | " . json_encode(['model' => 'address']));
 
     // Set default
     if($data['default']){
@@ -116,6 +122,8 @@ class User extends Authenticatable
     if(isset($data['y']) && $data['y']) $update['y'] = $update['y'] = $data['y'];
        
     $address->update($update);
+
+    if(!$address) return false;
 
     return true;
   }

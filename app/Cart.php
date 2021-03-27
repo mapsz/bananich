@@ -146,15 +146,15 @@ class Cart extends Model
     }
 
     
-    {//Check available
-      $cart = Cart::find($cart_id);
-      if($cart->type == 2){
-        $sOrder = SharedOrder::byAuth();
-        if(isset($sOrder->delivery_date) && !Product::checkProductAvailable($productId, $sOrder->delivery_date)){
-          self::removeItem($productId,$cart_id);
-          return 'notAvailable';
-        } 
-      }
+    {//Check available //@@@ TODO sharedOrder
+      // $cart = Cart::find($cart_id);
+      // if($cart->type == 2){
+      //   $sOrder = SharedOrder::byAuth();
+      //   if(isset($sOrder->delivery_date) && !Product::checkProductAvailable($productId, $sOrder->delivery_date)){
+      //     self::removeItem($productId,$cart_id);
+      //     return 'notAvailable';
+      //   } 
+      // }
     }
 
     //Attach

@@ -999,6 +999,9 @@ Route::group(['middleware' => ['HttpsRR'
     //All
     Route::group(['middleware' => []], function (){
 
+      //Logs
+      Route::put('/juge/log', 'JugeLogsController@add');
+
       {//Shared Order
         Route::post('/shared/order/test/time', 'SharedOrderController@testTime');
         Route::put('/shared/order/open', 'SharedOrderController@open');

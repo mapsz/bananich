@@ -12,6 +12,7 @@ use App\UserAddress;
 use App\UserComment;
 use App\FileUpload;
 use App\Address;
+use App\JugeLogs;
 
 class UserController extends Controller
 {
@@ -51,14 +52,16 @@ class UserController extends Controller
   }
 
   public function addAddress(Request $request){
-    
-    //Validate
-    Address::validate($request->all(),1);
- 
+     
     //Get user
     $userId = 0;
     $auth = Auth::user();
     if($auth) $userId = $auth->id;
+
+    JugeLogs::log(1010, "user - {$userId} | " . json_encode(['model' => 'address', 'data' => $request->all()]));
+    
+    //Validate
+    Address::validate($request->all(),1);
     
     return response()->json(User::addAddress($request->all(), $userId));
   }

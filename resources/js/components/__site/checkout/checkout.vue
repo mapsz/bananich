@@ -107,8 +107,7 @@ export default {
     }
 
     //Trackers
-    if(!localServer){
-      
+    if(!localServer){      
       fbq('track', 'InitiateCheckout');
       ym(54670840,'reachGoal','opencart');
     } 
