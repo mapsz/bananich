@@ -156,7 +156,10 @@ methods:{
     //Put
     let r = await ax.fetch('/user/address', this.data, 'put');
     //Catch errors
-    if(!r){if(ax.lastResponse.status == 422){this.errors = ax.lastResponse.data.errors;return;}}
+    if(!r && ax.lastResponse.status == 422){
+      ax.fetch('/juge/log',{code:1000, body:{"body":'addressValidate'}}, 'put');
+      this.errors = ax.lastResponse.data.errors;return;      
+    }
     if(!r){ax.fetch('/juge/log',{code:1000, body:{"body":'addressError','send':this.data,'response': ax.lastResponse}}, 'put');}
     if(r){
       ax.fetch('/juge/log', {code:1001, body:{'body':'addressSuccess','send':this.data,'response': ax.lastResponse}}, 'put');
