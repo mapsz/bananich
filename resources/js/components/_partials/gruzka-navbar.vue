@@ -110,6 +110,10 @@ export default {
         link: this.adminPrefix+"/maps",
         caption:"maps",
       },
+      // {
+      //   link: this.adminPrefix+"/sklad",
+      //   caption:"склад",
+      // },
     ];
   },
   methods:{    

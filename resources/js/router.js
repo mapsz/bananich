@@ -162,6 +162,12 @@ let routes = [];
   //   {path: adminPrefix+'/mailings',component: mailings},
   // );
 
+  //Sklad
+  import sklad from './components/sklad/sklad.vue';
+  routes.push(
+    {path: adminPrefix+'/sklad',component: sklad},
+  );
+
   //Libras
   import libras from './components/libras/libras.vue';
   routes.push(

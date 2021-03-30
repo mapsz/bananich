@@ -7,6 +7,7 @@ import product from './modules/product'
 import settings from './modules/settings'
 import orderLimits from './modules/orderLimits'
 import sharedOrder from './modules/site/sharedOrder'
+import sklad from './modules/sklad'
 // import statistic from './modules/statistic'
 
 
@@ -39,7 +40,7 @@ let store = {
     order,delivery,confirm,report,product,item,supplier,stocktaking,
     purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,
     settings,category,orderLimits,page,menu,site,coupon,logistic,notFound,email,
-    libra,sharedOrder
+    libra,sharedOrder,sklad
   }
 };
 
