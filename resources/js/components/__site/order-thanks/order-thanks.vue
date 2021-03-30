@@ -10,6 +10,12 @@
 
             <template v-if="user">
               <div class="thanks-text">Статус доставке вы можете отслеживать в <a href="/profile">личном кабинете</a></div>
+
+                
+              <div v-if="user && isX" class="thanks-text">
+                При оформлении заказа в течении двух недель с момента доставки сервисный сбор в интервалах за 300 рублей будет автоматически пересчитан на 200 рублей!
+              </div>
+
               <a v-if="isX" href="/profile/shared/orders" class="btn-yellow btn-thick btn-thanks">Перейти в заказы</a>
               <a v-else href="/profile/orders" class="btn-yellow btn-thick btn-thanks">Перейти в заказы</a>
             </template>
@@ -23,6 +29,7 @@
                 Чтобы в дальнейшем получать 10% кешбэка с каждой покупки, а также иметь возможность отслеживать статусы заказов в личном кабинете, рекомендуем вам <a href="/profile">зарегистрироваться</a> 
               </span>
             </div>
+
           </div>
         </div>
       </div>
