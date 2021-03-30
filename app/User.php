@@ -232,7 +232,7 @@ class User extends Authenticatable
     $query = new User;
 
     //With
-    if("WITH" == "WITH"){
+    {
       //Comment
       $query = $query->with('comment');
       //Referal
@@ -240,10 +240,12 @@ class User extends Authenticatable
       //Addresses
       $query = $query->with('addresses');
       // $query = $query->with('addresses.coords');
+      //Memberships
+      $query = $query->with('memberships');
     }
 
     //Where
-    if("WHERE" == "WHERE"){
+    {
 
       //Id
       if(isset($request['id']) && $request['id'] > 0){
@@ -275,7 +277,7 @@ class User extends Authenticatable
     $users = JugeCRUD::get($query,$request);
 
     //After Query
-    if("AfterQuery" == "AfterQuery"){
+    {
       //Loop
       foreach ($users as $user) {
         //Images
@@ -292,7 +294,7 @@ class User extends Authenticatable
     }
 
     //To single id
-    if(isset($request['id']) && $request['id'] > 0){
+    if(isset($users[0]) && isset($request['id']) && $request['id'] > 0){
       $users = $users[0];
     }    
 
@@ -301,6 +303,12 @@ class User extends Authenticatable
 
 
 
+  public function memberships(){
+    return $this->belongsToMany('App\Membership','user_membership','user_id','membership_id')
+      ->where('expire', ">", now())
+      ->orderBy('expire','DESC')
+      ->withPivot('expire');
+  }
   public function comment(){
     return $this->hasOne('App\UserComment');
   }

@@ -11,6 +11,7 @@ use App\Item;
 use Illuminate\Support\Facades\Mail;
 use App\Bonus;
 use App\Polygon;
+use App\Membership;
 use Carbon\Carbon;
 
 class Order extends Model
@@ -279,6 +280,35 @@ class Order extends Model
     if(is_array($polygons)){
       $rDate = Polygon::getPrices($polygons, $rDate);
     }
+    
+    {//Membership    
+      {//user
+        $userId = Auth::user() ? Auth::user()->id : 0;
+        if($userId && is_array($polygons) && $cart['type'] == 2){
+          //Get membership
+          $user = User::jugeGet(['id' => $userId]);
+          $membership = false;
+          foreach ($user->memberships as $i => $v) {
+            if($v->id == 10) {
+              $membership = $v;
+              break;
+            }
+          }          
+          //Add discount
+          if($membership){
+            $settings = (new Setting)->getList(1);
+            $defaultPrice = $settings['x_order_price'];
+            foreach ($rDate as $i => $date) {
+              foreach($date['times'] as $j => $time){
+                if($time['price'] < $defaultPrice){
+                  $rDate[$i]['times'][$j]['price'] = $time['price'] - $membership->value;
+                }
+              }
+            }
+          }
+        }
+      }   
+    } 
 
     return $rDate;
 
@@ -559,7 +589,15 @@ class Order extends Model
     if($bonus > 0){
       JugeLogs::log(15, json_encode(['model' => 'order', 'user' => $customer_id]));
       Bonus::remove($customer_id, $bonus, 2, $orderId);
-    }    
+    }
+
+
+    {//Attach Membership
+      if($cart['type'] == 2 && $customer_id > 0){
+        Membership::add(10,$customer_id);
+      } 
+
+    }
 
     return $order;
 
