@@ -120,7 +120,9 @@ class Cart extends Model
             foreach ($relations as $relation) {
               foreach ($relation as $row) {
                 $cloneRow = $row->replicate();
-                $cloneRow->cart_id = $cloneCart->id;
+                if(isset($cloneRow->cart_id)){
+                  $cloneRow->cart_id  = $cloneCart->id;
+                } 
                 $cloneRow->save();
               }            
             }          

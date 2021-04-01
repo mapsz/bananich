@@ -51,7 +51,12 @@
     <div class="d-flex justify-content-between">
       <button @click="doCancel()" class="x-btn x-btn-sm x-btn-trans">Отмена</button>
       <button @click="save()" class="x-btn x-btn-sm">Сохранить</button>
-    </div>     
+    </div>
+
+    <!-- Noty -->
+    <div style="font-size: 10pt;margin-top: 20px;">
+      Если у вас возникли проблемы с вводом адреса или вы видете только интервалы за 600 рублей, пожалуйста, свяжитесь с нами для уточнения деталей по номеру 8(964)345-44-19 или в соц сетях.
+    </div>
   </div>
 </template>
 

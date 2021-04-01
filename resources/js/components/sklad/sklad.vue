@@ -6,20 +6,19 @@
     <h1>Sklad</h1>
     <div class="mt-3">
       <div class="row">
-        <div class="col-2">
+        <div class="col-3">
           <h4>Status</h4>
 
         </div>
+
         <div class="col-2">
           <h4>Actions</h4>
           <!-- Reset PC -->
           <div class="m-2"><button @click="resetPc()" class="btn btn-info btn-sm">Reset PC</button></div>
-          <div class="m-2"><button @click="resetPc()" class="btn btn-info btn-sm">Reset SMS</button></div>
-
-          
-          
+          <div class="m-2"><button @click="resetPc()" class="btn btn-info btn-sm">Reset SMS</button></div>          
         </div>
-        <div class="col-8">
+
+        <div class="col-7">
           <h4>Log</h4>
           <div>
             <div v-for="(log, i) in logs" :key="i" class="" style="border-bottom:gray 1px solid">

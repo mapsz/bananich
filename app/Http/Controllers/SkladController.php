@@ -26,6 +26,7 @@ class SkladController extends Controller
 
   public function outTask(Request $request){
 
+    //Log
     JugeLogs::log(2001, json_encode(['model' => 'sklad', 'direction' => "OUT"]));
 
     return response()->json(['task'=>"resetSms"],200);
@@ -33,23 +34,19 @@ class SkladController extends Controller
 
   public function inTask(Request $request){
 
-    $query =  json_encode($request->all());
+    //Encode query
+    $query = json_encode($request->all());
 
+    //Log
     JugeLogs::log(2002, json_encode(['model' => 'sklad', 'direction' => "IN", 'query' => $query]));
 
-    return response()->json(['response'=>"gg"],200);
-
-    
+    return response()->json(['response'=>"gg"],200);   
     
   }
 
 
   public function getLogs(){
-
-    $logs = JugeLogs::where('body','like', '%"model":"sklad"%')->OrderBy('created_at', "DESC")->limit(200)->get();
-
-    return response()->json($logs);
-
+    return response()->json(JugeLogs::where('body','like', '%"model":"sklad"%')->OrderBy('created_at', "DESC")->limit(200)->get());
   }
 
 
