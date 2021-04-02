@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Coupon;
 use App\Cart;
+use App\Referral;
 
 class CouponController extends Controller
 {
@@ -33,6 +34,10 @@ class CouponController extends Controller
     Cart::find($cart['id'])->coupons()->attach($coupon->id);
 
     return response()->json($cart);
+  }
+
+  public function attachReferral(Request $request){
+    return response()->json(Referral::attachCoupon($request['couponId'], $request['parentId'], $request['reward']));    
   }
 
 

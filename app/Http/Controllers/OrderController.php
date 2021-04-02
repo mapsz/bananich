@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Events\OrderPlacedEvent;
 use App\Order;
 use App\OrderStatus;
 use App\Item;
@@ -61,9 +62,8 @@ class OrderController extends Controller
 
   }
 
-  public function put(Request $request){
+  public function put(Request $request){    
 
-    // dd($request);
     
     JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
     
@@ -240,13 +240,16 @@ class OrderController extends Controller
 
           JugeLogs::log(90, json_encode(['model' => 'orderController', 'user' => $userId]));
               
-        }DB::commit();    
+        }DB::commit();
       } catch (Exception $e) {
         // Rollback from DB
         DB::rollback();
         return response(['code' => 'wo1','text' => 'order error'], 512)->header('Content-Type', 'text/plain');
       }
     }
+
+    event(new OrderPlacedEvent($order));
+
 
     return response()->json($order->id);
 

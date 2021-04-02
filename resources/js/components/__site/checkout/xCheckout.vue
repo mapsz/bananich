@@ -175,8 +175,8 @@ export default {
         //   ym(72176563,'reachGoal','orderplaced');
         // } 
         this.clean();
-        ax.fetch('/order/update/available', {id:r});
-        location.href ='/order-thanks';
+        // ax.fetch('/order/update/available', {id:r});
+        // location.href ='/order-thanks';
       }        
     },
     setPolygons(ids){

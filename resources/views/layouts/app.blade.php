@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     {{-- Vendors --}}
-    @if (ENV('APP_ENV') != 'local' && strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false)
+    @if (strpos($_SERVER['SERVER_NAME'], '.loc') === false && strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false)
         <!-- Yandex.Metrika counter -->
         <script type="text/javascript" >
             (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};

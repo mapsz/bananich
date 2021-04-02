@@ -22,6 +22,13 @@ class Coupon extends Model
     ['key'    => 'single_for_user','label' => '1 купон для 1 клиента'],
     ['key'    => 'first_order','label' => 'Только первый заказ'],
     ['key'    => 'sites','label' => 'Сайты'],
+    ['key'    => 'sites','label' => 'Сайты'],
+    [
+      "key" => "couponReferral",
+      "label" => "Реферал",
+      'type' => 'custom',
+      'component' => 'coupon-referral', 
+    ]  
   ];  
   protected $postInputs = [
     [
@@ -238,6 +245,8 @@ class Coupon extends Model
     //With
     {
       $query = $query->with('metas');
+      $query = $query->with('gmetas');
+      $query = $query->with('referralParent');
     }
 
     {//Where
@@ -261,9 +270,20 @@ class Coupon extends Model
     //Get
     $coupons = JugeCRUD::get($query,$request);
 
-    //Set metas
-    $coupons = JugeCRUD::setMetas($coupons);
+    
+    {//Set metas
+      $coupons = JugeCRUD::setMetas($coupons);
 
+      foreach ($coupons as $k => $coupon) {
+        if(isset($coupon->gmetas)){
+          $coupons[$k]['metas'] = $coupon->gmetas;
+          unset($coupons[$k]->gmetas);
+        }
+      }
+
+      $coupons = JugeCRUD::setMetas($coupons);
+    }
+    
     //Sites
     foreach ($coupons as $key => $coupon) {
       $sites = "";
@@ -455,4 +475,19 @@ class Coupon extends Model
   public function orders(){
     return $this->belongsToMany('App\Order')->withTimestamps(); 
   }  
+  public function gmetas(){
+    return $this->morphMany('App\Meta', 'metable');
+  }
+  public function referralParent(){
+    return $this->hasOneThrough(
+        'App\User',   //End class
+        'App\Meta',   //Through class
+        'metable_id', 
+        'id',
+        'id',
+        'value'
+      )
+      ->where('metable_type', 'LIKE', "%Coupon%")
+      ->where('metas.name', 'refferal_parent_id');
+  }
 }

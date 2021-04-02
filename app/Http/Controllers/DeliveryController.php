@@ -18,6 +18,8 @@ use App\Product;
 use App\User;
 use App\Setting;
 use Carbon\Carbon;
+use App\Events\OrderSuccessEvent;
+use App\Events\OrderCancelSuccessEvent;
 use App\Events\OrderSuccess;
 use App\Events\OrderSuccessCancel;
 
@@ -128,6 +130,8 @@ class DeliveryController extends Controller
             ]
           );
         }
+
+        event(new OrderSuccessEvent($order));
               
       }DB::commit();
     } catch (Exception $e) {
@@ -177,6 +181,7 @@ class DeliveryController extends Controller
 
       //Event      
       event(new OrderSuccessCancel($orderId));
+      event(new OrderCancelSuccessEvent($order));
 
       //Remove bonus
       if($order->customer_id){

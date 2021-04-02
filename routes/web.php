@@ -1059,12 +1059,16 @@ Route::group(['middleware' => ['HttpsRR'
         Route::put('/menu', 'MenuController@put');
       });
 
-      //Coupons
-      Route::middleware([])->group(function (){
+      
+      {//Coupons
         Route::post('/coupon', 'CouponController@post');
         Route::put('/coupon', 'CouponController@put');
         // Route::get('/order/limit/settings', 'OrderController@getLimitSettings');
-      });
+      };
+
+      {//Coupons referral
+        Route::post('/coupon/referral', 'CouponController@attachReferral');        
+      }
 
       //Order Limits
       Route::middleware([])->group(function (){

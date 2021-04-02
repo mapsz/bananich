@@ -26,7 +26,18 @@ class EventServiceProvider extends ServiceProvider
             LogFailedAuthenticationAttempt::class,
         ],
 
+
         //Order
+        \App\Events\OrderPlacedEvent::class => [
+            \App\Listeners\addCouponReferralListener::class,
+        ],       
+        \App\Events\OrderSuccessEvent::class => [
+            \App\Listeners\CouponReferralSuccessListener::class,
+        ],       
+        \App\Events\OrderCancelSuccessEvent::class => [
+            \App\Listeners\CouponReferralCancelListener::class,
+        ],        
+        //??
         'App\Events\OrderSuccess' => [
             'App\Listeners\addBonus',
         ],
