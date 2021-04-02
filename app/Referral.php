@@ -79,7 +79,7 @@ class Referral extends Model
       'metable_id' => $referral->id,
       'metable_type' => 'App\Referral',
       'name' => 'order_id',
-      'value' => $orderId,
+      'value' => $order->id,
     ]); 
 
     return true;
