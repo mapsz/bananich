@@ -26,6 +26,7 @@ async mounted() {
 
   if(isX){
     this.links.push({link:'/profile/orders',caption:'Мои заказы',});
+    this.links.push({link:'/profile/referrals',caption:'Рефералы',});
   }else{
     this.links.push({link:'/profile/bonus',caption:'Бонусы',});
     this.links.push({link:'/profile/orders',caption:'Мои заказы',});

@@ -1060,6 +1060,10 @@ Route::group(['middleware' => ['HttpsRR'
       });
 
       
+      {//Referrals
+        Route::get('/referral/user/balance', 'ReferralController@getUserBalance');
+      }
+      
       {//Coupons
         Route::post('/coupon', 'CouponController@post');
         Route::put('/coupon', 'CouponController@put');

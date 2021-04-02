@@ -113,6 +113,19 @@ class Referral extends Model
 
   }
 
+  public static function getUserBalance($userId){
+
+    $referrals = Referral::where('parent_id', $userId)->where('status', 1)->get();
+
+    $balance = 0;
+    foreach ($referrals as $key => $referral) {
+      $balance += $referral->reward;
+    }
+
+    return $balance;
+
+  }
+
 
   public static function validateToCoupon($data, $put = false){
 
