@@ -1525,7 +1525,6 @@ class Order extends Model
     
     return $charge->save();
 
-
   }
 
   

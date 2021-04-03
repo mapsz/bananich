@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Events\OrderPlacedEvent;
 use App\Order;
+use App\OrderExtraCharge;
 use App\OrderStatus;
 use App\Item;
 use App\Product;
@@ -496,5 +497,14 @@ class OrderController extends Controller
 
     return response()->json($item);
 
+  }
+
+  public function addExtraCharge(Request $request){
+    Order::addExtraCharge($request->orderId, $request->name ,$request->value);
+    return response()->json(1);
+  }
+  public function removeExtraCharge(Request $request){
+    OrderExtraCharge::where('id', $request->id)->delete();
+    return response()->json(1);
   }
 }

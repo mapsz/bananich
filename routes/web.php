@@ -1114,8 +1114,12 @@ Route::group(['middleware' => ['HttpsRR'
         //Order
         Route::post('/order', 'OrderController@post');
         Route::put('/order/item', 'OrderController@addItem');
-
       });
+      
+      {//Order Extra Cherges
+        Route::put('/order/extra/charge', 'OrderController@addExtraCharge');
+        Route::delete('/order/extra/charge', 'OrderController@removeExtraCharge');
+      }
 
       //Product
       Route::middleware([])->group(function (){

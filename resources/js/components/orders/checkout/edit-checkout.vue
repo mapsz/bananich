@@ -13,8 +13,14 @@
       <input v-model="bonus" name="bonus" type="number" class="form-control" id="order-checkout-bonus" >
     </div>
     <!-- Save -->
-    <button class="btn-success btn" type="submit">Сохранить</button>
+    <button class="btn-success btn" type="submit">Сохранить</button>    
   </form>
+
+  <!-- Extra Charges -->
+  <hr>
+  <order-edit-extra-charges />
+  <hr>
+
 </div>
 </template>
 
