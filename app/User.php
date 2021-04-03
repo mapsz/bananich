@@ -298,6 +298,10 @@ class User extends Authenticatable
       $users = $users[0];
     }    
 
+    if(isset($request['test'])){
+      dd($users);
+    }
+
     return $users;
   }
 
@@ -307,7 +311,7 @@ class User extends Authenticatable
     return $this->belongsToMany('App\Membership','user_membership','user_id','membership_id')
       ->where('expire', ">", now())
       ->orderBy('expire','DESC')
-      ->withPivot('expire');
+      ->withPivot('expire','id');
   }
   public function comment(){
     return $this->hasOne('App\UserComment');

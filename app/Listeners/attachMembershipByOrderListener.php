@@ -13,9 +13,8 @@ class attachMembershipByOrderListener
       
       $order = $event->order;
 
-
       if($order->type == 'x' && $order->customer_id > 0){
-        Membership::add(10, $order->customer_id);
+        Membership::add(10, $order->customer_id, $order->id);
       } 
 
       return;
