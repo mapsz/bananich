@@ -593,13 +593,6 @@ class Order extends Model
     }
 
 
-    {//Attach Membership
-      if($cart['type'] == 2 && $customer_id > 0){
-        Membership::add(10,$customer_id);
-      } 
-
-    }
-
     return $order;
 
   }

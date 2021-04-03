@@ -251,7 +251,9 @@
         </div>
 
         <!-- Result -->
-        <div class="col-6 col-md-4 col-xl-3 order-checkout-data" v-if="order.total_result != undefined && order.total_result > 0">
+        <div v-if="order.total_result != undefined && order.total_result > 0 && items_total_result > 0" 
+          class="col-6 col-md-4 col-xl-3 order-checkout-data"
+        >
           <!-- Total -->
           <div style="font-weight: 600;">Всего: {{order.total_result}}</div>
         </div>

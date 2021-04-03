@@ -289,8 +289,6 @@ class OrderController extends Controller
 
   public function autoOrder(){
 
-    // 
-
     //get active order
     $orders = Order::whereHas('statuses', function($q){
                         $q->where('order_statuses.id',500)
