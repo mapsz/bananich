@@ -231,6 +231,15 @@
           <div v-if="order.bonus != 0">Бонусы: {{order.bonus}}</div>
           <!-- Coupon -->
           <div v-if="coupon">{{coupon.code}}: {{coupon.discount}}</div>
+          <!-- Extra charges -->
+          <template v-if="order.extra_charges != undefined && order.extra_charges[0] != undefined">
+            <div 
+              v-for="charges in order.extra_charges" :key="charges.id"
+            >            
+              <span>{{charges.name}}:</span>
+              <span>{{parseInt(charges.value)}}</span>
+            </div>
+          </template>
           <!-- Participation -->
           <div v-if="isX">Сервисный взнос: {{order.xData.participation_price}}</div>
         </div>

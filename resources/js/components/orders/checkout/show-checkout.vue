@@ -39,6 +39,16 @@
       <span>Купон {{coupon.code}}:</span>
       <span>-{{parseInt(coupon.discount)}}</span>
     </div>
+    <!-- Extra charges -->
+    <template v-if="order.extra_charges != undefined && order.extra_charges[0] != undefined">
+      <div 
+        v-for="charges in order.extra_charges" :key="charges.id"
+        class="d-flex justify-content-between border-bottom"
+      >            
+        <span>{{charges.name}}:</span>
+        <span>{{parseInt(charges.value)}}</span>
+      </div>
+    </template>
   </div> 
   <!-- X -->
   <template v-if="this.order.type == 'x' && order.xData != undefined">

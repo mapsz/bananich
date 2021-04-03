@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Bonus;
 use App\Polygon;
 use App\Membership;
+use App\OrderExtraCharge;
 use Carbon\Carbon;
 
 class Order extends Model
@@ -813,6 +814,8 @@ class Order extends Model
         $query = $query->with('logistics.driver');    
       }
 
+      //Extra Charge
+      $query = $query->with('extraCharges');
       //To other
       $query = $query->with('toOther');
       //Metas
@@ -1199,16 +1202,27 @@ class Order extends Model
             if($order->bonus > 0){
               $order->bonus = $order->bonus - ($order->bonus * 2);
             }
-          }   
+          }
+
+          {//Extra charges
+            $order->extras_total = 0;
+            if(isset($order->extraCharges) && isset($order->extraCharges[0])){
+              foreach ($order->extraCharges as $key => $charge) {
+                $order->extras_total += $charge->value;
+              }
+            }          
+          }
             
           {//Normal Totals
             $order->n_total = (
+              $order->extras_total + 
               $order->items_total + 
               $order->shipping + 
               $order->bonus +
               $order->coupons_total
             );            
             $order->n_total_result = (
+              $order->extras_total + 
               $order->items_total_result + 
               $order->shipping + 
               $order->bonus +
@@ -1258,6 +1272,10 @@ class Order extends Model
               {//Total
                 $order->x_total         = 0;
                 $order->x_total_result  = 0;
+                {//Add Extra charges
+                  $order->x_total         += $order->extras_total;
+                  $order->x_total_result  += $order->extras_total;
+                }
                 {//Add Bonus
                   $order->x_total         += $order->bonus;
                   $order->x_total_result  += $order->bonus;
@@ -1501,11 +1519,29 @@ class Order extends Model
     return true;    
   }
 
+  public static function addExtraCharge($orderId, $name ,$value){
+
+    //Delete old
+    OrderExtraCharge::where('order_id', $orderId)->where('name', $name)->delete();
+
+    //Put
+    $charge = new OrderExtraCharge();
+    $charge->order_id = $orderId;
+    $charge->name = $name;
+    $charge->value = $value;
+    
+    return $charge->save();
+
+
+  }
 
   
   public function metas(){
     return $this->hasMany('App\OrderMeta');
-  }   
+  }
+  public function extraCharges(){
+    return $this->hasMany('App\OrderExtraCharge');
+  }
   public function items(){
     return $this->hasMany('App\Item');
   }

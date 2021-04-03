@@ -16,6 +16,8 @@ class addCouponReferralListener{
     $order = $event->order;
     $orderId = $event->order->id;
 
+
+
     //Check referral exists
     $coupon = Coupon::whereHas('orders', function($q)use($orderId){
       $q->where('order_id',$orderId);
@@ -23,11 +25,11 @@ class addCouponReferralListener{
     ->whereHas('referralParent')
     ->with('referralParent')  
     ->first();
-    if($coupon == null) return false;
+    if($coupon == null) return;
 
     Referral::addCoupon($order, $coupon);
 
-    return true;
+    return;
   }
 
 }

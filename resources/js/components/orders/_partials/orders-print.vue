@@ -110,6 +110,14 @@
                         <th>Купоны:</th>
                         <td>{{r(order.coupons_total)}}</td>
                       </tr>
+                      <!-- Extra charges -->
+                      <template v-if="order.extra_charges != undefined && order.extra_charges[0] != undefined">
+                        <tr v-for="charges in order.extra_charges" :key="charges.id">
+                          <td></td><td></td><td></td><td></td><td></td>
+                          <th>{{charges.name}}:</th>
+                          <td>{{parseInt(charges.value)}}</td>
+                        </tr>
+                      </template>
                       <!-- Bonus -->
                       <tr v-if="order.bonus != undefined && order.bonus != 0">
                         <td></td><td></td><td></td><td></td><td></td>
