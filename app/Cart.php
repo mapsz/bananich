@@ -119,10 +119,16 @@ class Cart extends Model
             $relations = $cartFull->getRelations();
             foreach ($relations as $relation) {
               foreach ($relation as $row) {
+                
+                if($row->table == "coupons"){
+                  $couponId = $row->id;
+                  $cloneCartId = $cloneCart->id;
+                  DB::table('coupon_cart')->insert(['cart_id' => $cloneCartId, 'coupon_id' => $couponId]);
+                  continue;
+                }
+
                 $cloneRow = $row->replicate();
-                if(isset($cloneRow->cart_id)){
-                  $cloneRow->cart_id  = $cloneCart->id;
-                } 
+                $cloneRow->cart_id  = $cloneCart->id;
                 $cloneRow->save();
               }            
             }          
