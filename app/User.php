@@ -373,10 +373,10 @@ class User extends Authenticatable
   // LEFT JOIN (
   // 	SELECT id, customer_id, delivery_date,address FROM (
   // 		SELECT ol.id, customer_id, delivery_date, address FROM orders ol
-  // 		INNER JOIN (
-  // 			SELECT * FROM order_order_status
-  // 			WHERE order_status_id = 1
-  // 		)os
+  		// INNER JOIN (
+  		// 	SELECT * FROM order_order_status
+  		// 	WHERE order_status_id = 1
+  		// )os
   // 		ON ol.id = os.order_id
   // 		ORDER BY ol.id desc
   // 	) oz
@@ -386,6 +386,14 @@ class User extends Authenticatable
 
   // WHERE `count` > 0
 }
+
+// 300, 400, 500, 600, 700, 800, 850, 900
+
+// 2104038051, 2104037812, 2104048987, 2104041964, 2104048058
+// 2104048893, 2104042814, 2104049260
+// 2104037812, 2104049260
+// 2104049417
+// 2104048987
 
 // >2 orders list
 // SELECT u.id, u.email, u.`name` FROM (

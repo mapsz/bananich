@@ -1362,6 +1362,13 @@ class Order extends Model
 
     //Test
     if(isset($request['test'])){
+      if($request['test'] == 'ids'){
+        foreach ($orders as $key => $order) {
+          echo $order->id . ',';
+        }
+      }
+
+
       dd(
         microtime(true) - $timer, 
         $orders->toArray(),
