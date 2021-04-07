@@ -231,8 +231,8 @@ class User extends Authenticatable
     //Make query
     $query = new User;
 
-    //With
-    {
+    
+    {//With
       //Comment
       $query = $query->with('comment');
       //Referal
@@ -244,8 +244,8 @@ class User extends Authenticatable
       $query = $query->with('memberships');
     }
 
-    //Where
-    {
+    
+    {//Where
 
       //Id
       if(isset($request['id']) && $request['id'] > 0){
@@ -289,6 +289,10 @@ class User extends Authenticatable
         //Bonus
         if(isset($request['with_bonus'])){
           $user['bonus'] = Bonus::left($user->id);
+        }
+        //Balance
+        if(isset($request['with_balance'])){
+          $user['balance'] = Balance::left($user->id);
         }
       }
     }

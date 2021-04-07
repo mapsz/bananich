@@ -1,7 +1,8 @@
 <template>
 <div>
   
-  <gruzka-navbar></gruzka-navbar>
+  <gruzka-navbar></gruzka-navbar>  
+  <balances-navbar />
 
   <div class="container-fluid" ref="orderList">
 

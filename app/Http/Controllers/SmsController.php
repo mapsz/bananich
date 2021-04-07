@@ -116,7 +116,7 @@ class SmsController extends Controller
       }
     }
 
-    dd($messages);
+    // dd($messages);
     // dump($reports);
 
     if(count($messages) > 0){

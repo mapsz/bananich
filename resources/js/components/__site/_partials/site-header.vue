@@ -1,5 +1,14 @@
 <template>
 <div :class="halloween?'halloween':''">
+
+  <!-- To admin -->
+  <template v-if="isAdmin">
+    <a href="/admin">
+      <div class="toAdmin">👺</div>
+    </a>
+  </template>
+  
+
   <header class="header" style="z-index: 1045;" :class="(halloween?'halloween':'') +' '+(isX?'bananich-x':'')">
 
     <!-- navbar-sad -->
@@ -85,6 +94,7 @@ export default {
   computed:{    
     isMobile:function(){return window.screen.width <= 768;},
     ...mapGetters({
+      user:'user/get',
       menus:'page/get',
       cart:'cart/getCart',
       settings:'settings/beautyGet',
@@ -95,6 +105,18 @@ export default {
         return true;
       }
       return false;
+    },
+    isAdmin:function(){
+      if(this.user == undefined || this.user.roles == undefined || this.user.roles[0] == undefined) return false;
+
+      let isAdmin = false;
+
+      this.user.roles.forEach(role => {
+        if(role.name == "admin") isAdmin = true;
+      });
+
+      return isAdmin;
+      
     }
   },    
   mounted(){    
@@ -131,6 +153,17 @@ export default {
 </script>
 
 <style scoped>
+
+.toAdmin{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+  padding: 3px;
+  font-size: 20px;
+  border-radius: 0 0 20px 0;
+  background-color: #1efad1;
+}
 
 .tap-bar {
   height: inherit!important;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Referral;
+use App\Balance;
 
 class ReferralController extends Controller
 {
@@ -15,6 +15,6 @@ class ReferralController extends Controller
 
     if($userId == 0) return response()->json(0);
 
-    return response()->json(Referral::getUserBalance($userId));
+    return response()->json(Balance::left($userId));
   }
 }

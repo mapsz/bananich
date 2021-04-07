@@ -5,6 +5,7 @@ namespace App\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Referral;
+use App\Balance;
 
 class CouponReferralSuccessListener
 {

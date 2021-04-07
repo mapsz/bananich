@@ -31,7 +31,7 @@ class JugeCRUDController extends Controller
     if(!isset($request['model']) && $request['model'] == ''){
       return response(['code' => 'lc1','text' => 'no model name'], 512)->header('Content-Type', 'text/plain');
     }
-
+    
     //Get params
     $modelName = $request['model'];
     $userId = Auth::user()->id;
@@ -44,7 +44,7 @@ class JugeCRUDController extends Controller
     $modelKeys = [];
     if(method_exists ( $model , 'jugeGetKeys' )){
       $modelKeys = $model->jugeGetKeys();
-    }   
+    }
     
     //Get user keys
     $userKeys = ListConfig::where('model',$modelName)->where('user_id',$userId)->orderBy('position')->get()->toArray();

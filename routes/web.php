@@ -1032,6 +1032,11 @@ Route::group(['middleware' => ['HttpsRR'
         Route::put('/bonus/add', 'BonusController@add');
       });
 
+      
+      {//Balance
+        Route::put('/balance', 'BalanceController@edit');
+      }
+
       //User
       Route::middleware([])->group(function (){
         Route::get('/login/as/user', 'UserController@loginAsUser');  
@@ -1366,6 +1371,7 @@ Route::group(['middleware' => ['HttpsRR'
       Route::get('/json/deliveries', 'DeliveryController@jsonGet');  
       Route::put('/put/delivery', 'DeliveryController@put');      
       Route::delete('/delivery', 'DeliveryController@delete');
+      Route::delete('/delivery/return', 'DeliveryController@deleteReturn');
 
 
       //Pay

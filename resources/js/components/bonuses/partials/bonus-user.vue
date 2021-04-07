@@ -21,8 +21,15 @@
     </div>
     <!-- Bonus -->
     <div class="mx-3">
-      <div>Доступно бонусов</div>
-      <div> <b>{{user.bonus}}</b> </div>
+      <div>Доступно</div>
+      <div> 
+        <b v-if="isBalance">
+          {{user.balance}}
+        </b> 
+        <b v-else>
+          {{user.bonus}}
+        </b>
+      </div>
     </div>
     <!-- Comments -->
     <!-- <div class="mx-3">
@@ -39,11 +46,16 @@
 
 <script>
 export default {
+props: ['isBalance'],
 data(){return{
   user:false,
 }},
 mounted(){
-  this.$store.dispatch('user/addFilter',{'with_bonus':1});    
+  if(this.isBalance){
+    this.$store.dispatch('user/addFilter',{'with_balance':1});
+  }else{
+    this.$store.dispatch('user/addFilter',{'with_bonus':1});
+  }
 },
 methods:{
   choose(row){

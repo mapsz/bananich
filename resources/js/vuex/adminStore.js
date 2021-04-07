@@ -33,6 +33,7 @@ let logistic = new jugeVuex('logistic');
 let notFound = new jugeVuex('notFound');
 let email = new jugeVuex('email');
 let libra = new jugeVuex('libra',true,true);
+let balance = new jugeVuex('balance',true,true);
 // let user = new jugeVuex('user');
 
 let store = {  
@@ -40,7 +41,7 @@ let store = {
     order,delivery,confirm,report,product,item,supplier,stocktaking,
     purchase,writeoff,statistic,purchasePrice,bonus,user,sms,interview,
     settings,category,orderLimits,page,menu,site,coupon,logistic,notFound,email,
-    libra,sharedOrder,sklad
+    libra,sharedOrder,sklad,balance
   }
 };
 

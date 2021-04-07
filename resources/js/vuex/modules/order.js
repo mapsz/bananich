@@ -19,6 +19,9 @@ order.actions.fetchToConfirm = async ({state,commit})=>{
 order.actions.setReturned = async ({dispatch})=>{
   dispatch('putStatus',100);
 };
+order.actions.cancelReturned = async ({dispatch})=>{
+  dispatch('putStatus',200);
+};
 //Mutations
 order.mutations.mToConfirm = async (state,d) => {return state.toConfirm = d;},
 

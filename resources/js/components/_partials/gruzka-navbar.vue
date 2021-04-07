@@ -1,6 +1,6 @@
 <template>  
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <router-link class="navbar-brand" to="/main">GRUZKA</router-link>
+  <a class="navbar-brand" href="/">👺</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -79,9 +79,13 @@ export default {
         caption:"Водитель",
       },
       {
-        link: this.adminPrefix+"/bonuses",
-        caption:"Бонусы",
+        link: this.adminPrefix+"/balances",
+        caption:"Баланс",
       },
+      // {
+      //   link: this.adminPrefix+"/bonuses",
+      //   caption:"Бонусы",
+      // },
       // {
       //   link: this.adminPrefix+"/interviews",
       //   caption:"Опрос",

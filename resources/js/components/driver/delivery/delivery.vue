@@ -97,8 +97,12 @@
               Заказ Возращен! {{order.statuses[0].pivot.created_at}}
             </span>
             <!-- Cancel -->
-            <span v-if="order.statuses != undefined && (order.statuses[0].id == 1 || order.statuses[0].id == 100)">
+            <span v-if="order.statuses != undefined && (order.statuses[0].id == 1)">
               <button @click="deleteDelivery(order.id)" class="btn btn-outline-danger">Отменить</button>
+            </span>
+            <!-- Cancel -->
+            <span v-if="order.statuses != undefined && (order.statuses[0].id == 100)">
+              <button @click="deleteReturn(order.id)" class="btn btn-outline-danger">Отменить Возврат</button>
             </span>
           </div>
 
@@ -129,7 +133,12 @@ mounted(){
   this.fetchOrder(this.id);
 },
 methods:{
-  ...mapActions({'fetchOrder':'order/fetchOne',deleteDelivery:'deleteDelivery',setOrderReturned:'order/setReturned',}),
+  ...mapActions({
+    fetchOrder:'order/fetchOne',
+    deleteDelivery:'deleteDelivery',
+    setOrderReturned:'order/setReturned',
+    deleteReturn:'order/cancelReturned',
+  }),
   async setDelivered(){
     
     {//Validate Pays

@@ -156,14 +156,15 @@ class DeliveryController extends Controller
 
       //Delete pays
       DB::table('pays')->where('order_id',$orderId)->delete();
-
-      //Get deliveries goods
-      $items = (
-        Item::where('order_id',$orderId)
-          ->with('delivery')
-          ->with('delivery.goods')
-          ->get()
-      );      
+      
+      {//Get deliveries goods
+        $items = (
+          Item::where('order_id',$orderId)
+            ->with('delivery')
+            ->with('delivery.goods')
+            ->get()
+        );
+      }    
 
       //Delete goods/deliveries
       foreach ($items as $item) {
@@ -174,14 +175,16 @@ class DeliveryController extends Controller
           $item->delivery->delete();
         }
       }
-
-      //Set status
-      $order = Order::getWithOptions(['id' => $orderId]);
-      $order->Statuses()->attach(200,['user_id' => Auth::user()->id]);
-
-      //Event      
-      event(new OrderSuccessCancel($orderId));
-      event(new OrderCancelSuccessEvent($order));
+      
+      {//Set status
+        $order = Order::getWithOptions(['id' => $orderId]);
+        $order->Statuses()->attach(200,['user_id' => Auth::user()->id]);          
+      }
+      
+      {//Event
+        event(new OrderSuccessCancel($orderId));
+        event(new OrderCancelSuccessEvent($order));
+      }
 
       //Remove bonus
       if($order->customer_id){
@@ -199,4 +202,6 @@ class DeliveryController extends Controller
     return response()->json(1);
 
   }
+
+  // deleteReturn
 }

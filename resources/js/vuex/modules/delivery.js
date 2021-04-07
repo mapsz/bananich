@@ -47,12 +47,17 @@ let delivery = {
     async deleteReturn({dispatch}, id){
       let r = await ax.fetch('/return/item',{id},'delete');
       dispatch('order/fetchOne');
-    },    
+    },
     async deleteDelivery({dispatch},id){
       let r = await ax.fetch('/delivery',{id},'delete');
       ax.fetch('/order/update/available', {id:id});
       dispatch('order/fetchOne');
     },
+    async deleteReturn({dispatch},id){
+      let r = await ax.fetch('/delivery/return',{id},'delete');
+      dispatch('order/fetchOne');
+    },
+
     async putDelivery(){
       //
     },

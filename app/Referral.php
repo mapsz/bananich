@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Coupon;
 use App\Meta;
+use App\Balance;
 
 class Referral extends Model
 {
@@ -93,12 +94,18 @@ class Referral extends Model
       $q->where('value',$orderId)
         ->where('metable_type', 'App\Referral')
         ->where('name', 'order_id');
-    })
-    ->update(['status' => 1]);
+    })->first();
+    
+    //Edit balance
+    Balance::editBalance($ref->parent_id, $ref->reward, "Реферал: $ref->child_id", false, $orderId);
+
+    //Edit status 
+    $ref->update(['status' => 1]);
 
     return true;
 
   }
+  
   public static function couponCancel($orderId){
 
     $ref = Referral::with('metas')
@@ -106,8 +113,13 @@ class Referral extends Model
       $q->where('value',$orderId)
         ->where('metable_type', 'App\Referral')
         ->where('name', 'order_id');
-    })
-    ->update(['status' => 0]);
+    })->first();
+
+    //Edit balance
+    Balance::editBalance($ref->parent_id, $ref->reward - ($ref->reward*2), "Отмена заказа, реферал: $ref->child_id", false, $orderId);
+
+    //Edit status 
+    $ref->update(['status' => 1]);
 
     return true;
 

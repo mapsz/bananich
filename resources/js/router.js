@@ -291,6 +291,12 @@ let routes = [];
     {path: adminPrefix+'/bonuses',    component:bonuses},
   );
 
+  //Balance
+  import balances from './components/balances/balances.vue';
+  routes.push(
+    {path: adminPrefix+'/balances',    component:balances},
+  );
+
 
   //Confirms
   import confirms from './components/confirm/confirms.vue';
