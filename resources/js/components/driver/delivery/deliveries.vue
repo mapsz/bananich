@@ -31,6 +31,14 @@
       <span v-if="ordersLeft == 0" class="text-success"><b>Все заказы успешны!</b></span>
     </div>
 
+    <!-- Pays -->
+    <div>
+      <div v-for="(pay, index) in pays" :key="index" class="">
+        <span>{{pay.name}}</span>:<span>{{pay.summary}}</span>
+
+      </div>
+    </div>
+
     <!-- List -->
     <juge-list v-if="driverKeys" class="mt-3" :data="'logistic'" :keys="driverKeys"/>
   </div>
@@ -47,9 +55,10 @@ export default {
     showList:false,
     loadData:false,
     byId:null,
+    rawPays:[],
   }},
   computed:{
-    ...mapGetters({orders:'logistic/get',isFetched:'logistic/isFetched'}),
+    ...mapGetters({orders:'logistic/get',isFetched:'logistic/isFetched',getFilters:'logistic/getFilters'}),
     ordersLeft(){
       if(!this.isFetched) return -1;
       if(this.isFetched && this.orders.length == 0) return -2;
@@ -65,6 +74,40 @@ export default {
       if(this.orders.length < 1) return -3;
 
       return this.orders.length - count;
+    },
+    deliveryDateFilter(){
+      if(this.getFilters == undefined || this.getFilters.deliveryDate == undefined) return false;
+      return this.getFilters.deliveryDate;
+    },
+    pays(){
+      if(this.rawPays == undefined || this.rawPays[0] == undefined) return false;
+
+      let methods = [];
+
+      this.rawPays.forEach(pay => {
+        if(methods.find((x) => x.id == pay.pay_method_id) === undefined){
+          let add = pay.method;
+          add.summary = 0;
+          methods.push(add);
+        }
+      });
+
+      this.rawPays.forEach(pay => {
+        let i = methods.findIndex((x) => x.id == pay.pay_method_id);
+        methods[i].summary += parseInt(pay.value);
+      });
+
+      return methods;
+
+    }
+  },
+  watch:{ 
+    deliveryDateFilter:{
+      deep: true,
+      handler(){
+        if(this.getFilters == undefined || this.getFilters.deliveryDate == undefined) return false;
+        this.getPays();
+      }      
     },
   },
   mounted(){
@@ -88,6 +131,9 @@ export default {
     },
     async getDriverKeys(){
       this.driverKeys = await ax.fetch('/driver/logistic/keys');
+    },
+    async getPays(){
+      this.rawPays = await ax.fetch('/pays',{deliveryDate:this.deliveryDateFilter});
     }
   },
 

@@ -95,6 +95,8 @@ class Referral extends Model
         ->where('metable_type', 'App\Referral')
         ->where('name', 'order_id');
     })->first();
+
+    if(!$ref) return false;
     
     //Edit balance
     Balance::editBalance($ref->parent_id, $ref->reward, "Реферал: $ref->child_id", false, $orderId);
@@ -114,6 +116,8 @@ class Referral extends Model
         ->where('metable_type', 'App\Referral')
         ->where('name', 'order_id');
     })->first();
+
+    if(!$ref) return false;
 
     //Edit balance
     Balance::editBalance($ref->parent_id, $ref->reward - ($ref->reward*2), "Отмена заказа, реферал: $ref->child_id", false, $orderId);

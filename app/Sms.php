@@ -499,6 +499,7 @@ class Sms extends Model
 
   //Bonus Notification
   public static function bonusNotification(){
+    return false;
     $bonuses = Bonus::getWithOptions(['soonDie' => 1, 'all_users' => 1,'nousernolive' => 1]);
 
     $soonDays = 3*(24*60*60);

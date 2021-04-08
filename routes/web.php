@@ -1376,6 +1376,9 @@ Route::group(['middleware' => ['HttpsRR'
 
       //Pay
       Route::get('/json/pay/methods', 'PayController@getMethods');
+      Route::get('/pays', 'PayController@get');
+
+
       //Return Item
       Route::put('/return/item', 'ReturnItemController@put');      
       Route::delete('/return/item', 'ReturnItemController@delete');        

@@ -15,7 +15,7 @@ class Balance extends Model
     ['key'    => 'left','label' => 'осталось'],
     ['key'    => 'user.name','label' => 'пользователь','type' => 'link', 'link' => '/admin/user/{user_id}'],
     ['key'    => 'actionUser.name','label' => 'исполнитель'],
-    ['key'    => 'order.id','label' => 'заказ','type' => 'link', 'link' => '/admin/order/{order_id}'],
+    ['key'    => 'order.id','label' => 'заказ'],
     ['key'    => 'comment.body','label' => 'коммент'],
     ['key'    => 'created_at','label' => 'дата'],
   ];

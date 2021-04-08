@@ -24,7 +24,13 @@ class Logistic extends Model
     ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
     ['key'    => 'date', 'label' => 'дата'],     
     ['key'    => 'driver.name', 'label' => 'водила','type' => 'link', 'link' => '/admin/user/{driver_id}'],
-    ['key'    => 'driver_id', 'label' => 'водила id','type' => 'link', 'link' => '/admin/user/{driver_id}'],
+    ['key'    => 'driver_id', 'label' => 'водила id','type' => 'link', 'link' => '/admin/user/{driver_id}'],    
+    [
+      'key'    => 'pays',
+      'label' => 'Оплата',
+      'type' => 'list',
+      'show' => 'value',
+    ],
     [
       'key'    => 'edit-driver', 'label' => 'замена водилы',
       'type' => 'custom',
@@ -47,6 +53,12 @@ class Logistic extends Model
     ['key'    => 'driver.name', 'label' => 'водитель'],
     ['key'    => 'address','label' => 'адрес'],     
     ['key'    => 'plan_arrival_time', 'label' => 'план. время приб.'],    
+    [
+      'key'    => 'order.pays',
+      'label' => 'Оплата',
+      'type' => 'list',
+      'show' => 'value',
+    ],
     ['key'    => 'date', 'label' => 'дата'],
   ];
 
@@ -229,7 +241,8 @@ class Logistic extends Model
     //With
     if('with' == 'with'){
       $query = $query->with('driver');
-      $query = $query->with('order');      
+      $query = $query->with('order');
+      $query = $query->with('order.pays');
       $query = $query->with(['order.statuses' => function($q){
         $q->orderBy('created_at','DESC');
       }]);  
