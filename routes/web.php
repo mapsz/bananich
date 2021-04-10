@@ -948,7 +948,10 @@
   //Logistic
   Route::get('/logistic/daily', function(){echo App\Logistic::daily();});  
   //bonus
-  Route::get('/bonus/die/sms', function(){echo App\Sms::bonusNotification();});
+  Route::get('/bonus/die/sms', function(){
+    // echo App\Sms::membershipNotification();
+    echo App\Sms::bonusNotification();
+  });
 }
 
 //Mail
@@ -969,7 +972,8 @@ Route::get('/mail/preview/{id}', function($id){
 });
 
 
-Route::group(['middleware' => ['HttpsRR'
+Route::group(['middleware' => [
+  'HttpsRR'
   // ,'under-construction'
   ]],function () {
       

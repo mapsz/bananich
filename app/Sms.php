@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\SmsSend;
 use App\Bonus;
+use App\Membership;
+use App\User;
 use Carbon\Carbon;
 
 class Sms extends Model
@@ -589,6 +591,57 @@ class Sms extends Model
     }
 
     
+  }
+
+  //Membership Notification
+  public static function membershipNotification($test = false){
+    
+    {//Get Soon die memberships
+      $expire = now()->add('hours',48);
+      $users = User::whereHas('memberships', function ($q)use($expire){
+        $q->where('expire', '<', $expire)
+          ->where('type', '=', 10);
+      })
+      ->with('memberships')
+      ->get();
+
+    }
+
+    //Make sms
+    $sms = [];
+    foreach ($users as $k => $user) {
+      dump($user->phone);
+      foreach ($user->memberships as $key => $membership) {
+        dump($membership->pivot->expire);
+
+        $body =         
+          "{$user->name}, абонемент всё " .
+          Carbon::parse($membership->pivot->expire)->format('j.m в G:i')        
+        ;
+
+        array_push($sms,
+          [
+            'to' => $user->phone,
+            'body' => $body,
+          ]
+        );
+      }
+      dump('-------');
+    }
+
+    //Add sms
+    foreach ($sms as $key => $v) {
+      if(Sms::where('body', $v['body'])->where('to', $v['to'])->exists()){
+        continue;
+      }
+      
+      if(!$test) self::putSmsToSend(['body'=>$v['body'],'to'=>$v['to']]);      
+
+      dump('add', $v);
+    }
+
+    return true;
+
   }
 
   //Put sms send

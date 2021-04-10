@@ -4,11 +4,13 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\DB;
 
 use App\User;
 use App\Order;
 use App\Setting;
 use App\OrderMeta;
+use App\Membership;
 
 class addOrderMembershipDiscountListener
 {
@@ -31,7 +33,11 @@ class addOrderMembershipDiscountListener
 
       if(!$orderPrice || !$defaultPrice || !isset($orderPrice->value) || $orderPrice->value >= $defaultPrice) return;
 
-      Order::addExtraCharge($order->id, $user->memberships[0]->name, -$user->memberships[0]->value);      
+      Order::addExtraCharge($order->id, $user->memberships[0]->name, -$user->memberships[0]->value);    
+           
+      //Detach membership
+      DB::table("user_membership")->where('user_id', $order->customer_id)->where('membership_id', $user->memberships[0]->id)->delete();
+
 
     }
 }

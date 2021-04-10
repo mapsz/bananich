@@ -282,7 +282,7 @@ class Order extends Model
       $rDate = Polygon::getPrices($polygons, $rDate);
     }
     
-    {//Membership    
+    {//Membership
       {//user
         $userId = Auth::user() ? Auth::user()->id : 0;
         if($userId && is_array($polygons) && $cart['type'] == 2){
