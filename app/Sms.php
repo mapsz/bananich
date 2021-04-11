@@ -614,9 +614,10 @@ class Sms extends Model
       foreach ($user->memberships as $key => $membership) {
         dump($membership->pivot->expire);
 
-        $body =         
-          "{$user->name}, абонемент всё " .
-          Carbon::parse($membership->pivot->expire)->format('j.m в G:i')        
+        $body =
+          "Напоминаем вам успеть оформить заказ на neolavka.ru до " .
+          Carbon::parse($membership->pivot->expire)->format('j.m G:i') .
+          " чтобы ваш сервисный сбор был 200 рублей вместо 300😊"               
         ;
 
         array_push($sms,
