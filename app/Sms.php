@@ -611,13 +611,13 @@ class Sms extends Model
     $sms = [];
     foreach ($users as $k => $user) {
       dump($user->phone);
-      foreach ($user->memberships as $key => $membership) {
-        dump($membership->pivot->expire);
+      if(isset($user->memberships) && isset($user->memberships[0])){
+        dump($membership[0]->pivot->expire);
 
         $body =
           "Напоминаем вам успеть оформить заказ на neolavka.ru до " .
-          Carbon::parse($membership->pivot->expire)->format('j.m G:i') .
-          " чтобы ваш сервисный сбор был 200 рублей вместо 300😊"               
+          Carbon::parse($membership[0]->pivot->expire)->format('j.m G:i') .
+          " чтобы ваш сервисный сбор был 200 рублей вместо 300😊"
         ;
 
         array_push($sms,
@@ -627,7 +627,7 @@ class Sms extends Model
           ]
         );
       }
-      dump('-------');
+      dump('-------');      
     }
 
     //Add sms
