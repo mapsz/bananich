@@ -604,7 +604,7 @@ class Sms extends Model
       })
       ->with(['memberships' => function ($q)use($expire){
         $q->where('expire', '<', $expire)
-          ->where('type', 10)
+          ->where('type',  10)
           ->orderBy('user_membership.id', 'DESC')
           ->first();
       }])
@@ -618,6 +618,7 @@ class Sms extends Model
     $sms = [];
     foreach ($users as $k => $user) {
       dump($user->phone);
+      dump(count($user->memberships));
       foreach ($user->memberships as $key => $membership) {
         dump($membership->pivot->expire);
 
