@@ -602,7 +602,12 @@ class Sms extends Model
         $q->where('expire', '<', $expire)
           ->where('type', '=', 10);
       })
-      ->with('memberships')
+      ->with('memberships', function ($q)use($expire){
+        $q->where('expire', '<', $expire)
+          ->where('type', '=', 10)
+          ->orderBy('created_at', 'DESC')
+          ->first();
+      })
       ->get();
 
     }
@@ -611,12 +616,12 @@ class Sms extends Model
     $sms = [];
     foreach ($users as $k => $user) {
       dump($user->phone);
-      if(isset($user->memberships) && isset($user->memberships[0])){
-        dump($membership[0]->pivot->expire);
+      foreach ($user->memberships as $key => $membership) {
+        dump($membership->pivot->expire);
 
         $body =
           "Напоминаем вам успеть оформить заказ на neolavka.ru до " .
-          Carbon::parse($membership[0]->pivot->expire)->format('j.m G:i') .
+          Carbon::parse($membership->pivot->expire)->format('j.m G:i') .
           " чтобы ваш сервисный сбор был 200 рублей вместо 300😊"
         ;
 
@@ -627,7 +632,7 @@ class Sms extends Model
           ]
         );
       }
-      dump('-------');      
+      dump('-------');
     }
 
     //Add sms
