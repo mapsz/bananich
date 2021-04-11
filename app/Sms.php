@@ -600,17 +600,19 @@ class Sms extends Model
       $expire = now()->add('hours',48);
       $users = User::whereHas('memberships', function ($q)use($expire){
         $q->where('expire', '<', $expire)
-          ->where('type', '=', 10);
+          ->where('type',  10);
       })
       ->with(['memberships' => function ($q)use($expire){
         $q->where('expire', '<', $expire)
-          ->where('type', '=', 10)
+          ->where('type', 10)
           ->orderBy('user_membership.id', 'DESC')
           ->first();
       }])
       ->get();
-
     }
+
+    dump("to expire {$expire}");
+
 
     //Make sms
     $sms = [];
@@ -635,6 +637,7 @@ class Sms extends Model
       dump('-------');
     }
 
+    dump("=========");
     //Add sms
     foreach ($sms as $key => $v) {
       if(Sms::where('body', $v['body'])->where('to', $v['to'])->exists()){
@@ -644,6 +647,7 @@ class Sms extends Model
       if(!$test) self::putSmsToSend(['body'=>$v['body'],'to'=>$v['to']]);      
 
       dump('add', $v);
+      dump('-------');
     }
 
     return true;
