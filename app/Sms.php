@@ -602,12 +602,12 @@ class Sms extends Model
         $q->where('expire', '<', $expire)
           ->where('type', '=', 10);
       })
-      ->with('memberships', function ($q)use($expire){
+      ->with(['memberships' => function ($q)use($expire){
         $q->where('expire', '<', $expire)
           ->where('type', '=', 10)
           ->orderBy('created_at', 'DESC')
           ->first();
-      })
+      }])
       ->get();
 
     }
