@@ -603,9 +603,7 @@ class Sms extends Model
           ->where('type',  10);
       })
       ->with(['memberships' => function ($q)use($expire){
-        $q->where('expire', '<', $expire)
-          ->where('type',  10)
-          ->orderBy('user_membership.id', 'DESC')
+        $q->where('type',  10)
           ->first();
       }])
       ->get();
