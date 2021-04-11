@@ -641,7 +641,9 @@ class Sms extends Model
 
     //Add sms
     foreach ($sms as $key => $v) {
-      if(Sms::where('body', $v['body'])->where('to', $v['to'])->exists()){
+      if(Sms::where('body', $v['body'])->where('to', $v['to'])->exists()){      
+        dump('exists');
+        dump('-------');
         continue;
       }
       

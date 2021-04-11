@@ -957,15 +957,15 @@
 //Mail
 Route::get('/mail/preview/{id}', function($id){
 
-  // $user = App\User::find(751);
-  // $email = App\Email::jugeGet(['id'=>$id]);
-  // $html = App\Email::customTags($email->html,$user);
+  $user = App\User::find(751);
+  $email = App\Email::jugeGet(['id'=>$id]);
+  $html = App\Email::customTags($email->html,$user);
 
   
-  // return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
+  return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
 
-  $order = App\Order::jugeGet(['id' => $id]);
-  $order['container'] = 0;
+  // $order = App\Order::jugeGet(['id' => $id]);
+  // $order['container'] = 0;
 
 
   return view('mail.mailOrder', ['order' => $order, 'site' => 'x']);
