@@ -317,6 +317,9 @@ class User extends Authenticatable
       ->orderBy('expire','DESC')
       ->withPivot('expire','id');
   }
+  public function rawMemberships(){
+    return $this->belongsToMany('App\Membership','user_membership','user_id','membership_id');
+  }
   public function comment(){
     return $this->hasOne('App\UserComment');
   }

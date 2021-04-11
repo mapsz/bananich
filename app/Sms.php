@@ -596,47 +596,49 @@ class Sms extends Model
   //Membership Notification
   public static function membershipNotification($test = false){
     
-    {//Get Soon die memberships
-      $expire = now()->add('hours',48);
-      $users = User::whereHas('memberships', function ($q)use($expire){
-        $q->where('expire', '<', $expire)
-          ->where('type',  10);
-      })
-      ->with(['memberships' => function ($q)use($expire){
-        $q->where('type',  10)
-          ->first();
-      }])
+    // {//Get Soon die memberships users
+    //   $expire = now()->add('hours',48);
+    //   $users = User::whereHas('memberships', function ($q)use($expire){
+    //     $q->where('expire', '<', $expire)
+    //       ->where('type',  10);
+    //   })
+    //   ->get();
+    // }
+
+    // foreach ($users as $key => $user) {
+    //   # code...
+    // }
+
+    $expire = now()->add('hours',48);
+    $memberships = DB::table('user_membership')
+      ->where('expire', ">", now())
+      ->where('expire', '<', $expire)
+      ->join('users', 'user_membership.user_id', '=', 'users.id')
+      ->orderBy('expire','DESC')
       ->get();
-    }
 
     dump("to expire {$expire}");
 
-
-    //Make sms
     $sms = [];
-    foreach ($users as $k => $user) {
-      dump($user->phone);
-      dump(count($user->memberships));
-      foreach ($user->memberships as $key => $membership) {
-        dump($membership->pivot->expire);
-
-        $body =
-          "Напоминаем вам успеть оформить заказ на neolavka.ru до " .
-          Carbon::parse($membership->pivot->expire)->format('j.m G:i') .
-          " чтобы ваш сервисный сбор был 200 рублей вместо 300😊"
-        ;
-
-        array_push($sms,
-          [
-            'to' => $user->phone,
-            'body' => $body,
-          ]
-        );
-      }
+    foreach ($memberships as $key => $membership) {      
+      dump($membership->phone);
+      dump($membership->expire);        
+      $body =
+        "Напоминаем вам успеть оформить заказ на neolavka.ru до " .
+        Carbon::parse($membership->expire)->format('j.m G:i') .
+        " чтобы ваш сервисный сбор был 200 рублей вместо 300😊"
+      ;
+      array_push($sms,
+        [
+          'to' => $membership->phone,
+          'body' => $body,
+        ]
+      );
       dump('-------');
     }
 
     dump("=========");
+
     //Add sms
     foreach ($sms as $key => $v) {
       if(Sms::where('body', $v['body'])->where('to', $v['to'])->exists()){
