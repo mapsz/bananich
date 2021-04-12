@@ -40,7 +40,7 @@ class PriceList extends Model{
     }
 
     {// Creating categories array (https://yandex.ru/support/webmaster/goods-prices/technical-requirements.xml#categories)
-        $dbCategories = \App\Category::jugeGet(['menu' => 1]);
+        $dbCategories = \App\Category::jugeGet();
 
         $categories = [];
         foreach ($dbCategories as $key => $dCategory) {
