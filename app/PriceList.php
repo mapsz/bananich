@@ -98,7 +98,7 @@ class PriceList extends Model{
         $deliveries
     );
 
-    $file = 'filename';
+    // $file = 'filename';
     file_put_contents($file,str_replace('categoryId_to_rework','categoryId',file_get_contents($file)));
    
     return $file;
