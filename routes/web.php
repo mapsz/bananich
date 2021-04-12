@@ -939,6 +939,11 @@
   });
 }
 
+
+{// Prise List
+  Route::get('/price/list/yandex',    'PriceListController@getYandex');
+}
+
 {//Sklad
   Route::get('/dalks',    'SkladController@outTask');
   Route::get('/dalks/q',  'SkladController@inTask');

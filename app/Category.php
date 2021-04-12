@@ -76,7 +76,7 @@ class Category extends Model
   //JugeCRUD  
   public function jugeGetInputs()   {return $this->inputs;}    
   public function jugeGetKeys()     {return $this->keys;} 
-  public static function jugeGet($request) {
+  public static function jugeGet($request = false) {
       
     $query = new Category;
 

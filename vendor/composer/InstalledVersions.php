@@ -19,11 +19,20 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '2693a7c606c6e3e8bc11d2314595171d135b9733',
+    'reference' => 'd3bc31680e36ba1a3c6ca2803313f70405005765',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
   array (
+    'bukashk0zzz/yml-generator' => 
+    array (
+      'pretty_version' => 'v1.11.5',
+      'version' => '1.11.5.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '49c05290076d8218f2d063f7d4e8db58f167f5b6',
+    ),
     'cordoval/hamcrest-php' => 
     array (
       'replaced' => 
@@ -437,7 +446,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '2693a7c606c6e3e8bc11d2314595171d135b9733',
+      'reference' => 'd3bc31680e36ba1a3c6ca2803313f70405005765',
     ),
     'laravel/tinker' => 
     array (
