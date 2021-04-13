@@ -1336,7 +1336,7 @@ class Order extends Model
             $sort = $order->items->toArray();
             //Add existless priority
             foreach ($sort as $k => $v) {
-              $sort[$k] = isset($v['gruzka_priority']) ? $v['gruzka_priority'] : 1;
+              $sort[$k]['gruzka_priority'] = isset($v['gruzka_priority']) ? $v['gruzka_priority'] : 1;
             }
             //Sort
             usort($sort, function($a, $b){

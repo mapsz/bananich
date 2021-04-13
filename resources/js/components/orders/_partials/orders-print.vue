@@ -50,14 +50,35 @@
                         v-for="item in order.items" 
                         :key="item.id" 
                       >
-                        <td >{{item.product_id}}</td>
-                        <td :colspan="order.type != 'x' ? '' : '3'">{{item.name}}</td>
-                        <td >{{r(item.price_one)}}</td>
-                        <td >{{r3(item.quantity_result)}}</td>
-                        <td v-if="order.type != 'x'">{{r(item.price_final_result) + (item.discount_final_result != undefined ? r(item.discount_final_result) : 0)}}</td>                      
-                        <td v-if="order.type != 'x'">{{r(item.discount_final_result != undefined ? item.discount_final_result : 0)}}</td>                      
-                        <td >{{r(item.price_final_result)}}</td>                      
+                        <!-- Termo -->
+                        <template v-if="item.termobox">
+                          <td >{{item.product_id}} 🧊</td>
+                          <td :colspan="order.type != 'x' ? '' : '3'">{{item.name}}</td>
+                          <td >{{r(item.price_one)}}</td>
+                          <td >{{r3(item.quantity_result)}}</td>
+                          <td v-if="order.type != 'x'">{{r(item.price_final_result) + (item.discount_final_result != undefined ? r(item.discount_final_result) : 0)}}</td>                      
+                          <td v-if="order.type != 'x'">{{r(item.discount_final_result != undefined ? item.discount_final_result : 0)}}</td>                      
+                          <td >{{r(item.price_final_result)}}</td>
+                        </template>                    
+                      </tr>                      
+                      <tr 
+                        class="p-1 item-data"
+                        v-show="item.quantity_result > 0" 
+                        v-for="item in order.items" 
+                        :key="item.id" 
+                      >
+                        <!-- No termo -->
+                        <template v-if="!item.termobox">
+                          <td >{{item.product_id}}</td>
+                          <td :colspan="order.type != 'x' ? '' : '3'">{{item.name}}</td>
+                          <td >{{r(item.price_one)}}</td>
+                          <td >{{r3(item.quantity_result)}}</td>
+                          <td v-if="order.type != 'x'">{{r(item.price_final_result) + (item.discount_final_result != undefined ? r(item.discount_final_result) : 0)}}</td>                      
+                          <td v-if="order.type != 'x'">{{r(item.discount_final_result != undefined ? item.discount_final_result : 0)}}</td>                      
+                          <td >{{r(item.price_final_result)}}</td>
+                        </template>
                       </tr>
+
                     </tbody>
                     <tfoot class="checkout">
                       
