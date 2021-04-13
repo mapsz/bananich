@@ -1330,12 +1330,19 @@ class Order extends Model
               } 
             }            
           }
-          
-          //Sort gruzka priority
-          $sort = $order->items->toArray();
-          usort($sort, function($a, $b){
-            return $a['gruzka_priority'] <=> $b['gruzka_priority'];
-          });
+                    
+          {//Sort gruzka priority
+            //Get sort
+            $sort = $order->items->toArray();
+            //Add existless priority
+            foreach ($sort as $k => $v) {
+              $sort[$k] = isset($v['gruzka_priority']) ? $v['gruzka_priority'] : 1;
+            }
+            //Sort
+            usort($sort, function($a, $b){
+              return $a['gruzka_priority'] <=> $b['gruzka_priority'];
+            });
+          }
 
           //Attach sortet items
           $order->unsetRelation('items');

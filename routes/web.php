@@ -1226,6 +1226,9 @@ Route::group(['middleware' => [
 
     //All
     Route::group(['middleware' => []], function (){
+
+      // Balance      
+      Route::get('/balance/current/user', 'BalanceController@currentUserBalance');
       
       //Polygons
       Route::get('/polygons', 'PolygonController@get');

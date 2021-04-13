@@ -19,13 +19,13 @@ class addOrderMembershipDiscountListener
       $order = $event->order;
 
       //No user
-      if($order->customer_id == 0) return false;
+      if($order->customer_id == 0) return;
 
       //Get user
       $user = User::jugeGet(['id' => $order->customer_id]);
 
       //No membership
-      if(!isset($user->memberships) || !isset($user->memberships[0])) return false;
+      if(!isset($user->memberships) || !isset($user->memberships[0])) return;
 
       //Check price
       $defaultPrice = (new Setting)->getList(1)['x_order_price'];

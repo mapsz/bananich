@@ -31,15 +31,27 @@
               </ul>
             </p>
             
-            <p style="font-size:12pt">
-              <b>Ваш текущий баланс баллов : {{balance}}</b> 
-            </p>
+            <div class="mt-3 d-flex" style="align-items: center; font-size:12pt;">
+              <div>                
+                <b>Ваш текущий баланс баллов : {{balance}}</b>  
+              </div>             
+              <div>
+                <span @click="showPopup=true" class="ml-2 info-icon info-icon-sm info-icon-success" style="color: black;cursor:pointer;"></span>
+              </div>
+            </div>
 
           </div>
         </div>
 
       </div>
     </div>
+
+
+  <!-- About no Container -->
+  <x-popup :title="''" :active="showPopup" @close="showPopup=false" id="membership-coupon-info-modal">
+    Для участия в реферальной программе запросите любым удобным вам способом ( в соц сетях, или по телефону) генерацию вашего личного промокода на первую бесплатную доставку, которым вы сможете делиться со своими друзьями. Мы привяжем его к вашему аккаунту, и за каждого приведенного вами клиента вы будете получать бонусные баллы, которыми можно будет оплачивать покупки на нашем сайте.
+  </x-popup> 
+
 </div>
 </template>
 
@@ -47,6 +59,7 @@
 export default {
 data(){return{
   balance:0,
+  showPopup:false,
 }},
 async mounted() {
   this.getBalance();

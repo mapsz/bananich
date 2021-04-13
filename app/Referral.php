@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Coupon;
 use App\Meta;
 use App\Balance;
+use App\Order;
 
 class Referral extends Model
 {
@@ -99,7 +100,8 @@ class Referral extends Model
     if(!$ref) return false;
     
     //Edit balance
-    Balance::editBalance($ref->parent_id, $ref->reward, "Реферал: $ref->child_id", false, $orderId);
+    $child = $ref->child_id == 0 ? 'н.'.Order::jugeGet(['id' => $orderId])->phone : 'id.'.$ref->child_id;
+    Balance::editBalance($ref->parent_id, $ref->reward, "Реферал: $child"  , false, $orderId);
 
     //Edit status 
     $ref->update(['status' => 1]);
@@ -120,7 +122,8 @@ class Referral extends Model
     if(!$ref) return false;
 
     //Edit balance
-    Balance::editBalance($ref->parent_id, $ref->reward - ($ref->reward*2), "Отмена заказа, реферал: $ref->child_id", false, $orderId);
+    $child = $ref->child_id == 0 ? 'н.'.Order::jugeGet(['id' => $orderId])->phone : 'id.'.$ref->child_id;
+    Balance::editBalance($ref->parent_id, $ref->reward - ($ref->reward*2), "Отмена заказа, реферал: $child", false, $orderId);
 
     //Edit status 
     $ref->update(['status' => 1]);

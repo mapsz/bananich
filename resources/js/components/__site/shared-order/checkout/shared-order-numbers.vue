@@ -37,9 +37,15 @@
         <span>{{cart.coupon.code}}</span>
         <b>{{cart.coupon.discount-(cart.coupon.discount*2)}} р</b>
       </div>
+      <!-- Balace -->
+      <div v-if="balanceToUse" class="d-flex justify-content-between">
+        <span>Баланс</span>
+        <b>{{balanceToUse}} р</b>
+      </div>
+
 
       <!-- Saved -->
-      <div v-if="saved > 0"class="d-flex justify-content-between mt-3">
+      <div v-if="saved > 0" class="d-flex justify-content-between mt-3">
         <span><b>ВАША ЭКОНОМИЯ</b>
         </span><b>{{saved}} p</b>
       </div>
@@ -58,14 +64,17 @@
 <script>
 import {mapGetters,mapActions} from 'vuex';
 export default {
+  data(){return{
+    balance:0,
+  }},
   computed:{
     ...mapGetters({
-      cart:'cart/getCart',
-      checkout: 'checkout/get',
-      order:'sharedOrder/getOrder',
+      cart:       'cart/getCart',
+      checkout:   'checkout/get',
+      order:      'sharedOrder/getOrder',
       settings:   'settings/beautyGet',
     }), 
-    saved(){      
+    saved(){
       if(!this.cart || this.cart.xData == undefined || this.cart.xData.saved == undefined) return false;
       return this.cart.xData.saved;
     },
@@ -96,7 +105,26 @@ export default {
     },
     final_summ_x(){
       if(!this.cart || this.cart.final_summ_x == undefined) return false;
-      return this.cart.final_summ_x + (this.$route.name == 'soloCheckout' ? this.participation_price : 0);
+      return this.cart.final_summ_x + this.balanceToUse;
+    },
+    balanceToUse(){
+      if(!this.balance) return 0;
+      if(!this.cart || this.cart.final_summ_x == undefined) return false;
+
+      let toUse = this.balance;
+      if(this.cart.final_summ_x < this.balance) toUse = this.cart.final_summ_x;
+      toUse-=toUse*2;
+
+      return toUse;
+    }
+  },
+  async mounted() {
+    this.getBalance();
+  },
+  methods:{
+    async getBalance(){
+      let r = await ax.fetch('/balance/current/user');
+      this.balance = r;
     }
   },
 }

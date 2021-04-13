@@ -9,6 +9,16 @@ use App\Balance;
 
 class BalanceController extends Controller
 {
+  public function currentUserBalance(){
+
+    $user = Auth::User();
+    $userId = $user ? $user->id : 0;
+
+    if($userId == 0) return response()->json(0);
+
+    return response()->json(Balance::left($userId));
+  }
+
   public function edit(Request $request){    
     //Validate
     Validator::make($request->all(), [

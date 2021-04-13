@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Meta;
+use App\Order;
 
 class Balance extends Model
 {
@@ -62,7 +63,32 @@ class Balance extends Model
 
   }
 
+  public static function applyBalanceToOrder($orderId){
 
+    //Get order
+    $order = Order::jugeGet(['id' => $orderId]);
+    if($order->customer_id == 0) return false;
+
+    //Get balance left
+    $left = Balance::left($order->customer_id);
+    if($left < 1) return false;
+        
+    {//Set apply quantity
+      $applyQuantity = $left;
+      if($left > $order->total) $applyQuantity = $order->total;
+      $applyQuantity -= $applyQuantity*2;
+    }
+
+    //Edit balance
+    Balance::editBalance($order->customer_id, $applyQuantity, "Заказ №$order->id", false, $order->id);
+
+    //Apply balance to order
+    Order::addExtraCharge($order->id, 'Баланс', $applyQuantity);
+
+  }
+
+
+  public function jugeGetKeys()     {return $this->keys;}  
   public static function jugeGet($request = []) {
     //Model
     $query = new self;
@@ -123,8 +149,6 @@ class Balance extends Model
     //Return
     return $data;
   }
-
-  public function jugeGetKeys()     {return $this->keys;}  
 
 
 
