@@ -414,10 +414,10 @@ class User extends Authenticatable
   // LEFT JOIN (
   // 	SELECT id, customer_id, delivery_date,address FROM (
   // 		SELECT ol.id, customer_id, delivery_date, address FROM orders ol
-  		// INNER JOIN (
-  		// 	SELECT * FROM order_order_status
-  		// 	WHERE order_status_id = 1
-  		// )os
+  // 		INNER JOIN (
+  // 			SELECT * FROM order_order_status
+  // 			WHERE order_status_id = 1
+  // 		)os
   // 		ON ol.id = os.order_id
   // 		ORDER BY ol.id desc
   // 	) oz
