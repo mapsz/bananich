@@ -13,6 +13,15 @@ class SmsController extends Controller
 
     if(now()->hour > 20 || now()->hour < 10) return response()->json(0);
 
+    $currentCluster = intval(now()->hour) / 6;
+
+    $from = now()->format('Y-m-d') .' '. $currentCluster * 6 . ':00:00';
+    $to   = now()->format('Y-m-d') .' '. ((($currentCluster+1) * 6)-1) . ':59:59';
+
+    $smsSend = SmsSend::where('send', '>', $from)->where('send', '<', $to)->count();
+
+    if($smsSend > 20)  return response()->json(0);
+
 
     $toSend = SmsSend::with('sms')
                       ->whereNull('send')

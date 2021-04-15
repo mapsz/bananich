@@ -378,6 +378,8 @@ class User extends Authenticatable
 
 }
 
+
+
 {
   // SELECT u.`id`,`email`,`phone`, `name`,b.`left`,delivery_date,`comment`,oc.`count`,address FROM users u
   // /* Order Count*/
