@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Meta;
 use App\UserAddress;
 use App\UserComment;
 use App\FileUpload;
@@ -240,7 +241,25 @@ class UserController extends Controller
   }
 
   public function getAddresses(){
-    return response()->json(Address::where('addressable_type', 'session')->where('addressable_id', session()->getId())->get());
+    $addresses = Address::where('addressable_type', 'session')->where('addressable_id', session()->getId())->get();
+
+    if(!$addresses) return response()->json($address);
+    
+    //Manual
+    foreach ($addresses as $k => $address) {
+      if(
+        isset($address['manual']) && isset($address['manual'][0]) &&
+        $address['manual'][0] == true
+      ){
+        unset($addresses[$k]['manual']);
+        $addresses[$k]['manual'] = true;
+      }else{
+        unset($addresses[$k]['manual']);
+        $addresses[$k]['manual'] = false;
+      }
+    }
+
+    return response()->json($addresses);
   }
 
   // public function postAddress(Request $request){

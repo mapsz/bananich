@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="row">
+  <div v-if="!manual" class="row">
     <!-- Delivery Date -->
     <div class="col-lg-6">
       <div class="checkout-title">Дата доставки</div>
@@ -19,16 +19,24 @@
       />
     </div>        
   </div>
+  <div v-else class="row">
+    <div class="col-12">
+      <div class="checkout-title">Дата и время доставки</div>
+      <div>
+        C вами свяжется оператор для согласования даты и времени доставки.
+      </div>      
+    </div>      
+  </div>
 </div>  
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
 export default {  
-  props: ['polygons'],
+  props: ['polygons','manual'],
   data(){return{
     day:false,
-    time:false,    
+    time:false,
   }},
   computed:{
     ...mapGetters({

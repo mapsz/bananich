@@ -25,7 +25,8 @@ window.ax = new ax;
 
 //Juge load
 import load from './juge/juge-loader.js';
-window.load = new load;
+if(isX){window.load = new load('#8ac2a73b','/image/neo-loader.png');}else{window.load = new load();}
+
 
 //Moment
 import moment from 'moment';

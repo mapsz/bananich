@@ -1,7 +1,8 @@
 class jugeLoader{
 
-  constructor(color = '#fff6003b;') {
+  constructor(color = '#fff6003b;', image = false) {
     this.color = color;
+    this.image = image;
     this.activeLoaders = [];
   }
 
@@ -10,9 +11,11 @@ class jugeLoader{
     //Make dom
     let dom = this.appendDom(id,container);
     // Keep sizing
-    let sizing = this.keepSizing(dom,container,id);    
+    let sizing = this.keepSizing(dom,container,id);
+    // Keep sizing
+    let one = this.keepOne(id);
     // Push loader 
-    this.activeLoaders.push({id,dom,sizing});
+    this.activeLoaders.push({id,dom,sizing,one});
     
     return id;
   }
@@ -20,10 +23,14 @@ class jugeLoader{
   stop(id){
     //Get loader
     let i = this.activeLoaders.findIndex(x => x.id == id);
+    if(i == -1) return;
     let loader = this.activeLoaders[i];
 
     //stop sizing
-    this.stopSizing(loader.sizing);
+    this.stopKeep(loader.sizing);
+
+    //stop one
+    this.stopKeep(loader.one);
 
     //Remove dom
     loader.dom.remove();
@@ -59,10 +66,29 @@ class jugeLoader{
       bottom: $(container).css('padding-bottom'),
       left:   $(container).css('padding-left'),
     } 
-  
+
+    //Append loader
+
+    let imageDom = !this.image ? '' : ''+
+      '<div '+
+        'style="'+
+          'animation: spin 1.5s;'+
+          'animation-iteration-count: infinite;'+
+          'position: absolute;'+
+          'top: 50%;'+
+          'left: 50%;'+
+          'margin-top: -100px;'+
+          'margin-left: -100px;'+
+        '"'+
+      '>'+
+        '<img src="'+this.image+'">'+
+      '</div>'
+    ;
+
+
     $(container).append(''+
       '<div '+ 
-        'class="juge-loader" '+
+        'class="juge-loader d-none" '+
         'data-id="'+id+'"'+
         'style="'+
           'cursor: wait;'+
@@ -74,7 +100,15 @@ class jugeLoader{
           'background-color:'+this.color+';'+
           'z-index: 99999;'+
         '"'+
-      '></div>'
+      '>'+
+        imageDom +       
+        '<style>'+      
+          '@keyframes spin { '+
+            'from {transform:rotate(0deg);}'+
+            'to {transform:rotate(360deg);}'+
+          '}'+
+        '</style>'+
+      '</div>'
     );
 
     return $('.juge-loader[data-id="'+id+'"]')
@@ -82,17 +116,24 @@ class jugeLoader{
 
   keepSizing(dom,container,id){
     return setInterval(()=>{
+      // console.log(id);
       dom.height($(container).outerHeight()); 
       dom.width($(container).outerWidth()); 
     }, 500);
   }
 
-  stopSizing(id){
-    clearInterval(id);    
+  keepOne(id){
+    return setInterval(()=>{
+      if($('.juge-loader.d-block').length == 0){
+        $('.juge-loader[data-id='+id+']').removeClass('d-none').addClass('d-block');
+      };
+    }, 100);
+
   }
 
-
-
+  stopKeep(intervalId){
+    clearInterval(intervalId);    
+  }
 
 }
 

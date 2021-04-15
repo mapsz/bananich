@@ -1,6 +1,6 @@
 <template>  
   <div style="display:block!important">
-    <input id="address-decoder-suggest-input" type="text" style="width:100%">
+    <input v-model="inputString" id="address-decoder-suggest-input" type="text" style="width:100%">
   </div>
 </template>
 
@@ -9,10 +9,63 @@ export default {
 model: {prop:'hidden', event:'blur'},
 props: ['search'],
 data(){return{
+  //Input string
+  inputString:null,
+  typeAttempts:0,
+  startAttempTime:null,
+  userFailed:null,
+
   input:null,
   geo:null,
   address: null,
+  loading:false,
+  geoDecoderFailed:false,
+  startYmapsLoadingTime:null,
+  
 }},
+computed:{
+  preList(){
+    let input = this.input;
+    if(!input || input.state == undefined || input.state._data == undefined || input.state._data.items == undefined || input.state._data.items[0] == undefined) return [];
+    return input.state._data.items;
+  },
+  geoObject(){
+    let geo = this.geo;
+    if(
+      !geo || 
+      geo.featureMember == undefined ||
+      geo.featureMember[0] == undefined ||
+      geo.featureMember[0] == undefined ||
+      geo.featureMember[0].GeoObject == undefined    
+    ) return false;
+
+    return geo.featureMember[0].GeoObject;
+  },
+  streetHouse(){
+    let geoObject = this.geoObject;
+    if(!geoObject) return -1;
+    if(
+      !geoObject.metaDataProperty == undefined || 
+      geoObject.metaDataProperty.GeocoderMetaData == undefined || 
+      geoObject.metaDataProperty.GeocoderMetaData.Address == undefined || 
+      geoObject.metaDataProperty.GeocoderMetaData.Address.Components == undefined ||
+      geoObject.metaDataProperty.GeocoderMetaData.Address.Components[0] == undefined
+    ) return -2;
+
+    let comments = geoObject.metaDataProperty.GeocoderMetaData.Address.Components;
+
+    //Take street house
+    let street = false;
+    let house = false;
+    comments.forEach(component => {
+      if (component.kind == 'house')      house = component.name;
+      if (component.kind == 'district')   street = component.name;
+      if (component.kind == 'street')     street = component.name;
+    });
+
+    return {street,house};
+  }
+},
 watch:{
   geo: function (val, oldVal) {
     this.$emit('blur', val);
@@ -21,6 +74,34 @@ watch:{
     if(!val) return false;
     this.geoDecoder(val);
   },
+  geoDecoderFailed: function(val){
+    if(val){
+      this.$emit('geo-decoder-failed');
+      load.stop(this.loading);
+    }
+  },
+  userFailed: function(val){
+    if(val){
+      this.$emit('user-failed');
+      load.stop(this.loading);
+    }
+  },
+  inputString:function(val, oldVal){
+    //Set attemps
+    if(1){
+      //By time
+      if(this.startAttempTime == null){
+        this.startAttempTime = Date.now();
+        this.attempTimeout();
+      } 
+
+      //By types
+      this.typeAttempts++
+      if(this.typeAttempts > 100){
+        this.userFailed = true;
+      }
+    }
+  }
 },
 async mounted() {
   // Include yandex maps
@@ -31,6 +112,7 @@ async mounted() {
   }
 
   //Init
+  this.loading = load.start();
   await this.waitInit();
 
   //Preset
@@ -40,6 +122,14 @@ async mounted() {
 },
 methods:{
   async waitInit(){
+    //Check loading
+    if(this.startYmapsLoadingTime == null) this.startYmapsLoadingTime = Date.now();
+    let loadingTime = parseInt((Date.now() - this.startYmapsLoadingTime) / 1000);
+    if(loadingTime > 30){
+      this.geoDecoderFailed = true;
+      return false;  
+    }
+
     //Wait load    
     if('ymaps' in window && ymaps){
       //Init
@@ -62,6 +152,7 @@ methods:{
       await this.geoDecoder(this.address);
     });
 
+    load.stop(this.loading);
     return true;
   },
   async geoDecoder(address){
@@ -90,11 +181,17 @@ methods:{
 
     return false;
   },  
-  async sleep(ms) {
+  async sleep(ms){
     return new Promise(resolve => {
       setTimeout(resolve, ms);
     });
   },
+  attempTimeout(){
+    setTimeout(()=>{
+      this.userFailed = true;
+    }, 3000);
+  }
+
 },
 }
 </script>

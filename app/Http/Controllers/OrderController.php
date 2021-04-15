@@ -65,6 +65,7 @@ class OrderController extends Controller
 
   public function put(Request $request){    
 
+
     
     JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
     
@@ -74,7 +75,7 @@ class OrderController extends Controller
       $userId = $user ? $user->id : 0;
       //Get data
       $data = $request->all();
-      $polygons = isset($data['polygons']) ? $data['polygons'] : false;
+      $polygons = isset($data['polygons']) ? $data['polygons'] : false;      
       $data = $data['data'];
       //Get Cart
       if($request->type == 'x'){
@@ -88,6 +89,12 @@ class OrderController extends Controller
       $site = false;
       if(strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false){
         $site = 'x';
+      }
+      //Manual Address      
+      $manualAddress = isset($request->manualAddress) ? $request->manualAddress : false;
+      if($manualAddress){
+        unset($data['deliveryDate']);
+        unset($data['deliveryTime']);
       }
 
 
@@ -172,7 +179,15 @@ class OrderController extends Controller
           $validate['toOtherName'] = ['required', 'string', 'max:190'];
           $validate['toOtherPhone'] = ['required', 'regex:/^8(\d){10}?$/'];
           $validate['toOtherComment'] = ['string', 'max:1000'];
-        }   
+        }
+
+        
+        {//Manual Address Validate
+          if($manualAddress){
+            unset($validate['deliveryDate']);
+            unset($validate['deliveryTime']);
+          }
+        }
 
         $messages = [
           'aggreOffer.required'         => 'Необходимо согласие на договор оферты',
@@ -202,13 +217,15 @@ class OrderController extends Controller
           'name.max'         => 'Количество символов в поле "Имя" не должно превышать :max',
         ];
 
+        
+
         Validator::make($data, $validate,$messages)->validate();
       }
 
       JugeLogs::log(40, json_encode(['model' => 'orderController', 'user' => $userId]));
 
       {//Validate available days
-        Order::validateAvailableDays($data['deliveryDate'], $data['deliveryTime'], $cart);
+        if(!$manualAddress) Order::validateAvailableDays($data['deliveryDate'], $data['deliveryTime'], $cart);        
       }
 
       JugeLogs::log(50, json_encode(['model' => 'orderController', 'user' => $userId]));
@@ -220,7 +237,8 @@ class OrderController extends Controller
       JugeLogs::log(60, json_encode(['model' => 'orderController', 'user' => $userId]));
       
     }
-          
+
+    
     {//do order
       try {
         DB::beginTransaction();{

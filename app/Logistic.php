@@ -97,6 +97,10 @@ class Logistic extends Model
 
   public static function getFromRaw(){
 
+    // @@@ simple to array
+    // $xml = simplexml_load_string($xml);
+    // $json = json_encode($xml);
+    // $array = json_decode($json,TRUE);
 
     $date = now()->format('Y-m-d');
 
@@ -116,22 +120,18 @@ class Logistic extends Model
         break;
       }      
     }
-
-    
     
     //Return if no errorless raw
     if(!$raw) return false;
 
     //To object
-    $obj = simplexml_load_string ($raw);
-
-    
+    $obj = simplexml_load_string ($raw);   
 
     //Make beauty array
     $logistics = [];
     $vehicles = $obj->scheduleResponse->vehicles;
     
-    foreach ($vehicles as $key => $vehicle) {      
+    foreach ($vehicles as $key => $vehicle) {
       foreach ($vehicle as $key => $vehicleA) {                 
         $driverId = ((array)$vehicleA)['@attributes']['driverExternalID'];
         //Get locations

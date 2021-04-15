@@ -2,31 +2,50 @@
   <div> 
 
     <!-- Geo Decoder -->
-    <div class="mb-3">
-      <label for="">Поиск:</label>
-      <address-decoder-input v-model="geoSearch" :search="doGeoSearch" />
+    <div v-if="!manual" class="mb-3">
+      <!-- Input -->
+      <template>
+        <label for="">Поиск:</label>
+        <address-decoder-input v-model="geoSearch" :search="doGeoSearch" @geo-decoder-failed="geoDecoderFailed = true" @user-failed="geoUserFailed = true"/>
+      </template>
+      <!-- Fails -->      
+      <div v-if="geoDecoderFailed">
+        load failed
+      </div>
+      <div v-if="geoUserFailed" class="mt-2 d-flex justify-content-center">
+        <button @click="manual=true" class="x-btn x-btn-sm">Не могу ввести адрес!</button>
+      </div>
+    </div>
+
+    <!-- Manual annonce -->
+    <div v-if="manual">
+      <div>
+        <span style="color:tomato">*</span> При данном методе вводе адреса доступные интервалы не будут определены автоматически, и с вами свяжется оператор для согласования удобного времени доставки.
+      </div>
+      <div class="mt-2 d-flex justify-content-center">
+        <button @click="data.street='';data.number='';manual=false" class="x-btn x-btn-sm">Попробовать ещё раз</button>
+      </div>      
     </div>
     
     <template>
-      <!-- Address \ House -->
-      <div class="form-group mb-2" style="position:relative">
-        <!-- <span>{{data.street}}</span> -->
-        <!-- <span>{{data.number}}</span> -->
-        <!-- <input v-model="data.street" id="user-addresses-address" class="form-input user-addresses-address" type="text" required="required"> -->
-        <!-- <label for="user-addresses-address" class="user-addresses-placeholder"><span style="color:tomato;">*</span>Улица</label> -->
-      </div>
-
       <!-- Home \ Appart -->
-      <!-- <div class="form-group mb-2 d-flex form-group-multi">
-        <input v-model="data.street" @change="doChange()" style="width:60%" name="street" class="form-input" placeholder="Улица" type="text">
-        <input v-model="data.number" @change="doChange()" style="width:40%" name="number" class="form-input" placeholder="Номер дома" type="text">
-      </div> -->
       <div class="form-group mb-2 d-flex form-group-multi">
-        <div style="width:60%">{{data.street}}</div>
-        <input v-model="data.number"  style="width:40%" name="number" class="form-input" placeholder="Номер дома" type="text">
+        
+        <!-- Geo decoder -->
+        <template v-if="!manual">
+          <div style="width:60%;align-self:center;font-weight:600;">{{data.street}}</div>
+          <div style="width:40%;align-self:center;font-weight:600;">{{data.number}}</div>
+        </template>
+
+        <!-- Manual -->
+        <template v-else>
+          <input v-model="data.street" style="width:60%" name="street" class="form-input" placeholder="Улица" type="text">
+          <input v-model="data.number" style="width:40%" name="number" class="form-input" placeholder="Номер дома" type="text">
+        </template>
+
       </div>
 
-      <!-- Porch \ Stage \ Intercom -->
+      <!-- Appart \ Porch \ Stage \ Intercom -->
       <div class="form-group mb-2 d-flex form-group-multi">
         <input v-model="data.appart" name="appart" class="form-input" placeholder="Квартира" type="text">
         <input v-model="data.porch" name="porch" class="form-input" placeholder="Подъезд" type="text">
@@ -52,11 +71,7 @@
       <button @click="doCancel()" class="x-btn x-btn-sm x-btn-trans">Отмена</button>
       <button @click="save()" class="x-btn x-btn-sm">Сохранить</button>
     </div>
-
-    <!-- Noty -->
-    <div style="font-size: 10pt;margin-top: 20px;">
-      Если у вас возникли проблемы с вводом адреса или вы видете только интервалы за 600 рублей, пожалуйста, свяжитесь с нами для уточнения деталей по номеру 8(964)345-44-19 или в соц сетях.
-    </div>
+    
   </div>
 </template>
 
@@ -81,6 +96,11 @@ data(){return{
     y:null,
     default:0,
   },
+
+  //Geo decoder
+  manual:false,
+  geoDecoderFailed:false,
+  geoUserFailed:false,
 
   //Other
   errors:[],
@@ -128,6 +148,7 @@ watch:{
   },
   fGeoSearch: function(val, oldVal){
     this.data.street = val.street != undefined ? val.street : null;
+    if(this.data.street == null) this.data.street = val.district != undefined ? val.district : null;
     this.data.number = val.house != undefined ? val.house : null;
     this.data.x = val.x != undefined ? val.x : null;
     this.data.y = val.y != undefined ? val.y : null;
@@ -146,15 +167,9 @@ methods:{
     if(this.activeAddress.intercom != undefined) this.data.intercom = this.activeAddress.intercom;
     if(this.activeAddress.default != undefined) this.data.default = this.activeAddress.default;
   },
-  save(){
-    //
-    if(this.id){
-      //Edit
-      this.edit();
-    }else{
-      //Add
-      this.add();
-    }
+  save(){    
+    this.data.manual = this.manual;
+    if(this.id){this.edit();}else{this.add();}
   },
   async add(){
     this.errors = [];

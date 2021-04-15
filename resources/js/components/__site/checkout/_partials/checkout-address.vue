@@ -1,7 +1,6 @@
 <template>
 <div>
-  <div class="row checkout-address checkout-address-gift">
-    <div class="col-12">
+  <div class="row checkout-address checkout-address-gift">>
 
       <div v-if="design != 'x'" class="checkout-title">Адрес</div>
 
@@ -16,7 +15,6 @@
       </div>
 
 
-    </div>
   </div>
 </div>
 </template>

@@ -86,6 +86,17 @@ class Address extends Model
 
   }
 
+
+  
+  public function metas(){
+    return $this->morphMany('App\Meta', 'metable');
+  }  
+  public function manual(){
+    return $this->morphMany('App\Meta', 'metable')
+      ->where('name', "manual")
+      ->where('value', 1)
+    ;
+  }
   public function addressable(){
     return $this->morphTo();
   }

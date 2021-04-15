@@ -12,6 +12,7 @@ use App\Parse;
 use App\JugeCRUD;
 use App\Bonus;
 use App\JugeLogs;
+use App\Meta;
 
 
 use Spatie\Permission\Traits\HasRoles;
@@ -69,6 +70,7 @@ class User extends Authenticatable
 
   public static function addAddress($data, $userId){
 
+    //Set type
     $addressable_id = $userId == 0 ? session()->getId() : $userId;
     $addressable_type = $userId == 0 ? 'session' : 'App\User';
     
@@ -96,10 +98,17 @@ class User extends Authenticatable
 
     JugeLogs::log(1012, "user - {$userId} | " . json_encode(['model' => 'address']));
 
+    //Get address
+    $address = Address::where('addressable_type',$addressable_type)->where('addressable_id', $addressable_id)->orderBy('id', 'desc')->first();
+
     // Set default
     if($data['default']){
-      $address = Address::where('addressable_type',$addressable_type)->where('addressable_id', $addressable_id)->orderBy('id', 'desc')->first();
       User::setDefaultAddress($address->id);
+    }
+
+    //Manual
+    if(isset($data['manual']) && $data['manual']){
+      $address->metas()->save(new Meta(['name' => 'manual', 'value' => 1]));
     }
 
     return true;
@@ -124,6 +133,13 @@ class User extends Authenticatable
     $address->update($update);
 
     if(!$address) return false;
+    
+    {//Manual
+      //Delete old
+      Meta::where('metable_type','App\Address')->where('metable_id',$data['id'])->where('name','manual')->delete();
+      //Add new
+      if(isset($data['manual']) && $data['manual'])Address::find($data['id'])->metas()->save(new Meta(['name' => 'manual', 'value' => 1]));      
+    }
 
     return true;
   }
@@ -239,7 +255,7 @@ class User extends Authenticatable
       $query = $query->with('referal');
       //Addresses
       $query = $query->with('addresses');
-      // $query = $query->with('addresses.coords');
+      $query = $query->with('addresses.manual');
       //Memberships
       $query = $query->with('memberships');
     }
@@ -276,8 +292,8 @@ class User extends Authenticatable
     //Get
     $users = JugeCRUD::get($query,$request);
 
-    //After Query
-    {
+    
+    {//After Query
       //Loop
       foreach ($users as $user) {
         //Images
@@ -294,6 +310,23 @@ class User extends Authenticatable
         if(isset($request['with_balance'])){
           $user['balance'] = Balance::left($user->id);
         }
+        {//Address
+          //Manual
+          if(isset($user['addresses']) && isset($user['addresses'][0])){
+            foreach ($user['addresses'] as $k => $address) {
+              if(
+                isset($address['manual']) && isset($address['manual'][0]) &&
+                $address['manual'][0] == true
+              ){
+                unset($user['addresses'][$k]['manual']);
+                $user['addresses'][$k]['manual'] = true;
+              }else{
+                unset($user['addresses'][$k]['manual']);
+                $user['addresses'][$k]['manual'] = false;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -302,6 +335,7 @@ class User extends Authenticatable
       $users = $users[0];
     }    
 
+    //Test
     if(isset($request['test'])){
       dd($users);
     }

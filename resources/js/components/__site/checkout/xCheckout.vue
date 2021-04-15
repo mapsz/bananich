@@ -35,10 +35,8 @@
                 <div class="checkout-div">
                 <!-- <div v-if="user" class="checkout-div"> -->
                   <div class=" checkout-address checkout-address-gift m-0">
-                    <div class="col-12">
-                      <div class="checkout-title">Адрес</div>                      
-                      <choose-address v-model="data.jugeAddress"/>
-                    </div>
+                    <div class="checkout-title">Адрес</div>                      
+                    <choose-address v-model="data.jugeAddress"/>
                   </div>
                 </div>
                 <!-- <checkout-address v-else class="checkout-div"/> -->
@@ -56,13 +54,11 @@
               </template>              
             
               <!-- Date / Time -->
-              <checkout-x-date-time class="checkout-div" v-model="data.dateTime" :polygons="choosedPolygons"/>
+              <checkout-x-date-time class="checkout-div" v-model="data.dateTime" :polygons="choosedPolygons" :manual="manualAddress"/>
 
               <!-- Container / Paymethod -->
               <div class="row checkout-div">
-                <div class="col-12 col-lg-6">
-                  <checkout-container v-model="data.container"/>
-                </div>
+                <checkout-container v-model="data.container"/>
                 <!-- <div class="col-12 col-lg-6">
                   <checkout-paymethod v-model="data.paymethod"/>
                 </div> -->
@@ -119,6 +115,12 @@ export default {
       let address = this.addresses.find(x => x.id == this.data.jugeAddress);
       return address;
     },
+    manualAddress(){
+      if(!this.choosedAddress) return false;
+      if(!this.choosedAddress.manual == undefined) return false;
+
+      return this.choosedAddress.manual;
+    },
     choosedCoords(){
       if(this.choosedAddress.x == undefined || this.choosedAddress.y == undefined) return false;
       return {x:this.choosedAddress.x, y:this.choosedAddress.y};
@@ -154,7 +156,7 @@ export default {
       data.jugeAddress = this.data.jugeAddress;
 
       //Put      
-      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type,'polygons':this.choosedPolygons}, 'put');
+      r = await ax.fetch('/order/put', {data,'cartId':this.cart.id,type,'polygons':this.choosedPolygons,'manualAddress':this.manualAddress}, 'put');
 
       //Catch errors
       if(!r){      

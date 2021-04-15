@@ -63,7 +63,7 @@ window.ax = new ax;
 
 //Juge load
 import load from './juge/juge-loader.js';
-window.load = new load;
+window.load = new load('#8ac2a73b','/image/neo-loader.png');
 
 //Moment
 window.moment = require('moment');

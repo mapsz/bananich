@@ -32,13 +32,25 @@
           
           <!-- Name -->
           <div class="col-12 col-lg-6 pr-4 p-0 mb-2 mb-lg-0">
-            <span class="cart-item-name"> 
+            <div class="cart-item-name"> 
               {{
                 item.product != undefined ? 
                 item.product.name + (item.product.unit_name != '' ? ', '+item.product.unit_view : '')
                 :''
               }}
-            </span>
+            </div>
+
+            <div
+              v-if="item.product.short_info != undefined && item.product.short_info"
+              style="
+                font-style: italic;
+                font-size: 10pt;
+                margin-top: 10px;
+              "
+            >
+              <span style="color: tomato;">*</span>               
+              {{item.product.short_info}}
+            </div>
           </div>
           
           <!-- Other -->

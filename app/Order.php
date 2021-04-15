@@ -541,13 +541,20 @@ class Order extends Model
       $fullOrder = Order::jugeGet(['id'=> $order->id]);
 
       {//Participation price
-        $participation_price = Polygon::getPrice(
-          $polygons,
-          $data['deliveryDate'], 
-          $data['deliveryTime']['from'].'-'.$data['deliveryTime']['to']
-        );
+        //Check address manual
+        if($fullOrder->delivery_date == '0000-00-00'){
+          $participation_price = 0;
+        }else{
+          $participation_price = Polygon::getPrice(
+            $polygons,
+            $data['deliveryDate'], 
+            $data['deliveryTime']['from'].'-'.$data['deliveryTime']['to']
+          );
+        }
+        DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'participation_price', 'value'=>$participation_price]);
       }
-      DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'participation_price', 'value'=>$participation_price]);
+      
+      //overWeightPrice
       DB::table('order_metas')->insert(['order_id'=>$fullOrder->id, 'name'=>'over_weight_price', 'value'=>$fullOrder->xData['overWeightPrice']]);
     }
 
@@ -627,9 +634,9 @@ class Order extends Model
         $order->id = $randomId;
         $order->customer_id = $customer_id;
         $order->date = now();
-        $order->delivery_date = $data['deliveryDate'];
-        $order->delivery_time_from = $data['deliveryTime']['from'].':00:00';
-        $order->delivery_time_to = $data['deliveryTime']['to'].':00:00';
+        $order->delivery_date = isset($data['deliveryDate']) ? $data['deliveryDate'] : '0000-00-00';
+        $order->delivery_time_from  = isset($data['deliveryTime']) ? $data['deliveryTime']['from'].':00:00' : '00:00:00';
+        $order->delivery_time_to    = isset($data['deliveryTime']) ? $data['deliveryTime']['to'] . ':00:00' : '00:00:00';
         $order->container = 0;
         $order->pay_method = $data['payMethod'];
         $order->confirm = $data['confirm'];
