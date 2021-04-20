@@ -312,6 +312,7 @@ Route::group(['middleware' => [
 
       {//Coupons referral
         Route::post('/coupon/referral', 'CouponController@attachReferral');        
+        Route::get('/coupon/referral', 'CouponController@getReferralCoupon');        
       }
       
       {//Order Limits

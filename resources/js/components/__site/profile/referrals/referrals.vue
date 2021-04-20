@@ -30,14 +30,22 @@
                 <li>За каждого приведённого нам клиента вы получите 100 рублей баллами в личном кабинете. Ими можно оплатить ваши заказы на Neolavka.</li>
               </ul>
             </p>
+
+            <div class="mt-3">
             
-            <div class="mt-3 d-flex" style="align-items: center; font-size:12pt;">
-              <div>                
-                <b>Ваш текущий баланс баллов : {{balance}}</b>  
-              </div>             
-              <div>
-                <span @click="showPopup=true" class="ml-2 info-icon info-icon-sm info-icon-success" style="color: black;cursor:pointer;"></span>
+              <div class="mb-2" v-if="coupon && coupon.code != undefined">
+                Ваш промокод: <b>{{coupon.code}}</b>  
               </div>
+              
+              <div class="d-flex" style="align-items: center; font-size:12pt;">
+                <div>                
+                  <b>Ваш текущий баланс баллов : {{balance}}</b>  
+                </div>             
+                <div>
+                  <span @click="showPopup=true" class="ml-2 info-icon info-icon-sm info-icon-success" style="color: black;cursor:pointer;"></span>
+                </div>
+              </div>
+
             </div>
 
           </div>
@@ -59,16 +67,24 @@
 export default {
 data(){return{
   balance:0,
+  coupon:null,
   showPopup:false,
 }},
 async mounted() {
   this.getBalance();
+  this.getCoupon();
 },
 methods:{
   async getBalance(){
     let r = await ax.fetch('/referral/user/balance');
 
     if(r) this.balance = r;
+  },
+  async getCoupon(){
+    let r = await ax.fetch('/coupon/referral');
+
+    if(r) this.coupon = r;
+
   }
 },
 }

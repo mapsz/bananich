@@ -110,7 +110,7 @@
                       <!-- Participation price -->
                       <tr v-if="order.type == 'x' && order.participation_price != undefined && order.participation_price != 0">
                         <td></td><td></td><td></td><td></td><td></td>
-                        <th>Сервисный взнос:</th>
+                        <th>Доставка:</th>
                         <td>{{r(order.participation_price)}}</td>
                       </tr>
                       <!-- Over weight -->
@@ -182,6 +182,9 @@
 
                   <div  class="mt-3" style="font-size:10pt">
                     ПОЛУЧИТЕ 1000 рублей на покупки в NEOLAVKA.RU! Каждый месяц 25го числа подписчики наших аккаунтов выбирают самый полезный отзыв. Победителям в ВК и в Инстаграмме мы дарим по 1000 рублей на покупки в NEOLAVKA.RU
+                  </div>
+                  <div style="font-size:10pt">
+                    оставить отзыв в инстаграмме или в нашей группе в ВК vk.com/neolavka
                   </div>
                 </div>
 

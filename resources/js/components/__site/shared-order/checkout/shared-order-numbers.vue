@@ -20,7 +20,7 @@
     <div v-if="cart">
       <div class="d-flex justify-content-between"><span>Товары ({{cart.items.length}} шт)</span><b>{{cart.pre_price_x}} p</b></div>
       <div class="d-flex justify-content-between" v-if="participation_price">
-        <span>Сервисный взнос</span><b>{{participation_price}} p</b>
+        <span>Доставка</span><b>{{participation_price}} p</b>
       </div>
       <div class="d-flex justify-content-between" v-if="personalAddress"><span>Доставка</span><b>{{personalAddress}} p</b></div>
       <div class="d-flex justify-content-between" v-if="fullWeight"><span>Общий вес</span><b>{{fullWeight.toFixed(2)}} кг</b></div>

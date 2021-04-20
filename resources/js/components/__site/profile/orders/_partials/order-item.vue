@@ -241,7 +241,7 @@
             </div>
           </template>
           <!-- Participation -->
-          <div v-if="isX">Сервисный взнос: {{order.participation_price}}</div>
+          <div v-if="isX">Доставка: {{order.participation_price}}</div>
         </div>
 
         <!-- Pre -->
