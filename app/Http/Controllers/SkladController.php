@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\OutTask;
 use App\JugeLogs;
+use App\Meta;
 
 class SkladController extends Controller
 {
@@ -24,21 +25,34 @@ class SkladController extends Controller
     return response()->json(OutTask::put($request->name,$priority));
   }
 
+  // resetPc
+  // resetSms
+
   public function outTask(Request $request){
 
-    //Log
-    JugeLogs::log(2001, json_encode(['model' => 'sklad', 'direction' => "OUT"]));
+    $task = Meta::where('metable_type','sklad_out_tasks')->first();
 
-    return response()->json(['task'=>"resetSms"],200);
+    if(isset($task->name)){
+      JugeLogs::log(2001, json_encode(['model' => 'sklad', 'direction' => "OUT - {$task->name}"]));
+      return response()->json(['task'=>$task->name],200);
+    }else{
+      JugeLogs::log(2001, json_encode(['model' => 'sklad', 'direction' => "OUT - none"]));
+      return response()->json(0);
+    }
+
   }
 
   public function inTask(Request $request){
 
     //Encode query
     $query = json_encode($request->all());
-
     //Log
     JugeLogs::log(2002, json_encode(['model' => 'sklad', 'direction' => "IN", 'query' => $query]));
+
+    if(isset($request->s) && $request->s){
+      Meta::where('metable_type','sklad_out_tasks')->where('name', $request->t)->delete();
+    }
+
 
     return response()->json(['response'=>"gg"],200);   
     

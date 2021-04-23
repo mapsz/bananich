@@ -1173,6 +1173,12 @@ class Order extends Model
                 }
               }              
             }
+
+            //Saved
+            if($order->type == 'x'){
+              $item->saved            = $item->price - $item->final_price_x;
+              $item->saved            = ($item->saved < 0) ? 0 : $item->saved;
+            }
   
             //Items Totals        
             //pre

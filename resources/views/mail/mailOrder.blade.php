@@ -35,7 +35,7 @@ if(!isset($site)) $site = false;
     <div>Заказ №<b>{{$order['id']}}</b></div>
     {{-- Date / Time --}}
     <div>
-      <span><b>      
+      <span><b>
         {{-- Date --}}      
         <?php setlocale(LC_TIME, 'ru_RU.UTF-8');?>
         <span style="text-transform:capitalize">
@@ -156,7 +156,7 @@ if(!isset($site)) $site = false;
       @if($site == 'x')
         <tr>
           <td></td>
-          <td>Орг. взнос:</td>
+          <td>Доставка:</td>
           <td align="right">{{$order['participation_price']}} {{$c}}</td>
         </tr>
       @endif
@@ -167,6 +167,16 @@ if(!isset($site)) $site = false;
           <td>Бонусы:</td>
           <td align="right">{{$order['bonus']}} {{$c}}</td>
         </tr>
+      @endif
+      {{-- Extra Charges --}}
+      @if (isset($order['extra_charges']) && isset($order['extra_charges'][0]))
+        @foreach ($order['extra_charges'] as $charge)
+          <tr>
+            <td></td>
+            <td >{{$charge['name']}}:</td>
+            <td align="right" >{{$charge['value']}} {{$c}}</td>
+          </tr>
+        @endforeach
       @endif
       {{-- Coupon --}}
       @if (isset($order['coupons']) && isset($order['coupons'][0]))
@@ -182,6 +192,13 @@ if(!isset($site)) $site = false;
         <td style="font-weight:600">Всего:</td>
         <td align="right" style="font-weight:600">{{$order['total']}} {{$c}}</td>
       </tr>
+      {{-- saved --}}
+      @if($site == 'x' && $order['xData']['saved'] > 0)
+        <tr height="20px"></tr>
+        <tr>
+          <td align="right" colspan="4">Ваша экономия: {{$order['xData']['saved']}} {{$c}}</td>
+        </tr>
+      @endif
     @endif
   </tbody>
 </table>
@@ -206,6 +223,27 @@ if(!isset($site)) $site = false;
     <div style="font-size: 8pt;">
       <span style="color:red; ">*</span> 
       Все изменения, внесенные вами в корзину после получения этого письма будут отображены только на сайте в вашем личном кабинете в разделе "мои заказы"
+    </div>
+  @endif
+  {{-- X tip--}}
+  @if($site == 'x')
+    <div style="font-size: 8pt;">
+      <span style="color:red; ">*</span> 
+      Если вы зарегистрированы на сайте, в вашем личном кабинете утром в день доставки вы сможете увидеть ориентировочное время прибытия, курьера и его контакт.
+    </div>
+  @endif
+  {{-- X tip--}}
+  @if($site == 'x')
+    <div style="font-size: 8pt;">
+      <span style="color:red; ">*</span> 
+      Курьер будет звонить вам за 20 минут до доставки.
+    </div>
+  @endif
+  {{-- X tip--}}
+  @if($site == 'x')
+    <div style="font-size: 8pt;">
+      <span style="color:red; ">*</span> 
+      У всех курьеров есть терминалы, сообщите ему, если вам удобно заплатить картой.
     </div>
   @endif
   <hr>

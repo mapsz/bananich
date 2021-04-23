@@ -11,14 +11,23 @@
 
 
   {//Mail test
-    Route::get('/mail//test/preview', function($id){
+    Route::get('/mail/test/preview', function(){
 
-      $user = App\User::find(751);
-      $email = App\Email::jugeGet(['id'=>$id]);
-      $html = App\Email::customTags($email->html,$user);
+      $order = App\Order::getWithOptions(['id'=>2104184755]);
+
+      // $order = $order->toArray();
+
+
+      // dd($order->toarray());
+
+      return view('mail.mailOrder', ['order' => $order->toarray(),'site' => 'x']);
+
+      // $user = App\User::find(751);
+      // $email = App\Email::jugeGet(['id'=>$id]);
+      // $html = App\Email::customTags($email->html,$user);
 
       
-      return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
+      // return view('mail.customEmail', ['user' => $user->toarray(),'html' => $html]);
 
 
       // $order = App\Order::getWithOptions(['id'=>$id]);
