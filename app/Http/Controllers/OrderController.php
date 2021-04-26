@@ -250,14 +250,6 @@ class OrderController extends Controller
   
           //Check order success
           if(!$order || !isset($order->id)) throw new Exception('order error');
-
-          JugeLogs::log(80, json_encode(['model' => 'orderController', 'user' => $userId]));
-  
-          {//Mail
-            Order::email($order);
-          }
-
-          JugeLogs::log(90, json_encode(['model' => 'orderController', 'user' => $userId]));
               
         }DB::commit();
       } catch (Exception $e) {

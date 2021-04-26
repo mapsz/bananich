@@ -798,7 +798,149 @@ class Order extends Model
     Order::find($orderId)->discounts()->attach($discount->id);
 
 
-  }   
+  }
+
+  public static function withStatus(){
+
+    return self::join(
+      DB::raw('
+        (
+          select t.order_id, t.order_status_id, r.MaxDate 
+          FROM 
+          ( 
+            SELECT order_id, MAX(created_at) as MaxDate 
+            FROM order_order_status 
+            GROUP BY order_id 
+          ) r 
+          INNER JOIN order_order_status t 
+          ON t.order_id = r.order_id 
+          AND t.created_at = r.MaxDate 
+        ) g
+      '),
+      'orders.id', '=', 'g.order_id'
+    );
+
+  }
+
+  public static function syncCartOrder($cart = false, $order = false, $user = false){ 
+            
+    {//Data
+      {//User
+        $user = Auth::user();
+        if(!$user) return false;
+      }
+      
+      {//Cart
+        if(!$cart || !isset($cart['id'])){
+          if($cart > 0){
+            $cart = Cart::jugeGet(['id' => $cart]);
+            $cart = Checkout::addToCart($cart);
+          }else{
+            $cart = Cart::getCart(['type' => 'x']);
+          }
+        }
+        if(!$cart || !isset($cart['id'])) return false;
+      }
+
+      {//Order
+        //Get order
+        if(!$order || !isset($order->id)){
+          if(isset($cart['xData']) && isset($cart['xData']['order_id']) && $cart['xData']['order_id'] > 0){
+            // $order = Order::jugeGet(['id' => $cart['xData']['order_id']]);
+            $order = $cart['xData']['order_id'];
+          }else{
+            //Get shared order
+            // $sOrder = SharedOrder::byAuth();
+            // if(!$sOrder || !isset($sOrder->id)) 
+            return false;
+          }
+
+        }        
+        if(isset($order->id)){
+          $order = $order->id;
+        }
+
+        if(!$order) return false;      
+
+        {//Sync
+          {//Delete old
+            Item::where('order_id', $order)->delete();
+          }         
+          
+          {//Put new
+            $putItems = [];
+            foreach ($cart['items'] as $key => $item) {
+              array_push($putItems,[
+                'order_id' => $order,
+                'product_id' => $item['product_id'],
+                'name' => $item['name'],
+                'quantity' => $item['count'],
+                'gram_sys' => $item['unit'],
+                'gram' => isset($item['unit_view']) ? $item['unit_view'] : $item['unit'],                  
+                'price' => $item['final_price_x'],
+                'unit_type' => $item['product']['unit_type'],
+                'unit_full' => isset($item['product']['full_weight']) ? $item['product']['full_weight'] : $item['unit']        
+              ]);
+            }
+            $insert = Item::insert($putItems);
+            return $insert;
+          }
+        }
+        
+        return false;
+        
+      }
+    }
+  }
+
+  public static function email($order){
+
+    //Set data
+    $orderId = $order->id;
+    $order = Order::getWithOptions(['id'=>$orderId]);        
+    $email = $order->email;
+    $data = ["email" => $email, "orderId" => $orderId];
+    $data['from'] = 'no-reply@bananich.ru';
+    $data['subject'] = 'Бананыч заказ №'.$data['orderId'].' получен!';
+
+    if($order->type == 'x'){
+      $data['from'] = 'no-reply@neolavka.ru';
+      $data['subject'] = 'Neolavka заказ №'.$data['orderId'].' получен!';
+    } 
+
+    //Client send
+    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $order->type], function($m)use($data){
+      $m->to($data['email'],'to');
+      $m->from($data['from']);
+      $m->subject($data['subject']);
+    });
+
+    //Dasha Send
+    if(ENV('APP_ENV') != 'local'){
+      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $order->type], function($m)use($data){
+        $m->to('bbananich@yandex.ru','to');
+        $m->from($data['from']);
+        $m->subject($data['subject']);
+      });
+    }
+
+    return true;    
+  }
+
+  public static function addExtraCharge($orderId, $name ,$value){
+
+    //Delete old
+    OrderExtraCharge::where('order_id', $orderId)->where('name', $name)->delete();
+
+    //Put
+    $charge = new OrderExtraCharge();
+    $charge->order_id = $orderId;
+    $charge->name = $name;
+    $charge->value = $value;
+    
+    return $charge->save();
+
+  }
 
   public static function getWithOptions($request){
 
@@ -1071,7 +1213,7 @@ class Order extends Model
         $orders[$ok]['termobox'] = $termobox;
 
 
-      //Memberships
+        //Memberships
         if(isset($order->extraCharges)){
           foreach ($order->extraCharges as $charge) {          
             if($charge->name == "Абонемент"){
@@ -1392,16 +1534,6 @@ class Order extends Model
 
       }
 
-      // dd
-
-      // if($order->id == 2104032439){
-      //   dd($order);
-      // }
-
-
-      
-      // dd($order);
-
     }
 
     
@@ -1441,148 +1573,6 @@ class Order extends Model
     }
 
     return $orders;
-
-  }
-
-  public static function withStatus(){
-
-    return self::join(
-      DB::raw('
-        (
-          select t.order_id, t.order_status_id, r.MaxDate 
-          FROM 
-          ( 
-            SELECT order_id, MAX(created_at) as MaxDate 
-            FROM order_order_status 
-            GROUP BY order_id 
-          ) r 
-          INNER JOIN order_order_status t 
-          ON t.order_id = r.order_id 
-          AND t.created_at = r.MaxDate 
-        ) g
-      '),
-      'orders.id', '=', 'g.order_id'
-    );
-
-  }
-
-  public static function syncCartOrder($cart = false, $order = false, $user = false){ 
-            
-    {//Data
-      {//User
-        $user = Auth::user();
-        if(!$user) return false;
-      }
-      
-      {//Cart
-        if(!$cart || !isset($cart['id'])){
-          if($cart > 0){
-            $cart = Cart::jugeGet(['id' => $cart]);
-            $cart = Checkout::addToCart($cart);
-          }else{
-            $cart = Cart::getCart(['type' => 'x']);
-          }
-        }
-        if(!$cart || !isset($cart['id'])) return false;
-      }
-
-      {//Order
-        //Get order
-        if(!$order || !isset($order->id)){
-          if(isset($cart['xData']) && isset($cart['xData']['order_id']) && $cart['xData']['order_id'] > 0){
-            // $order = Order::jugeGet(['id' => $cart['xData']['order_id']]);
-            $order = $cart['xData']['order_id'];
-          }else{
-            //Get shared order
-            // $sOrder = SharedOrder::byAuth();
-            // if(!$sOrder || !isset($sOrder->id)) 
-            return false;
-          }
-
-        }        
-        if(isset($order->id)){
-          $order = $order->id;
-        }
-
-        if(!$order) return false;      
-
-        {//Sync
-          {//Delete old
-            Item::where('order_id', $order)->delete();
-          }         
-          
-          {//Put new
-            $putItems = [];
-            foreach ($cart['items'] as $key => $item) {
-              array_push($putItems,[
-                'order_id' => $order,
-                'product_id' => $item['product_id'],
-                'name' => $item['name'],
-                'quantity' => $item['count'],
-                'gram_sys' => $item['unit'],
-                'gram' => isset($item['unit_view']) ? $item['unit_view'] : $item['unit'],                  
-                'price' => $item['final_price_x'],
-                'unit_type' => $item['product']['unit_type'],
-                'unit_full' => isset($item['product']['full_weight']) ? $item['product']['full_weight'] : $item['unit']        
-              ]);
-            }
-            $insert = Item::insert($putItems);
-            return $insert;
-          }
-        }
-        
-        return false;
-        
-      }
-    }
-  }
-
-  public static function email($order){
-
-    //Set data
-    $orderId = $order->id;
-    $order = Order::getWithOptions(['id'=>$orderId]);        
-    $email = $order->email;
-    $data = ["email" => $email, "orderId" => $orderId];
-    $data['from'] = 'no-reply@bananich.ru';
-    $data['subject'] = 'Бананыч заказ №'.$data['orderId'].' получен!';
-
-    if($order->type == 'x'){
-      $data['from'] = 'no-reply@neolavka.ru';
-      $data['subject'] = 'Neolavka заказ №'.$data['orderId'].' получен!';
-    } 
-
-    //Client send
-    $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $order->type], function($m)use($data){
-      $m->to($data['email'],'to');
-      $m->from($data['from']);
-      $m->subject($data['subject']);
-    });
-
-    //Dasha Send
-    if(ENV('APP_ENV') != 'local'){
-      $send = Mail::send('mail.mailOrder', ['order' => $order->toarray(), 'site' => $order->type], function($m)use($data){
-        $m->to('bbananich@yandex.ru','to');
-        $m->from($data['from']);
-        $m->subject($data['subject']);
-      });
-    }
-
-    return true;    
-  }
-
-  public static function addExtraCharge($orderId, $name ,$value){
-
-    //Delete old
-    OrderExtraCharge::where('order_id', $orderId)->where('name', $name)->delete();
-
-    //Put
-    $charge = new OrderExtraCharge();
-    $charge->order_id = $orderId;
-    $charge->name = $name;
-    $charge->value = $value;
-    
-    return $charge->save();
 
   }
 

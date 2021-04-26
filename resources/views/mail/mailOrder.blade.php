@@ -142,7 +142,7 @@ if(!isset($site)) $site = false;
       <tr>
         <td></td>
         <td>Подытог:</td>
-        <td align="right">@if($site == 'x') {{$order['x_items_total']}} @else {{$order['items_total']}} @endif {{$c}}</td>
+        <td align="right" style="white-space: nowrap;">@if($site == 'x') {{$order['x_items_total']}} @else {{$order['items_total']}} @endif {{$c}}</td>
       </tr>
       {{-- Shipping --}}
       @if($site != 'x')
@@ -190,15 +190,15 @@ if(!isset($site)) $site = false;
       <tr>
         <td></td>
         <td style="font-weight:600">Всего:</td>
-        <td align="right" style="font-weight:600">{{$order['total']}} {{$c}}</td>
+        <td align="right" style="font-weight:600; white-space: nowrap;">{{$order['total']}} {{$c}}</td>
       </tr>
       {{-- saved --}}
-      @if($site == 'x' && $order['xData']['saved'] > 0)
+      {{-- @if($site == 'x' && $order['xData']['saved'] > 0)
         <tr height="20px"></tr>
         <tr>
           <td align="right" colspan="4">Ваша экономия: {{$order['xData']['saved']}} {{$c}}</td>
         </tr>
-      @endif
+      @endif --}}
     @endif
   </tbody>
 </table>

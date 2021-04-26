@@ -32,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\addCouponReferralListener::class,
             \App\Listeners\addOrderMembershipDiscountListener::class,
             \App\Listeners\applyBalanceToOrderListener::class,
+            \App\Listeners\sendOrderEmailListener::class,
         ],       
         \App\Events\OrderSuccessEvent::class => [
             \App\Listeners\CouponReferralSuccessListener::class,            
