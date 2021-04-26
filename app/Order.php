@@ -56,7 +56,9 @@ class Order extends Model
     ['key'    => 'type', 'label' => 'сайт','type' => 'intToStr', 'intToStr' =>[
       'x' => 'neolavka',
       0 => 'bananich'
-    ]],
+    ]],    
+    ['key'    => 'membership', 'label' => 'абонемент'],
+    ['key'    => 'coupon', 'label' => 'купон'],
   ];  
 
   public static function orderValidate($data){
@@ -1067,6 +1069,23 @@ class Order extends Model
           }          
         }  
         $orders[$ok]['termobox'] = $termobox;
+
+
+      //Memberships
+        if(isset($order->extraCharges)){
+          foreach ($order->extraCharges as $charge) {          
+            if($charge->name == "Абонемент"){
+              $order['membership'] = $charge->value;
+              break;
+            }
+          }
+        }
+
+        //coupon
+        if(isset($order->coupons) && isset($order->coupons[0])){
+          $order['coupon'] = $order->coupons[0]['code'] . ':' . $order->coupons[0]['discount'];
+        }
+
       }
       
       {//Items
@@ -1090,8 +1109,8 @@ class Order extends Model
       {//Checkout
         $round = 0;
         foreach ($orders as $ok => $order) {
-          
-          //Items
+
+          //Items          
           foreach ($order->items as $ik => $item) {
             $item->gram_sys = $item->gram_sys == 0 ? 1 : $item->gram_sys;
   
@@ -1193,6 +1212,7 @@ class Order extends Model
             }
   
           }  
+          
           
           {//Coupons
             $order->coupons_total = 0;
@@ -1370,9 +1390,21 @@ class Order extends Model
           
         }
 
-      }    
+      }
+
+      // dd
+
+      // if($order->id == 2104032439){
+      //   dd($order);
+      // }
+
+
+      
+      // dd($order);
 
     }
+
+    
     
     {//Single order by id
       if(isset($orders[0]) && (isset($request['id']) && $request['id']) || (isset($request['single']) && $request['single'])){
