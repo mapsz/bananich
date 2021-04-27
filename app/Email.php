@@ -15,7 +15,11 @@ class Email extends Model
   ];
 
 
-  public static function customTags($html,$user = false){
+  public static function customTags($html,$user = false, $type = false){
+
+    $site = $type == 'x' ? 'https://neolavka.ru/' : 'https://bananich.ru/';
+    $color = $type == 'x' ? '#8ac2a7' : '#fbe214';
+    
 
     // Products
     if('producs'){
@@ -54,7 +58,7 @@ class Email extends Model
 
         $productHtml_start = "".
           "<div style='width:160px;display: inline-block;margin:15px 7px'>".
-            "<div><img width='160' height='160' src='https://bananich.ru/{$product->mainImage}' alt=''></div>".            
+            "<div><img width='160' height='160' src='{$site}{$product->mainImage}' alt=''></div>".            
         "";
 
         $productHtml_2 = "".
@@ -74,12 +78,12 @@ class Email extends Model
 
         $productHtml_4 = "".
           "<div align='center'>
-            <a href='https://bananich.ru/product/{$product->id}{$productHtml_link}' style='text-decoration: none;'>
+            <a href='{$site}product/{$product->id}{$productHtml_link}' style='text-decoration: none;'>
               <p align='center' style='
                 width: 120px;
                 margin: auto;
                 margin-top: 20px;
-                background-color: #fbe214;
+                background-color: {$color};
                 padding: 15px;
                 border-radius: 30px;
                 color:black;
@@ -143,7 +147,7 @@ class Email extends Model
         // dd($product);
         $productHtml_start = "".
           "<div style='width:160px;display: inline-block;margin:15px 7px'>".
-            "<div><img width='160' height='160' src='https://bananich.ru/{$category->mainImage}' alt=''></div>".            
+            "<div><img width='160' height='160' src='{$site}{$category->mainImage}' alt=''></div>".            
         "";
 
         $productHtml_2 = "".
@@ -162,12 +166,12 @@ class Email extends Model
 
         $productHtml_4 = "".
           "<div align='center'>
-            <a href='https://bananich.ru/category/{$category->id}' style='text-decoration: none;'>
+            <a href='{$site}category/{$category->id}' style='text-decoration: none;'>
               <p align='center' style='
                 width: 120px;
                 margin: auto;
                 margin-top: 20px;
-                background-color: #fbe214;
+                background-color: {$color};
                 padding: 15px;
                 border-radius: 30px;
                 color:black;

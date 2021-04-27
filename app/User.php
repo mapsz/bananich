@@ -380,63 +380,56 @@ class User extends Authenticatable
 
 
 
-{
-  // SELECT u.`id`,`email`,`phone`, `name`,b.`left`,delivery_date,`comment`,oc.`count`,address FROM users u
-  // /* Order Count*/
-  // LEFT JOIN (
-  // 	SELECT id, customer_id, COUNT(id) AS `count` FROM (
-  // 		SELECT o.id,`customer_id`, order_status_id FROM orders o 
-  // 		INNER JOIN order_order_status s
-  // 		ON o.id = s.order_id
-  // 		WHERE order_status_id = 1
-  // 		AND customer_id <> 0
-  // 	) os
-  // 	GROUP BY `customer_id`
-  // 	) oc
-  // ON u.id = oc.customer_id
-  // /* Comment */
-  // LEFT JOIN (
-  // 	SELECT * FROM (
-  // 		SELECT user_id, `comment` FROM user_comments
-  // 		ORDER BY id desc
-  // 	)cl
-  // 	GROUP BY `user_id`
-  // ) c
-  // ON u.id = c.user_id	
-  // /* Bonus */
-  // LEFT JOIN (
-  // 	SELECT user_id, MAX(`id`), `left` FROM (
-  // 		SELECT * FROM bonuses
-  // 		ORDER BY id desc
-  // 	)bl	
-  // 	GROUP BY `user_id`	
-  // ) b
-  // ON u.id = b.user_id
-  // /* Last Order */
-  // LEFT JOIN (
-  // 	SELECT id, customer_id, delivery_date,address FROM (
-  // 		SELECT ol.id, customer_id, delivery_date, address FROM orders ol
-  // 		INNER JOIN (
-  // 			SELECT * FROM order_order_status
-  // 			WHERE order_status_id = 1
-  // 		)os
-  // 		ON ol.id = os.order_id
-  // 		ORDER BY ol.id desc
-  // 	) oz
-  // 	Group by customer_id
-  // ) o
-  // ON u.id = o.customer_id
+// {
+//   SELECT u.`id`,`email`,`phone`, `name`,b.`left`,delivery_date,`comment`,oc.`count`,address FROM users u
+//   /* Order Count*/
+//   LEFT JOIN (
+//   	SELECT id, customer_id, COUNT(id) AS `count` FROM (
+//   		SELECT o.id,`customer_id`, order_status_id FROM orders o 
+//   		INNER JOIN order_order_status s
+//   		ON o.id = s.order_id
+//   		WHERE order_status_id = 1
+//   		AND customer_id <> 0
+//   	) os
+//   	GROUP BY `customer_id`
+//   	) oc
+//   ON u.id = oc.customer_id
+//   /* Comment */
+//   LEFT JOIN (
+//   	SELECT * FROM (
+//   		SELECT user_id, `comment` FROM user_comments
+//   		ORDER BY id desc
+//   	)cl
+//   	GROUP BY `user_id`
+//   ) c
+//   ON u.id = c.user_id	
+//   /* Bonus */
+//   LEFT JOIN (
+//   	SELECT user_id, MAX(`id`), `left` FROM (
+//   		SELECT * FROM bonuses
+//   		ORDER BY id desc
+//   	)bl	
+//   	GROUP BY `user_id`	
+//   ) b
+//   ON u.id = b.user_id
+//   /* Last Order */
+//   LEFT JOIN (
+//   	SELECT id, customer_id, delivery_date,address FROM (
+//   		SELECT ol.id, customer_id, delivery_date, address FROM orders ol
+//   		INNER JOIN (
+//   			SELECT * FROM order_order_status
+//   			WHERE order_status_id = 1
+//   		)os
+//   		ON ol.id = os.order_id
+//   		ORDER BY ol.id desc
+//   	) oz
+//   	Group by customer_id
+//   ) o
+//   ON u.id = o.customer_id
 
-  // WHERE `count` > 0
-}
+//   WHERE `count` > 0
+// }
 
-// 300, 400, 500, 600, 700, 800, 850, 900
-
-// 2104038051, 2104037812, 2104048987, 2104041964, 2104048058
-// 2104048893, 2104042814, 2104049260
-// 2104037812, 2104049260
-// 2104049417
-// 2104048987
 
 // >2 orders list
 // SELECT u.id, u.email, u.`name` FROM (

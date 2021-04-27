@@ -1,12 +1,20 @@
 <?php
 $s = new App\Setting;
+
+{//Get settings
+  $settings = new App\Setting;
+  $settings = $settings->getList(1);
+}    
 if(isset($_SERVER['SERVER_NAME']) && !isset($site)){
   $site = strpos($_SERVER['SERVER_NAME'], 'neolavka.') !== false ? 'x' : false;
 }
 
 
-$number = (isset($site) && $site == 'x') ? $s->byName('x_phone_number') : $s->byName('phone_number');
+$number = (isset($site) && $site == 'x') ? $settings['x_phone_number'] : $settings['phone_number'];
 $color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610';
+
+$vkLink = (isset($site) && $site == 'x') ? $settings['x_vkontakte'] : 'https://vk.com/bananichru';
+$isLink = (isset($site) && $site == 'x') ? $settings['x_instagram'] : 'https://instagram.com/bananich.ru';
 
 ?>
 
@@ -131,29 +139,33 @@ $color = (isset($site) && $site == 'x') ? '#8ac2a7' : '#FBD610';
             </p>              
           </td>
           <td width="150">
-            @if($number) <span>📞 <a href="#" style="color:black"><b>{{$number}}</b></a></span> @endif                
+            @if($number) <span>📞 <a href="#" style="color:black">
+              <b>
+                {{$number}}
+              </b>
+            </a></span> @endif                
           </td>
           {{-- Socs / Link --}}
           <td>
             <table>
               <tr>
                 <td width="30" height="25">
-                  <!-- <a width="46" height="25" href="https://instagram.com/bananich.ru" target="_blank" >
+                  <a width="46" height="25" href="{{$isLink}}" target="_blank" >
                     <table><tr><td width="35" height="25" style="
                         background: url('http://bananich.ru/mail/insta.png');
                         background-repeat: no-repeat;        
                     ">                          
                     </td></tr></table>                      
-                  </a> -->
+                  </a>
                 </td>
                 <td>
-                  <!-- <a width="20" height="25" href="https://vk.com/bananichru" target="_blank" >
+                  <a width="20" height="25" href="{{$vkLink}}" target="_blank" >
                     <table><tr><td width="35" height="25" style="
                         background: url('http://bananich.ru/mail/vk.png');
                         background-repeat: no-repeat;        
                     ">                          
                     </td></tr></table>                      
-                  </a> -->
+                  </a>
                 </td>
               </tr>
               <tr>
