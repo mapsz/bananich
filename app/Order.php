@@ -261,15 +261,15 @@ class Order extends Model
     
     //Custom remove
     if($cart['type'] == 2){
-      $min = Carbon::parse("2021-02-13")->timestamp;
+      // $min = Carbon::parse("2021-02-13")->timestamp;
       
-      $cd = $days;
-      foreach ($cd as $key => $day) {
-        if(Carbon::parse($day['date'])->timestamp < $min){
-          unset($days[$key]);
-        }
+      // $cd = $days;
+      // foreach ($cd as $key => $day) {
+      //   if(Carbon::parse($day['date'])->timestamp < $min){
+      //     unset($days[$key]);
+      //   }
           
-      }
+      // }
     }
     
     {//Return format
@@ -311,7 +311,39 @@ class Order extends Model
           }
         }
       }   
-    } 
+    }
+    
+    {//Remove default prices
+      if(is_array($polygons) && $cart['type'] == 2){
+        $x_settings = (new Setting)->getList(1);
+        $cloneDates = $rDate;
+        foreach ($cloneDates as $dk => $day){
+          foreach ($day['times'] as $tk => $time) {
+            //Remove time
+            if($time['price'] == $x_settings['x_order_price']){
+              unset($rDate[$dk]['times'][$tk]);
+            }
+          }          
+          //Remove day
+          if(count($rDate[$dk]['times']) < 1){
+            unset($rDate[$dk]);
+          }
+        }
+      }
+
+      //Format array
+      $cloneDates = $rDate;
+      foreach ($rDate as $dk => $day){
+        foreach ($day['times'] as $tk => $time) {
+          unset($cloneDates[$dk]['times'][$tk]);
+          $cloneDates[$dk]['times'] = [];
+          array_push($cloneDates[$dk]['times'],$time);
+        }
+      }
+
+      $rDate = $cloneDates;
+
+    }
 
     return $rDate;
 

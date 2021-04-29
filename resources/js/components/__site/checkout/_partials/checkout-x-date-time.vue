@@ -17,7 +17,11 @@
       <checkout-input v-model="time" :name="'deliveryTime'" :type="'radio'" 
         :list="times" 
       />
-    </div>        
+    </div>    
+    <!-- No day -->
+    <div v-if="polygons && days === false" class="col-12">
+      К сожалению, ваш адрес не входит в зону доставки 🙁 Неолавка пока работает только в пределах КАДа
+    </div>   
   </div>
   <div v-else class="row">
     <div class="col-12">
@@ -35,8 +39,8 @@ import {mapGetters, mapActions} from 'vuex';
 export default {  
   props: ['polygons','manual'],
   data(){return{
-    day:false,
-    time:false,
+    day:null,
+    time:null,
   }},
   computed:{
     ...mapGetters({
