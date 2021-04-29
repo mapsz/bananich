@@ -90,9 +90,10 @@ class User extends Authenticatable
           'default' => (isset($data['default']) && $data['default']) ? 1 : 0,
           'x' => isset($data['x']) ? $data['x'] : null,
           'y' => isset($data['y']) ? $data['y'] : null,
+          //Area
+          'area' => isset($data['area']) ? $data['area'] : null,
         ]
       );
-
       if($insert !== true) return false;
     }
 
@@ -100,6 +101,15 @@ class User extends Authenticatable
 
     //Get address
     $address = Address::where('addressable_type',$addressable_type)->where('addressable_id', $addressable_id)->orderBy('id', 'desc')->first();
+    
+    {//Add sub area
+      if(
+        isset($data['subArea']) && $data['subArea'] &&
+        ($data['subArea'] != $data['area'])      
+      ){
+        $address->metas()->save(new Meta(['name' => 'subArea', 'value' => $data['subArea']]));
+      }
+    }
 
     // Set default
     if($data['default']){
@@ -120,6 +130,7 @@ class User extends Authenticatable
 
     $update = [];
 
+    if(isset($data['area']) && $data['area']) $update['area'] = $data['area'];
     if(isset($data['street']) && $data['street']) $update['street'] = $data['street'];
     if(isset($data['number']) && $data['number']) $update['number'] = $data['number'];
     if(isset($data['appart']) && $data['appart']) $update['appart'] = $data['appart'];
@@ -133,6 +144,17 @@ class User extends Authenticatable
     $address->update($update);
 
     if(!$address) return false;
+
+        
+    {//Add sub area
+      Meta::where('metable_type','App\Address')->where('metable_id',$data['id'])->where('name','subArea')->delete();
+      if(
+        isset($data['subArea']) && $data['subArea'] &&
+        ($data['subArea'] != $data['area'])      
+      ){
+        Address::find($data['id'])->metas()->save(new Meta(['name' => 'subArea', 'value' => $data['subArea']]));    
+      }
+    }
     
     {//Manual
       //Delete old
@@ -256,6 +278,7 @@ class User extends Authenticatable
       //Addresses
       $query = $query->with('addresses');
       $query = $query->with('addresses.manual');
+      $query = $query->with('addresses.subArea');
       //Memberships
       $query = $query->with('memberships');
     }
@@ -310,10 +333,10 @@ class User extends Authenticatable
         if(isset($request['with_balance'])){
           $user['balance'] = Balance::left($user->id);
         }
-        {//Address
-          //Manual
+        {//Address          
           if(isset($user['addresses']) && isset($user['addresses'][0])){
             foreach ($user['addresses'] as $k => $address) {
+              //Manual
               if(
                 isset($address['manual']) && isset($address['manual'][0]) &&
                 $address['manual'][0] == true
@@ -324,11 +347,22 @@ class User extends Authenticatable
                 unset($user['addresses'][$k]['manual']);
                 $user['addresses'][$k]['manual'] = false;
               }
+
+              //Sub Area
+              if(
+                isset($address->subArea) && isset($address->subArea[0])
+              ){                
+                $subArea = $user['addresses'][$k]->subArea[0]->value;
+                unset($user['addresses'][$k]['sub_area']);
+                $user['addresses'][$k]['subArea'] = $subArea;
+              }
+
             }
           }
         }
       }
     }
+
 
     //To single id
     if(isset($users[0]) && isset($request['id']) && $request['id'] > 0){

@@ -63,9 +63,7 @@ class OrderController extends Controller
 
   }
 
-  public function put(Request $request){    
-
-
+  public function put(Request $request){
     
     JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
     

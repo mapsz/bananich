@@ -1012,8 +1012,8 @@ class Product extends Model
       'low_glycemic'          => 'boolean',
       'eco'                   => 'boolean',
       'gruzka_priority'       => 'numeric',
-      'short_info'            => 'string|max:50',
-      'shelf_life'            => 'string|max:50',
+      'short_info'            => 'string|max:50|nullable',
+      'shelf_life'            => 'string|max:50|nullable',
       'strews'                => 'numeric'
     ])->validate();
 
@@ -1043,7 +1043,7 @@ class Product extends Model
       'low_glycemic'          => 'boolean',
       'eco'                   => 'boolean',
       'gruzka_priority'       => 'numeric',
-      'short_info'            => 'string|max:50',
+      'short_info'            => 'string|max:50|nullable',
       'strews'                => 'numeric'
     ])->validate();
 

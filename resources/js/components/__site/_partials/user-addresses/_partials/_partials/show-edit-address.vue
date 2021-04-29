@@ -28,13 +28,19 @@
     </div>
     
     <template>
+      <!-- Area -->
+      <div class="form-group mb-2 d-flex form-group-multi">
+          <div style="width:50%;align-self:center;font-weight:600;">{{data.area}}</div>
+          <div style="width:50%;align-self:center;font-weight:600;">{{data.subArea}}</div>
+      </div>
+
       <!-- Home \ Appart -->
       <div class="form-group mb-2 d-flex form-group-multi">
         
         <!-- Geo decoder -->
         <template v-if="!manual">
-          <div style="width:60%;align-self:center;font-weight:600;">{{data.street}}</div>
-          <div style="width:40%;align-self:center;font-weight:600;">{{data.number}}</div>
+          <div style="width:50%;align-self:center;font-weight:600;">{{data.street}}</div>
+          <div style="width:50%;align-self:center;font-weight:600;">{{data.number}}</div>
         </template>
 
         <!-- Manual -->
@@ -92,6 +98,8 @@ data(){return{
     porch:null,
     stage:null,
     intercom:null,
+    area:null,
+    subArea:null,
     x:null,
     y:null,
     default:0,
@@ -147,11 +155,18 @@ watch:{
     this.addEditPreData();
   },
   fGeoSearch: function(val, oldVal){
+    //Street
     this.data.street = val.street != undefined ? val.street : null;
     if(this.data.street == null) this.data.street = val.district != undefined ? val.district : null;
+    //Number
     this.data.number = val.house != undefined ? val.house : null;
+    //Coords
     this.data.x = val.x != undefined ? val.x : null;
     this.data.y = val.y != undefined ? val.y : null;
+    //Area
+    this.data.area = val.province != undefined ? val.province : null;
+    this.data.subArea = val.locality != undefined ? val.locality : null;
+    
   }
 },
 async mounted() {
@@ -159,6 +174,8 @@ async mounted() {
 },
 methods:{
   addEditPreData(){
+    if(this.activeAddress.area != undefined) this.data.area = this.activeAddress.area;
+    if(this.activeAddress.subArea != undefined) this.data.subArea = this.activeAddress.subArea;
     if(this.activeAddress.street != undefined) this.data.street = this.activeAddress.street;
     if(this.activeAddress.number != undefined) this.data.number = this.activeAddress.number;
     if(this.activeAddress.appart != undefined) this.data.appart = this.activeAddress.appart;

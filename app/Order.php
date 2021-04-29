@@ -585,6 +585,28 @@ class Order extends Model
 
     }
     
+    {//Address
+      if(isset($data['jugeAddress']) && $data['jugeAddress'] > 0){
+        //Copy Address
+        $userAddress = Address::with('metas')->find($data['jugeAddress']);
+        $orderAddress = $userAddress->replicate();
+        $orderAddress->addressable_id = $order->id;
+        $orderAddress->addressable_type = 'App\Order';
+        $orderAddress->save();
+        //Copy manual
+        if(isset($userAddress->metas)){
+          foreach ($userAddress->metas as $key => $meta){
+            DB::table('metas')->insert([
+              'metable_id' => $orderAddress->id,
+              'metable_type' => "App\Address",
+              'name' => $meta->name,
+              'value' => $meta->value              
+            ]);
+          }          
+        }
+      }      
+    }
+    
     //Delete Cart
     if($cart['type'] == 2){
       Cart::where('user_id',$customer_id)->where('type',2)->delete();
@@ -592,7 +614,6 @@ class Order extends Model
       Cart::where('user_id',$customer_id)->where('type',1)->delete();
     }
     
-
     JugeLogs::log(14, json_encode(['model' => 'order', 'user' => $customer_id]));
 
     //Remove Bonuses
@@ -1004,6 +1025,10 @@ class Order extends Model
               $q->where('name', 'gruzka_priority');
             }]);
       }
+
+      //Addresess
+      $query = $query->with('addresses');      
+      $query = $query->with('addresses.metas');      
     }
         
     {//Sort
@@ -1212,7 +1237,6 @@ class Order extends Model
         }  
         $orders[$ok]['termobox'] = $termobox;
 
-
         //Memberships
         if(isset($order->extraCharges)){
           foreach ($order->extraCharges as $charge) {          
@@ -1227,7 +1251,17 @@ class Order extends Model
         if(isset($order->coupons) && isset($order->coupons[0])){
           $order['coupon'] = $order->coupons[0]['code'] . ':' . $order->coupons[0]['discount'];
         }
-
+        
+        {//Juge Address
+          $order['jugeAddress'] = null;
+          if(isset($order->addresses) && isset($order->addresses[0])){
+            $order['jugeAddress'] = $order->addresses[0];
+            foreach ($order['jugeAddress']['metas'] as $meta) {
+              $order['jugeAddress'][$meta->name] = $meta->value;
+            }
+            unset($order['jugeAddress']['metas']);
+          }            
+        }
       }
       
       {//Items
@@ -1577,6 +1611,10 @@ class Order extends Model
   }
 
   
+  
+  public function addresses(){
+    return $this->morphMany('App\Address', 'addressable');
+  }
   public function metas(){
     return $this->hasMany('App\OrderMeta');
   }

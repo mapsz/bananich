@@ -52,7 +52,7 @@
                       >
                         <!-- Termo -->
                         <template v-if="item.termobox">
-                          <td >{{item.product_id}} 🧊</td>
+                          <td style="white-space: nowrap;">{{item.product_id}} 🧊</td>
                           <td :colspan="order.type != 'x' ? '' : '3'">{{item.name}}</td>
                           <td >{{r(item.price_one)}}</td>
                           <td >{{r3(item.quantity_result)}}</td>

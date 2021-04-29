@@ -37,6 +37,8 @@
           <!-- To Other warning -->
           <div v-if="order.to_other" class="text-danger"><b>🐞🐞Заказ для другого человека:</b><hr></div>
 
+          <fix-order-address />
+
           <!-- Details -->
           <div>
             <div class="text-info"><b>Заказ</b></div>
@@ -70,10 +72,6 @@
             <div>Комментарий: {{order.to_other.comment}}</div>            
           </div>
         </div>
-
-
-    
-
         <!-- Edit data -->
         <div v-if="editDetails">
           <form id="order-details">
@@ -269,6 +267,10 @@ export default {
     sOrder(){
       if(!this.order || this.order.shared_order == undefined || this.order.shared_order[0] == undefined) return false;
       return this.order.shared_order[0];
+    },
+    orderJugeAddress(){
+      if(!this.order || this.order.jugeAddress == undefined || this.order.jugeAddress.addressable_id == undefined) return false;
+      return this.order.jugeAddress;
     }
   },
   async mounted(){

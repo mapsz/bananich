@@ -97,6 +97,11 @@ class Address extends Model
       ->where('value', 1)
     ;
   }
+  public function subArea(){
+    return $this->morphMany('App\Meta', 'metable')
+      ->where('name', "subArea")
+    ;
+  }
   public function addressable(){
     return $this->morphTo();
   }
