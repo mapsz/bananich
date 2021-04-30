@@ -59,6 +59,13 @@ class Order extends Model
     ]],    
     ['key'    => 'membership', 'label' => 'абонемент'],
     ['key'    => 'coupon', 'label' => 'купон'],
+    [      
+      "key" => "fullAddress",
+      "label" => "full address",
+      'type' => 'custom',
+      'component' => 'fix-order-address',     
+    ]
+    
   ];  
 
   public static function orderValidate($data){

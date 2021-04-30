@@ -37,7 +37,7 @@
           <!-- To Other warning -->
           <div v-if="order.to_other" class="text-danger"><b>🐞🐞Заказ для другого человека:</b><hr></div>
 
-          <fix-order-address />
+          <!-- <fix-order-address :data="order"/> -->
 
           <!-- Details -->
           <div>
