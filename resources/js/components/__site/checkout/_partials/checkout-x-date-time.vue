@@ -139,6 +139,9 @@ export default {
         if(!this.noCache) this.set({name:'x_price_from_date', value:price})
       },
     },
+    day: function (){
+      this.time = null;
+    }
   },
   mounted(){
     //

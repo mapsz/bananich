@@ -1,14 +1,19 @@
 <template>
   <div>
-    {{fullAddress}}
-    <!-- <div v-if="badAddress">
+    <span v-if="fullAddress">
+      {{fullAddress}}
+    </span>
+    
+    <div v-if="badAddress">
       <button @click="showFix=true" class="btn btn-info btn-sm">fix</button>
       <x-popup :title="'fix address'" :active="showFix" @close="showFix=false" :id="'fix-order-address-popup-'+order.id">
+
+        <div class="mb-3">{{order.address}}</div>
         
         <address-decoder-input />
 
       </x-popup>  
-    </div> -->
+    </div>
 
 
     
@@ -45,12 +50,13 @@ computed:{
 
   },
   badAddress(){
-    if(!this.address) return false;
+    if(!this.order) return false;
+    if(!this.address) return true;
 
     if(this.address.manual != undefined && this.address.manual == 1) return true;
     if(this.address.area == undefined || !this.address.area) return true;
-    if(this.address.area == undefined || !this.address.street) return true;
-    if(this.address.area == undefined || !this.address.number) return true;
+    if(this.address.street == undefined || !this.address.street) return true;
+    if(this.address.number == undefined || !this.address.number) return true;
     if(this.address.x == undefined || !this.address.x) return true;
     if(this.address.y == undefined || !this.address.y) return true;
 
