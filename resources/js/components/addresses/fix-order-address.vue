@@ -10,7 +10,7 @@
 
         <div class="mb-3">{{order.address}}</div>
         
-        <address-decoder-input />
+        <!-- <address-decoder-input v-if="showFix"/> -->
 
       </x-popup>  
     </div>
