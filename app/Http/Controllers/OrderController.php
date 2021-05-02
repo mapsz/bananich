@@ -65,6 +65,7 @@ class OrderController extends Controller
 
   public function put(Request $request){
     
+
     JugeLogs::log(10, json_encode(['model' => 'orderController', 'user' => '?']));
     
     {//Data
@@ -125,7 +126,8 @@ class OrderController extends Controller
     if($cart['type'] == 2){
       $data['payMethod'] = 1;
     }
-    
+
+        
     JugeLogs::log(20, json_encode(['model' => 'orderController', 'user' => $userId]));
     
     {//Validate
@@ -223,7 +225,7 @@ class OrderController extends Controller
       JugeLogs::log(40, json_encode(['model' => 'orderController', 'user' => $userId]));
 
       {//Validate available days
-        if(!$manualAddress) Order::validateAvailableDays($data['deliveryDate'], $data['deliveryTime'], $cart);        
+        if(!$manualAddress) Order::validateAvailableDays($data['deliveryDate'], $data['deliveryTime'], $cart, $polygons);        
       }
 
       JugeLogs::log(50, json_encode(['model' => 'orderController', 'user' => $userId]));

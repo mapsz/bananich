@@ -391,8 +391,7 @@ class Order extends Model
 
   }
 
-  public static function validateAvailableDays($_date, $_time, $cart){
-
+  public static function validateAvailableDays($_date, $_time, $cart, $polygons = false){
     
     {//Cart
       if(isset($cart['type'])){
@@ -406,7 +405,7 @@ class Order extends Model
     {//Data
       $availableDay     = false;
       $availableTime    = false;
-      $days = Order::getAvailableDays($type, $cart);
+      $days = Order::getAvailableDays($type, $cart, $polygons);
     }
     
     //Check availables
