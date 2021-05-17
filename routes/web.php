@@ -107,8 +107,8 @@
 
 //HTTPS
 Route::group(['middleware' => [
-  'HttpsRR'
-  // ,'under-construction'
+  'HttpsRR',
+  'under-construction'
   ]],function () {
       
     Route::get('/home', function(){return redirect('/');});

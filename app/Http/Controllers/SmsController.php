@@ -11,6 +11,8 @@ class SmsController extends Controller
 {
   public static function toSend(){
 
+    exit;
+
     if(now()->hour > 20 || now()->hour < 10) return response()->json(0);
 
     {//Ограничение на 4 часа
